@@ -1,0 +1,179 @@
+/* 
+  Localizable.strings
+  docHeap-Dictionaries
+
+  Created by Pavel Gofman on 14.11.23.
+  
+*/
+//StartController
+"startVC_email_placeholder" = "E-mail";
+"startVC_password_placeholder" = "Password";
+"startVC_switch_label" = "Keep signed";
+"startVC_register_Button" = "Register";
+"startVC_signIn_Button" = "Sign In";
+//RegisterController
+"registerVC_email_placeholder" = "Your e-mail";
+"registerVC_password_placeholder" = "Your password";
+"registerVC_password_confirm_placeholder" = "Confirm password";
+"registerVC_name_placeholder" = "You name";
+"registerVC_avatar_button" = "Add avatar";
+"registerVC_back_button" = "Back";
+"registerVC_register_button" = "Register";
+//DictionariesController
+"dictionariesVC_attention_label" = "You have not created any dictionaries yet.\nCreate a new one by clicking on the + button";
+"dictionariesVC_wordsCount_label" = "Words:";
+"dictionariesVC_createDate_label" = "Created:";
+"dictionariesVC_myDictionaries_label" = "My dictionaries";
+"dictionariesVC_ownerName_label" = "Qwner:";
+//CreatePopUpViewController
+"createDictionaryPopUpVC_header_label" = "Create new dictionary";
+"createDictionaryPopUpVC_enterName_label" = "Enter dictionary name";
+"createDictionaryPopUpVC_dictionaryName_placeholder" = "Tap for enter a dictionary name";
+"createDictionaryPopUpVC_chooseLanguages_label" = "Choose languages pair";
+"createDictionaryPopUpVC_langSelect_Button" = "Select";
+"createDictionaryPopUpVC_langToLang_label" = "To";
+"createDictionaryPopUpVC_cancel_button" = "Cancel";
+"createDictionaryPopUpVC_create_button" = "Create";
+"createDictionaryPopUpVC_dictionary_warning" = "You have not entered a dictionary name!";
+"createDictionaryPopUpVC_dictionaryNameOrOneLang_warning" = "You did not enter the name of the dictionary or did not select one of the languages";
+"createDictionaryPopUpVC_sameLanguages_warning" = "You have selected the same languages!";
+"createDictionaryPopUpVC_noLanguages_warning" = "You have not selected any languages!";
+"createDictionaryPopUpVC_description_placeholder" = "Tap to enter a description";
+"createDictionaryPopUpVC_description_label" = "Enter a description or comment";
+//EditDictionaryViewController
+"editDictionaryVC_changeName_label" = "Change dictionary name";
+"editDictionaryVC_changeDescription_label" = "Change description";
+"editDictionaryVC_header_label" = "Edit dictionary";
+"editDictionaryVC_cancel_button" = "Cancel";
+"editDictionaryVC_save_button" = "Save";
+"editDictionaryVC_dictionaryNameIsEmpty_message" = "Unable to save without a dictionary name";
+"editDictionaryVC_nothingToChange_message" = "Nothing has changed, there is nothing to save";
+"editDictionaryVC_successSave_message" = "Changes have been successfully saved";
+//DeleteDictionaryViewController
+"deleteDictionaryVC_header_label" = "Deleting dictionary";
+"deleteDictionaryVC_dialog_label" = "Do you really want to delete the dictionary:";
+"deleteDictionaryVC_cancel_button" = "Cancel";
+"deleteDictionaryVC_delete_button" = "Delete";
+"deleteDictionaryVC_succDelete_message" = "Dictionary has been successfully deleted!";
+//BrowseDictionaryController
+"browseDictionaryVC_emptyDictionary_message" = "There are no word pairs in the dictionary yet.\nPress the + button to add them!";
+"browseDictionaryVC_wordsInDictionary_label" = "Words:";
+"browseDictionaryVC_createDate_label" = "Created:";
+"browseDictionaryVC_dicOwner_label" = "Owner:";
+//AddWordPopUpViewController
+"addWordPopUp_header_label" = "Adding a word pair";
+"addWordPopUp_word_label" = "Word:";
+"addWordPopUp_wordTextField_placeholder" = "Enter the word";
+"addWordPopUp_translation_label" = "Translation:";
+"addWordPopUp_translationTextField_placeholder" = "Enter the translation";
+"addWordPopUp_setImage_button" = "Set Image";
+"addWordPopUp_imageIsSelected_label" = "Image is set";
+"addWordPopUp_selectedYes_label" = "Yes";
+"addWordPopUp_selectedNo_label" = "No";
+"addWordPopUp_cancel_button" = "Cancel";
+"addWordPopUp_save_button" = "Save";
+"addWordPopUp_enterBothWords_message" = "You must first enter both words";
+"addWordPopUp_enterWord_message" = "You have not entered a word!";
+"addWordPopUp_enterTranslation_message" = "You have not entered a translation!";
+"addWordPopUp_foundDoubles_message" = "This dictionary already contains such a word!";
+//BrowseWordPopUpVC
+"browseWordPopUpVC_header_label_info" = "Information";
+"browseWordPopUpVC_header_label_edit" = "Edit";
+"browseWordPopUpVC_header_label_delete" = "Delete words pair";
+"browseWordPopUpVC_dialog_label_info" = "Do you really want to delete the word pair:";
+"browseWordPopUpVC_delete_button" = "Delete";
+"browseWordPopUpVC_cancel_button" = "Close";
+"browseWordPopUpVC_edit_button" = "Edit";
+"browseWordPopUpVC_confirm_button" = "Confirm";
+"browseWordPopUpVC_save_button" = "Save";
+"browseWordPopUpVC_testedName_label" = "Tested:";
+"browseWordPopUpVC_rightAnswersName_label" = "Correct Answers:";
+"browseWordPopUpVC_wrongAnswersName_label" = "Mistakes:";
+"browseWordPopUpVC_addDateName_label" = "Date Added:";
+"browseWordPopUpVC_wordName_label" = "Word:";
+"browseWordPopUpVC_translationName_label" = "Translation:";
+"browseWordPopUpVC_imageClear_button" = "Clear";
+"browseWordPopUpVC_imageSet_button" = "Change";
+"browseWordPopUpVC_noChanges_message" = "No changes to save!";
+"browseWordPopUpVC_changesSaved_message" = "All changes were successfuly saved!";
+"browseWordPopUpVC_noImagetoClear_message" = "Image is not set";
+"browseWordPopUpVC_imageCleared_message" = "The image was successfully removed";
+"browseWordPopUpVC_wordExist_message" = "This word already exists in the dictionary";
+//Defaults
+"defaults_langArray_1" = "🇩🇪 German";
+"defaults_langArray_2" = "🇬🇧 English";
+"defaults_langArray_3" = "🇪🇸 Spanish";
+"defaults_langArray_4" = "🇫🇮 Finnish";
+"defaults_langArray_5" = "🇫🇷 French";
+"defaults_langArray_6" = "🇮🇹 Italian";
+"defaults_langArray_7" = "🇱🇻 Latvian";
+"defaults_langArray_8" = "🇱🇹 Lithuanian";
+"defaults_langArray_9" = "🇵🇱 Polish";
+"defaults_langArray_10" = "🇵🇹 Portuguese";
+"defaults_langArray_11" = "🇷🇺 Russian";
+"defaults_langArray_12" = "🇸🇰 Slovak";
+"defaults_langArray_13" = "🇺🇦 Ukrainian";
+"defaults_interfaceLanguage_ru" = "🇷🇺 Russian";
+"defaults_interfaceLanguage_uk" = "🇺🇦 Ukrainian";
+"defaults_interfaceLanguage_en" = "🇬🇧 English";
+"defaults_month1" = "January";
+"defaults_month2" = "February";
+"defaults_month3" = "March";
+"defaults_month4" = "April";
+"defaults_month5" = "May";
+"defaults_month6" = "June";
+"defaults_month7" = "July";
+"defaults_month8" = "August";
+"defaults_month9" = "September";
+"defaults_month10" = "October";
+"defaults_month11" = "November";
+"defaults_month12" = "December";
+//ChangeLanguagePopUp
+"changeLanguagePopUp_header_label" = "Choose Interface Language";
+"changeLanguagePopUp_attention_label" = "Attention! You are attempting to change the application's interface language. After this action, the application language and your system language will be different. If you agree, you can choose a new interface language, but you will need to restart the application afterwards.";
+"changeLanguagePopUp_currentLanguage_label" = "Current language:";
+"changeLanguagePopUp_cancel_button" = "Cancel";
+"changeLanguagePopUp_select_button" = "Select";
+"changeLanguagePopUp_save_button" = "Save";
+"changeLanguagePopUp_newLanguage_label" = "Selected language:";
+"changeLanguagePopUp_beforeExit_label" = "The interface language has been changed. The application will now close, and you will need to restart it.";
+//SharedElements
+"sharedElements_noChose_label" = "Make your choise!";
+//TestsController
+"testVC_fiveWords_name" = "Five Words Test";
+"testVC_fiveWords_description" = "You can test your vocabulary by selecting one correct word from five suggested answers. After that, you can review your mistakes.";
+"testVC_threeWords_name" = "Three Words Test";
+"testVC_threeWords_description" = "You can test your vocabulary by selecting one correct word from three suggested answers. After that, you can review your mistakes.";
+"testVC_findApair_name" = "Find a Pair Test";
+"testVC_findApair_description" = "You will be presented with seven pairs of words. Your task is to choose the correct pair.";
+"testVC_falseOrTrue_name" = "True or False Test";
+"testVC_falseOrTrue_description" = "You need to determine whether the presented word is translated correctly or not.";
+"testVC_findAnImage_name" = "Find the Image Test";
+"testVC_findAnImage_description" = "You need to choose the correct image for the given word.";
+"testVC_noDictionariesCreated_message" = "You don't have any dictionaries yet.\nTo start testing, you need to create at least one dictionary and add 5 words to it.";
+// SelectDictionaryForTestVC
+"selectDictionaryVC_header_label" = "Select Dictionary for Test";
+"selectDictionaryVC_selectDictionary_label" = "Select a Dictionary";
+"selectDictionaryVC_tapToSelect_button" = "Tap to Select";
+"selectDictionaryVC_roundsNumber_label" = "Number of Rounds:";
+"selectDictionaryVC_cancel_button" = "Cancel";
+"selectDictionaryVC_select_button" = "Select";
+"selectDictionaryVC_startTest_button" = "Start Test";
+"selectDictionaryVC_noDictionary_message" = "Please select a dictionary";
+"selectDictionaryVC_wordsInDictionary_message" = "words";
+
+// ThreeWordsTestVC
+"threeWordsTestVC_repetitionMode_label" = "Error Fixation";
+"threeWordsTestVC_roundsName_label" = "Round";
+"threeWordsTestVC_scoresName_label" = "Scores";
+"threeWordsTestVC_instructionLabel_label" = "Select the Correct Translation";
+"threeWordsTestVC_makeChoise_label" = "Make a Choice";
+"threeWordsTestVC_check_button" = "CHECK";
+"threeWordsTestVC_next_button" = "NEXT";
+"threeWordsTestVC_toResults_button" = "TO RESULTS";
+"threeWordsTestVC_testProgress_label" = "Test Progress";
+//ProfileVC
+"profileVC_logout_button" = "User logout";
+"profileVC_setAvatar_button" = "Set avatar";
+"profileVC_registred_label" = "registered:";
+"profileVC_addInfo_label" = "Additional info";

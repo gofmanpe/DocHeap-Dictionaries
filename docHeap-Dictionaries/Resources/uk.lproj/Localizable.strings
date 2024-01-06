@@ -1,0 +1,179 @@
+/* 
+  Localizable.strings
+  docHeap-Dictionaries
+
+  Created by Pavel Gofman on 14.11.23.
+  
+*/
+"startVC_email_placeholder" = "Ваш email";
+"startVC_password_placeholder" = "Ваш пароль";
+"startVC_switch_label" = "Зберегти вхід";
+"startVC_register_Button" = "Реєстрація";
+"startVC_signIn_Button" = "Війти";
+//RegisterController
+"registerVC_email_placeholder" = "Ваш email";
+"registerVC_password_placeholder" = "Ваш пароль";
+"registerVC_password_confirm_placeholder" = "Пшдтвердіть пароль";
+"registerVC_name_placeholder" = "Ваше імʼя";
+"registerVC_avatar_button" = "Додати аватар";
+"registerVC_back_button" = "Назад";
+"registerVC_register_button" = "Реєстрація";
+//DictionariesController
+"dictionariesVC_attention_label" = "У вас поки що не створено словників.\nСтворіть новий, натиснувши кнопку +";
+"dictionariesVC_wordsCount_label" = "Слів:";
+"dictionariesVC_createDate_label" = "Створено:";
+"dictionariesVC_myDictionaries_label" = "Мої словники";
+"dictionariesVC_ownerName_label" = "Власник:";
+//CreatePopUpViewController
+"createDictionaryPopUpVC_header_label" = "Створити новий словник";
+"createDictionaryPopUpVC_enterName_label" = "Введіть назву словника";
+"createDictionaryPopUpVC_dictionaryName_placeholder" = "Торкніться, щоб ввести назву словника";
+"createDictionaryPopUpVC_chooseLanguages_label" = "Виберіть пару мов";
+"createDictionaryPopUpVC_langSelect_Button" = "Вибрати";
+"createDictionaryPopUpVC_langToLang_label" = "На";
+"createDictionaryPopUpVC_cancel_button" = "Скасувати";
+"createDictionaryPopUpVC_create_button" = "Створити";
+"createDictionaryPopUpVC_dictionary_warning" = "Ви не ввели назву словника!";
+"createDictionaryPopUpVC_dictionaryNameOrOneLang_warning" = "Ви не ввели назву словника або не вибрали одну з мов";
+"createDictionaryPopUpVC_sameLanguages_warning" = "Ви вибрали однакові мови!";
+"createDictionaryPopUpVC_noLanguages_warning" = "Ви не вибрали жодної мови!";
+"createDictionaryPopUpVC_description_placeholder" = "Торкніться, щоб ввести опис";
+"createDictionaryPopUpVC_description_label" = "Введіть опис або коментар";
+//EditDictionaryViewController
+"editDictionaryVC_changeName_label" = "Змінити назву словника";
+"editDictionaryVC_changeDescription_label" = "Змінити опис";
+"editDictionaryVC_header_label" = "Редагування словника";
+"editDictionaryVC_cancel_button" = "Скасувати";
+"editDictionaryVC_save_button" = "Зберегти";
+"editDictionaryVC_dictionaryNameIsEmpty_message" = "Неможливо зберегти без назви словника";
+"editDictionaryVC_nothingToChange_message" = "Нічого не змінилося, немає чого зберігати";
+"editDictionaryVC_successSave_message" = "Зміни успішно збережені";
+//DeleteDictionaryViewController
+"deleteDictionaryVC_header_label" = "Видалення словника";
+"deleteDictionaryVC_dialog_label" = "Ви дійсно хочете видалити словник:";
+"deleteDictionaryVC_cancel_button" = "Скасувати";
+"deleteDictionaryVC_delete_button" = "Видалити";
+"deleteDictionaryVC_succDelete_message" = "Словник був успішно видалений!";
+//BrowseDictionaryController
+"browseDictionaryVC_emptyDictionary_message" = "В словнику поки що немає пар слів.\nНатисніть кнопку +, щоб додати їх!";
+"browseDictionaryVC_wordsInDictionary_label" = "Слів:";
+"browseDictionaryVC_createDate_label" = "Створено:";
+"browseDictionaryVC_dicOwner_label" = "Власник:";
+//AddWordPopUpViewController
+"addWordPopUp_header_label" = "Додавання пари слів";
+"addWordPopUp_word_label" = "Слово:";
+"addWordPopUp_wordTextField_placeholder" = "Введіть слово";
+"addWordPopUp_translation_label" = "Переклад:";
+"addWordPopUp_translationTextField_placeholder" = "Введіть переклад";
+"addWordPopUp_setImage_button" = "Встановити зображення";
+"addWordPopUp_imageIsSelected_label" = "Зображення встановлено";
+"addWordPopUp_selectedYes_label" = "Так";
+"addWordPopUp_selectedNo_label" = "Ні";
+"addWordPopUp_cancel_button" = "Скасувати";
+"addWordPopUp_save_button" = "Зберегти";
+"addWordPopUp_enterBothWords_message" = "Ви повинні спочатку ввести обидва слова";
+"addWordPopUp_enterWord_message" = "Ви не ввели слово!";
+"addWordPopUp_enterTranslation_message" = "Ви не ввели переклад!";
+"addWordPopUp_foundDoubles_message" = "Цей словник вже містить таке слово!";
+//BrowseWordPopUpVC
+"browseWordPopUpVC_header_label_info" = "Інформація";
+"browseWordPopUpVC_header_label_edit" = "Редагувати";
+"browseWordPopUpVC_header_label_delete" = "Видалити пару слів";
+"browseWordPopUpVC_dialog_label_info" = "Ви дійсно бажаєте видалити пару слів:";
+"browseWordPopUpVC_delete_button" = "Видалити";
+"browseWordPopUpVC_cancel_button" = "Скасувати";
+"browseWordPopUpVC_edit_button" = "Редагувати";
+"browseWordPopUpVC_confirm_button" = "Підтвердити";
+"browseWordPopUpVC_save_button" = "Зберегти";
+"browseWordPopUpVC_testedName_label" = "Протестовано:";
+"browseWordPopUpVC_rightAnswersName_label" = "Правильних відповідей:";
+"browseWordPopUpVC_wrongAnswersName_label" = "Помилок:";
+"browseWordPopUpVC_addDateName_label" = "Дата додавання:";
+"browseWordPopUpVC_wordName_label" = "Слово:";
+"browseWordPopUpVC_translationName_label" = "Переклад:";
+"browseWordPopUpVC_imageClear_button" = "Видалити";
+"browseWordPopUpVC_imageSet_button" = "Змінити";
+"browseWordPopUpVC_noChanges_message" = "Немає змін для збереження!";
+"browseWordPopUpVC_changesSaved_message" = "Усі зміни успішно збережено!";
+"browseWordPopUpVC_noImagetoClear_message" = "Зображення не встановлено";
+"browseWordPopUpVC_imageCleared_message" = "Зображення успішно видалено";
+"browseWordPopUpVC_wordExist_message" = "Це слово вже існує у словнику";
+//Defaults
+"defaults_langArray_1" = "🇩🇪 Німецька";
+"defaults_langArray_2" = "🇬🇧 Англійська";
+"defaults_langArray_3" = "🇪🇸 Іспанська";
+"defaults_langArray_4" = "🇫🇮 Фінська";
+"defaults_langArray_5" = "🇫🇷 Французька";
+"defaults_langArray_6" = "🇮🇹 Італійська";
+"defaults_langArray_7" = "🇱🇻 Латвійська";
+"defaults_langArray_8" = "🇱🇹 Литовська";
+"defaults_langArray_9" = "🇵🇱 Польська";
+"defaults_langArray_10" = "🇵🇹 Португальська";
+"defaults_langArray_11" = "🇷🇺 Російська";
+"defaults_langArray_12" = "🇸🇰 Словацька";
+"defaults_langArray_13" = "🇺🇦 Українська";
+"defaults_interfaceLanguage_ru" = "🇷🇺 Російська";
+"defaults_interfaceLanguage_uk" = "🇺🇦 Українська";
+"defaults_interfaceLanguage_en" = "🇬🇧 Англійська";
+"defaults_month1" = "Січень";
+"defaults_month2" = "Лютий";
+"defaults_month3" = "Березень";
+"defaults_month4" = "Квітень";
+"defaults_month5" = "Травень";
+"defaults_month6" = "Червень";
+"defaults_month7" = "Липень";
+"defaults_month8" = "Серпень";
+"defaults_month9" = "Вересень";
+"defaults_month10" = "Жовтень";
+"defaults_month11" = "Листопад";
+"defaults_month12" = "Грудень";
+//ChangeLanguagePopUp
+"changeLanguagePopUp_header_label" = "Вибір мови інтерфейсу";
+"changeLanguagePopUp_attention_label" = "Увага! Ви намагаєтеся змінити мову інтерфейсу додатка. Після цієї дії мова додатка та мова вашої системи будуть різними. Якщо ви погоджуєтеся, ви можете вибрати нову мову інтерфейсу, але вам потрібно буде перезапустити додаток після цього.";
+"changeLanguagePopUp_currentLanguage_label" = "Поточна мова:";
+"changeLanguagePopUp_cancel_button" = "Закрити";
+"changeLanguagePopUp_select_button" = "Вибрати";
+"changeLanguagePopUp_save_button" = "Зберегти";
+"changeLanguagePopUp_newLanguage_label" = "Обрана мова:";
+"changeLanguagePopUp_beforeExit_label" = "Мова інтерфейсу була змінена. Зараз додаток закриється, і вам потрібно буде знову його запустити.";
+//SharedElements
+"sharedElements_noChose_label" = "Зробіть вибір!";
+//TestsController
+"testVC_fiveWords_name" = "Тест П'ять Слів";
+"testVC_fiveWords_description" = "Ви можете перевірити свій словниковий запас, обираючи одне правильне слово з п'яти запропонованих відповідей. Після цього ви зможете переглянути свої помилки.";
+"testVC_threeWords_name" = "Тест Три Слова";
+"testVC_threeWords_description" = "Ви можете перевірити свій словниковий запас, обираючи одне правильне слово з трьох запропонованих відповідей. Після цього ви зможете переглянути свої помилки.";
+"testVC_findApair_name" = "Тест Знайди Пару";
+"testVC_findApair_description" = "Вам буде запропоновано сім пар слів. Ваше завдання - вибрати правильну пару.";
+"testVC_falseOrTrue_name" = "Тест Правда чи Брехня";
+"testVC_falseOrTrue_description" = "Вам потрібно визначити, чи правильно перекладено подане слово.";
+"testVC_findAnImage_name" = "Тест Знайти Зображення";
+"testVC_falseOrTrue_description" = "Вам потрібно вибрати правильне зображення для заданого слова.";
+"testVC_noDictionariesCreated_message" = "У вас поки що немає словників.\nДля початку тестування необхідно створити хоча б один словник і додати до нього 5 слів.";
+// SelectDictionaryForTestVC
+"selectDictionaryVC_header_label" = "Вибір словника для тесту";
+"selectDictionaryVC_selectDictionary_label" = "Виберіть словник";
+"selectDictionaryVC_tapToSelect_button" = "Натискайте, щоб вибрати";
+"selectDictionaryVC_roundsNumber_label" = "Кількість раундів:";
+"selectDictionaryVC_cancel_button" = "Скасувати";
+"selectDictionaryVC_select_button" = "Вибрати";
+"selectDictionaryVC_startTest_button" = "Почати тест";
+"selectDictionaryVC_noDictionary_message" = "Будь ласка, виберіть словник";
+"selectDictionaryVC_wordsInDictionary_message" = "слів";
+
+// ThreeWordsTestVC
+"threeWordsTestVC_repetitionMode_label" = "Фіксація помилок";
+"threeWordsTestVC_roundsName_label" = "Раунд";
+"threeWordsTestVC_scoresName_label" = "Очки";
+"threeWordsTestVC_instructionLabel_label" = "Виберіть правильний переклад";
+"threeWordsTestVC_makeChoise_label" = "Зробіть вибір";
+"threeWordsTestVC_check_button" = "ПЕРЕВІРИТИ";
+"threeWordsTestVC_next_button" = "ДАЛІ";
+"threeWordsTestVC_toResults_button" = "ДО РЕЗУЛЬТАТІВ";
+"threeWordsTestVC_testProgress_label" = "Прогрес тесту";
+//ProfileVC
+"profileVC_logout_button" = "Вихід";
+"profileVC_setAvatar_button" = "Змінити";
+"profileVC_registred_label" = "реєстрація:";
+"profileVC_addInfo_label" = "Дод. інфо";
+

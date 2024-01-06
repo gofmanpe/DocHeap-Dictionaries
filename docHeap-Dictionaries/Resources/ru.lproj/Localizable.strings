@@ -1,0 +1,178 @@
+/* 
+  Localizable.strings
+  docHeap-Dictionaries
+
+  Created by Pavel Gofman on 14.11.23.
+  
+*/
+//StartController
+"startVC_email_placeholder" = "Ваш email";
+"startVC_password_placeholder" = "Ваш пароль";
+"startVC_switch_label" = "Сохранить вход";
+"startVC_register_Button" = "Регистрация";
+"startVC_signIn_Button" = "Войти";
+//RegisterController
+"registerVC_email_placeholder" = "Ваш email";
+"registerVC_password_placeholder" = "Ваш пароль";
+"registerVC_password_confirm_placeholder" = "Подтвердите пароль";
+"registerVC_name_placeholder" = "Ваше имя";
+"registerVC_avatar_button" = "Добавить аватар";
+"registerVC_back_button" = "Назад";
+"registerVC_register_button" = "Регистрация";
+//DictionariesController
+"dictionariesVC_attention_label" = "У вас пока не создано словарей.\nСоздайте новый, нажав на кнопку +";
+"dictionariesVC_wordsCount_label" = "Слов:";
+"dictionariesVC_createDate_label" = "Создан:";
+"dictionariesVC_myDictionaries_label" = "Мои словари";
+"dictionariesVC_ownerName_label" = "Владелец:";
+//CreatePopUpViewController
+"createDictionaryPopUpVC_header_label" = "Создать новый словарь";
+"createDictionaryPopUpVC_enterName_label" = "Введите название словаря";
+"createDictionaryPopUpVC_dictionaryName_placeholder" = "Нажмите для ввода названия словаря";
+"createDictionaryPopUpVC_chooseLanguages_label" = "Выберите пару языков";
+"createDictionaryPopUpVC_langSelect_Button" = "Выбрать";
+"createDictionaryPopUpVC_langToLang_label" = "На";
+"createDictionaryPopUpVC_cancel_button" = "Отмена";
+"createDictionaryPopUpVC_create_button" = "Создать";
+"createDictionaryPopUpVC_dictionary_warning" = "Вы не ввели название словаря!";
+"createDictionaryPopUpVC_dictionaryNameOrOneLang_warning" = "Вы не ввели название словаря или не выбрали один из языков";
+"createDictionaryPopUpVC_sameLanguages_warning" = "Вы выбрали одинаковые языки!";
+"createDictionaryPopUpVC_noLanguages_warning" = "Вы не выбрали ни одного языка!";
+"createDictionaryPopUpVC_description_placeholder" = "Нажмите для ввода описания";
+"createDictionaryPopUpVC_description_label" = "Введите описание или комментарий";
+//EditDictionaryPopUpViewController
+"editDictionaryVC_changeName_label" = "Изменить название словаря";
+"editDictionaryVC_changeDescription_label" = "Изменить описание";
+"editDictionaryVC_header_label" = "Редактирование словаря";
+"editDictionaryVC_cancel_button" = "Отмена";
+"editDictionaryVC_save_button" = "Сохранить";
+"editDictionaryVC_nothingToChange_message" = "Ничего не изменилось, сохранять нечего";
+"editDictionaryVC_dictionaryNameIsEmpty_message" = "Невозможно сохранить без имени словаря";
+"editDictionaryVC_successSave_message" = "Изменения успешно сохранены";
+//DeleteDictionaryPopUpViewController
+"deleteDictionaryVC_header_label" = "Удаление словаря";
+"deleteDictionaryVC_dialog_label" = "Вы действительно хотите удалить словарь:";
+"deleteDictionaryVC_succDelete_message" = "Словарь был успешно удален!";
+"deleteDictionaryVC_cancel_button" = "Отмена";
+"deleteDictionaryVC_delete_button" = "Удалить";
+//BrowseDictionaryController
+"browseDictionaryVC_emptyDictionary_message" = "В словаре пока нет пар слов.\nНажмите кнопку + чтобы добавить их!";
+"browseDictionaryVC_wordsInDictionary_label" = "Слов:";
+"browseDictionaryVC_createDate_label" = "Создан:";
+"browseDictionaryVC_dicOwner_label" = "Владелец:";
+//AddWordPopUpViewController
+"addWordPopUp_header_label" = "Добавление пары слов";
+"addWordPopUp_enterBothWords_message" = "Вы должны сначала ввести оба слова";
+"addWordPopUp_enterWord_message" = "Вы не ввели слово!";
+"addWordPopUp_enterTranslation_message" = "Вы не ввели перевод!";
+"addWordPopUp_foundDoubles_message" = "Этот словарь уже содержит такое слово!";
+"addWordPopUp_word_label" = "Слово:";
+"addWordPopUp_wordTextField_placeholder" = "Введите слово";
+"addWordPopUp_translation_label" = "Перевод:";
+"addWordPopUp_translationTextField_placeholder" = "Введите перевод";
+"addWordPopUp_setImage_button" =  "Установить картинку";
+"addWordPopUp_imageIsSelected_label" = "Картинка установлена";
+"addWordPopUp_selectedYes_label" = "Да";
+"addWordPopUp_selectedNo_label" =  "Нет";
+"addWordPopUp_cancel_button" = "Отмена";
+"addWordPopUp_save_button" = "Сохранить";
+//BrowseWordPopUpVC
+"browseWordPopUpVC_header_label_info" = "Информация";
+"browseWordPopUpVC_header_label_edit" = "Редактирование";
+"browseWordPopUpVC_header_label_delete" = "Удаление пары слов";
+"browseWordPopUpVC_dialog_label_info" = "Вы действительно хотите удалить пару слов:";
+"browseWordPopUpVC_delete_button" = "Удалить";
+"browseWordPopUpVC_cancel_button" = "Закрыть";
+"browseWordPopUpVC_edit_button" = "Редактировать";
+"browseWordPopUpVC_confirm_button" = "Подтвердить";
+"browseWordPopUpVC_save_button" = "Сохранить";
+"browseWordPopUpVC_testedName_label" = "Протестировано:";
+"browseWordPopUpVC_rightAnswersName_label" = "Правильных ответов:";
+"browseWordPopUpVC_wrongAnswersName_label" = "Ошибок:";
+"browseWordPopUpVC_addDateName_label" = "Дата добавления:";
+"browseWordPopUpVC_wordName_label" = "Слово:";
+"browseWordPopUpVC_translationName_label" = "Перевод:";
+"browseWordPopUpVC_imageClear_button" = "Удалить";
+"browseWordPopUpVC_imageSet_button" = "Сменить";
+"browseWordPopUpVC_noChanges_message" = "Нет изменений для сохранения";
+"browseWordPopUpVC_changesSaved_message" = "Все изменения успешно сохранениы";
+"browseWordPopUpVC_noImagetoClear_message" = "Изображение не установлено";
+"browseWordPopUpVC_imageCleared_message" = "Изображение успешно удалено";
+"browseWordPopUpVC_wordExist_message" = "Это слово уже существует в словаре";
+//Defaults
+"defaults_langArray_1" = "🇩🇪 Немецкий";
+"defaults_langArray_2" = "🇬🇧 Английский";
+"defaults_langArray_3" = "🇪🇸 Испанский";
+"defaults_langArray_4" = "🇫🇮 Финский";
+"defaults_langArray_5" = "🇫🇷 Французский";
+"defaults_langArray_6" = "🇮🇹 Итальянский";
+"defaults_langArray_7" = "🇱🇻 Латышский";
+"defaults_langArray_8" = "🇱🇹 Литовский";
+"defaults_langArray_9" = "🇵🇱 Польский";
+"defaults_langArray_10" = "🇵🇹 Португальский";
+"defaults_langArray_11" = "🇷🇺 Русский";
+"defaults_langArray_12" = "🇸🇰 Словацкий";
+"defaults_langArray_13" = "🇺🇦 Украинский";
+"defaults_interfaceLanguage_ru" = "🇷🇺 Русский";
+"defaults_interfaceLanguage_uk" = "🇺🇦 Украинский";
+"defaults_interfaceLanguage_en" = "🇬🇧 Английский";
+"defaults_month1" = "Январь";
+"defaults_month2" = "Февраль";
+"defaults_month3" = "Март";
+"defaults_month4" = "Апрель";
+"defaults_month5" = "Май";
+"defaults_month6" = "Июнь";
+"defaults_month7" = "Июль";
+"defaults_month8" = "Август";
+"defaults_month9" = "Скентябрь";
+"defaults_month10" = "Октябрь";
+"defaults_month11" = "Ноябрь";
+"defaults_month12" = "Декабрь";
+//ChangeLanguagePopUp
+"changeLanguagePopUp_header_label" = "Выбор языка интерфейса";
+"changeLanguagePopUp_attention_label" =  "Внимание! Вы пытаетесь изменить язык интерфейса приложения. После этого действия, язык приложения и язык вашей системы будут различаться. Если вы согласны, вы можете выбрать новый язык интерфейса, но после этого вам нужно будет перезапустить приложение.";
+"changeLanguagePopUp_currentLanguage_label" = "Текущий язык:";
+"changeLanguagePopUp_cancel_button" = "Отмена";
+"changeLanguagePopUp_select_button" = "Выбрать";
+"changeLanguagePopUp_save_button" = "Сохранить";
+"changeLanguagePopUp_newLanguage_label" = "Выбран язык:";
+"changeLanguagePopUp_beforeExit_label" = "Язык интерфейса был изменен. Сейчас приложение закроется и вам будет необходимо запустить его снова.";
+//SharedElements
+"sharedElements_noChose_label" = "Сделайте выбор!";
+//TestsController
+"testVC_fiveWords_name" = "Тест Пять слов";
+"testVC_fiveWords_description" = "Вы можете проверить свой словарный запас, выбрав одно правильное слово из пяти предложенных ответов. После этого вы сможете исправить ошибки.";
+"testVC_threeWords_name" = "Тест Три слова";
+"testVC_threeWords_description" = "Вы можете проверить свой словарный запас, выбрав одно правильное слово из трех предложенных ответов. После этого вы сможете исправить ошибки.";
+"testVC_findApair_name" = "Тест Найди пару";
+"testVC_findApair_description" = "Вам будет предложено семь пар слов. Ваша задача – выбрать правильную пару.";
+"testVC_falseOrTrue_name" = "Тест Правда или ложь";
+"testVC_falseOrTrue_description" = "Вам нужно будет определить, правильно ли переведено предложенное слово.";
+"testVC_findAnImage_name" = "Тест Найти картинку";
+"testVC_findAnImage_description" = "Вам нужно будет выбрать правильное изображение для значения слова.";
+"testVC_noDictionariesCreated_message" = "У вас пока нет словарей.\nДля начала тестирования необходимо создать хотя бы один словарь и добавить в него 5 слов.";
+//SelectDictionaryForTestVC
+"selectDictionaryVC_header_label" = "Выбор словаря для теста";
+"selectDictionaryVC_selectDictionary_label" = "Выберите словарь";
+"selectDictionaryVC_tapToSelect_button" = "Нажать для выбора";
+"selectDictionaryVC_roundsNumber_label" = "Кол-во раундов:";
+"selectDictionaryVC_cancel_button" = "Отмена";
+"selectDictionaryVC_select_button" = "Выбрать";
+"selectDictionaryVC_startTest_button" = "Старт теста";
+"selectDictionaryVC_noDictionary_message" = "Пожалуйста, выберите словарь";
+"selectDictionaryVC_wordsInDictionary_message" = "слов(а)";
+//ThreeWordsTestVC
+"threeWordsTestVC_repetitionMode_label" = "Фикс. ошибок";
+"threeWordsTestVC_roundsName_label" = "Раунд";
+"threeWordsTestVC_scoresName_label" = "Очки";
+"threeWordsTestVC_instructionLabel_label" = "Выберите правильный перевод";
+"threeWordsTestVC_makeChoise_label" = "Сделайте выбор";
+"threeWordsTestVC_check_button" = "ПРОВЕРИТЬ";
+"threeWordsTestVC_next_button" = "ДАЛЕЕ";
+"threeWordsTestVC_toResults_button" = "К РЕЗУЛЬТАТАМ";
+"threeWordsTestVC_testProgress_label" = "Прогресс теста";
+//ProfileVC
+"profileVC_logout_button" = "Выход";
+"profileVC_setAvatar_button" = "Сменить";
+"profileVC_registred_label" = "регистрация:";
+"profileVC_addInfo_label" = "Доп. инфо";

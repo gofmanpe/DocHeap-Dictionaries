@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22225" systemVersion="23B92" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="DicMessage" representedClassName="DicMessage" syncable="YES" codeGenerationType="class">
+        <attribute name="msgBody" optional="YES" attributeType="String"/>
+        <attribute name="msgDateTime" optional="YES" attributeType="String"/>
+        <attribute name="msgDicID" optional="YES" attributeType="String"/>
+        <attribute name="msgID" optional="YES" attributeType="String"/>
+        <attribute name="msgOrdering" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="msgSenderAvatarPath" optional="YES" attributeType="String"/>
+        <attribute name="msgSenderID" optional="YES" attributeType="String"/>
+        <attribute name="msgSenderName" optional="YES" attributeType="String"/>
+        <attribute name="msgSyncronized" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+    </entity>
+    <entity name="Dictionary" representedClassName=".Dictionary" syncable="YES" codeGenerationType="class">
+        <attribute name="dicAddDate" attributeType="String"/>
+        <attribute name="dicDeleted" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="dicDescription" optional="YES" attributeType="String"/>
+        <attribute name="dicID" attributeType="String"/>
+        <attribute name="dicImagesCount" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="dicLearningLanguage" attributeType="String"/>
+        <attribute name="dicLike" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="dicName" attributeType="String"/>
+        <attribute name="dicOwnerID" optional="YES" attributeType="String"/>
+        <attribute name="dicReadOnly" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="dicShared" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="dicSyncronized" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="dicTranslateLanguage" attributeType="String"/>
+        <attribute name="dicUserID" optional="YES" attributeType="String"/>
+        <attribute name="dicWordsCount" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="words" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Word" inverseName="parentDictionary" inverseEntity="Word"/>
+    </entity>
+    <entity name="FalseOrTrueTestStatistic" representedClassName="FalseOrTrueTestStatistic" syncable="YES" codeGenerationType="class">
+        <attribute name="mistakes" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="scores" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="testDate" optional="YES" attributeType="String"/>
+        <attribute name="testingDictionaryName" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="FindAnImageTestStatistic" representedClassName="FindAnImageTestStatistic" syncable="YES" codeGenerationType="class">
+        <attribute name="mistakes" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="scores" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="testDate" optional="YES" attributeType="String"/>
+        <attribute name="testingDictionaryName" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="FindAPairTestStatistic" representedClassName="FindAPairTestStatistic" syncable="YES" codeGenerationType="class">
+        <attribute name="mistakes" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="scores" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="testDate" optional="YES" attributeType="String"/>
+        <attribute name="testingDictionaryName" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="FiveWordsTestStatistic" representedClassName="FiveWordsTestStatistic" syncable="YES" codeGenerationType="class">
+        <attribute name="mistakes" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="scores" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="testDate" optional="YES" attributeType="String"/>
+        <attribute name="testingDictionaryName" optional="YES" attributeType="String"/>
+        <attribute name="testMethod" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="Statistic" representedClassName="Statistic" syncable="YES" codeGenerationType="class">
+        <attribute name="method" optional="YES" attributeType="String"/>
+        <attribute name="testDate" optional="YES" attributeType="String"/>
+        <attribute name="testingDictionaryName" optional="YES" attributeType="String"/>
+        <attribute name="testMistakesNumber" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="testScores" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+    </entity>
+    <entity name="TempData" representedClassName="TempData" syncable="YES" codeGenerationType="class">
+        <attribute name="tmpData" optional="YES" attributeType="Transformable"/>
+    </entity>
+    <entity name="ThreeWordsTestStatistic" representedClassName="ThreeWordsTestStatistic" syncable="YES" codeGenerationType="class">
+        <attribute name="mistakes" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="scores" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="testDate" optional="YES" attributeType="String"/>
+        <attribute name="testingDictionaryName" optional="YES" attributeType="String"/>
+        <attribute name="testMethod" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="Users" representedClassName="Users" syncable="YES" codeGenerationType="class">
+        <attribute name="userAvatarExtention" optional="YES" attributeType="String"/>
+        <attribute name="userAvatarFirestorePath" optional="YES" attributeType="String"/>
+        <attribute name="userBirthDate" optional="YES" attributeType="String"/>
+        <attribute name="userCountry" optional="YES" attributeType="String"/>
+        <attribute name="userEmail" optional="YES" attributeType="String"/>
+        <attribute name="userID" optional="YES" attributeType="String"/>
+        <attribute name="userInterfaceLanguage" optional="YES" attributeType="String"/>
+        <attribute name="userName" optional="YES" attributeType="String"/>
+        <attribute name="userNativeLanguage" optional="YES" attributeType="String"/>
+        <attribute name="userRegisterDate" optional="YES" attributeType="String"/>
+        <attribute name="userScores" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="userSyncronized" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+    </entity>
+    <entity name="Word" representedClassName=".Word" syncable="YES" codeGenerationType="class">
+        <attribute name="imageName" optional="YES" attributeType="String"/>
+        <attribute name="imageUploaded" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="wrdAddDate" optional="YES" attributeType="String"/>
+        <attribute name="wrdBobbleColor" optional="YES" attributeType="String"/>
+        <attribute name="wrdDeleted" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="wrdDicID" optional="YES" attributeType="String"/>
+        <attribute name="wrdID" optional="YES" attributeType="String"/>
+        <attribute name="wrdImageFirestorePath" optional="YES" attributeType="String"/>
+        <attribute name="wrdImageIsSet" optional="YES" attributeType="Boolean" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="wrdOwnerID" optional="YES" attributeType="String"/>
+        <attribute name="wrdReadOnly" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="wrdRightAnswers" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="wrdStatus" attributeType="Integer 16" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="wrdSyncronized" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="wrdTranslation" optional="YES" attributeType="String"/>
+        <attribute name="wrdUserID" optional="YES" attributeType="String"/>
+        <attribute name="wrdWord" optional="YES" attributeType="String"/>
+        <attribute name="wrdWrongAnswers" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="parentDictionary" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Dictionary" inverseName="words" inverseEntity="Dictionary"/>
+    </entity>
+</model>
