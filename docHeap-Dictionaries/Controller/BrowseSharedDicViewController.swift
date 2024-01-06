@@ -139,14 +139,6 @@ class BrowseSharedDicViewController: UIViewController {
         
     }
     
-//    func labelAppearAnimate(){
-//        succDownLabel.isHidden = false
-//        succDownLabel.alpha = 0
-//        UIView.animate(withDuration: 2) {
-//            self.succDownLabel.alpha = 1
-//        } completion: { Bool in }
-//    }
-    
 }
 
 extension BrowseSharedDicViewController: UITableViewDelegate, UITableViewDataSource{

@@ -93,7 +93,6 @@ class ChatViewController: UIViewController {
                                   self.coreDataMessages = self.coreData.getMessagesByDicID(dicID: self.dicID, context: self.context)
                                   if msgSenderID != self.mainModel.loadUserData().userID {
                                       self.mainModel.createFolderInDocuments(withName: msgSenderID)
-                                      
                                   }
                               }
                           case false:
