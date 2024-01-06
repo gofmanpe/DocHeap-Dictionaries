@@ -10,6 +10,8 @@ import CoreData
 import Firebase
 
 class DictionariesController: UIViewController, UpdateView, CellButtonPressed{
+    
+//MARK: - Protocsl delegate functions
     func cellButtonPressed(dicID: String, button:String) {
         switch button{
         case "Edit":
@@ -29,6 +31,7 @@ class DictionariesController: UIViewController, UpdateView, CellButtonPressed{
         dictionaryCheck()
     }
     
+//MARK: - Outlets
     @IBOutlet weak var dictionariesTable: UITableView!
     @IBOutlet weak var newDictionaryButton: UIButton!
     @IBOutlet weak var noDicltionariesLabel: UILabel!
@@ -37,7 +40,8 @@ class DictionariesController: UIViewController, UpdateView, CellButtonPressed{
     @IBOutlet weak var avatarImageView: UIImageView!
     @IBOutlet weak var userNameLabel: UILabel!
     
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+//MARK: - Constants and variables
+    private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     private var coreDataManager = CoreDataManager()
     private var currentUser = String()
     private var currentUserEmail = String()
@@ -53,7 +57,7 @@ class DictionariesController: UIViewController, UpdateView, CellButtonPressed{
     private var dicOwnerData = [DicOwnerData]()
     private var sharedDictionaries: [SharedDictionaryShortData]?
     
-    
+//MARK: - Lifecycle functions
     override func viewDidLoad() {
         super.viewDidLoad()
         setupData()
@@ -64,7 +68,6 @@ class DictionariesController: UIViewController, UpdateView, CellButtonPressed{
             sync.syncDictionariesCoreDataAndFirebase(userID: mainModel.loadUserData().userID, context: context)
             sync.syncWordsCoreDataAndFirebase(userID: mainModel.loadUserData().userID, context: context)
         }
-       
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -77,6 +80,7 @@ class DictionariesController: UIViewController, UpdateView, CellButtonPressed{
         dictionaryCheck()
     }
     
+//MARK: - Controller functions
     func setupData(){
         dictionariesArray = coreDataManager.loadUserDictionaries(userID: mainModel.loadUserData().userID, data: context)
         usersArray = coreDataManager.loadUserDataByID(userID: mainModel.loadUserData().userID, data: context)
@@ -89,14 +93,11 @@ class DictionariesController: UIViewController, UpdateView, CellButtonPressed{
             dictionariesTable.reloadData()
                 noDicltionariesLabel.isHidden = true
             }
-       
-
     }
     
     func loadDataForSharedDictionary(){
         firebase.getDictionaryShortData { dicArray in
         let sharedDictionaries = dicArray
-           
         }
     }
     
@@ -152,23 +153,6 @@ class DictionariesController: UIViewController, UpdateView, CellButtonPressed{
         }
     }
     
-    @IBAction func newDictionaryButtonPressed(_ sender: UIButton) {
-            buttonScaleAnimation(targetButton: newDictionaryButton)
-            popUpApear(dictionaryIDFromCell: "", senderAction: "Create")
-    }
-    
-    func dictionaryCheck(){
-        dictionariesTable.reloadData()
-        if dictionariesArray.isEmpty {
-           dictionariesTable.isHidden = true
-            noDicltionariesLabel.text = "dictionariesVC_attention_label".localized
-            noDicltionariesLabel.isHidden = false
-        } else {
-            dictionariesTable.isHidden = false
-            noDicltionariesLabel.isHidden = true
-        }
-    }
-    
     func popUpApear(dictionaryIDFromCell:String, senderAction:String){
             switch senderAction {
             case "Create":
@@ -197,8 +181,26 @@ class DictionariesController: UIViewController, UpdateView, CellButtonPressed{
         }
     }
     
+    func dictionaryCheck(){
+        dictionariesTable.reloadData()
+        if dictionariesArray.isEmpty {
+           dictionariesTable.isHidden = true
+            noDicltionariesLabel.text = "dictionariesVC_attention_label".localized
+            noDicltionariesLabel.isHidden = false
+        } else {
+            dictionariesTable.isHidden = false
+            noDicltionariesLabel.isHidden = true
+        }
+    }
+    
+//MARK: - Actions
+    @IBAction func newDictionaryButtonPressed(_ sender: UIButton) {
+            buttonScaleAnimation(targetButton: newDictionaryButton)
+            popUpApear(dictionaryIDFromCell: "", senderAction: "Create")
+    }
 }
 
+//MARK: - Table Delegate and dataSource functions
 extension DictionariesController: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return  dictionariesArray.count
@@ -209,7 +211,6 @@ extension DictionariesController: UITableViewDelegate, UITableViewDataSource{
         
         dictionaryCell.cellView.layer.cornerRadius = 5
         dictionaryCell.sharedDictionaryImage.image = UIImage(systemName: "person.2.fill")
-       // dictionaryCell.sharedDictionaryImage.isHidden = true
         dictionaryCell.sharedDictionaryImage.isHidden = true
         dictionaryCell.cellView.clipsToBounds = true
         dictionaryCell.dictionaryNameLabel.text = dictionariesArray[indexPath.row].dicName
@@ -229,7 +230,6 @@ extension DictionariesController: UITableViewDelegate, UITableViewDataSource{
         if dictionariesArray[indexPath.row].dicReadOnly{
             dictionaryCell.sharedDictionaryImage.image = UIImage(systemName: "tray.and.arrow.down.fill")
             dictionaryCell.sharedDictionaryImage.isHidden = false
-            //dictionaryCell.sharedDictionaryImage.isHidden = false
             dictionaryCell.separatorTwoButtons.isHidden = true
             dictionaryCell.editButton.isHidden = true
             dictionaryCell.createDateLabel.text = "dictionariesVC_ownerName_label".localized
@@ -246,7 +246,6 @@ extension DictionariesController: UITableViewDelegate, UITableViewDataSource{
         }
         if dictionariesArray[indexPath.row].dicShared{
             dictionaryCell.sharedDictionaryImage.isHidden = false
-           // dictionaryCell.sharedDictionaryImage.isHidden = false
         }
         dictionaryCell.selectionStyle = .none
         return dictionaryCell

@@ -9,9 +9,8 @@ import UIKit
     //import CoreData
 
 class ThreeWordsTestController: UIViewController, PerformToSegue, UpdateView{
-   
     
-//MARK: - Delegate functions
+//MARK: - Protocols delegate functions
     func didUpdateView(sender:String) {
         switch sender{
         case "reStartTest":
@@ -51,6 +50,7 @@ class ThreeWordsTestController: UIViewController, PerformToSegue, UpdateView{
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         _ = segue.destination as! TestsController
     }
+    
 //MARK: - Outlets
     @IBOutlet weak var wordsBackgroundView: UIView!
     @IBOutlet weak var headerWordsWindow: UIStackView!
@@ -82,6 +82,7 @@ class ThreeWordsTestController: UIViewController, PerformToSegue, UpdateView{
     @IBOutlet weak var scoresNameLabel: UILabel!
     @IBOutlet weak var instructionLabel: UILabel!
     
+//MARK: - Localization
     func localizeElements(){
         roundNameLabel.text = "threeWordsTestVC_roundsName_label".localized
         scoresNameLabel.text = "threeWordsTestVC_scoresName_label".localized
@@ -94,7 +95,6 @@ class ThreeWordsTestController: UIViewController, PerformToSegue, UpdateView{
     
 //MARK: - Constants and variables
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    
     var mainWord = String()
     var mainWordTranslation = String()
     var threeButtonsTranstlationsArray = [String]()
@@ -120,7 +120,7 @@ class ThreeWordsTestController: UIViewController, PerformToSegue, UpdateView{
     private var mainModel = MainModel()
     private var coreDataManager = CoreDataManager()
     
-//MARK: - View Did Load Functions
+//MARK: - Lifecycle functions
     override func viewDidLoad() {
         super.viewDidLoad()
         localizeElements()
@@ -349,7 +349,7 @@ class ThreeWordsTestController: UIViewController, PerformToSegue, UpdateView{
         }
     }
     
-//MARK: - Actions functions
+//MARK: - Actions
     @IBAction func firstButtonPressed(_ sender: UIButton) {
         pressedButtonBehavor(buttonId: 0, button: firstWordButton)
     }

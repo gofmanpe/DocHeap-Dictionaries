@@ -11,6 +11,8 @@ import CoreData
 import MBProgressHUD
 
 class NetworkViewController: UIViewController, GetFilteredData, SetDownloadedMarkToDictionary{
+    
+//MARK: - Protocols delegate functions
     func dictionaryWasDownloaded(dicID: String) {
         if let index = sharedDictionaries.firstIndex(where: { $0.dicID == dicID }) {
             sharedDictionaries[index].dicDownloaded = true
@@ -69,17 +71,18 @@ class NetworkViewController: UIViewController, GetFilteredData, SetDownloadedMar
             return
         }
     }
-   
+    
+//MARK: - Outlets
     @IBOutlet weak var noInetView: UIView!
     @IBOutlet weak var sharedTable: UITableView!
     @IBOutlet weak var useFilterButton: UIButton!
     @IBOutlet weak var currentFilterLabel: UILabel!
     @IBOutlet weak var learnFilterImage: UIImageView!
     @IBOutlet weak var transFilterImage: UIImageView!
-    
-    
+
+//MARK: - Constants and variables
     private let firebase = Firebase()
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     private var sharedDictionaries = [SharedDictionary]()
     private var filteredDictionaries = [SharedDictionary]()
     private var originalArray = [SharedDictionary]()
@@ -94,6 +97,7 @@ class NetworkViewController: UIViewController, GetFilteredData, SetDownloadedMar
     private var filterIsSet = Bool()
     private var messagesArray : [ChatMessage]?
     
+//MARK: - Lifecycle functions
     override func viewDidLoad() {
         super.viewDidLoad()
         if mainModel.isInternetAvailable(){
@@ -102,13 +106,10 @@ class NetworkViewController: UIViewController, GetFilteredData, SetDownloadedMar
             sharedTable.dataSource = self
             sharedTable.delegate = self
             sharedTable.reloadData()
-           // loadAllMessages()
         } else {
             noInetView.isHidden = false
             sharedTable.isHidden = true
         }
-       
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -134,7 +135,8 @@ class NetworkViewController: UIViewController, GetFilteredData, SetDownloadedMar
             sharedTable.isHidden = true
         }
     }
-    
+
+//MARK: - Controller functions
     func isFilterSet(){
         switch (selectedLearnFromDelegate.isEmpty,selectedTransFromDelegate.isEmpty){
         case (true,true):
@@ -149,7 +151,6 @@ class NetworkViewController: UIViewController, GetFilteredData, SetDownloadedMar
             let filteredArray = sharedDictionaries.filter({$0.dicTransLang == selectedTransFromDelegate && $0.dicTransLang == selectedTransFromDelegate})
             sharedDictionaries = filteredArray
         }
-    
     }
     
     func loadAllMessages(){
@@ -202,8 +203,6 @@ class NetworkViewController: UIViewController, GetFilteredData, SetDownloadedMar
         }
     }
     
- 
-    
     func getWords(dicArray:[SharedDictionary]){
         sharedWords.removeAll()
         for dic in dicArray{
@@ -229,8 +228,6 @@ class NetworkViewController: UIViewController, GetFilteredData, SetDownloadedMar
             }
         }
     }
-    
-
     
     func getWordsDataFromFirestore(dicID:String){
         let db = Firestore.firestore()
@@ -293,13 +290,14 @@ class NetworkViewController: UIViewController, GetFilteredData, SetDownloadedMar
                 overLayerView.appear(sender: self)
     }
     
+//MARK: - Actions
     @IBAction func useFilterButtonPressed(_ sender: UIButton) {
         popUpApear()
     }
-    
   
 }
 
+//MARK: - Table Delegate and dataSource functions
 extension NetworkViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return sharedDictionaries.count

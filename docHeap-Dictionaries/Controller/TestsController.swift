@@ -9,8 +9,9 @@ import UIKit
 import CoreData
 
 class TestsController: UIViewController, PerformToSegue{
-  
-    func getRoundsNumber(number: Int) {}
+    
+//MARK: - Protocols delegate functions
+   // func getRoundsNumber(number: Int) {}
     
     func performToSegue(identifier: String, dicID: String, roundsNumber:Int) {
         numberOfRounds = roundsNumber
@@ -50,9 +51,11 @@ class TestsController: UIViewController, PerformToSegue{
         }
     }
     
+//MARK: - Outlets
     @IBOutlet weak var testsTable: UITableView!
     @IBOutlet weak var noDictionariesLabel: UILabel!
     
+//MARK: - Constants and variables
     private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     private var coreDataManager = CoreDataManager()
     var segueIdentifier = String()
@@ -62,7 +65,8 @@ class TestsController: UIViewController, PerformToSegue{
     private var testsArray: [Tests] = TestDataModel.tests
     private var mainModel = MainModel()
     private var currentUserEmail = String()
-    
+ 
+//MARK: - Lifecycle functions
     override func viewDidLoad() {
         super.viewDidLoad()
         standartState()
@@ -74,6 +78,7 @@ class TestsController: UIViewController, PerformToSegue{
         isDictionariesAvalible()
     }
     
+//MARK: - Controller functions
     func isDictionariesAvalible(){
         coreDataManager.loadDictionariesForCurrentUser(userID: mainModel.loadUserData().userID, data: context)
         if coreDataManager.dictionariesArray.isEmpty{
@@ -101,6 +106,7 @@ class TestsController: UIViewController, PerformToSegue{
         overLayerView.appear(sender: self)
     }
 }
+
 //MARK: - Tests table Datasource & Delegate
 extension TestsController: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

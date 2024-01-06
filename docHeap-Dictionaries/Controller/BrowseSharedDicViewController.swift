@@ -8,7 +8,8 @@
 import UIKit
 
 class BrowseSharedDicViewController: UIViewController {
-    
+ 
+//MARK: - Outlets
     @IBOutlet weak var learnLangImage: UIImageView!
     @IBOutlet weak var learnLangLabel: UILabel!
     @IBOutlet weak var transLangImage: UIImageView!
@@ -23,7 +24,8 @@ class BrowseSharedDicViewController: UIViewController {
     @IBOutlet weak var downloadedTimesLabel: UILabel!
     @IBOutlet weak var dicLikesLabel: UILabel!
     @IBOutlet weak var messagesCountLabel: UILabel!
-    
+ 
+//MARK: - Constants and variables
     private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     var dicID = String()
     var sharedDictionary : SharedDictionary?
@@ -36,8 +38,8 @@ class BrowseSharedDicViewController: UIViewController {
     var setDownloadedDelegate: SetDownloadedMarkToDictionary?
     private let firebase = Firebase()
     private var dicWasDownloaded = Bool()
-    
 
+//MARK: - Lifecycle functions
     override func viewDidLoad() {
         super.viewDidLoad()
         elementsSetup()
@@ -46,7 +48,8 @@ class BrowseSharedDicViewController: UIViewController {
         sharedWordsTable.reloadData()
         print("Messages count for dictionary is: \(messagesCount)")
     }
-    
+
+//MARK: - Controller functions
     func elementsSetup(){
         learnLangImage.image = UIImage(named: sharedDictionary?.dicLearnLang ?? "")
         transLangImage.image = UIImage(named: sharedDictionary?.dicTransLang ?? "")
@@ -61,7 +64,6 @@ class BrowseSharedDicViewController: UIViewController {
         dicLikesLabel.text = String(dicLikes.count)
         downloadButton.layer.cornerRadius = 5
         messagesCountLabel.text = messagesCount
-       
     }
     
     func createDictionaryCoreData(){
@@ -109,8 +111,8 @@ class BrowseSharedDicViewController: UIViewController {
             newWord.wrdSyncronized = true
             coreData.saveData(data: context)
         }
-        
     }
+    
     func buttonScaleAnimation(targetButton:UIButton){
         UIView.animate(withDuration: 0.2) {
             targetButton.transform = CGAffineTransform(scaleX: 1.25, y: 1.25)
@@ -118,8 +120,8 @@ class BrowseSharedDicViewController: UIViewController {
             targetButton.transform = .identity
         }
     }
-    
-    
+
+//MARK: - Actions
     @IBAction func downloadButtonPressed(_ sender: UIButton) {
         switch dicWasDownloaded{
         case true:
@@ -132,15 +134,14 @@ class BrowseSharedDicViewController: UIViewController {
                 createDictionaryCoreData()
                 downloadButton.tintColor = .white
                 downloadButton.backgroundColor = UIColor(named: "Right answer")
-      
             }
             dicWasDownloaded = true
         }
-        
     }
     
 }
 
+//MARK: - Words table Delegate and DataSource
 extension BrowseSharedDicViewController: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return sharedWordsArray.count
@@ -157,6 +158,4 @@ extension BrowseSharedDicViewController: UITableViewDelegate, UITableViewDataSou
         wordCell.translationLabel.text = sharedWordsArray[indexPath.row].wrdTranslation
         return wordCell
     }
-    
-   
 }

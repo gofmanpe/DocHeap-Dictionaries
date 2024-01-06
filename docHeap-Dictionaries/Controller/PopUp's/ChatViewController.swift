@@ -10,12 +10,15 @@ import Firebase
 import CoreData
 import AlamofireImage
 import Alamofire
-class ChatViewController: UIViewController {
 
+class ChatViewController: UIViewController {
+    
+//MARK: - Table Delegate and dataSource functions
     @IBOutlet weak var chatTable: UITableView!
     @IBOutlet weak var sendButton: UIButton!
     @IBOutlet weak var messageTextView: UITextView!
     
+//MARK: - Constants and variables
     var dicID = String()
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     private let mainModel = MainModel()
@@ -24,20 +27,34 @@ class ChatViewController: UIViewController {
     private var coreDataMessages = [DicMessage]()
     private var userData = Users()
     private let defaults = Defaults()
-    
+
+//MARK: - Lifecycle functions
     override func viewDidLoad() {
         super.viewDidLoad()
         loadData()
         messageTextView.layer.cornerRadius = 10
         syncMessages()
         getMessagesForDictionary()
-        chatTable.delegate = self
-        chatTable.dataSource = self
-        chatTable.register(UINib(nibName: "ChatCell", bundle: nil), forCellReuseIdentifier: "chatCell")
-        chatTable.register(UINib(nibName: "UserChatCell", bundle: nil), forCellReuseIdentifier: "userChatCell")
-        
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        getMessagesForDictionary()
+        chatTable.reloadData()
+        tabBarController?.tabBar.isHidden = true
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        getMessagesForDictionary()
+        chatTable.reloadData()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        tabBarController?.tabBar.isHidden = false
+    }
+
+//MARK: - Controller functions
     func syncMessages(){
         if mainModel.isInternetAvailable(){
             let unsyncMessages = coreDataMessages.filter({$0.msgSyncronized == false})
@@ -116,28 +133,16 @@ class ChatViewController: UIViewController {
         }
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        getMessagesForDictionary()
-        chatTable.reloadData()
-        tabBarController?.tabBar.isHidden = true
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        getMessagesForDictionary()
-        chatTable.reloadData()
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        tabBarController?.tabBar.isHidden = false
-    }
-    
     func loadData(){
         coreDataMessages = coreData.getMessagesByDicID(dicID: dicID, context: context)
         userData = coreData.loadUserDataByID(userID: mainModel.loadUserData().userID, data: context)
+        chatTable.delegate = self
+        chatTable.dataSource = self
+        chatTable.register(UINib(nibName: "ChatCell", bundle: nil), forCellReuseIdentifier: "chatCell")
+        chatTable.register(UINib(nibName: "UserChatCell", bundle: nil), forCellReuseIdentifier: "userChatCell")
     }
 
+//MARK: - Actions
     @IBAction func sendButtonPressed(_ sender: UIButton) {
         let msgID = mainModel.uniqueIDgenerator(prefix: "msg")
         guard let msgBody = messageTextView.text else {return}
@@ -192,6 +197,8 @@ class ChatViewController: UIViewController {
     }
     
 }
+
+//MARK: - Table Delegate and dataSource functions
 extension ChatViewController: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return coreDataMessages.count
