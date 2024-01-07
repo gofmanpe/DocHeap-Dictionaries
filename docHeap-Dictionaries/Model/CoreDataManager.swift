@@ -448,14 +448,41 @@ struct CoreDataManager{
         return [Users]()
     }
     
-    func loadUserDataByID(userID: String, data: NSManagedObjectContext , with request: NSFetchRequest<Users> = Users.fetchRequest())->Users{
-        request.predicate = NSPredicate(format: "userID MATCHES %@", userID)
+    func isNetworkUserExist(userID: String, data: NSManagedObjectContext)->Bool{
+        let request: NSFetchRequest<NetworkUser> = NetworkUser.fetchRequest()
+        request.predicate = NSPredicate(format: "nuID MATCHES %@", userID)
+        var userExist = Bool()
         do {
             let userArray = try data.fetch(request)
-            return userArray.first ?? Users()
+            if !userArray.isEmpty{
+                userExist = true
+            }
         }
         catch { print ("Error fetching data \(error)") }
-        return Users()
+        return userExist
+    }
+    
+    func loadAllNetworkUsers(data:NSManagedObjectContext)->[NetworkUser]{
+        let request: NSFetchRequest<NetworkUser> = NetworkUser.fetchRequest()
+        var usersArray = [NetworkUser]()
+        do {
+            let array = try data.fetch(request)
+            usersArray = array
+        }
+        catch { print ("Error fetching data \(error)") }
+        return usersArray
+    }
+    
+    func loadUserDataByID(userID: String, data: NSManagedObjectContext)->Users{
+        let request: NSFetchRequest<Users> = Users.fetchRequest()
+        request.predicate = NSPredicate(format: "userID MATCHES %@", userID)
+        var result = Users()
+        do {
+            let userArray = try data.fetch(request)
+            result = userArray.first ?? Users()
+        }
+        catch { print ("Error fetching data \(error)") }
+        return result
     }
     
     

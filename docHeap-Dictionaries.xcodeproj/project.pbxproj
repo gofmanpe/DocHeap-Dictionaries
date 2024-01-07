@@ -216,7 +216,6 @@
 				768A1F342B3A25E600EF877A /* FilterSharedDicController.xib */,
 				7618E5242B3DA8CC0090F183 /* EditProfileViewController.swift */,
 				7618E5252B3DA8CC0090F183 /* EditProfileViewController.xib */,
-				765316FF2B443BDB006DEA09 /* ChatViewController.swift */,
 			);
 			path = "PopUp's";
 			sourceTree = "<group>";
@@ -294,6 +293,7 @@
 				76A3FB7429E9B53800AF87C1 /* Cells */,
 				761C830A29D21C3300ABD5E0 /* PopUp's */,
 				767DA1F829D0A7D5004E0FA5 /* DictionariesController.swift */,
+				765316FF2B443BDB006DEA09 /* ChatViewController.swift */,
 				767DA1FA29D0A819004E0FA5 /* TestsController.swift */,
 				767DA1FC29D0A850004E0FA5 /* BrowseDictionaryController.swift */,
 				767DA20029D0A8C0004E0FA5 /* StatisticController.swift */,

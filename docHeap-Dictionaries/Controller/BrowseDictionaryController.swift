@@ -153,6 +153,7 @@ class BrowseDictionaryController: UIViewController, UpdateView, SaveWordsPairToD
     private var wordsArray = [Word]()
     private let sync = SyncModel()
     var dicOwnerData = [DicOwnerData]()
+    private var networkUsersArray = [NetworkUser]()
 
 //MARK: - Lifecycle functions
     override func viewDidLoad() {
@@ -169,6 +170,7 @@ class BrowseDictionaryController: UIViewController, UpdateView, SaveWordsPairToD
         if mainModel.isInternetAvailable(){
             sync.syncDictionariesCoreDataAndFirebase(userID: mainModel.loadUserData().userID, context: context)
             sync.syncWordsCoreDataAndFirebase(userID: mainModel.loadUserData().userID, context: context)
+            fireDB.createNetworkUsersData(dicID: dicID, context: context)
         }
     }
     
@@ -189,6 +191,7 @@ class BrowseDictionaryController: UIViewController, UpdateView, SaveWordsPairToD
         guard let dicID = selectedDictionary?.dicID else {
             return}
         wordsArray = coreDataManager.getWordsForDictionary(dicID: dicID, userID: mainModel.loadUserData().userID, data: context)
+        networkUsersArray = coreDataManager.loadAllNetworkUsers(data: context)
     }
     
     func flipView(view:UIView) {
@@ -371,6 +374,7 @@ class BrowseDictionaryController: UIViewController, UpdateView, SaveWordsPairToD
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
             let destinationVC = segue.destination as! ChatViewController
                 destinationVC.dicID = dicID
+                destinationVC.networkUsers = networkUsersArray
     }
     
 }

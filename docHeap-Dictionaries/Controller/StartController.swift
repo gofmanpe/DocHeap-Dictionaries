@@ -14,7 +14,8 @@ import GoogleSignIn
 import GoogleSignInSwift
 
 class StartController: UIViewController{
-
+    
+//MARK: - Outlets
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var keepSignedSwitch: UISwitch!
@@ -25,6 +26,7 @@ class StartController: UIViewController{
     @IBOutlet weak var keepSignedLabel: UILabel!
     @IBOutlet weak var googleSignInButton: GIDSignInButton!
     
+//MARK: - Localization
     func localizeElements(){
         emailTextField.placeholder = "startVC_email_placeholder".localized
         passwordTextField.placeholder = "startVC_password_placeholder".localized
@@ -33,7 +35,8 @@ class StartController: UIViewController{
         keepSignedLabel.text = "startVC_switch_label".localized
     }
     
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+//MARK: - Constants and variables
+    private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     private let userDefaults = UserDefaults.standard
     private var switchStatus = Bool()
     private var userSigned = Bool()
@@ -50,6 +53,7 @@ class StartController: UIViewController{
     private let tableReloadDelegate : UpdateView? = nil
     private let sync = SyncModel()
     
+//MARK: - Lifecycle functions
     override func viewDidLoad() {
         super.viewDidLoad()
         print(mainModel.getDocumentsFolderPath())
@@ -59,7 +63,8 @@ class StartController: UIViewController{
         elementsDesign()
         userCheck()
     }
-  
+    
+//MARK: - Controller functions
     private func setupGoogleSignIn(){
         guard let clientID = FirebaseApp.app()?.options.clientID else { return }
         let config = GIDConfiguration(clientID: clientID)
@@ -91,23 +96,18 @@ class StartController: UIViewController{
                     multiFactorString += info.displayName ?? "[DispayName]"
                     multiFactorString += " "
                   } // User was logined
-                  
                     let userEmail = email ?? "No_user_email"
                     let userPhoto = photoURL
                     if coreDataManager.isUserExistInCoreData(userEmail: userEmail, context: context){ // User was found in CoreData by email
                         userID = coreDataManager.loadUserData(userEmail: userEmail, data: context).first?.userID ?? "noUserID"
                         self.userName = coreDataManager.loadUserData(userEmail: userEmail, data: context).first?.userName ?? "noUserName"
 //TODO: - For sync from different devices, if dictionary and/or word was created/modified/deleted from different device on same accaunt
-//                        DispatchQueue.main.async {
-//                            self.sync.loadDictionariesFromFirebase(userID: self.userID, context: self.context)
-//                        }
                         userDefaults.set(userID, forKey: "userID")
                         userDefaults.set(userEmail, forKey: "userEmail")
                         userDefaults.set(true, forKey: "keepSigned")
                         userDefaults.set("google", forKey: "accType")
                         userDefaults.set(self.userName, forKey: "userName")
-                        //TODO: - Here need to sync user with Firebase for checking changes
-                        //performSegue(withIdentifier: "goFromStart", sender: self)
+//TODO: - Here need to sync user with Firebase for checking changes
                         goToApp()
                     } else { // No user found in CoreData
                         firebase.checkUserExistsInFirebase(userEmail: userEmail) { userExist in
@@ -151,7 +151,7 @@ class StartController: UIViewController{
                                         self.userDefaults.set(userName, forKey: "userName")
                                         if let userAvatarFirestorePath = userAvatarFirestorePath {
                                                 self.alamo.downloadAndSaveAvatar(from: userAvatarFirestorePath, forUser: userID) {
-                                                    self.goToApp()//performSegue(withIdentifier: "goFromStart", sender: self)
+                                                    self.goToApp()
                                                 }
                                         }
                                     }
@@ -185,7 +185,7 @@ class StartController: UIViewController{
                                 self.userDefaults.set(true, forKey: "keepSigned")
                                 self.userDefaults.set("google", forKey: "accType")
                                 self.userDefaults.set(userName, forKey: "userName")
-                                self.goToApp()//performSegue(withIdentifier: "goFromStart", sender: self)
+                                self.goToApp()
                             }
                         }
                     }
@@ -197,11 +197,6 @@ class StartController: UIViewController{
     func goToApp(){
         self.performSegue(withIdentifier: "goFromStart", sender: self)
     }
-    
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//            let destinationVC = segue.destination as! DictionariesController
-//                destinationVC.userID = userID
-//    }
     
     func elementsDesign(){
         buttonsView.layer.cornerRadius = 5
@@ -235,7 +230,8 @@ class StartController: UIViewController{
                 let overLayerView = LoginErrorViewController()
                 overLayerView.appearOverlayer(sender: self, text:text)
             }
-    
+   
+//MARK: - Actions
     @IBAction func switchToggled(_ sender: UISwitch) {
         if keepSignedSwitch.isOn{
             switchStatus = true
@@ -267,7 +263,7 @@ class StartController: UIViewController{
                            self.userDefaults.set(self.switchStatus, forKey: "keepSigned")
                            self.userDefaults.set("auth", forKey: "accType")
                            self.userDefaults.set(self.userName, forKey: "userName")
-                           self.goToApp()//performSegue(withIdentifier: "goFromStart", sender: self)
+                           self.goToApp()
                        } else {
                            self.firebase.getUserDataByEmail(userEmail: email) { userData in
                                if let result = userData{
@@ -299,7 +295,7 @@ class StartController: UIViewController{
                                    self.userDefaults.set(userName, forKey: "userName")
                                    if let userAvatarFirestorePath = userAvatarFirestorePath {
                                            self.alamo.downloadAndSaveAvatar(from: userAvatarFirestorePath, forUser: userID) {
-                                               self.goToApp()//performSegue(withIdentifier: "goFromStart", sender: self)
+                                               self.goToApp()
                                            }
                                    }
                                }

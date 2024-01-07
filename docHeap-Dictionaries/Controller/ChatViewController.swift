@@ -20,6 +20,7 @@ class ChatViewController: UIViewController {
     
 //MARK: - Constants and variables
     var dicID = String()
+    var networkUsers : [NetworkUser]?
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     private let mainModel = MainModel()
     private let firebase = Firebase()
@@ -27,6 +28,8 @@ class ChatViewController: UIViewController {
     private var coreDataMessages = [DicMessage]()
     private var userData = Users()
     private let defaults = Defaults()
+    private let alamo = Alamo()
+    private var avatarFileName = String()
 
 //MARK: - Lifecycle functions
     override func viewDidLoad() {
@@ -39,13 +42,13 @@ class ChatViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        getMessagesForDictionary()
+        //getMessagesForDictionary()
         chatTable.reloadData()
         tabBarController?.tabBar.isHidden = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        getMessagesForDictionary()
+       // getMessagesForDictionary()
         chatTable.reloadData()
     }
     
@@ -55,6 +58,16 @@ class ChatViewController: UIViewController {
     }
 
 //MARK: - Controller functions
+    func loadData(){
+        //coreDataMessages = coreData.getMessagesByDicID(dicID: dicID, context: context)
+        print("loadData: coreDataMessages loaded with count \(coreDataMessages.count)\n")
+        userData = coreData.loadUserDataByID(userID: mainModel.loadUserData().userID, data: context)
+        chatTable.delegate = self
+        chatTable.dataSource = self
+        chatTable.register(UINib(nibName: "ChatCell", bundle: nil), forCellReuseIdentifier: "chatCell")
+        chatTable.register(UINib(nibName: "UserChatCell", bundle: nil), forCellReuseIdentifier: "userChatCell")
+    }
+    
     func syncMessages(){
         if mainModel.isInternetAvailable(){
             let unsyncMessages = coreDataMessages.filter({$0.msgSyncronized == false})
@@ -82,10 +95,13 @@ class ChatViewController: UIViewController {
             if let error = error {
                 print("Error getting messages: \(error)\n")
                   } else {
+                     // self.coreDataMessages = [DicMessage]()
                       for document in querySnapshot!.documents {
                           let messageData = document.data()
                           let msgID = messageData["msgID"] as? String ?? ""
+                          self.coreDataMessages = self.coreData.getMessagesByDicID(dicID: self.dicID, context: self.context)
                           let messageForCheck = self.coreDataMessages.filter({$0.msgID == msgID})
+                          print("getMessagesForDictionary: messageForCheck array count \(messageForCheck.count)\n")
                           switch messageForCheck.isEmpty{
                           case true:
                               if let msgBody = messageData["msgBody"] as? String,
@@ -107,17 +123,16 @@ class ChatViewController: UIViewController {
                                   newMessage.msgOrdering = Int64(msgOrdering)
                                   newMessage.msgSyncronized = true
                                   self.coreData.saveData(data: self.context)
-                                  self.coreDataMessages = self.coreData.getMessagesByDicID(dicID: self.dicID, context: self.context)
-                                  if msgSenderID != self.mainModel.loadUserData().userID {
-                                      self.mainModel.createFolderInDocuments(withName: msgSenderID)
-                                  }
                               }
+                              self.firebase.createNetworkUsersData(dicID: self.dicID, context: self.context)
                           case false:
                               continue
                           }
                       }
+                     // self.coreDataMessages = self.coreData.getMessagesByDicID(dicID: self.dicID, context: self.context)
                       self.coreDataMessages = self.coreDataMessages.sorted{$0.msgOrdering < $1.msgOrdering}
                       DispatchQueue.main.async {
+                          
                           self.chatTable.reloadData()
                           var rowsCount = Int()
                           if self.coreDataMessages.count == 0 {
@@ -133,14 +148,7 @@ class ChatViewController: UIViewController {
         }
     }
     
-    func loadData(){
-        coreDataMessages = coreData.getMessagesByDicID(dicID: dicID, context: context)
-        userData = coreData.loadUserDataByID(userID: mainModel.loadUserData().userID, data: context)
-        chatTable.delegate = self
-        chatTable.dataSource = self
-        chatTable.register(UINib(nibName: "ChatCell", bundle: nil), forCellReuseIdentifier: "chatCell")
-        chatTable.register(UINib(nibName: "UserChatCell", bundle: nil), forCellReuseIdentifier: "userChatCell")
-    }
+ 
 
 //MARK: - Actions
     @IBAction func sendButtonPressed(_ sender: UIButton) {
@@ -152,18 +160,6 @@ class ChatViewController: UIViewController {
         case (true,false): // No internet connection, message is empty
             return
         case (false,true): // Internet connected, message is not empty
-            let newMessage = DicMessage(context: self.context)
-            newMessage.msgID = msgID
-            newMessage.msgBody = msgBody
-            let msgDateTime = mainModel.convertDateToString(currentDate: Date(), time: true)
-            newMessage.msgDateTime = msgDateTime
-            newMessage.msgDicID = dicID
-            newMessage.msgSenderAvatarPath = userData.userAvatarFirestorePath
-            newMessage.msgSenderID = mainModel.loadUserData().userID
-            newMessage.msgSenderName = mainModel.loadUserData().userName
-            newMessage.msgOrdering = Int64(mainModel.convertCurrentDateToInt())
-            newMessage.msgSyncronized = true
-            self.coreData.saveData(data: self.context)
             firebase.createMessage(msgSenderID: mainModel.loadUserData().userID, msgDicID: dicID, msgBody: msgBody, msgID: msgID, replayTo: nil, msgSenderAvatar: userData.userAvatarFirestorePath ?? defaults.emptyAvatarPath, msgSenderName: userData.userName ?? "Anonimus")
             messageTextView.text?.removeAll()
         case (false,false): // No internet connection, message is not empty
@@ -181,7 +177,7 @@ class ChatViewController: UIViewController {
             self.coreData.saveData(data: self.context)
             messageTextView.text?.removeAll()
         }
-        coreDataMessages = coreData.getMessagesByDicID(dicID: dicID, context: context)
+       // coreDataMessages = coreData.getMessagesByDicID(dicID: dicID, context: context)
         DispatchQueue.main.async {
             self.chatTable.reloadData()
             var rowsCount = Int()
@@ -205,16 +201,20 @@ extension ChatViewController: UITableViewDelegate, UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let otherUserCell = chatTable.dequeueReusableCell(withIdentifier: "chatCell") as! ChatCell
-        otherUserCell.messageBody.text = coreDataMessages[indexPath.row].msgBody
-        otherUserCell.dateTimeLabel.text = coreDataMessages[indexPath.row].msgDateTime
-        otherUserCell.messageView.backgroundColor = UIColor.white
-        otherUserCell.senderNameLabel.isHidden = false
-        otherUserCell.senderNameLabel.text = coreDataMessages[indexPath.row].msgSenderName
-        otherUserCell.senderAvatarImage.isHidden = false
-        if let imageUrl = URL(string: coreDataMessages[indexPath.row].msgSenderAvatarPath ?? ""){
-            otherUserCell.senderAvatarImage.af.setImage(withURL: imageUrl)
-        }
+        let networkUserCell = chatTable.dequeueReusableCell(withIdentifier: "chatCell") as! ChatCell
+        networkUserCell.messageBody.text = coreDataMessages[indexPath.row].msgBody
+        networkUserCell.dateTimeLabel.text = coreDataMessages[indexPath.row].msgDateTime
+        networkUserCell.messageView.backgroundColor = UIColor.white
+        networkUserCell.senderNameLabel.isHidden = false
+        networkUserCell.senderNameLabel.text = coreDataMessages[indexPath.row].msgSenderName
+        networkUserCell.senderAvatarImage.isHidden = false
+        let networkUserAvatar = networkUsers?.filter({$0.nuID == self.coreDataMessages[indexPath.row].msgSenderID}).first?.nuLocalAvatar
+            networkUserCell.senderAvatarImage.image = UIImage(contentsOfFile:  mainModel.getDocumentsFolderPath().appendingPathComponent("\(mainModel.loadUserData().userID)/\(networkUserAvatar ?? "")").path)
+
+            if let imageUrl = URL(string: coreDataMessages[indexPath.row].msgSenderAvatarPath ?? ""){
+                networkUserCell.senderAvatarImage.af.setImage(withURL: imageUrl)
+            }
+        
         let currentUserCell = chatTable.dequeueReusableCell(withIdentifier: "userChatCell") as! UserChatCell
         currentUserCell.messageView.backgroundColor = UIColor(named: "userMessageBg")
         currentUserCell.dateAndTimeLabel.text = coreDataMessages[indexPath.row].msgDateTime
@@ -222,7 +222,30 @@ extension ChatViewController: UITableViewDelegate, UITableViewDataSource{
         if coreDataMessages[indexPath.row].msgSenderID == mainModel.loadUserData().userID {
             return currentUserCell
         } else {
-            return otherUserCell
+//            if coreDataMessages[indexPath.row].msgSenderLocalAvatar == nil{
+//                
+//                    self.alamo.downloadChatUserAvatar(
+//                        url: self.coreDataMessages[indexPath.row].msgSenderAvatarPath!,
+//                        senderID: self.coreDataMessages[indexPath.row].msgSenderID!,
+//                        userID: self.mainModel.loadUserData().userID) { fileName in
+//                            self.avatarFileName = fileName
+//                            
+//                            self.coreDataMessages[indexPath.row].msgSenderLocalAvatar = fileName
+//                            self.coreData.saveData(data: self.context)
+//                        }
+//                   
+//                
+//                
+//                if let imageUrl = URL(string: coreDataMessages[indexPath.row].msgSenderAvatarPath ?? ""){
+//                    otherUserCell.senderAvatarImage.af.setImage(withURL: imageUrl)
+//                }
+////                let avatarPath = "\(mainModel.loadUserData().userID)/\(avatarFileName)"
+////                otherUserCell.senderAvatarImage.image = UIImage(contentsOfFile:  mainModel.getDocumentsFolderPath().appendingPathComponent(avatarPath).path)
+//            } else {
+//                let avatarPath = "\(mainModel.loadUserData().userID)/\(coreDataMessages[indexPath.row].msgSenderLocalAvatar ?? "")"
+//                otherUserCell.senderAvatarImage.image = UIImage(contentsOfFile:  mainModel.getDocumentsFolderPath().appendingPathComponent(avatarPath).path)
+//            }
+            return networkUserCell
         }
     }
     

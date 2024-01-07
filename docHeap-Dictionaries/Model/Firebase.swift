@@ -15,7 +15,7 @@ struct Firebase {
     private let fireDB = Firestore.firestore()
     private let mainModel = MainModel()
     private let coreDataManager = CoreDataManager()
-    
+    private let alamo = Alamo()
 //MARK: - Create functions
     func createUser(userID:String, userEmail: String, userName: String, userInterfaceLanguage:String, userAvatarFirestorePath:URL?, accType:String) {
         let date = mainModel.convertDateToString(currentDate: Date(), time: false)
@@ -330,20 +330,59 @@ struct Firebase {
         }
     }
     
-    func getMessagesByDicID(dicID:String, userID:String, completion: @escaping ([String: Any]?, Error?) -> Void) {
-        fireDB.collection("Dictionaries").whereField("dicShared", isEqualTo: true).getDocuments { (querySnapshot, error) in
+    func createNetworkUsersData(dicID:String, context:NSManagedObjectContext){
+        fireDB.collection("Messages")
+            .whereField("msgDicID", isEqualTo: dicID)
+            .whereField("msgSenderID", isNotEqualTo: mainModel.loadUserData().userID)
+            .getDocuments { (querySnapshot, error) in
             if let error = error {
-                      completion(nil, error)
+                     print("Error getting messages: \(error)")
                   } else {
-                      var allDictionaries: [String: Any] = [:]
-
+                      var messagesUsersSet = Set<String>()
                       for document in querySnapshot!.documents {
-                          let dictionaryData = document.data()
-                          let dictionaryID = document.documentID
-                          allDictionaries[dictionaryID] = dictionaryData
+                          let messageData = document.data()
+                          let msgSenderID = messageData["msgSenderID"] as! String
+                          messagesUsersSet.insert(msgSenderID)
                       }
-
-                      completion(allDictionaries, nil)
+                      let usersArray = Array(messagesUsersSet)
+                      for user in usersArray{
+                          fireDB.collection("Users").whereField("userID", isEqualTo: user).getDocuments{ (querySnapshot, error) in
+                              if let error = error {
+                                       print("Error getting users: \(error)")
+                              } else {
+                                  for document in querySnapshot!.documents {
+                                      let userData = document.data()
+                                      let userID = userData["userID"] as? String ?? "NO_ID"
+                                      if coreDataManager.isNetworkUserExist(userID: userID, data: context){
+                                          continue
+                                      } else {
+                                          if let userName = userData["userName"] as? String,
+                                             let userAvatarFirestorePath = userData["userAvatarFirestorePath"] as? String,
+                                             let userBirthDate = userData["userBirthDate"] as? String,
+                                             let userNativeLanguage = userData["userNativeLanguage"] as? String,
+                                             let userCountry = userData["userCountry"] as? String,
+                                             let userRegisterDate = userData["userRegisterDate"] as? String
+                                          {
+                                              let newNetworkUser = NetworkUser(context:context)
+                                              newNetworkUser.nuID = userID
+                                              newNetworkUser.nuName = userName
+                                              newNetworkUser.nuFirebaseAvatarPath = userAvatarFirestorePath
+                                              newNetworkUser.nuBirthDate = userBirthDate
+                                              newNetworkUser.nuNativeLanguage = userNativeLanguage
+                                              newNetworkUser.nuCountry = userCountry
+                                              newNetworkUser.nuRegisterDate = userRegisterDate
+                                              self.coreDataManager.saveData(data: context)
+                                              alamo.downloadChatUserAvatar(url: userAvatarFirestorePath, senderID: userID, userID: mainModel.loadUserData().userID) { avatarName in
+                                                  newNetworkUser.nuLocalAvatar = avatarName
+                                                  self.coreDataManager.saveData(data: context)
+                                              }
+                                              print("User \(userName) succesfully created!\n")
+                                          }
+                                      }
+                                  }
+                              }
+                          }
+                      }
                   }
         }
     }
@@ -521,6 +560,7 @@ struct Firebase {
         }
        
     }
+  
     
     func setLikeForDictionaryFirebase(dicID: String, userID:String, like:Bool){
         

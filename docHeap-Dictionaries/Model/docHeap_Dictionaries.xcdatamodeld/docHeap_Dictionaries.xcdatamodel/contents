@@ -8,6 +8,7 @@
         <attribute name="msgOrdering" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="msgSenderAvatarPath" optional="YES" attributeType="String"/>
         <attribute name="msgSenderID" optional="YES" attributeType="String"/>
+        <attribute name="msgSenderLocalAvatar" optional="YES" attributeType="String"/>
         <attribute name="msgSenderName" optional="YES" attributeType="String"/>
         <attribute name="msgSyncronized" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
     </entity>
@@ -54,15 +55,22 @@
         <attribute name="testingDictionaryName" optional="YES" attributeType="String"/>
         <attribute name="testMethod" optional="YES" attributeType="String"/>
     </entity>
+    <entity name="NetworkUser" representedClassName="NetworkUser" syncable="YES" codeGenerationType="class">
+        <attribute name="nuBirthDate" optional="YES" attributeType="String"/>
+        <attribute name="nuCountry" optional="YES" attributeType="String"/>
+        <attribute name="nuFirebaseAvatarPath" optional="YES" attributeType="String"/>
+        <attribute name="nuID" optional="YES" attributeType="String"/>
+        <attribute name="nuLocalAvatar" optional="YES" attributeType="String"/>
+        <attribute name="nuName" optional="YES" attributeType="String"/>
+        <attribute name="nuNativeLanguage" optional="YES" attributeType="String"/>
+        <attribute name="nuRegisterDate" optional="YES" attributeType="String"/>
+    </entity>
     <entity name="Statistic" representedClassName="Statistic" syncable="YES" codeGenerationType="class">
         <attribute name="method" optional="YES" attributeType="String"/>
         <attribute name="testDate" optional="YES" attributeType="String"/>
         <attribute name="testingDictionaryName" optional="YES" attributeType="String"/>
         <attribute name="testMistakesNumber" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="testScores" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-    </entity>
-    <entity name="TempData" representedClassName="TempData" syncable="YES" codeGenerationType="class">
-        <attribute name="tmpData" optional="YES" attributeType="Transformable"/>
     </entity>
     <entity name="ThreeWordsTestStatistic" representedClassName="ThreeWordsTestStatistic" syncable="YES" codeGenerationType="class">
         <attribute name="mistakes" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
@@ -84,6 +92,7 @@
         <attribute name="userRegisterDate" optional="YES" attributeType="String"/>
         <attribute name="userScores" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="userSyncronized" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="userType" optional="YES" attributeType="String"/>
     </entity>
     <entity name="Word" representedClassName=".Word" syncable="YES" codeGenerationType="class">
         <attribute name="imageName" optional="YES" attributeType="String"/>

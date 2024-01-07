@@ -150,6 +150,30 @@ struct Alamo {
         }
     }
     
+    func downloadChatUserAvatar(url:String, senderID:String, userID:String, completion: @escaping (String) -> Void){
+        var avatarExt = String()
+        if let imageUrl = URL(string: url){
+            let destination: DownloadRequest.Destination = { _, _ in
+            let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            avatarExt = imageUrl.pathExtension
+            let fileURL = documentsURL.appendingPathComponent("\(userID)/\(senderID).\(avatarExt)")
+            return (fileURL, [.removePreviousFile, .createIntermediateDirectories])
+            }
+            
+            AF.download(imageUrl, to: destination).response { response in
+                if let imagePath = response.fileURL?.path {
+                    // Теперь у вас есть локальный путь к сохраненной картинке
+//                    print("File extention is: \(avatarExt)")
+                    completion("\(senderID).\(avatarExt)")
+                    // Используйте локальный путь для загрузки и отображения изображения
+                   // localImageURL = imagePath
+                    //otherUserCell.senderAvatarImage.image = UIImage(contentsOfFile: localImageUrl.path)
+                }
+            }
+        }
+        
+    }
+    
 //    func deleteImageFolderFromStorage1(folderURL: String, completion: @escaping (Error?) -> Void) {
 //        guard let url = URL(string: folderURL) else {
 //            completion(nil)

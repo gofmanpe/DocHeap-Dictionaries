@@ -51,7 +51,6 @@ class CreatePopUpViewController: UIViewController, UITextFieldDelegate {
     private var dictionariesArray = [Dictionary]()
     private let defaults = Defaults()
     private let coreDataManager = CoreDataManager()
-   // private var languagesVolumesArray = [String]()
     private let mainModel = MainModel()
     private let fireDB = Firebase()
     
@@ -70,70 +69,6 @@ class CreatePopUpViewController: UIViewController, UITextFieldDelegate {
         dictionaryNameTextField.delegate = self
         elementsDesign()
         standartState()
-    }
-    
-    @IBAction func cancelPressed(_ sender: Any) {
-        hide()
-    }
-    
-    @IBAction func learningButtonPressed(_ sender: UIButton) {
-        pressedButton = 1
-        warningView.isHidden = true
-        if pickerView.isHidden{
-            pickerView.isHidden = false
-            activeButton(button: 1)
-        } else {
-            standartState()
-        }
-    }
-    
-    @IBAction func translateButtonPressed(_ sender: UIButton) {
-        pressedButton = 2
-        warningView.isHidden = true
-        if pickerView.isHidden{
-            pickerView.isHidden = false
-            activeButton(button: 2)
-        } else {
-            standartState()
-        }
-    }
-    
-    @IBAction func createButtonPressed(_ sender: UIButton) {
-        if checkRulesForSelectedLanguages(learningLanguage: selectedLearning, translateLanguage: selectedTranslate, dicName: dictionaryNameTextField.text ?? ""){
-            let newDictionary = Dictionary(context: context)
-            newDictionary.dicName = dictionaryNameTextField.text
-            newDictionary.dicDescription = descriptionTextField.text
-            newDictionary.dicLearningLanguage = selectedLearning
-            newDictionary.dicTranslateLanguage = selectedTranslate
-            let dicID = mainModel.uniqueIDgenerator(prefix: "dic")//"dic\(mainModel.timeStampGeneration())"
-            newDictionary.dicID = dicID
-            newDictionary.dicUserID = mainModel.loadUserData().userID
-            newDictionary.dicAddDate = mainModel.convertDateToString(currentDate: Date(), time: false)
-            mainModel.createFolderInDocuments(withName: "\(mainModel.loadUserData().userID)/\(dicID)")
-            newDictionary.dicDeleted = false
-            newDictionary.dicShared = false
-            newDictionary.dicReadOnly = false
-            if mainModel.isInternetAvailable(){
-                fireDB.createDictionary(
-                    dicName: dictionaryNameTextField.text!,
-                    dicUserID: mainModel.loadUserData().userID,
-                    dicLearningLang: selectedLearning,
-                    dicTranslationLang: selectedTranslate,
-                    dicDescription: descriptionTextField.text ?? "",
-                    dicWordsCount: 0,
-                    dicID: dicID,
-                    dicImagesCount: 0,
-                    dicAddDate: mainModel.convertDateToString(currentDate: Date(), time: false), 
-                    dicShared: false
-                )
-                newDictionary.dicSyncronized = true
-            } else {
-                newDictionary.dicSyncronized = false
-            }
-            coreDataManager.saveData(data: context)
-            tableReloadDelegate?.didUpdateView(sender:"")
-            hide()
-        }
     }
     
     func appear(sender: DictionariesController) {
@@ -266,6 +201,69 @@ class CreatePopUpViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
+    @IBAction func cancelPressed(_ sender: Any) {
+        hide()
+    }
+    
+    @IBAction func learningButtonPressed(_ sender: UIButton) {
+        pressedButton = 1
+        warningView.isHidden = true
+        if pickerView.isHidden{
+            pickerView.isHidden = false
+            activeButton(button: 1)
+        } else {
+            standartState()
+        }
+    }
+    
+    @IBAction func translateButtonPressed(_ sender: UIButton) {
+        pressedButton = 2
+        warningView.isHidden = true
+        if pickerView.isHidden{
+            pickerView.isHidden = false
+            activeButton(button: 2)
+        } else {
+            standartState()
+        }
+    }
+    
+    @IBAction func createButtonPressed(_ sender: UIButton) {
+        if checkRulesForSelectedLanguages(learningLanguage: selectedLearning, translateLanguage: selectedTranslate, dicName: dictionaryNameTextField.text ?? ""){
+            let newDictionary = Dictionary(context: context)
+            newDictionary.dicName = dictionaryNameTextField.text
+            newDictionary.dicDescription = descriptionTextField.text
+            newDictionary.dicLearningLanguage = selectedLearning
+            newDictionary.dicTranslateLanguage = selectedTranslate
+            let dicID = mainModel.uniqueIDgenerator(prefix: "dic")
+            newDictionary.dicID = dicID
+            newDictionary.dicUserID = mainModel.loadUserData().userID
+            newDictionary.dicAddDate = mainModel.convertDateToString(currentDate: Date(), time: false)
+            mainModel.createFolderInDocuments(withName: "\(mainModel.loadUserData().userID)/\(dicID)")
+            newDictionary.dicDeleted = false
+            newDictionary.dicShared = false
+            newDictionary.dicReadOnly = false
+            if mainModel.isInternetAvailable(){
+                fireDB.createDictionary(
+                    dicName: dictionaryNameTextField.text!,
+                    dicUserID: mainModel.loadUserData().userID,
+                    dicLearningLang: selectedLearning,
+                    dicTranslationLang: selectedTranslate,
+                    dicDescription: descriptionTextField.text ?? "",
+                    dicWordsCount: 0,
+                    dicID: dicID,
+                    dicImagesCount: 0,
+                    dicAddDate: mainModel.convertDateToString(currentDate: Date(), time: false), 
+                    dicShared: false
+                )
+                newDictionary.dicSyncronized = true
+            } else {
+                newDictionary.dicSyncronized = false
+            }
+            coreDataManager.saveData(data: context)
+            tableReloadDelegate?.didUpdateView(sender:"")
+            hide()
+        }
+    }
     
 }
 

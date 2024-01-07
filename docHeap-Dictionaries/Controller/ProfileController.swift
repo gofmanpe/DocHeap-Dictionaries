@@ -12,11 +12,13 @@ import FirebaseFirestore
 import FirebaseStorage
 
 class ProfileController: UIViewController, UIImagePickerControllerDelegate & UINavigationControllerDelegate, UpdateView {
+    
+//MARK: - Protocols delegate functions
     func didUpdateView(sender: String) {
         setupUserData()
     }
     
-
+//MARK: - Outlets
     @IBOutlet weak var userAvatar: UIImageView!
     @IBOutlet weak var setAvatarButton: UIButton!
     @IBOutlet weak var nameLabel: UILabel!
@@ -32,6 +34,7 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate & UIN
     @IBOutlet weak var scoresLabel: UILabel!
     @IBOutlet weak var editButton: UIButton!
     
+//MARK: - Localization
     func localizeElements(){
         logoutButton.setTitle("profileVC_logout_button".localized, for: .normal)
         setAvatarButton.setTitle("profileVC_setAvatar_button".localized, for: .normal)
@@ -39,7 +42,8 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate & UIN
         addInfoLabel.text = "profileVC_addInfo_label".localized
     }
     
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+//MARK: - Constants and variables
+    private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     private let userDefaults = UserDefaults.standard
     private var selectedImage = UIImage()
     private var imageIsSet = false
@@ -55,7 +59,7 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate & UIN
     private let sync = SyncModel()
     private var avatarFirestorePath = String()
     private var userData : Users?
-    
+//MARK: - Lifecycle functions
     override func viewDidLoad() {
         super.viewDidLoad()
         localizeElements()
@@ -74,6 +78,7 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate & UIN
         setupUserData()
     }
     
+//MARK: - Controller functions
     func setupUserData(){
         userData = coreDataManager.loadUserDataByID(userID: mainModel.loadUserData().userID, data: context)
         nameLabel.text = userData?.userName
@@ -85,10 +90,8 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate & UIN
 
     func elementsDesign(){
         if userData?.userAvatarExtention != nil{
-           // if let ava = coreDataManager.usersArray.first?.userAvatarExtention{
-                let avaExtention = userData?.userAvatarExtention ?? ""
-                avatarName = "userAvatar.\(avaExtention)"
-          //  }
+            let avaExtention = userData?.userAvatarExtention ?? ""
+            avatarName = "userAvatar.\(avaExtention)"
             let avatarPath = "\(mainModel.loadUserData().userID)/\(avatarName)"
             userAvatar.image = UIImage(contentsOfFile:  mainModel.getDocumentsFolderPath().appendingPathComponent(avatarPath).path)
             userAvatar.layer.cornerRadius = userAvatar.frame.size.width/2
@@ -97,9 +100,8 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate & UIN
         } else {
             print("NO USER AVATAR\n")
         }
-        //nameLabel.text = coreDataManager.usersArray.first?.userName
-        emailLabel.text = userData?.userEmail//coreDataManager.usersArray.first?.userEmail
-        registerDateLabel.text = userData?.userRegisterDate//coreDataManager.usersArray.first?.userRegisterDate
+        emailLabel.text = userData?.userEmail
+        registerDateLabel.text = userData?.userRegisterDate
         setAvatarButton.layer.cornerRadius = 5
         logoutButton.layer.cornerRadius = 5
         windowView.clipsToBounds = true
@@ -148,16 +150,10 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate & UIN
         let storage = Storage.storage()
         let imageRef = storage.reference().child(mainModel.loadUserData().userID).child("userAvatar.\(imageExtention)")
         let localImageURL = avatarURL!
-        
         imageRef.putFile(from: localImageURL, metadata: nil) { metadata, error in
-            guard metadata != nil else {
-                return
-            }
-
+            guard metadata != nil else { return }
             imageRef.downloadURL { url, error in
-                guard let downloadURL = url else {
-                    return
-                }
+                guard let downloadURL = url else { return }
                 self.userData?.userAvatarFirestorePath = downloadURL.absoluteString
                 self.coreDataManager.saveData(data: self.context)
                 self.updateAvatarURLInFirestore(userID: self.mainModel.loadUserData().userID, avatarURL: downloadURL.absoluteString)
@@ -169,18 +165,9 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate & UIN
         self.fireDB.collection("Users").document(userID).updateData(["userAvatarFirestorePath": avatarURL]) { error in
             if let error = error {
                 print("Error updating avatar URL in Firestore: \(error)")
-            } else {
-                print("Avatar URL in Firestore successfully updated")
             }
         }
     }
-    
-//    func popUpApear(){
-//        let overLayerView = ChangeLanguagePopUpController()
-//        overLayerView.appear(sender: self)
-//    }
-    
-  
     
     func popUpApear(){
             let overLayedView = EditProfileViewController()
@@ -188,6 +175,7 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate & UIN
             overLayedView.appear(sender: self)
     }
     
+//MARK: - Actions
     @IBAction func logoutButtonPressed(_ sender: UIButton) {
         let accountType = mainModel.loadUserData().accType
         switch accountType{
@@ -219,10 +207,5 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate & UIN
     @IBAction func editButtonPressed(_ sender: UIButton) {
         popUpApear()
     }
-    
-    
-//    @IBAction func interfaceLanguageButtonPressed(_ sender: UIButton) {
-//        popUpApear()
-//    }
-    
+
 }
