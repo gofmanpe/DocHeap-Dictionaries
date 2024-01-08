@@ -26,6 +26,14 @@ struct SyncModel {
         }
     }
     
+    func syncNetworkUsersDataWithFirebase(context:NSManagedObjectContext){
+        // 1. get nuID from CoreData
+        // 2. in loop, for each nuID get data from Firebase and update it in CoreData (exclude avatar path)
+        // 3. check, if avatar path is not equals, download new avatar, and upddate it locally
+        firebase.updateNetworkUsersDataInCoreData(context: context)
+       
+    }
+    
     func syncWordsCoreDataAndFirebase(userID: String, context:NSManagedObjectContext){
        let allWords = coreData.loadAllWordsByUserID(userID: userID, data: context)
         let unsyncWords = allWords.filter({$0.wrdSyncronized == false})

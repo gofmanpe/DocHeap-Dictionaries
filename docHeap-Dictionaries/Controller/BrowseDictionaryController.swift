@@ -170,6 +170,7 @@ class BrowseDictionaryController: UIViewController, UpdateView, SaveWordsPairToD
         if mainModel.isInternetAvailable(){
             sync.syncDictionariesCoreDataAndFirebase(userID: mainModel.loadUserData().userID, context: context)
             sync.syncWordsCoreDataAndFirebase(userID: mainModel.loadUserData().userID, context: context)
+            sync.syncNetworkUsersDataWithFirebase(context: context)
             fireDB.createNetworkUsersData(dicID: dicID, context: context)
         }
     }

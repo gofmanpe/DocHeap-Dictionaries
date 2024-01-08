@@ -131,7 +131,7 @@ struct Firebase {
     }
     
     func createUnsynchronedMessage(msgSenderID:String, msgDicID: String, msgBody: String, msgID: String, msgDateTime:String, msgSenderAvatar: String, msgSenderName:String, msgOrdering:Int) {
-        var data: [String: Any] = [
+        let data: [String: Any] = [
             "msgSenderID" : msgSenderID,
             "msgDicID": msgDicID,
             "msgBody": msgBody,
@@ -385,6 +385,73 @@ struct Firebase {
                       }
                   }
         }
+    }
+    
+    func updateNetworkUsersDataInCoreData(context:NSManagedObjectContext){
+        let networkUsers = coreDataManager.loadAllNetworkUsers(data:context)
+        for user in networkUsers {
+            let userID = user.nuID ?? "EMPTY_ID"
+            fireDB.collection("Users").whereField("userID", isEqualTo: userID).getDocuments {(querySnapshot, error) in
+                if let error = error {
+                    print("Error getting user data: \(error)")
+                } else {
+                    guard let document = querySnapshot?.documents.first else {return}
+                    let userData = document.data()
+                    let userName = userData["userName"] as? String
+                    if user.nuName != userName{
+                        user.nuName = userName
+                    }
+                    let userCountry = userData["userCountry"] as? String
+                    if user.nuCountry != userCountry{
+                        user.nuCountry = userCountry
+                    }
+                    let userNativeLanguage = userData["userNativeLanguage"] as? String
+                    if user.nuNativeLanguage != userNativeLanguage{
+                        user.nuNativeLanguage = userNativeLanguage
+                    }
+                    let userBirthDate = userData["userBirthDate"] as? String
+                    if user.nuBirthDate != userBirthDate{
+                        user.nuBirthDate = userBirthDate
+                    }
+                    let userAvatarFirestorePath = userData["userAvatarFirestorePath"] as? String ?? "EMPTY_AVATAR"
+                    if user.nuLocalAvatar != userAvatarFirestorePath{
+                        user.nuFirebaseAvatarPath = userAvatarFirestorePath
+                        self.alamo.downloadChatUserAvatar(url: userAvatarFirestorePath, senderID: userID, userID: mainModel.loadUserData().userID) { avatarName in
+                            user.nuLocalAvatar = avatarName
+                            self.coreDataManager.saveData(data: context)
+                        }
+                    }
+                    self.coreDataManager.saveData(data: context)
+                }
+            }
+        }
+    }
+    
+    func getNetworkUserDataByID(userID:String, completion: @escaping (NetworkUserData?) -> Void){
+        fireDB.collection("Users")
+            .whereField("userID", isEqualTo: userID)
+            .getDocuments { (querySnapshot, error) in
+                if error != nil {
+                    print("Error getting user data: \(error!)")
+                    completion(nil)
+                } else {
+                    var resultData : NetworkUserData?
+                    for document in querySnapshot!.documents {
+                        let userData = document.data()
+                        if let userID = userData["userID"] as? String,
+                           let userName = userData["userName"] as? String,
+                           let userCountry = userData["userCountry"] as? String,
+                           let userNativeLanguage = userData["userNativeLanguage"] as? String,
+                           let userBirthDate = userData["userBirthDate"] as? String,
+                           let userRegisterDate = userData["userRegisterDate"] as? String,
+                           let userAvatarFirestorePath = userData["userAvatarFirestorePath"] as? String
+                        {
+                            resultData = NetworkUserData(userID: userID, userName: userName, userCountry: userCountry, userNativeLanguage: userNativeLanguage, userBirthDate: userBirthDate, userRegisterDate: userRegisterDate, userAvatarFirestorePath: userAvatarFirestorePath)
+                        }
+                    }
+                    completion(resultData)
+                }
+            }
     }
     
     func getAllMessages(completion: @escaping ([ChatMessage]?) -> Void){

@@ -47,16 +47,16 @@ struct LanguagesArray{
     let lang: String
     let langValue: String
 }
-struct UserDataFirebase{
-    let userID: String
-    let userName:String
-    let userEmail:String
-    let userCountry:Int
-    let userNativeLanguage:String
-    let userBirthDate:String
-    let userRegisterDate:String
-    let userScores:Int
-}
+//struct UserDataFirebase{
+//    let userID: String
+//    let userName:String
+//    let userEmail:String
+//    let userCountry:Int
+//    let userNativeLanguage:String
+//    let userBirthDate:String
+//    let userRegisterDate:String
+//    let userScores:Int
+//}
 struct MonthArray{
     let value: String
     let name: String
@@ -76,4 +76,14 @@ struct ChatMessage{
     let msgSenderName: String
     let msgSenderAvatarPath: String
     let msgOrdering: Int
+}
+
+struct NetworkUserData{
+    let userID: String
+    let userName:String
+    let userCountry:String
+    let userNativeLanguage:String
+    let userBirthDate:String
+    let userRegisterDate:String
+    let userAvatarFirestorePath:String
 }

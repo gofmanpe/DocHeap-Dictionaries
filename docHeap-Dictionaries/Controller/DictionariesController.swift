@@ -67,6 +67,7 @@ class DictionariesController: UIViewController, UpdateView, CellButtonPressed{
         if mainModel.isInternetAvailable(){
             sync.syncDictionariesCoreDataAndFirebase(userID: mainModel.loadUserData().userID, context: context)
             sync.syncWordsCoreDataAndFirebase(userID: mainModel.loadUserData().userID, context: context)
+            sync.syncNetworkUsersDataWithFirebase(context: context)
         }
     }
     
@@ -74,7 +75,7 @@ class DictionariesController: UIViewController, UpdateView, CellButtonPressed{
         if mainModel.isInternetAvailable(){
             sync.syncDictionariesCoreDataAndFirebase(userID: mainModel.loadUserData().userID, context: context)
         }
-        loadDataForSharedDictionary()
+        //loadDataForSharedDictionary()
         avatarSet()
         setupData()
         dictionaryCheck()
@@ -93,13 +94,18 @@ class DictionariesController: UIViewController, UpdateView, CellButtonPressed{
             dictionariesTable.reloadData()
                 noDicltionariesLabel.isHidden = true
             }
-    }
-    
-    func loadDataForSharedDictionary(){
-        firebase.getDictionaryShortData { dicArray in
-        let sharedDictionaries = dicArray
+        if let userNickname = usersArray?.userName, userNickname.isEmpty {
+            userNameLabel.text = usersArray?.userEmail
+        } else {
+            userNameLabel.text = usersArray?.userName
         }
     }
+    
+//    func loadDataForSharedDictionary(){
+//        firebase.getDictionaryShortData { dicArray in
+//        let sharedDictionaries = dicArray
+//        }
+//    }
     
     func getDicOwnerDataFromFirestore(ownerID:String){
         let db = Firestore.firestore()
@@ -126,11 +132,6 @@ class DictionariesController: UIViewController, UpdateView, CellButtonPressed{
         avatarImageView.clipsToBounds = true
         avatarImageView.layer.borderWidth = 0.5
         avatarImageView.layer.borderColor = UIColor.lightGray.cgColor
-        if let userNickname = usersArray?.userName, userNickname.isEmpty {
-            userNameLabel.text = usersArray?.userEmail
-        } else {
-            userNameLabel.text = usersArray?.userName
-        }
         myDictionariesLabel.text = "dictionariesVC_myDictionaries_label".localized
         profileButtonView.layer.cornerRadius = 45
         profileButtonView.layer.shadowColor = UIColor.black.cgColor

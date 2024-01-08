@@ -120,6 +120,31 @@ class BrowseSharedDicViewController: UIViewController {
             targetButton.transform = .identity
         }
     }
+    
+    func saveSharedDictionaryUserData(){
+        guard let ownerID = dicOwnerData?.ownerID else {return}
+        if coreData.isNetworkUserExist(userID: ownerID, data: context){
+            return
+        } else {
+            firebase.getNetworkUserDataByID(userID: dicOwnerData?.ownerID ?? "EMPTY_ID") { networkUserData in
+                let newNetworkUser = NetworkUser(context: self.context)
+                newNetworkUser.nuID = networkUserData?.userID
+                newNetworkUser.nuName = networkUserData?.userName
+                newNetworkUser.nuCountry = networkUserData?.userCountry
+                newNetworkUser.nuBirthDate = networkUserData?.userBirthDate
+                newNetworkUser.nuNativeLanguage = networkUserData?.userNativeLanguage
+                newNetworkUser.nuRegisterDate = networkUserData?.userRegisterDate
+                newNetworkUser.nuFirebaseAvatarPath = networkUserData?.userAvatarFirestorePath
+                self.coreData.saveData(data: self.context)
+                let userAvatarFirestorePath = networkUserData?.userAvatarFirestorePath ?? ""
+                let userID = networkUserData?.userID ?? ""
+                self.alamo.downloadChatUserAvatar(url: userAvatarFirestorePath, senderID: userID, userID: self.mainModel.loadUserData().userID) { avatarName in
+                    newNetworkUser.nuLocalAvatar = avatarName
+                    self.coreData.saveData(data: self.context)
+                }
+            }
+        }
+    }
 
 //MARK: - Actions
     @IBAction func downloadButtonPressed(_ sender: UIButton) {
@@ -136,6 +161,7 @@ class BrowseSharedDicViewController: UIViewController {
                 downloadButton.backgroundColor = UIColor(named: "Right answer")
             }
             dicWasDownloaded = true
+            saveSharedDictionaryUserData()
         }
     }
     
