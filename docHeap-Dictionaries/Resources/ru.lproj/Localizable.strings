@@ -5,6 +5,13 @@
   Created by Pavel Gofman on 14.11.23.
   
 */
+
+//TabBarController
+"Dictionaries" = "Словари";
+"Tests" = "Тесты";
+"Network" = "Сеть";
+"Statistic" = "Статистика";
+"Profile" = "Профиль";
 //StartController
 "startVC_email_placeholder" = "Ваш email";
 "startVC_password_placeholder" = "Ваш пароль";
@@ -49,6 +56,7 @@
 "editDictionaryVC_nothingToChange_message" = "Ничего не изменилось, сохранять нечего";
 "editDictionaryVC_dictionaryNameIsEmpty_message" = "Невозможно сохранить без имени словаря";
 "editDictionaryVC_successSave_message" = "Изменения успешно сохранены";
+"editDictionaryVC_shareDictionary_label" = "Сделать общедоступным";
 //DeleteDictionaryPopUpViewController
 "deleteDictionaryVC_header_label" = "Удаление словаря";
 "deleteDictionaryVC_dialog_label" = "Вы действительно хотите удалить словарь:";
@@ -151,6 +159,11 @@
 "testVC_findAnImage_name" = "Тест Найти картинку";
 "testVC_findAnImage_description" = "Вам нужно будет выбрать правильное изображение для значения слова.";
 "testVC_noDictionariesCreated_message" = "У вас пока нет словарей.\nДля начала тестирования необходимо создать хотя бы один словарь и добавить в него 5 слов.";
+"testVC_5wordstest_ico" = "5wrdico_ru.png";
+"testVC_3wordstest_ico" = "3wrdico_ru.png";
+"testVC_findApairtest_ico" = "fApico_ru.png";
+"testVC_findAnImagetest_ico" = "fAiico_ru.png";
+"testVC_trueOrFalsetest_ico" = "tOfico_ru.png";
 //SelectDictionaryForTestVC
 "selectDictionaryVC_header_label" = "Выбор словаря для теста";
 "selectDictionaryVC_selectDictionary_label" = "Выберите словарь";
@@ -176,3 +189,11 @@
 "profileVC_setAvatar_button" = "Сменить";
 "profileVC_registred_label" = "регистрация:";
 "profileVC_addInfo_label" = "Доп. инфо";
+
+//StatisticVC
+"statisticVC_noStatistic_label" = "У вас еще нет статистики, потому что вы пока не прошли ни одного теста!";
+"statisticVC_totaly_label" = "ИТОГО:";
+"statisticVC_starts_label" = "Запуски";
+"statisticVC_right_label" = "Верно";
+"statisticVC_wrong_label" = "Ошибка";
+"statisticVC_scores_label" = "Очки";

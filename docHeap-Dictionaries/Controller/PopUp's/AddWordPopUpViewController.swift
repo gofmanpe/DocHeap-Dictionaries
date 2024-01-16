@@ -170,7 +170,7 @@ class AddWordPopUpViewController: UIViewController, UITextFieldDelegate {
           
           //  let translitImageName = mainModel.spacesToUnderscores(value: enteredWord.transliterate())
           //  let preparedFileName = translitImageName.transliterate().replaceSpacesWithUnderscores().removeSpacesAndSpecialChars()
-            imageName = mainModel.uniqueIDgenerator(prefix: "img")
+            imageName = "\(mainModel.uniqueIDgenerator(prefix: "img")).\(imageExtention)"
             
             imageUrl = mainModel.getDocumentsFolderPath().appendingPathComponent("\(mainModel.loadUserData().userID)/\(dictionaryID)/\(imageName)")
            
@@ -350,13 +350,7 @@ extension AddWordPopUpViewController: UIImagePickerControllerDelegate, UINavigat
               picker.dismiss(animated: true, completion: nil)
       
         
-//        if let pickedImage = info[.originalImage] as? UIImage,
-//           let url = info[.imageURL] as? URL {
-//            // Получите путь и имя файла
-//            let path = url.path
-//            let imageName = url.lastPathComponent
-//            imageExtention = String(path.lowercased().suffix(4))
-//            }
+
         }
   
     

@@ -36,7 +36,7 @@ class EditProfileViewController: UIViewController {
     }
     
     private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    private var userData : Users?
+    private var userData : UserData?
     private let coreData = CoreDataManager()
     private let firebase = Firebase()
     private let mainModel = MainModel()
@@ -47,12 +47,12 @@ class EditProfileViewController: UIViewController {
     var updateViewDelegate : UpdateView?
     let pickerView = UIPickerView()
     private let defaults = Defaults()
-        var selectedDay: Int?
-        var selectedMonth: String?
-        var selectedYear: Int?
-        let days = Array(1...31)
-        var months = [MonthArray]()
-    var years = Array(1920...Calendar.current.component(.year, from: Date()) - 3)
+    private var selectedDay: Int?
+    private var selectedMonth: String?
+    private var selectedYear: Int?
+    private let days = Array(1...31)
+    private var months = [MonthArray]()
+    private var years = Array(1920...Calendar.current.component(.year, from: Date()) - 3)
        
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -71,7 +71,7 @@ class EditProfileViewController: UIViewController {
     }
    
     func dataSetup(){
-        userData = coreData.loadUserDataByID(userID: mainModel.loadUserData().userID, data: context)
+        userData = coreData.loadUserDataByID(userID: mainModel.loadUserData().userID, context: context).first
         userNameTextField.text = userData?.userName
         dateOfBirthTextField.text = userData?.userBirthDate
         countryTextField.text = userData?.userCountry
@@ -79,10 +79,6 @@ class EditProfileViewController: UIViewController {
         months = defaults.monthArray
         
     }
-    
-//    func datePickerSettings(){
-
-//    }
     
     func checkForChanges()->Bool{
         newUserName = userNameTextField.text ?? ""
@@ -155,17 +151,29 @@ class EditProfileViewController: UIViewController {
     @IBAction func saveButtonPressed(_ sender: UIButton) {
         if checkForChanges(){
             warningViewAppearAnimate("All data was saved!", problem: false)
-            userData?.userName = newUserName
-            userData?.userBirthDate = newBirthDate
-            userData?.userCountry = newCountry
-            userData?.userNativeLanguage = newNativeLanguage
-            coreData.saveData(data: context)
-            userData = coreData.loadUserDataByID(userID: mainModel.loadUserData().userID, data: context)
+            let uData = UserData(
+                userID: mainModel.loadUserData().userID,
+                userName: newUserName,
+                userBirthDate: newBirthDate,
+                userCountry: newCountry,
+                userAvatarFirestorePath: "",
+                userAvatarExtention: "",
+                userNativeLanguage: newNativeLanguage,
+                userScores: 0,
+                userShowEmail: false,
+                userEmail: "",
+                userSyncronized: true,
+                userType: "",
+                userRegisterDate: "",
+                userInterfaceLanguage: "")
+            coreData.updateUserData(userData: uData, context: context)
+           
+            userData = coreData.loadUserDataByID(userID: mainModel.loadUserData().userID, context: context).first
             if mainModel.isInternetAvailable(){
-                firebase.updateUserDataFirebase(userData: userData ?? Users())
-                userData?.userSyncronized = true
+                firebase.updateUserDataFirebase(userData: userData!)
+                coreData.setSyncronizedStatusForUser(userID: mainModel.loadUserData().userID, status: true, context: context)
             } else {
-                userData?.userSyncronized = false
+                coreData.setSyncronizedStatusForUser(userID: mainModel.loadUserData().userID, status: false, context: context)
             }
             coreData.saveData(data: context)
             updateViewDelegate?.didUpdateView(sender: "")

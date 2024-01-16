@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22225" systemVersion="23B92" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22225" systemVersion="23C71" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="DicMessage" representedClassName="DicMessage" syncable="YES" codeGenerationType="class">
         <attribute name="msgBody" optional="YES" attributeType="String"/>
         <attribute name="msgDateTime" optional="YES" attributeType="String"/>
         <attribute name="msgDicID" optional="YES" attributeType="String"/>
         <attribute name="msgID" optional="YES" attributeType="String"/>
         <attribute name="msgOrdering" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="msgSenderAvatarPath" optional="YES" attributeType="String"/>
         <attribute name="msgSenderID" optional="YES" attributeType="String"/>
-        <attribute name="msgSenderLocalAvatar" optional="YES" attributeType="String"/>
-        <attribute name="msgSenderName" optional="YES" attributeType="String"/>
         <attribute name="msgSyncronized" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
     </entity>
     <entity name="Dictionary" representedClassName=".Dictionary" syncable="YES" codeGenerationType="class">
@@ -30,54 +27,28 @@
         <attribute name="dicWordsCount" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="words" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Word" inverseName="parentDictionary" inverseEntity="Word"/>
     </entity>
-    <entity name="FalseOrTrueTestStatistic" representedClassName="FalseOrTrueTestStatistic" syncable="YES" codeGenerationType="class">
-        <attribute name="mistakes" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="scores" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="testDate" optional="YES" attributeType="String"/>
-        <attribute name="testingDictionaryName" optional="YES" attributeType="String"/>
-    </entity>
-    <entity name="FindAnImageTestStatistic" representedClassName="FindAnImageTestStatistic" syncable="YES" codeGenerationType="class">
-        <attribute name="mistakes" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="scores" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="testDate" optional="YES" attributeType="String"/>
-        <attribute name="testingDictionaryName" optional="YES" attributeType="String"/>
-    </entity>
-    <entity name="FindAPairTestStatistic" representedClassName="FindAPairTestStatistic" syncable="YES" codeGenerationType="class">
-        <attribute name="mistakes" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="scores" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="testDate" optional="YES" attributeType="String"/>
-        <attribute name="testingDictionaryName" optional="YES" attributeType="String"/>
-    </entity>
-    <entity name="FiveWordsTestStatistic" representedClassName="FiveWordsTestStatistic" syncable="YES" codeGenerationType="class">
-        <attribute name="mistakes" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="scores" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="testDate" optional="YES" attributeType="String"/>
-        <attribute name="testingDictionaryName" optional="YES" attributeType="String"/>
-        <attribute name="testMethod" optional="YES" attributeType="String"/>
-    </entity>
     <entity name="NetworkUser" representedClassName="NetworkUser" syncable="YES" codeGenerationType="class">
         <attribute name="nuBirthDate" optional="YES" attributeType="String"/>
         <attribute name="nuCountry" optional="YES" attributeType="String"/>
+        <attribute name="nuEmail" optional="YES" attributeType="String"/>
         <attribute name="nuFirebaseAvatarPath" optional="YES" attributeType="String"/>
         <attribute name="nuID" optional="YES" attributeType="String"/>
         <attribute name="nuLocalAvatar" optional="YES" attributeType="String"/>
         <attribute name="nuName" optional="YES" attributeType="String"/>
         <attribute name="nuNativeLanguage" optional="YES" attributeType="String"/>
         <attribute name="nuRegisterDate" optional="YES" attributeType="String"/>
+        <attribute name="nuScores" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="nuShowEmail" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
     </entity>
     <entity name="Statistic" representedClassName="Statistic" syncable="YES" codeGenerationType="class">
-        <attribute name="method" optional="YES" attributeType="String"/>
-        <attribute name="testDate" optional="YES" attributeType="String"/>
-        <attribute name="testingDictionaryName" optional="YES" attributeType="String"/>
-        <attribute name="testMistakesNumber" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="testScores" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-    </entity>
-    <entity name="ThreeWordsTestStatistic" representedClassName="ThreeWordsTestStatistic" syncable="YES" codeGenerationType="class">
-        <attribute name="mistakes" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="scores" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="testDate" optional="YES" attributeType="String"/>
-        <attribute name="testingDictionaryName" optional="YES" attributeType="String"/>
-        <attribute name="testMethod" optional="YES" attributeType="String"/>
+        <attribute name="statDate" optional="YES" attributeType="String"/>
+        <attribute name="statDicID" optional="YES" attributeType="String"/>
+        <attribute name="statID" optional="YES" attributeType="String"/>
+        <attribute name="statMistakes" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="statRightAnswers" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="statScores" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="statTestIdentifier" optional="YES" attributeType="String"/>
+        <attribute name="statUserID" optional="YES" attributeType="String"/>
     </entity>
     <entity name="Users" representedClassName="Users" syncable="YES" codeGenerationType="class">
         <attribute name="userAvatarExtention" optional="YES" attributeType="String"/>
@@ -91,6 +62,7 @@
         <attribute name="userNativeLanguage" optional="YES" attributeType="String"/>
         <attribute name="userRegisterDate" optional="YES" attributeType="String"/>
         <attribute name="userScores" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="userShowEmail" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="userSyncronized" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="userType" optional="YES" attributeType="String"/>
     </entity>

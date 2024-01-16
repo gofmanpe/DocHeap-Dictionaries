@@ -21,6 +21,7 @@
                 <outlet property="headerLabel" destination="c1r-BJ-cp3" id="IWl-fb-VBW"/>
                 <outlet property="mainWindowView" destination="dka-ws-5Kf" id="OIL-Jo-M5s"/>
                 <outlet property="saveButton" destination="14h-y4-UPl" id="5Oi-dV-hk2"/>
+                <outlet property="shareDictionaryLabel" destination="DwK-Ro-EEn" id="qWW-mn-SWN"/>
                 <outlet property="sharedSwitch" destination="BkY-m6-ozI" id="Bhn-5V-kpT"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
                 <outlet property="warningImage" destination="mUX-Gc-9fV" id="ypg-kn-CQt"/>
@@ -86,11 +87,11 @@
                                                 </textField>
                                             </subviews>
                                         </stackView>
-                                        <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" spacing="50" translatesAutoresizingMaskIntoConstraints="NO" id="Um2-nk-QRL">
+                                        <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="Um2-nk-QRL">
                                             <rect key="frame" x="20" y="149" width="313" height="31"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Share this dictionary" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DwK-Ro-EEn">
-                                                    <rect key="frame" x="0.0" y="0.0" width="140.66666666666666" height="31"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="254" height="31"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>

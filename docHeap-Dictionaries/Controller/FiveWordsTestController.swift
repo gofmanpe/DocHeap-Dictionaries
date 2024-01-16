@@ -80,6 +80,9 @@ class FiveWordsTestController: UIViewController, PerformToSegue, UpdateView {
     @IBOutlet weak var headerMainWord: UILabel!
     @IBOutlet weak var warningView: UIView!
     
+    func localizeElements(){
+       
+    }
     
 //MARK: - Constants and variables
    
@@ -114,6 +117,7 @@ class FiveWordsTestController: UIViewController, PerformToSegue, UpdateView {
 //MARK: - View Did Load Functions
     override func viewDidLoad() {
         super.viewDidLoad()
+        localizeElements()
         coreDataManager.loadParentDictionaryData(dicID: selectedDicID, userID: mainModel.loadUserData().userID, data: context)
         coreDataManager.loadWordsForSelectedDictionary(dicID: coreDataManager.parentDictionaryData.first?.dicID ?? "", userID: mainModel.loadUserData().userID, data: context)
         standartState()

@@ -34,14 +34,16 @@ class ResultsPopUpController: UIViewController{
     var roundsNumber = Int()
     var selectedDictionary = String()
     var selectedTestIdentifier = String()
-   // var selectedTestName = String()
-    var raitingRatio = Double()
+    private var raitingRatio = Double()
     var performToSegueDelegate: PerformToSegue?
     var didUpdateViewDelegate: UpdateView?
-    var statisticDataArray = [Statistic]()
-    var coreDataManager = CoreDataManager()
-    var mainModel = MainModel()
+    private var statisticDataArray = [Statistic]()
+    private var coreDataManager = CoreDataManager()
+    private var mainModel = MainModel()
     private let firebase = Firebase()
+    private var userData : UserData?
+    private var testsArray: [Tests] = TestDataModel.tests
+    private var errorsCount = Int()
     
     init() {
         super.init(nibName: "ResultsPopUpController", bundle: nil)
@@ -53,27 +55,41 @@ class ResultsPopUpController: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-      //  coreDataManager.loadTestData(testIdentifier: selectedTestIdentifier, data: context)
+        loadData()
         elementsDesign(selectedTestIdentifier)
         starsSetting(selectedTestIdentifier)
         isErrorsExisting()
-        statisticUpload(identifier: selectedTestIdentifier)
-        coreDataManager.saveData(data: context)
         updateUserScoresData(userID: mainModel.loadUserData().userID)
+        statisticUpload()
+    }
+    func loadData(){
+        userData = coreDataManager.loadUserDataByID(userID: mainModel.loadUserData().userID, context: context).first
     }
     
     func updateUserScoresData(userID:String){
-        let userData = coreDataManager.loadUserDataByID(userID: userID, data: context)
-        let existedScores =  userData.userScores
-        let dataForAdd = Int64(rightAnswers - errors)
-        userData.userScores = existedScores + dataForAdd
+        let existedScores =  userData?.userScores ?? 0
+        let dataForAdd = rightAnswers - errors
+        let userScores = existedScores + dataForAdd
+        coreDataManager.updateUserData(
+            userID: mainModel.loadUserData().userID,
+            field: "userScores",
+            argument: userScores,
+            context: context)
+        userData = coreDataManager.loadUserDataByID(userID: userID, context: context).first
         if mainModel.isInternetAvailable(){
-            firebase.updateUserDataFirebase(userData: userData)
-            userData.userSyncronized = true
+            firebase.updateUserDataFirebase(userData: userData!)
+            coreDataManager.updateUserData(
+                userID: mainModel.loadUserData().userID,
+                field: "userSyncronized",
+                argument: true,
+                context: context)
         } else {
-            userData.userSyncronized = false
+            coreDataManager.updateUserData(
+                userID: mainModel.loadUserData().userID,
+                field: "userSyncronized",
+                argument: false,
+                context: context)
         }
-        coreDataManager.saveData(data: context)
     }
     
     @IBAction func restartTestButtonPressed(_ sender: UIButton) {
@@ -168,93 +184,41 @@ class ResultsPopUpController: UIViewController{
         switch identifier{
         case "threeWordsTest","fiveWordsTest":
             scoresLabel.text = String(rightAnswers)
-            let errorsCount = wordsCount - rightAnswers
+            errorsCount = wordsCount - rightAnswers
             messageLabel.text = "Finished \(wordsCount) rounds \n with \(errorsCount) mistakes"
         case "findAPairTest":
             wordsCount = 7
             scoresLabel.text = String(rightAnswers-errors)
+            errorsCount = errors
             messageLabel.text = "Finded \(String(rightAnswers)) pairs \n with \(String(errors)) mistakes"
         case "falseOrTrueTest":
             scoresLabel.text = String(rightAnswers)
+            errorsCount = errors
             messageLabel.text = "Totaly \(String(rightAnswers)) right answers \n and \(String(errors)) mistakes"
         case "findAnImageTest":
             errors = roundsNumber - rightAnswers
+            errorsCount = errors
             scoresLabel.text = String(rightAnswers)
             messageLabel.text = "Selected \(String(rightAnswers)) right images \n with \(String(errors)) mistakes"
         default: break
         }
     }
     
-    func statisticUpload(identifier:String){
-        switch identifier{
-        case "findAnImageTest":
-            //selectedTestName = coreDataManager.selectedTestData.first!.name!
-            let newStatisticData = FindAnImageTestStatistic(context: context)
-            //newStatisticData.testMethod = "Test"
-            newStatisticData.testingDictionaryName = selectedDictionary
-            newStatisticData.testDate = mainModel.convertDateToString(currentDate: Date(), time: true)
-            //newStatisticData.testRatingRatio = Int64(raitingRatio)
-            newStatisticData.scores = Int64(rightAnswers)
-            newStatisticData.mistakes = Int64(errors)
-            //newStatisticData.testMistakesFixing = false
-        case "findAPairTest":
-            //selectedTestName = coreDataManager.selectedTestData.first!.name!
-            let newStatisticData = FindAPairTestStatistic(context: context)
-            //newStatisticData.testMethod = "Test"
-            newStatisticData.testingDictionaryName = selectedDictionary
-            newStatisticData.testDate = mainModel.convertDateToString(currentDate: Date(), time: true)
-            //newStatisticData.testRatingRatio = Int64(raitingRatio)
-            newStatisticData.scores = Int64(rightAnswers)
-            newStatisticData.mistakes = Int64(errors)
-            //newStatisticData.testMistakesFixing = false
-        case "falseOrTrueTest":
-            //selectedTestName = coreDataManager.selectedTestData.first!.name!
-            let newStatisticData = FalseOrTrueTestStatistic(context: context)
-            //newStatisticData.testMethod = "Test"
-            newStatisticData.testingDictionaryName = selectedDictionary
-            newStatisticData.testDate = mainModel.convertDateToString(currentDate: Date(), time: true)
-            //newStatisticData.testRatingRatio = Int64(raitingRatio)
-            newStatisticData.scores = Int64(rightAnswers)
-            newStatisticData.mistakes = Int64(errors)
-            //newStatisticData.testMistakesFixing = false
-        case "fiveWordsTest":
-            if errorsFixed{
-                //selectedTestName = coreDataManager.selectedTestData.first!.name!
-                let newStatisticData = FiveWordsTestStatistic(context: context)
-                newStatisticData.testMethod = "Fixing"
-                //newStatisticData.testMistakesFixing = true
-                newStatisticData.testingDictionaryName = selectedDictionary
-                newStatisticData.testDate = mainModel.convertDateToString(currentDate: Date(), time: true)
-                newStatisticData.scores = Int64(rightAnswers)
-            } else{
-                //selectedTestName = coreDataManager.selectedTestData.first!.name!
-                let newStatisticData = FiveWordsTestStatistic(context: context)
-                newStatisticData.testMethod = "Test"
-                //newStatisticData.testMistakesFixing = false
-                newStatisticData.testingDictionaryName = selectedDictionary
-                newStatisticData.testDate = mainModel.convertDateToString(currentDate: Date(), time: true)
-                //newStatisticData.testRatingRatio = Int64(raitingRatio)
-                newStatisticData.scores = Int64(rightAnswers)
-                newStatisticData.mistakes = Int64(wordsCount-rightAnswers)
-            }
-        case "threeWordsTest":
-            if errorsFixed{
-                let newStatisticData = ThreeWordsTestStatistic(context: context)
-                newStatisticData.testMethod = "Fixing"
-                newStatisticData.testingDictionaryName = selectedDictionary
-                newStatisticData.testDate = mainModel.convertDateToString(currentDate: Date(), time: true)
-                newStatisticData.scores = Int64(rightAnswers)
-            } else{
-                let newStatisticData = ThreeWordsTestStatistic(context: context)
-                newStatisticData.testMethod = "Test"
-                newStatisticData.testingDictionaryName = selectedDictionary
-                newStatisticData.testDate = mainModel.convertDateToString(currentDate: Date(), time: true)
-                newStatisticData.scores = Int64(rightAnswers)
-                newStatisticData.mistakes = Int64(wordsCount-rightAnswers)
-            }
-        default:break
-        }
-        
+    func statisticUpload(){
+        let statID = mainModel.uniqueIDgenerator(prefix: "stat")
+       // let testName = testsArray.filter({$0.identifier == selectedTestIdentifier}).first?.name ?? "NOTESTNAME"
+        let date = mainModel.convertDateToString(currentDate: Date(), time:true)!
+        let statisticData = StatisticData(
+            statID: statID,
+            statDate: date,
+            statMistekes: errorsCount,
+            statDicID: selectedDictionary,
+            statScores: rightAnswers,
+            statUserID: mainModel.loadUserData().userID,
+            statTestIdentifier: selectedTestIdentifier, 
+            statRightAnswers: rightAnswers
+        )
+        coreDataManager.createStatisticRecord(statisticData: statisticData, context: context)
     }
  
     

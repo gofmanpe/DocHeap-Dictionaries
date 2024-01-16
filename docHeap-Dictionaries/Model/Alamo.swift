@@ -9,7 +9,6 @@ import Foundation
 import FirebaseStorage
 
 struct Alamo {
-   
     
     func downloadAndSaveAvatar(from url: String, forUser userID: String, completion: @escaping () -> Void) {
         guard let imageURL = URL(string: url) else {

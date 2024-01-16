@@ -7,21 +7,34 @@
 
 import Foundation
 
-struct Tests {
-    var identifier: String
-    var name: String
-    var image: String
-    var testDescription: String
-}
-
 class TestDataModel {
     static var tests: [Tests] {
         return [
-            Tests(identifier: "fiveWordsTest", name: "testVC_fiveWords_name".localized, image: "5wrdtst.png", testDescription: "testVC_fiveWords_description".localized),
-            Tests(identifier: "threeWordsTest", name: "testVC_threeWords_name".localized, image: "3wrdtst.png", testDescription: "testVC_threeWords_description".localized),
-            Tests(identifier: "findAPairTest", name: "testVC_findApair_name".localized, image: "fndApair.png", testDescription: "testVC_findApair_description".localized),
-            Tests(identifier: "falseOrTrueTest", name: "testVC_falseOrTrue_name".localized, image: "toftest.png", testDescription: "testVC_falseOrTrue_description".localized),
-            Tests(identifier: "findAnImageTest", name: "testVC_findAnImage_name".localized, image: "fanitest.png", testDescription: "testVC_findAnImage_description".localized)
+            Tests(
+                identifier: "fiveWordsTest",
+                name: "testVC_fiveWords_name".localized,
+                image: "testVC_5wordstest_ico".localized,
+                testDescription: "testVC_fiveWords_description".localized),
+            Tests(
+                identifier: "threeWordsTest",
+                name: "testVC_threeWords_name".localized,
+                image: "testVC_3wordstest_ico".localized,
+                testDescription: "testVC_threeWords_description".localized),
+            Tests(
+                identifier: "findAPairTest",
+                name: "testVC_findApair_name".localized,
+                image: "testVC_findApairtest_ico".localized,
+                testDescription: "testVC_findApair_description".localized),
+            Tests(
+                identifier: "falseOrTrueTest",
+                name: "testVC_falseOrTrue_name".localized,
+                image: "testVC_trueOrFalsetest_ico".localized,
+                testDescription: "testVC_falseOrTrue_description".localized),
+            Tests(
+                identifier: "findAnImageTest",
+                name: "testVC_findAnImage_name".localized,
+                image: "testVC_findAnImagetest_ico".localized,
+                testDescription: "testVC_findAnImage_description".localized)
         ]
     }
 }

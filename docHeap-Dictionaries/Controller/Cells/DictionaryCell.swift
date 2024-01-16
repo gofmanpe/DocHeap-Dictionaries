@@ -24,6 +24,8 @@ class DictionaryCell: UITableViewCell {
     @IBOutlet weak var editButton: UIButton!
     @IBOutlet weak var wordsCountLabel: UILabel!
     @IBOutlet weak var createDateLabel: UILabel!
+    @IBOutlet weak var btSeparatorView: UIView!
+    
     @IBOutlet weak var descriptionLabel: UILabel!
     @IBOutlet weak var separatorOneButton: UIImageView!
     @IBOutlet weak var separatorTwoButtons: UIImageView!

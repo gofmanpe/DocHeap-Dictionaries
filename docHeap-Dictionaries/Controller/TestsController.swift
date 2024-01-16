@@ -44,7 +44,7 @@ class TestsController: UIViewController, PerformToSegue{
         case "findAnImageTest":
             let destinationVC = segue.destination as! FindAnImageTestController
             destinationVC.numberOfRounds = numberOfRounds
-            destinationVC.selectedDictionary = selectedDicID
+            destinationVC.selectedDicID = selectedDicID
             destinationVC.selectedTestIdentifier = selectedTestIdentifier
         default:
             return
@@ -79,6 +79,10 @@ class TestsController: UIViewController, PerformToSegue{
     }
     
 //MARK: - Controller functions
+    func localizeElements(){
+        
+    }
+    
     func isDictionariesAvalible(){
         coreDataManager.loadDictionariesForCurrentUser(userID: mainModel.loadUserData().userID, data: context)
         if coreDataManager.dictionariesArray.isEmpty{

@@ -123,6 +123,7 @@ class StartController: UIViewController{
                                         let userCountry = result["userCountry"] as? String ?? ""
                                         let userBirthDate = result["userBithDate"] as? String ?? ""
                                         let userNativeLanguage = result["userNativeLanguage"] as? String ?? ""
+                                        let userShowEmail = result["userShowEmail"] as? Bool ?? false
                                         let userScores = result["userScores"] as? Int64 ?? 0
                                         DispatchQueue.main.async {
                                             self.sync.loadDictionariesFromFirebase(userID: userID, context: self.context)
@@ -139,6 +140,7 @@ class StartController: UIViewController{
                                         recoveredUser.userCountry = userCountry
                                         recoveredUser.userBirthDate = userBirthDate
                                         recoveredUser.userNativeLanguage = userNativeLanguage
+                                        recoveredUser.userShowEmail = userShowEmail
                                         recoveredUser.userScores = userScores
                                         self.coreDataManager.saveData(data: self.context)
                                         if !self.mainModel.isUserFolderExist(folderName: userID) { // User folder dont exist
@@ -172,6 +174,7 @@ class StartController: UIViewController{
                                 newUser.userBirthDate = ""
                                 newUser.userNativeLanguage = ""
                                 newUser.userScores = 0
+                                newUser.userShowEmail = false
                                 self.coreDataManager.saveData(data: self.context)
                                 self.mainModel.createFolderInDocuments(withName: userID)
                                 if let userPhoto = userPhoto{
@@ -273,6 +276,7 @@ class StartController: UIViewController{
                                    let userRegisterDate = result["userRegisterDate"] as? String
                                    let userEmail = result["userEmail"] as? String
                                    let userAvatarFirestorePath = result["userAvatarFirestorePath"] as? String
+                                   let userShowEmail = result["userShowEmail"] as? Bool ?? false
                                    DispatchQueue.main.async {
                                        self.sync.loadDictionariesFromFirebase(userID: userID, context: self.context)
                                    }
@@ -284,6 +288,7 @@ class StartController: UIViewController{
                                    recoveredUser.userInterfaceLanguage = userInterfaceLanguage
                                    recoveredUser.userAvatarExtention = "jpg"
                                    recoveredUser.userAvatarFirestorePath = userAvatarFirestorePath
+                                   recoveredUser.userShowEmail = userShowEmail
                                    self.coreDataManager.saveData(data: self.context)
                                    if !self.mainModel.isUserFolderExist(folderName: userID) { // User folder dont exist
                                        self.mainModel.createFolderInDocuments(withName: userID)

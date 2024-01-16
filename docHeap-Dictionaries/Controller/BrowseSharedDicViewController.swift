@@ -24,6 +24,10 @@ class BrowseSharedDicViewController: UIViewController {
     @IBOutlet weak var downloadedTimesLabel: UILabel!
     @IBOutlet weak var dicLikesLabel: UILabel!
     @IBOutlet weak var messagesCountLabel: UILabel!
+    
+    func localizeElemants(){
+       
+    }
  
 //MARK: - Constants and variables
     private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
@@ -31,6 +35,7 @@ class BrowseSharedDicViewController: UIViewController {
     var sharedDictionary : SharedDictionary?
     var sharedWordsArray = [SharedWord]()
     var dicOwnerData : DicOwnerData?
+    var ownerID = String()
     var messagesCount = String()
     private let mainModel = MainModel()
     private let coreData = CoreDataManager()
@@ -42,11 +47,11 @@ class BrowseSharedDicViewController: UIViewController {
 //MARK: - Lifecycle functions
     override func viewDidLoad() {
         super.viewDidLoad()
+        localizeElemants()
         elementsSetup()
         sharedWordsTable.delegate = self
         sharedWordsTable.dataSource = self
         sharedWordsTable.reloadData()
-        print("Messages count for dictionary is: \(messagesCount)")
     }
 
 //MARK: - Controller functions
@@ -80,7 +85,7 @@ class BrowseSharedDicViewController: UIViewController {
         newDictionary.dicShared = false
         newDictionary.dicReadOnly = true
         newDictionary.dicLike = false
-        newDictionary.dicOwnerID = dicOwnerData?.ownerID
+        newDictionary.dicOwnerID = sharedDictionary?.dicUserID
         newDictionary.dicWordsCount = Int64(sharedDictionary?.dicWordsCount ?? 0)
         newDictionary.dicImagesCount = Int64(sharedDictionary?.dicImagesCount ?? 0)
         coreData.saveData(data: context)
@@ -101,7 +106,7 @@ class BrowseSharedDicViewController: UIViewController {
                     imageName: word.wrdImageName) {
                     }
             }
-            newWord.parentDictionary = parentDictionary.first
+            newWord.parentDictionary = parentDictionary
             newWord.wrdAddDate = mainModel.convertDateToString(currentDate: Date(), time: false)
             newWord.wrdBobbleColor = ".systemYellow"
             newWord.wrdDicID = dicID
@@ -121,26 +126,53 @@ class BrowseSharedDicViewController: UIViewController {
         }
     }
     
-    func saveSharedDictionaryUserData(){
-        guard let ownerID = dicOwnerData?.ownerID else {return}
+    func createSharedDictionaryOwnerData(){
         if coreData.isNetworkUserExist(userID: ownerID, data: context){
             return
         } else {
-            firebase.getNetworkUserDataByID(userID: dicOwnerData?.ownerID ?? "EMPTY_ID") { networkUserData in
-                let newNetworkUser = NetworkUser(context: self.context)
-                newNetworkUser.nuID = networkUserData?.userID
-                newNetworkUser.nuName = networkUserData?.userName
-                newNetworkUser.nuCountry = networkUserData?.userCountry
-                newNetworkUser.nuBirthDate = networkUserData?.userBirthDate
-                newNetworkUser.nuNativeLanguage = networkUserData?.userNativeLanguage
-                newNetworkUser.nuRegisterDate = networkUserData?.userRegisterDate
-                newNetworkUser.nuFirebaseAvatarPath = networkUserData?.userAvatarFirestorePath
-                self.coreData.saveData(data: self.context)
-                let userAvatarFirestorePath = networkUserData?.userAvatarFirestorePath ?? ""
-                let userID = networkUserData?.userID ?? ""
+            firebase.getNetworkUserDataByID(userID: ownerID) { nuData in
+                guard let networkUserData = nuData else {
+                    return
+                }
+                self.coreData.createNetworkUser(userData: networkUserData, context: self.context)
+                let userAvatarFirestorePath = networkUserData.userAvatarFirestorePath
+                let userID = networkUserData.userID
                 self.alamo.downloadChatUserAvatar(url: userAvatarFirestorePath, senderID: userID, userID: self.mainModel.loadUserData().userID) { avatarName in
-                    newNetworkUser.nuLocalAvatar = avatarName
-                    self.coreData.saveData(data: self.context)
+                    self.coreData.updateNetworkUserLocalAvatarName(userID: networkUserData.userID, avatarName: avatarName, context: self.context)
+                }
+            }
+        }
+    }
+    
+    func createDownloadedDictionaryUsers(){
+        guard let usersIDsArray = sharedDictionary?.dicDownloadedUsers else {
+            return }
+        let excludeCurrentUserArray = usersIDsArray.filter({$0 != mainModel.loadUserData().userID})
+        for userID in excludeCurrentUserArray{
+            if coreData.isNetworkUserExist(userID: userID, data: context){
+                return
+            } else {
+                firebase.createNetworkUsersInCoreData(userID: userID, context: context)
+            }
+        }
+    }
+    
+    func createMessagesForDictionary(){
+        firebase.loadMessagesForDictionary(dicID: dicID, context: context) { messagesArray, error in
+            if let error = error{
+                print("Error to get messages: \(error)")
+            } else {
+                if let messArray = messagesArray{
+                    // check is message already exist in CoreData
+                    for message in messArray{
+                        let newMessageID = message.msgID
+                        let corDataMessages = self.coreData.getMessagesByDicID(dicID: self.dicID, context: self.context)
+                        let filteredCDMessages = corDataMessages.filter({$0.msgID == newMessageID})
+                        if filteredCDMessages.isEmpty{
+                            self.coreData.createChatMessage(message: message, context: self.context)
+                        }
+                    }
+                    
                 }
             }
         }
@@ -161,7 +193,9 @@ class BrowseSharedDicViewController: UIViewController {
                 downloadButton.backgroundColor = UIColor(named: "Right answer")
             }
             dicWasDownloaded = true
-            saveSharedDictionaryUserData()
+            createSharedDictionaryOwnerData()
+            createDownloadedDictionaryUsers()
+            createMessagesForDictionary()
         }
     }
     

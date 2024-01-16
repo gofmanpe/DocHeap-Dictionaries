@@ -43,20 +43,24 @@ struct SharedWord{
     let wrdImageFirestorePath:String
     let wrdImageName:String
 }
+
+struct WordsPair{
+    let wrdWord:String
+    let wrdTranslation:String
+    let wrdDicID:String
+    let wrdUserID:String
+    let wrdID:String
+    let wrdImageFirestorePath:String
+    let wrdImageName:String
+    let wrdReadOnly:String
+    
+}
+
 struct LanguagesArray{
     let lang: String
     let langValue: String
 }
-//struct UserDataFirebase{
-//    let userID: String
-//    let userName:String
-//    let userEmail:String
-//    let userCountry:Int
-//    let userNativeLanguage:String
-//    let userBirthDate:String
-//    let userRegisterDate:String
-//    let userScores:Int
-//}
+
 struct MonthArray{
     let value: String
     let name: String
@@ -67,15 +71,28 @@ struct DictionaryLike{
     let likeStatus: Bool
 }
 
-struct ChatMessage{
-    let msgID: String
-    let msgBody: String
-    let msgSenderID: String
-    let msgDicID: String
-    let msgDateTime: String
-    let msgSenderName: String
-    let msgSenderAvatarPath: String
-    let msgOrdering: Int
+struct DictionaryCounts{
+    let dicID:String
+    let likesCount:String
+    let downloadsCount:String
+    let messagesCount:String
+}
+
+struct UserData{
+    let userID: String
+    let userName: String
+    let userBirthDate: String
+    let userCountry: String
+    let userAvatarFirestorePath: String
+    let userAvatarExtention: String
+    let userNativeLanguage: String
+    let userScores: Int
+    let userShowEmail: Bool
+    let userEmail: String
+    let userSyncronized: Bool
+    let userType: String
+    let userRegisterDate: String
+    let userInterfaceLanguage: String
 }
 
 struct NetworkUserData{
@@ -86,4 +103,43 @@ struct NetworkUserData{
     let userBirthDate:String
     let userRegisterDate:String
     let userAvatarFirestorePath:String
+    let userShowEmail:Bool
+    let userEmail:String
+    let userScores:Int
+}
+
+struct ChatMessage{
+    let msgID: String
+    let msgBody: String
+    let msgDateTime: String
+    let msgDicID: String
+    let msgSenderID: String
+    let msgOrdering: Int
+    let msgSyncronized: Bool
+}
+
+struct Tests {
+    var identifier: String
+    var name: String
+    var image: String
+    var testDescription: String
+}
+
+struct StatisticData{
+    let statID: String
+    let statDate: String
+    let statMistekes: Int
+    let statDicID: String
+    let statScores: Int
+    let statUserID: String
+    let statTestIdentifier: String
+    let statRightAnswers: Int
+}
+
+struct StatisticForTest{
+    let statTestImage: String
+    let statRightAnswers: Int
+    let statMistakes: Int
+    let statLaunches: Int
+    let statScores: Int
 }

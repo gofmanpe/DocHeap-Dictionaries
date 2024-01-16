@@ -16,6 +16,7 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate & UIN
 //MARK: - Protocols delegate functions
     func didUpdateView(sender: String) {
         setupUserData()
+        elementsDesign()
     }
     
 //MARK: - Outlets
@@ -33,6 +34,8 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate & UIN
     @IBOutlet weak var nativeLangLabel: UILabel!
     @IBOutlet weak var scoresLabel: UILabel!
     @IBOutlet weak var editButton: UIButton!
+    @IBOutlet weak var showEmailLabel: UILabel!
+    @IBOutlet weak var emailSwitch: UISwitch!
     
 //MARK: - Localization
     func localizeElements(){
@@ -58,7 +61,7 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate & UIN
     private var defaults = Defaults()
     private let sync = SyncModel()
     private var avatarFirestorePath = String()
-    private var userData : Users?
+    private var userData : UserData?
 //MARK: - Lifecycle functions
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -68,7 +71,7 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate & UIN
         if mainModel.isInternetAvailable(){
             sync.syncUserDataWithFirebase(userID: mainModel.loadUserData().userID, context: context)
         } else {
-            userData?.userSyncronized = false
+            coreDataManager.setSyncronizedStatusForUser(userID: mainModel.loadUserData().userID, status: false, context: context)
             coreDataManager.saveData(data: context)
         }
         
@@ -80,7 +83,7 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate & UIN
     
 //MARK: - Controller functions
     func setupUserData(){
-        userData = coreDataManager.loadUserDataByID(userID: mainModel.loadUserData().userID, data: context)
+        userData = coreDataManager.loadUserDataByID(userID: mainModel.loadUserData().userID, context: context).first
         nameLabel.text = userData?.userName
         birthDateLabel.text = userData?.userBirthDate
         countryLabel.text = userData?.userCountry
@@ -108,6 +111,12 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate & UIN
         windowView.layer.cornerRadius = 10
         windowView.layer.borderWidth = 0.5
         windowView.layer.borderColor = UIColor.lightGray.cgColor
+        if let emailSwitchStatus = userData?.userShowEmail{
+            emailSwitch.isOn = emailSwitchStatus
+        } else {
+            emailSwitch.isOn = false
+        }
+        
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
@@ -131,8 +140,9 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate & UIN
         if isImageSelected{
             avatarName = "userAvatar.\(imageExtention)"
             avatarURL = mainModel.getDocumentsFolderPath().appendingPathComponent("\(mainModel.loadUserData().userID)/\(avatarName)")
-            userData?.userAvatarExtention = imageExtention
-            coreDataManager.saveData(data: context)
+            coreDataManager.updateUserData(userID: mainModel.loadUserData().userID, field: "userAvatarExtention", argument: imageExtention, context: context)
+           // userData?.userAvatarExtention = imageExtention
+         //   coreDataManager.saveData(data: context)
             if let imageData = image.jpegData(compressionQuality: 0.8) {
                 do {
                     if let imageWithUrl = avatarURL{
@@ -154,8 +164,13 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate & UIN
             guard metadata != nil else { return }
             imageRef.downloadURL { url, error in
                 guard let downloadURL = url else { return }
-                self.userData?.userAvatarFirestorePath = downloadURL.absoluteString
-                self.coreDataManager.saveData(data: self.context)
+                self.coreDataManager.updateUserData(
+                    userID: self.mainModel.loadUserData().userID,
+                    field: "userAvatarFirestorePath",
+                    argument: downloadURL.absoluteString,
+                    context: self.context)
+             //   self.userData?.userAvatarFirestorePath = downloadURL.absoluteString
+             //   self.coreDataManager.saveData(data: self.context)
                 self.updateAvatarURLInFirestore(userID: self.mainModel.loadUserData().userID, avatarURL: downloadURL.absoluteString)
             }
         }
@@ -194,6 +209,53 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate & UIN
             return
         }
         
+    }
+    @IBAction func emailSwitchToggled(_ sender: UISwitch) {
+        switch (emailSwitch.isOn, mainModel.isInternetAvailable()){
+        case (true,true):
+           // userData?.userShowEmail = true
+            coreDataManager.updateUserData(
+                userID: mainModel.loadUserData().userID,
+                field: "userShowEmail",
+                argument: true,
+                context: context)
+            firebase.updateUserEmailShowStatus(userID: userData?.userID ?? "", status: true)
+        case (false,false):
+//            userData?.userShowEmail = false
+//            userData?.userSyncronized = false
+            coreDataManager.updateUserData(
+                userID: mainModel.loadUserData().userID,
+                field: "userShowEmail",
+                argument: false,
+                context: context)
+            coreDataManager.updateUserData(
+                userID: mainModel.loadUserData().userID,
+                field: "userSyncronized",
+                argument: false,
+                context: context)
+        case(true,false):
+//            userData?.userShowEmail = true
+//            userData?.userSyncronized = false
+            coreDataManager.updateUserData(
+                userID: mainModel.loadUserData().userID,
+                field: "userShowEmail",
+                argument: true,
+                context: context)
+            coreDataManager.updateUserData(
+                userID: mainModel.loadUserData().userID,
+                field: "userSyncronized",
+                argument: false,
+                context: context)
+        case(false,true):
+            //userData?.userShowEmail = false
+            coreDataManager.updateUserData(
+                userID: mainModel.loadUserData().userID,
+                field: "userShowEmail",
+                argument: false,
+                context: context)
+            firebase.updateUserEmailShowStatus(userID: userData?.userID ?? "", status: false)
+        }
+        coreDataManager.saveData(data: context)
     }
     
     @IBAction func setAvatarPressed(_ sender: UIButton) {

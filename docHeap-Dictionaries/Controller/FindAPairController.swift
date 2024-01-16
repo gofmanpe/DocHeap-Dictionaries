@@ -69,6 +69,10 @@ class FindAPairController: UIViewController, PerformToSegue, UpdateView {
     @IBOutlet weak var fifthTranslateButton: UIButton!
     @IBOutlet weak var sixthTranslateButton: UIButton!
     @IBOutlet weak var seventhTranslateButton: UIButton!
+   
+    func localizeElemants(){
+        
+    }
     
 //MARK: - Constants and variables
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
@@ -107,6 +111,7 @@ class FindAPairController: UIViewController, PerformToSegue, UpdateView {
 //MARK: - View Did Load Functions
     override func viewDidLoad() {
         super.viewDidLoad()
+        localizeElemants()
        // coreDataManager.loadTestData(testIdentifier: selectedTestIdentifier, data: context)
         coreDataManager.loadParentDictionaryData(dicID: selectedDicID, userID: mainModel.loadUserData().userID, data: context)
         coreDataManager.loadWordsForSelectedDictionary(dicID: coreDataManager.parentDictionaryData.first?.dicID ?? "", userID: mainModel.loadUserData().userID, data: context)

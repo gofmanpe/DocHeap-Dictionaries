@@ -14,7 +14,6 @@ class BrowseDictionaryController: UIViewController, UpdateView, SaveWordsPairToD
  
 //MARK: - Protocols delegate functions
     func didUpdateView(sender:String) {
-        coreDataManager.loadWordsForSelectedDictionary(dicID: dicID, userID: mainModel.loadUserData().userID, data: context)
         setupData()
         wordsTable.reloadData()
         issetWordsInDictionary()
@@ -68,7 +67,7 @@ class BrowseDictionaryController: UIViewController, UpdateView, SaveWordsPairToD
             coreDataManager.setCountsInParentDictionary(increment: true, isSetImage: isSetImage, dicID: dicID, context: context)
         }
         coreDataManager.saveData(data: context)
-        coreDataManager.loadWordsForSelectedDictionary(dicID: dicID, userID: mainModel.loadUserData().userID, data: context)
+        setupData()
         coreDataManager.setCountsInParentDictionary(increment: true, isSetImage: isSetImage, dicID: dicID, context: context)
         wordsTable.reloadData()
         dictionaryData()
@@ -83,7 +82,7 @@ class BrowseDictionaryController: UIViewController, UpdateView, SaveWordsPairToD
                     }
                     imageRef.downloadURL { url, error in
                         guard let downloadURL = url else { return }
-                        let currentWord = self.coreDataManager.wordsArray.filter({$0.wrdWord == word})
+                        let currentWord = self.wordsArray.filter({$0.wrdWord == word})
                         currentWord.first?.wrdImageFirestorePath = downloadURL.absoluteString
                         currentWord.first?.wrdImageIsSet = true
                         currentWord.first?.imageUploaded = true
@@ -135,11 +134,7 @@ class BrowseDictionaryController: UIViewController, UpdateView, SaveWordsPairToD
     }
     
 //MARK: - Constants and variables
-    var selectedDictionary: Dictionary? {
-        didSet{
-            coreDataManager.loadAllWords(data: context)
-        }
-    }
+    var selectedDictionary : Dictionary?
     private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     private var coreDataManager = CoreDataManager()
     private let mainModel = MainModel()
@@ -153,7 +148,7 @@ class BrowseDictionaryController: UIViewController, UpdateView, SaveWordsPairToD
     private var wordsArray = [Word]()
     private let sync = SyncModel()
     var dicOwnerData = [DicOwnerData]()
-    private var networkUsersArray = [NetworkUser]()
+    var ownerName = String()
 
 //MARK: - Lifecycle functions
     override func viewDidLoad() {
@@ -161,7 +156,6 @@ class BrowseDictionaryController: UIViewController, UpdateView, SaveWordsPairToD
             localizeElements()
             setupData()
             dictionaryData()
-            coreDataManager.loadWordsForSelectedDictionary(dicID: dicID, userID: mainModel.loadUserData().userID, data: context)
             elementsDesign()
             wordsTable.dataSource = self
             wordsTable.delegate = self
@@ -170,8 +164,6 @@ class BrowseDictionaryController: UIViewController, UpdateView, SaveWordsPairToD
         if mainModel.isInternetAvailable(){
             sync.syncDictionariesCoreDataAndFirebase(userID: mainModel.loadUserData().userID, context: context)
             sync.syncWordsCoreDataAndFirebase(userID: mainModel.loadUserData().userID, context: context)
-            sync.syncNetworkUsersDataWithFirebase(context: context)
-            fireDB.createNetworkUsersData(dicID: dicID, context: context)
         }
     }
     
@@ -187,12 +179,17 @@ class BrowseDictionaryController: UIViewController, UpdateView, SaveWordsPairToD
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        if mainModel.isInternetAvailable(){
+            sync.syncNetworkUsersDataWithFirebase(context: context)
+        }
+    }
+    
 //MARK: - Controller functions
     func setupData(){
         guard let dicID = selectedDictionary?.dicID else {
             return}
         wordsArray = coreDataManager.getWordsForDictionary(dicID: dicID, userID: mainModel.loadUserData().userID, data: context)
-        networkUsersArray = coreDataManager.loadAllNetworkUsers(data: context)
     }
     
     func flipView(view:UIView) {
@@ -222,7 +219,7 @@ class BrowseDictionaryController: UIViewController, UpdateView, SaveWordsPairToD
         wordsCountLabel.text = String(selectedDictionary!.dicWordsCount)
         if let dicROStatus = selectedDictionary?.dicReadOnly{
             if dicROStatus{
-                creationDateLabel.text = dicOwnerData.first?.ownerName ?? "Anonimus"
+                creationDateLabel.text = ownerName
             } else {
                 creationDateLabel.text = selectedDictionary?.dicAddDate
             }
@@ -235,11 +232,11 @@ class BrowseDictionaryController: UIViewController, UpdateView, SaveWordsPairToD
         translateLanguageImage.image = UIImage(named: "\(translateImage).png")
         if let dicLike = selectedDictionary?.dicLike{
             if dicLike{
-                likeButton.tintColor = UIColor(named: "Main_header")
-                likeButton.setImage(UIImage(systemName: "hand.thumbsup.fill"), for: .normal)
+                likeButton.tintColor = UIColor(named: "Wrong answer")
+              //  likeButton.setImage(UIImage(systemName: "hand.thumbsup.fill"), for: .normal)
             } else {
                 likeButton.tintColor = UIColor.systemGray
-                likeButton.setImage(UIImage(systemName: "hand.thumbsup"), for: .normal)
+              //  likeButton.setImage(UIImage(systemName: "hand.thumbsup"), for: .normal)
             }
         }
     }
@@ -317,9 +314,14 @@ class BrowseDictionaryController: UIViewController, UpdateView, SaveWordsPairToD
                 }
             }
         }
-        chatButton.layer.cornerRadius = 5
-        addButton.layer.cornerRadius = 5
-        likeButton.layer.cornerRadius = 5
+        let buttons = [chatButton!,addButton!,likeButton!]
+            for button in buttons{
+                button.layer.shadowColor = UIColor.systemGray2.cgColor
+                button.layer.shadowOffset = CGSize(width: 1, height: 1)
+                button.layer.shadowRadius = 2.0
+                button.layer.shadowOpacity = 0.5
+                button.layer.cornerRadius = 5
+            }
     }
    
     func updateBubbleState(){
@@ -349,16 +351,16 @@ class BrowseDictionaryController: UIViewController, UpdateView, SaveWordsPairToD
             if dicLike{
                 fireDB.setLikeForDictionaryFirebase(dicID: dicID, userID: mainModel.loadUserData().userID, like: false)
                 buttonScaleAnimation(targetButton: likeButton)
-                let handFillImage = UIImage(systemName: "hand.thumbsup.fill")
-                likeButton.setImage(handFillImage, for: .normal)
-                likeButton.tintColor = UIColor(named: "Main_header")
+//                let handFillImage = UIImage(systemName: "hand.thumbsup.fill")
+//                likeButton.setImage(handFillImage, for: .normal)
+                likeButton.tintColor = UIColor(named: "Wrong answer")
                 selectedDictionary?.dicLike = false
                 dictionaryData()
             } else {
                 fireDB.setLikeForDictionaryFirebase(dicID: dicID, userID: mainModel.loadUserData().userID, like: true)
                 buttonScaleAnimation(targetButton: likeButton)
-                let handBorderedImage = UIImage(systemName: "hand.thumbsup")
-                likeButton.setImage(handBorderedImage, for: .normal)
+//                let handBorderedImage = UIImage(systemName: "hand.thumbsup")
+//                likeButton.setImage(handBorderedImage, for: .normal)
                 likeButton.tintColor = .systemGray
                 selectedDictionary?.dicLike = true
                 dictionaryData()
@@ -375,7 +377,6 @@ class BrowseDictionaryController: UIViewController, UpdateView, SaveWordsPairToD
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
             let destinationVC = segue.destination as! ChatViewController
                 destinationVC.dicID = dicID
-                destinationVC.networkUsers = networkUsersArray
     }
     
 }
@@ -391,7 +392,7 @@ extension BrowseDictionaryController: UITableViewDataSource, UITableViewDelegate
         wordCell.layer.cornerRadius = 5
         wordCell.learningLanguageLabel.text = wordsArray[indexPath.row].wrdWord
         wordCell.translateLanguageLabel.text = wordsArray[indexPath.row].wrdTranslation
-        if coreDataManager.wordsArray[indexPath.row].wrdImageIsSet == true {
+        if wordsArray[indexPath.row].wrdImageIsSet == true {
             wordCell.isSetImageBackgroundView.backgroundColor = UIColor(named: "Right answer")
         } else {
             wordCell.isSetImageBackgroundView.backgroundColor = .systemGray2

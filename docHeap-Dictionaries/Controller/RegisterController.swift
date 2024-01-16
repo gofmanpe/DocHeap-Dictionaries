@@ -113,6 +113,7 @@ class RegisterController: UIViewController {
                            newUser.userBirthDate = ""
                            newUser.userNativeLanguage = ""
                            newUser.userScores = 0
+                           newUser.userShowEmail = false
                            self.mainModel.createFolderInDocuments(withName: userID)
                            self.defaults.set(enteredEmail, forKey: "userEmail")
                            self.defaults.set(false, forKey: "keepSigned")

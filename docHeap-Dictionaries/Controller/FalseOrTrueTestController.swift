@@ -55,6 +55,10 @@ class FalseOrTrueTestController: UIViewController, PerformToSegue, UpdateView {
     @IBOutlet weak var progressLabel: UILabel!
     @IBOutlet weak var progressBar: UIProgressView!
     
+    func localizeElements(){
+        
+    }
+    
     var filteredArray = [Word]()
     var mainWordIndex = Int()
     var mainWord = String()
@@ -78,7 +82,7 @@ class FalseOrTrueTestController: UIViewController, PerformToSegue, UpdateView {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("Number of rounds from SelectDicController is: \(numberOfRounds)")
+        localizeElements()
        // coreDataManager.loadTestData(testIdentifier: selectedTestIdentifier, data: context)
         coreDataManager.loadParentDictionaryData(dicID: selectedDictionary, userID: mainModel.loadUserData().userID, data: context)
         coreDataManager.loadWordsForSelectedDictionary(dicID: coreDataManager.parentDictionaryData.first?.dicID ?? "", userID: mainModel.loadUserData().userID, data: context)

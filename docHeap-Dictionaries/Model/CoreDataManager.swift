@@ -16,25 +16,41 @@ struct CoreDataManager{
     var usersArray = [Users]()
     var parentDictionaryData = [Dictionary]()
     var dictionariesArray = [Dictionary]()
-   // var selectedTestData = [Test]()
-   // var allTestsArray = [Test]()
-    var statisticArray = [Statistic]()
-    var fiveWordsStatisticArray = [FiveWordsTestStatistic]()
-    var threeWordsStatisticArray = [ThreeWordsTestStatistic]()
-    var findAPairStatisticArray = [FindAPairTestStatistic]()
-    var falseOrTrueStatisticArray = [FalseOrTrueTestStatistic]()
-    var findAnImageStatisticArray = [FindAnImageTestStatistic]()
-    
-    
+    private let alamo = Alamo()
     
     mutating func loadAllWords(data: NSManagedObjectContext, request: NSFetchRequest<Word> = Word.fetchRequest())
-     {
-         do {
+    {
+        do {
             let array = try data.fetch(request)
-             wordsArray = array.filter({$0.wrdDeleted == false})
-         }
-         catch { print ("Error fetching data \(error)") }
-     }
+            wordsArray = array.filter({$0.wrdDeleted == false})
+        }
+        catch { print ("Error fetching data \(error)") }
+    }
+    
+    func getAllWords(data: NSManagedObjectContext)->[Word]{
+    let request: NSFetchRequest<Word> = Word.fetchRequest()
+        var result = [Word]()
+        do {
+            let array = try data.fetch(request)
+            result = array.filter({$0.wrdDeleted == false})
+        }
+        catch { print ("Error fetching data \(error)") }
+        return result
+    }
+    
+//    func createMessage(messagesArray:[ChatMessage], context: NSManagedObjectContext){
+//        for message in messagesArray{
+//            let newMessage = DicMessage(context:context)
+//            newMessage.msgID = message.msgID
+//            newMessage.msgBody = message.msgBody
+//            newMessage.msgSenderID = message.msgSenderID
+//            newMessage.msgDateTime = message.msgDateTime
+//            newMessage.msgDicID = message.msgDicID
+//            newMessage.msgSyncronized = true
+//            newMessage.msgOrdering = Int64(message.msgOrdering)
+//        }
+//        saveData(data: context)
+//    }
     
     func loadWordDataByID(wrdID: String, data: NSManagedObjectContext)->[Word]{
          let request: NSFetchRequest<Word> = Word.fetchRequest()
@@ -186,10 +202,9 @@ struct CoreDataManager{
         }
     }
     
-    func getWordsForDictionary(dicID: String, userID:String, data: NSManagedObjectContext, with request: NSFetchRequest<Word> = Word.fetchRequest())->[Word]{
-        
-        request.predicate = NSPredicate(format: "parentDictionary.dicID MATCHES %@", dicID)
-        request.sortDescriptors = [NSSortDescriptor(key: "wrdWord", ascending: true)]
+    func getWordsForDictionary(dicID: String, userID:String, data: NSManagedObjectContext)->[Word]{
+        let request: NSFetchRequest<Word> = Word.fetchRequest()
+        request.predicate = NSPredicate(format: "wrdDicID MATCHES %@", dicID)
         var requestedWords = [Word]()
         do {
             let array = try data.fetch(request)
@@ -261,12 +276,12 @@ struct CoreDataManager{
         }
     }
     
-    func getParentDictionaryData(dicID: String, userID:String, data: NSManagedObjectContext, with request: NSFetchRequest<Dictionary> = Dictionary.fetchRequest())->[Dictionary]{
+    func getParentDictionaryData(dicID: String, userID:String, data: NSManagedObjectContext, with request: NSFetchRequest<Dictionary> = Dictionary.fetchRequest())->Dictionary{
         request.predicate = NSPredicate(format: "dicID MATCHES %@", dicID)
-        var parentDic = [Dictionary]()
+        var parentDic = Dictionary()
         do {
             let dictionary = try data.fetch(request)
-            parentDic = dictionary.filter({$0.dicUserID == userID})
+            parentDic = dictionary.filter({$0.dicUserID == userID}).first ?? Dictionary()
         }
         catch {
             print("Error fetching data \(error)")
@@ -288,7 +303,7 @@ struct CoreDataManager{
         return parentDictionary
     }
     
-    func loadParentRODictionaryForWord(dicID: String, userID:String, data: NSManagedObjectContext, with request: NSFetchRequest<Dictionary> = Dictionary.fetchRequest())->[Dictionary]{
+    func loadParentReadOnlyDictionaryForWord(dicID: String, userID:String, data: NSManagedObjectContext, with request: NSFetchRequest<Dictionary> = Dictionary.fetchRequest())->[Dictionary]{
         request.predicate = NSPredicate(format: "dicID MATCHES %@", dicID)
         var parentDictionary = [Dictionary]()
         do {
@@ -300,46 +315,6 @@ struct CoreDataManager{
             
         }
         return parentDictionary
-    }
-    
-   
-    
-    mutating func loadStatistics(data: NSManagedObjectContext){
-        let requestFWT: NSFetchRequest<FiveWordsTestStatistic> = FiveWordsTestStatistic.fetchRequest()
-        do {
-            fiveWordsStatisticArray = try data.fetch(requestFWT)
-        }
-        catch {
-            print ("Error fetching data \(error)")
-        }
-        let requestTWT: NSFetchRequest<ThreeWordsTestStatistic> = ThreeWordsTestStatistic.fetchRequest()
-        do {
-            threeWordsStatisticArray = try data.fetch(requestTWT)
-        }
-        catch {
-            print ("Error fetching data \(error)")
-        }
-        let requestFAPT: NSFetchRequest<FindAPairTestStatistic> = FindAPairTestStatistic.fetchRequest()
-        do {
-            findAPairStatisticArray = try data.fetch(requestFAPT)
-        }
-        catch {
-            print ("Error fetching data \(error)")
-        }
-        let requestFOTT: NSFetchRequest<FalseOrTrueTestStatistic> = FalseOrTrueTestStatistic.fetchRequest()
-        do {
-            falseOrTrueStatisticArray = try data.fetch(requestFOTT)
-        }
-        catch {
-            print ("Error fetching data \(error)")
-        }
-        let requestFAIT: NSFetchRequest<FindAnImageTestStatistic> = FindAnImageTestStatistic.fetchRequest()
-        do {
-            findAnImageStatisticArray = try data.fetch(requestFAIT)
-        }
-        catch {
-            print ("Error fetching data \(error)")
-        }
     }
     
     mutating func loadDictionariesData(data: NSManagedObjectContext){
@@ -389,17 +364,102 @@ struct CoreDataManager{
         }
     }
     
-    func getMessagesByDicID(dicID:String, context:NSManagedObjectContext)->[DicMessage]{
+    func getMessagesByDicID(dicID:String, context:NSManagedObjectContext)->[ChatMessage]{
         let request: NSFetchRequest<DicMessage> = DicMessage.fetchRequest()
         request.predicate = NSPredicate(format: "msgDicID MATCHES %@", dicID)
-        var messagesArray = [DicMessage]()
+        var messagesArray = [ChatMessage]()
         do {
-            messagesArray = try context.fetch(request)
+            let array = try context.fetch(request)
+            for message in array{
+                let chatMessage = ChatMessage(
+                    msgID: message.msgID ?? "",
+                    msgBody: message.msgBody ?? "",
+                    msgDateTime: message.msgDateTime ?? "",
+                    msgDicID: message.msgDicID ?? "",
+                    msgSenderID: message.msgSenderID ?? "",
+                    msgOrdering: Int(message.msgOrdering),
+                    msgSyncronized: message.msgSyncronized
+                )
+                messagesArray.append(chatMessage)
+            }
         }
         catch {
             print ("Error fetching data \(error)")
         }
         return messagesArray
+    }
+    
+    func createChatMessage(message:ChatMessage, context:NSManagedObjectContext){
+        let newMessage = DicMessage(context: context)
+        newMessage.msgID = message.msgID
+        newMessage.msgBody = message.msgBody
+        newMessage.msgDateTime = message.msgDateTime
+        newMessage.msgDicID = message.msgDicID
+        newMessage.msgSenderID = message.msgSenderID
+        newMessage.msgOrdering = Int64(message.msgOrdering)
+        newMessage.msgSyncronized = true
+        saveData(data: context)
+    }
+    
+    func createNetworkUser(userData:NetworkUserData, context:NSManagedObjectContext){
+        let newNetworkUser = NetworkUser(context: context)
+        newNetworkUser.nuBirthDate = userData.userBirthDate
+        newNetworkUser.nuCountry = userData.userCountry
+        newNetworkUser.nuEmail = userData.userEmail
+        newNetworkUser.nuFirebaseAvatarPath = userData.userAvatarFirestorePath
+        newNetworkUser.nuID = userData.userID
+        newNetworkUser.nuLocalAvatar = ""
+        newNetworkUser.nuName = userData.userName
+        newNetworkUser.nuNativeLanguage = userData.userNativeLanguage
+        newNetworkUser.nuRegisterDate = userData.userRegisterDate
+        newNetworkUser.nuScores = Int64(userData.userScores)
+        newNetworkUser.nuShowEmail = false
+        saveData(data: context)
+    }
+    
+    func getNetworkUserNameByID(userID:String, context:NSManagedObjectContext)->String{
+        let request: NSFetchRequest<NetworkUser> = NetworkUser.fetchRequest()
+        request.predicate = NSPredicate(format: "nuID MATCHES %@", userID)
+        var userName = String()
+        do {
+            let userData = try context.fetch(request)
+            userName = userData.first?.nuName ?? "Anonimus"
+        }
+        catch {
+            print ("Error fetching data \(error)")
+        }
+        return userName
+    }
+    
+    func updateNetworkUserLocalAvatarName(userID:String, avatarName:String, context:NSManagedObjectContext){
+        let request: NSFetchRequest<NetworkUser> = NetworkUser.fetchRequest()
+        request.predicate = NSPredicate(format: "nuID MATCHES %@", userID)
+       
+        do {
+            let userData = try context.fetch(request)
+            userData.first?.nuLocalAvatar = avatarName
+        }
+        catch {
+            print ("Error fetching data \(error)")
+        }
+       saveData(data: context)
+    }
+    
+    func updateUserData(userData:UserData, context:NSManagedObjectContext){
+        let userID = userData.userID
+        let request: NSFetchRequest<Users> = Users.fetchRequest()
+        request.predicate = NSPredicate(format: "userID MATCHES %@", userID)
+        do {
+            let uData = try context.fetch(request)
+            uData.first?.userName = userData.userName
+            uData.first?.userNativeLanguage = userData.userNativeLanguage
+            uData.first?.userBirthDate = userData.userBirthDate
+            uData.first?.userCountry = userData.userCountry
+        }
+        catch {
+            print ("Error fetching data \(error)")
+        }
+        saveData(data: context)
     }
     
     func loadAllWordsByUserID(userID: String, data: NSManagedObjectContext)->[Word]{
@@ -473,16 +533,43 @@ struct CoreDataManager{
         return usersArray
     }
     
-    func loadUserDataByID(userID: String, data: NSManagedObjectContext)->Users{
-        let request: NSFetchRequest<Users> = Users.fetchRequest()
-        request.predicate = NSPredicate(format: "userID MATCHES %@", userID)
-        var result = Users()
+    func loadNetworkUserByID(userID:String, data:NSManagedObjectContext)->NetworkUser{
+        let request: NSFetchRequest<NetworkUser> = NetworkUser.fetchRequest()
+        var userData = NetworkUser()
         do {
-            let userArray = try data.fetch(request)
-            result = userArray.first ?? Users()
+            let user = try data.fetch(request)
+            userData = user.first ?? NetworkUser()
         }
         catch { print ("Error fetching data \(error)") }
-        return result
+        return userData
+    }
+    
+    func loadUserDataByID(userID: String, context: NSManagedObjectContext)->[UserData]{
+        let request: NSFetchRequest<Users> = Users.fetchRequest()
+        request.predicate = NSPredicate(format: "userID MATCHES %@", userID)
+        var queryResult = [UserData]()
+        do {
+            let userArray = try context.fetch(request)
+            let data = userArray.first
+            queryResult = [UserData(
+                userID: data?.userID ?? "",
+                userName: data?.userName ?? "",
+                userBirthDate: data?.userBirthDate ?? "",
+                userCountry: data?.userCountry ?? "",
+                userAvatarFirestorePath: data?.userAvatarFirestorePath ?? "",
+                userAvatarExtention: data?.userAvatarExtention ?? "",
+                userNativeLanguage: data?.userNativeLanguage ?? "",
+                userScores: Int(data?.userScores ?? 0),
+                userShowEmail: data?.userShowEmail ?? false,
+                userEmail: data?.userEmail ?? "",
+                userSyncronized: data?.userSyncronized ?? true,
+                userType: data?.userType ?? "",
+                userRegisterDate: data?.userRegisterDate ?? "",
+                userInterfaceLanguage: data?.userInterfaceLanguage ?? "")]
+            return queryResult
+        }
+        catch { print ("Error fetching data \(error)") }
+        return queryResult
     }
     
     
@@ -495,113 +582,41 @@ struct CoreDataManager{
         }
     }
     
-    mutating func loadStatisticData(testName: String, data: NSManagedObjectContext, with request: NSFetchRequest<Statistic> = Statistic.fetchRequest()){
-        request.predicate = NSPredicate(format: "testName MATCHES %@", testName)
+    func createStatisticRecord(statisticData:StatisticData, context: NSManagedObjectContext){
+        let newStatisticData = Statistic(context: context)
+        newStatisticData.statID = statisticData.statID
+        newStatisticData.statDate = statisticData.statDate
+        newStatisticData.statTestIdentifier = statisticData.statTestIdentifier
+        newStatisticData.statUserID = statisticData.statUserID
+        newStatisticData.statDicID = statisticData.statDicID
+        newStatisticData.statMistakes = Int64(statisticData.statMistekes)
+        newStatisticData.statScores = Int64(statisticData.statScores)
+        newStatisticData.statRightAnswers = Int64(statisticData.statRightAnswers)
+        saveData(data: context)
+    }
+    
+    func loadAllStatisticForUser(userID:String, context:NSManagedObjectContext)->[StatisticData]{
+        let request: NSFetchRequest<Statistic> = Statistic.fetchRequest()
+        request.predicate = NSPredicate(format: "statUserID MATCHES %@", userID)
+        var statisticData = [StatisticData]()
         do {
-            statisticArray = try data.fetch(request)
+            let array = try context.fetch(request)
+            for data in array{
+                let statDataElement = StatisticData(
+                    statID: data.statID ?? "",
+                    statDate: data.statDate ?? "",
+                    statMistekes: Int(data.statMistakes),
+                    statDicID: data.statDicID ?? "",
+                    statScores: Int(data.statScores),
+                    statUserID: data.statUserID ?? "",
+                    statTestIdentifier: data.statTestIdentifier ?? "", 
+                    statRightAnswers: Int(data.statRightAnswers))
+                statisticData.append(statDataElement)
+            }
+        } catch {
+            print ("Error fetching data \(error)")
         }
-        catch {
-            print("Error fetching data \(error)")
-            
-        }
-    }
-    
-    mutating func statisticDataForDictionariesAndWords(data:NSManagedObjectContext)->[String:String]{
-            loadDictionariesData(data: data)
-            loadAllWords(data: data)
-            return ["dictionaries":String(dictionariesArray.count),"words":String(wordsArray.count)]
-        
-    }
-    
-    mutating func statisticDataForFiveWordsTest(data:NSManagedObjectContext)->[String:Int]{
-        loadStatistics(data: data)
-        
-        let filtredArrayByName = fiveWordsStatisticArray.filter({$0.testMethod == "Test"})
-        let filtredArrayByFixing = fiveWordsStatisticArray.filter({$0.testMethod == "Fixing"})
-        let launches = filtredArrayByName.count
-        var rightAnswersArray = [Int]()
-        var mistakesArray = [Int]()
-        var fixedArray = [Int]()
-        for i in 0..<filtredArrayByName.count {
-            rightAnswersArray.append(Int(filtredArrayByName[i].scores))
-            mistakesArray.append(Int(filtredArrayByName[i].mistakes))
-        }
-        for i in 0..<filtredArrayByFixing.count{
-            fixedArray.append(Int(filtredArrayByFixing[i].scores))
-        }
-        let rightAnswers = rightAnswersArray.reduce(0, +)
-        let mistakes = mistakesArray.reduce(0, +)
-        let fixedMistakes = fixedArray.reduce(0, +)
-        let totalScores = rightAnswers+fixedMistakes
-        return ["fiveLaunches":launches, "fiveRightAnswers":rightAnswers, "fiveMistakes":mistakes, "fiveFixedMistakes":fixedMistakes, "fiveTotalScores":totalScores]
-        
-    }
-    
-    mutating func statisticDataForThreeWordsTest(data:NSManagedObjectContext)->[String:String]{
-        loadStatistics(data: data)
-        
-        let filtredArrayByName = threeWordsStatisticArray.filter({$0.testMethod == "Test"})
-        print("Data from 3: \(filtredArrayByName.count)")
-        let filtredArrayByFixing = threeWordsStatisticArray.filter({$0.testMethod == "Fixing"})
-        let launches = filtredArrayByName.count
-        print("Launches from 3: \(launches)")
-        var rightAnswersArray = [Int64]()
-        var mistakesArray = [Int64]()
-        var fixedArray = [Int64]()
-        for i in 0..<filtredArrayByName.count {
-            rightAnswersArray.append(Int64(filtredArrayByName[i].scores))
-            mistakesArray.append(Int64(filtredArrayByName[i].mistakes))
-        }
-        for i in 0..<filtredArrayByFixing.count{
-            fixedArray.append(Int64(filtredArrayByFixing[i].scores))
-        }
-        let rightAnswers = rightAnswersArray.reduce(0, +)
-        let mistakes = mistakesArray.reduce(0, +)
-        let fixedMistakes = fixedArray.reduce(0, +)
-        let totalScores = rightAnswers+fixedMistakes
-        return ["launches":String(launches), "rightAnswers":String(rightAnswers), "mistakes":String(mistakes), "fixedMistakes":String(fixedMistakes), "totalScores":String(totalScores)]
-    }
-    
-    mutating func statisticDataForFindAPairTest(data:NSManagedObjectContext)->[String:String]{
-        loadStatistics(data: data)
-        let launches = findAPairStatisticArray.count
-        var rightAnswersArray = [Int64]()
-        var mistakesArray = [Int64]()
-        for i in 0..<findAPairStatisticArray.count {
-            rightAnswersArray.append(Int64(findAPairStatisticArray[i].scores))
-            mistakesArray.append(Int64(findAPairStatisticArray[i].mistakes))
-        }
-        let rightAnswers = rightAnswersArray.reduce(0, +)
-        let mistakes = mistakesArray.reduce(0, +)
-        return ["launches":String(launches), "mistakes":String(mistakes), "totalScores":String(rightAnswers)]
-    }
-    
-    mutating func statisticDataForFalseOrTrueTest(data:NSManagedObjectContext)->[String:String]{
-        loadStatistics(data: data)
-        let launches = falseOrTrueStatisticArray.count
-        var rightAnswersArray = [Int64]()
-        var mistakesArray = [Int64]()
-        for i in 0..<falseOrTrueStatisticArray.count {
-            rightAnswersArray.append(Int64(falseOrTrueStatisticArray[i].scores))
-            mistakesArray.append(Int64(falseOrTrueStatisticArray[i].mistakes))
-        }
-        let rightAnswers = rightAnswersArray.reduce(0, +)
-        let mistakes = mistakesArray.reduce(0, +)
-        return ["launches":String(launches), "mistakes":String(mistakes), "totalScores":String(rightAnswers)]
-    }
-    
-    mutating func statisticDataForFindAnImageTest(data:NSManagedObjectContext)->[String:String]{
-        loadStatistics(data: data)
-        let launches = findAnImageStatisticArray.count
-        var rightAnswersArray = [Int64]()
-        var mistakesArray = [Int64]()
-        for i in 0..<findAnImageStatisticArray.count {
-            rightAnswersArray.append(Int64(findAnImageStatisticArray[i].scores))
-            mistakesArray.append(Int64(findAnImageStatisticArray[i].mistakes))
-        }
-        let rightAnswers = rightAnswersArray.reduce(0, +)
-        let mistakes = mistakesArray.reduce(0, +)
-        return ["launches":String(launches), "mistakes":String(mistakes), "totalScores":String(rightAnswers)]
+        return statisticData
     }
     
     func setDeletedStatusForDictionary(data: NSManagedObjectContext, dicID: String){
@@ -750,6 +765,30 @@ struct CoreDataManager{
         }
         catch { print ("Error fetching data \(error)") }
         return answer
+    }
+    
+    func setSyncronizedStatusForUser(userID:String, status:Bool, context:NSManagedObjectContext){
+        let request: NSFetchRequest<Users> = Users.fetchRequest()
+        request.predicate = NSPredicate(format: "userID MATCHES %@", userID)
+        do {
+            let usersArray = try context.fetch(request)
+            usersArray.first?.userSyncronized = status
+        }
+        catch { print ("Error fetching data \(error)") }
+       saveData(data: context)
+    }
+    
+    func updateUserData(userID:String, field:String, argument:Any, context:NSManagedObjectContext){
+        let request: NSFetchRequest<Users> = Users.fetchRequest()
+        request.predicate = NSPredicate(format: "userID MATCHES %@", userID)
+        do {
+            let usersArray = try context.fetch(request)
+            if let user = usersArray.first {
+                user.setValue(argument, forKey: field)
+            }
+        }
+        catch { print ("Error fetching data \(error)") }
+        saveData(data: context)
     }
     
     

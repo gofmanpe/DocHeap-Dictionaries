@@ -48,6 +48,7 @@
 "editDictionaryVC_dictionaryNameIsEmpty_message" = "Неможливо зберегти без назви словника";
 "editDictionaryVC_nothingToChange_message" = "Нічого не змінилося, немає чого зберігати";
 "editDictionaryVC_successSave_message" = "Зміни успішно збережені";
+"editDictionaryVC_shareDictionary_label" = "Зробити загальнодоступним";
 //DeleteDictionaryViewController
 "deleteDictionaryVC_header_label" = "Видалення словника";
 "deleteDictionaryVC_dialog_label" = "Ви дійсно хочете видалити словник:";
@@ -150,6 +151,11 @@
 "testVC_findAnImage_name" = "Тест Знайти Зображення";
 "testVC_falseOrTrue_description" = "Вам потрібно вибрати правильне зображення для заданого слова.";
 "testVC_noDictionariesCreated_message" = "У вас поки що немає словників.\nДля початку тестування необхідно створити хоча б один словник і додати до нього 5 слів.";
+"testVC_5wordstest_ico" = "5wrdico_ua.png";
+"testVC_3wordstest_ico" = "3wrdico_ua.png";
+"testVC_findApairtest_ico" = "fApico_ua.png";
+"testVC_findAnImagetest_ico" = "fAiico_ua.png";
+"testVC_trueOrFalsetest_ico" = "tOfico_ua.png";
 // SelectDictionaryForTestVC
 "selectDictionaryVC_header_label" = "Вибір словника для тесту";
 "selectDictionaryVC_selectDictionary_label" = "Виберіть словник";
@@ -176,4 +182,13 @@
 "profileVC_setAvatar_button" = "Змінити";
 "profileVC_registred_label" = "реєстрація:";
 "profileVC_addInfo_label" = "Дод. інфо";
+
+//StatisticVC
+"statisticVC_noStatistic_label" = "У вас ще немає статистики, оскільки ви ще не пройшли жодного тесту!";
+"statisticVC_totaly_label" = "РАЗОМ:";
+"statisticVC_starts_label" = "Запуски";
+"statisticVC_right_label" = "Правильно";
+"statisticVC_wrong_label" = "Помилка";
+"statisticVC_scores_label" = "Очки";
+
 

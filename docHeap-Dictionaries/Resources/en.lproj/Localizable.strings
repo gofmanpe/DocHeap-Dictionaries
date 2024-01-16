@@ -5,6 +5,9 @@
   Created by Pavel Gofman on 14.11.23.
   
 */
+
+//TabBarController
+"Dictionaries"= "DDD";
 //StartController
 "startVC_email_placeholder" = "E-mail";
 "startVC_password_placeholder" = "Password";
@@ -49,6 +52,7 @@
 "editDictionaryVC_dictionaryNameIsEmpty_message" = "Unable to save without a dictionary name";
 "editDictionaryVC_nothingToChange_message" = "Nothing has changed, there is nothing to save";
 "editDictionaryVC_successSave_message" = "Changes have been successfully saved";
+"editDictionaryVC_shareDictionary_label" = "Share dictionary";
 //DeleteDictionaryViewController
 "deleteDictionaryVC_header_label" = "Deleting dictionary";
 "deleteDictionaryVC_dialog_label" = "Do you really want to delete the dictionary:";
@@ -151,6 +155,11 @@
 "testVC_findAnImage_name" = "Find the Image Test";
 "testVC_findAnImage_description" = "You need to choose the correct image for the given word.";
 "testVC_noDictionariesCreated_message" = "You don't have any dictionaries yet.\nTo start testing, you need to create at least one dictionary and add 5 words to it.";
+"testVC_5wordstest_ico" = "5wrdico_en.png";
+"testVC_3wordstest_ico" = "3wrdico_en.png";
+"testVC_findApairtest_ico" = "fApico_en.png";
+"testVC_findAnImagetest_ico" = "fAiico_en.png";
+"testVC_trueOrFalsetest_ico" = "tOfico_en.png";
 // SelectDictionaryForTestVC
 "selectDictionaryVC_header_label" = "Select Dictionary for Test";
 "selectDictionaryVC_selectDictionary_label" = "Select a Dictionary";
@@ -177,3 +186,11 @@
 "profileVC_setAvatar_button" = "Set avatar";
 "profileVC_registred_label" = "registered:";
 "profileVC_addInfo_label" = "Additional info";
+
+//StatisticVC
+"statisticVC_noStatistic_label" = "You don't have any statistics, because you haven't taken any tests yet!";
+"statisticVC_totaly_label" = "TOTALY:";
+"statisticVC_starts_label" = "Starts";
+"statisticVC_right_label" = "Right";
+"statisticVC_wrong_label" = "Wrong";
+"statisticVC_scores_label" = "Scores";

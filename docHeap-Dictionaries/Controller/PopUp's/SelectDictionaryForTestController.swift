@@ -39,7 +39,7 @@ class SelectDictionaryForTestController: UIViewController {
     
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    var selectedDictionary = String()
+    private var selectedDicID = String()
     var selectedTestIdentifier = String()
     var testName = String()
     var mainModel = MainModel()
@@ -104,7 +104,7 @@ class SelectDictionaryForTestController: UIViewController {
                 selectButton.isEnabled = true
             }
         case "findAnImageTest":
-            coreDataManager.loadWordsForSelectedDictionary(dicID: selectedDictionary, userID: mainModel.loadUserData().userID , data: context)
+            coreDataManager.loadWordsForSelectedDictionary(dicID: selectedDicID, userID: mainModel.loadUserData().userID , data: context)
             let filteredByImageArray = coreDataManager.wordsArray.filter({$0.wrdImageIsSet == true})
             if filteredByImageArray.count < 4 {
                 warningView.isHidden = false
@@ -155,11 +155,11 @@ class SelectDictionaryForTestController: UIViewController {
     }
     
     @IBAction func selectButtonPressed(_ sender: UIButton) {
-        if selectedDictionary.isEmpty{
+        if selectedDicID.isEmpty{
             warningViewAppearAnimate("red", "selectDictionaryVC_noDictionary_message".localized)
         } else {
             warningView.isHidden = true
-            performToSegueDelegate?.performToSegue(identifier: selectedTestIdentifier, dicID: selectedDictionary, roundsNumber:numberOfRounds)
+            performToSegueDelegate?.performToSegue(identifier: selectedTestIdentifier, dicID: selectedDicID, roundsNumber:numberOfRounds)
            
             hide()
         }
@@ -287,7 +287,7 @@ extension SelectDictionaryForTestController: UIPickerViewDataSource, UIPickerVie
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         dictionaryButton.setTitle("\(coreDataManager.dictionariesArray[row].dicName!)", for: .normal)
-        selectedDictionary = coreDataManager.dictionariesArray[row].dicID!
+        selectedDicID = coreDataManager.dictionariesArray[row].dicID!
         warningView.isHidden = true
         selectButton.setTitle("selectDictionaryVC_startTest_button".localized, for: .normal)
         var maxNumberOfRounds = numberOfRounds(identifier: selectedTestIdentifier, row: row)

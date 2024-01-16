@@ -9,159 +9,118 @@ import UIKit
 import CoreData
 
 class StatisticController: UIViewController {
-
     
-    @IBOutlet weak var windowDictionariesView: UIView!
-    @IBOutlet weak var windowFiveWordsTestView: UIView!
-    @IBOutlet weak var windowThreeWordsTestView: UIView!
-    @IBOutlet weak var windowFindAPairTestView: UIView!
-    @IBOutlet weak var windowFalseOrTrueTestView: UIView!
-    @IBOutlet weak var windowFindAnImageTestView: UIView!
+    @IBOutlet weak var statisticTable: UITableView!
+    @IBOutlet weak var totalLaunchesLabel: UILabel!
+    @IBOutlet weak var totalRightAnswersLabel: UILabel!
+    @IBOutlet weak var totalMistakesLabel: UILabel!
+    @IBOutlet weak var totalScoresLabel: UILabel!
+    @IBOutlet weak var totalView: UIView!
+    @IBOutlet weak var noStatisticLabel: UILabel!
+    @IBOutlet weak var totalyLabel: UILabel!
+    @IBOutlet weak var startsLabel: UILabel!
+    @IBOutlet weak var rightLabel: UILabel!
+    @IBOutlet weak var wrongLabel: UILabel!
+    @IBOutlet weak var scoresLabel: UILabel!
     
-    @IBOutlet weak var threeWordsTestHeaderLabel: UILabel!
-    @IBOutlet weak var dictionariesAndWordsHeaderLabel: UILabel!
-    @IBOutlet weak var fiveWordsTestHeaderLabel: UILabel!
-    @IBOutlet weak var findApairTestHeaderLabel: UILabel!
-    @IBOutlet weak var falseOrTrueTestHeaderLabel: UILabel!
-    @IBOutlet weak var findAnImageTestHeaderLabel: UILabel!
+    func localizeElements(){
+        totalyLabel.text = "statisticVC_totaly_label".localized
+        startsLabel.text = "statisticVC_starts_label".localized
+        rightLabel.text = "statisticVC_right_label".localized
+        wrongLabel.text = "statisticVC_wrong_label".localized
+        scoresLabel.text = "statisticVC_scores_label".localized
+    }
     
-    @IBOutlet weak var pointsDictionariesCreatedLabel: UILabel!
-    @IBOutlet weak var pointsWordsAddedLabel: UILabel!
-    
-    @IBOutlet weak var points5wtLaunchesLabel: UILabel!
-    @IBOutlet weak var points5wtRightAnswersLabel: UILabel!
-    @IBOutlet weak var points5wtMistakesLabel: UILabel!
-    @IBOutlet weak var points5wtMistakesFixedLabel: UILabel!
-    @IBOutlet weak var points5wtTotalScoresLabel: UILabel!
-    
-    @IBOutlet weak var points3wtLaunchesLabel: UILabel!
-    @IBOutlet weak var points3wtRightAnswersLabel: UILabel!
-    @IBOutlet weak var points3wtMistakesLabel: UILabel!
-    @IBOutlet weak var points3wtMistakesFixedLabel: UILabel!
-    @IBOutlet weak var points3wtTotalScoresLabel: UILabel!
-    
-    @IBOutlet weak var pointsFAPTLaunchesLabel: UILabel!
-    @IBOutlet weak var pointsFAPTMistakesLabel: UILabel!
-    @IBOutlet weak var pointsFAPTTotalScoresLabel: UILabel!
-    
-    @IBOutlet weak var pointsFOTTLaunchesLabel: UILabel!
-    @IBOutlet weak var pointsFOTTMistakesLabel: UILabel!
-    @IBOutlet weak var pointsFOTTTotalScoresLabel: UILabel!
-    
-    @IBOutlet weak var pointsFAITLaunchesLabel: UILabel!
-    @IBOutlet weak var pointsFAITMistakesLabel: UILabel!
-    @IBOutlet weak var pointsFAITTotalScoresLabel: UILabel!
-    
-    
-    
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    var coreDataManager = CoreDataManager()
+    private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    private var coreDataManager = CoreDataManager()
+    private let mainModel = MainModel()
+    private var statisticArray = [StatisticForTest]()
+    private var totalLaunches = Int()
+    private var totalRightAnswers = String()
+    private var totalMistakes = String()
+    private var totalScores = String()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        standartState()
-        checkStatisticIsSet()
-        dataForTests()
+        loadData()
+        controllerSetup()
+        localizeElements()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        checkStatisticIsSet()
-        dataForTests()
+    override func viewWillAppear(_ animated: Bool) {
+        loadData()
+        controllerSetup()
+        statisticTable.reloadData()
     }
     
-//    func isStatisticAvalable(){
-//        if coreDataManager.dictionariesArray.isEmpty{
-//            windowDictionariesView.isHidden = true
-//            windowFiveWordsTestView.isHidden = true
-//            windowThreeWordsTestView.isHidden = true
-//            windowFindAPairTestView.isHidden = true
-//            windowFindAnImageTestView.isHidden = true
-//        }
-//    }
-    
-    func checkStatisticIsSet(){
-        coreDataManager.loadStatistics(data: context)
-        if coreDataManager.fiveWordsStatisticArray.isEmpty{
-            windowFiveWordsTestView.isHidden = true
-        } else {
-            windowFiveWordsTestView.isHidden = false
-        }
-        if coreDataManager.threeWordsStatisticArray.isEmpty{
-            windowThreeWordsTestView.isHidden = true
-        } else {
-            windowThreeWordsTestView.isHidden = false
-        }
-        if coreDataManager.findAPairStatisticArray.isEmpty{
-            windowFindAPairTestView.isHidden = true
-        } else {
-            windowFindAPairTestView.isHidden = false
-        }
-        if coreDataManager.findAnImageStatisticArray.isEmpty{
-            windowFindAnImageTestView.isHidden = true
-        } else {
-            windowFindAnImageTestView.isHidden = false
-        }
-        if coreDataManager.falseOrTrueStatisticArray.isEmpty{
-            windowFalseOrTrueTestView.isHidden = true
-        } else {
-            windowFalseOrTrueTestView.isHidden = false
-        }
-        if coreDataManager.dictionariesArray.isEmpty{
-            windowDictionariesView.isHidden = true
-        } else {
-            windowDictionariesView.isHidden = false
-        }
-    }
-    
-    func standartState(){
-        windowDesignUI(windowDictionariesView, dictionariesAndWordsHeaderLabel)
-        windowDesignUI(windowFiveWordsTestView, fiveWordsTestHeaderLabel)
-        windowDesignUI(windowThreeWordsTestView, threeWordsTestHeaderLabel)
-        windowDesignUI(windowFindAPairTestView, findApairTestHeaderLabel)
-        windowDesignUI(windowFalseOrTrueTestView, falseOrTrueTestHeaderLabel)
-        windowDesignUI(windowFindAnImageTestView, findAnImageTestHeaderLabel)
-    }
-    
-    func windowDesignUI(_ view:UIView,_ label:UILabel) {
+    private func controllerSetup(){
+        statisticTable.register(UINib(nibName: "StatisticCell", bundle: nil), forCellReuseIdentifier: "statisticCell")
+        statisticTable.dataSource = self
+        statisticTable.delegate = self
+        totalLaunchesLabel.text = String(totalLaunches)
+        totalRightAnswersLabel.text = totalRightAnswers
+        totalMistakesLabel.text = totalMistakes
+        totalScoresLabel.text = totalScores
         
-        label.layer.cornerRadius = 10
-        label.layer.maskedCorners = [.layerMinXMinYCorner,.layerMaxXMinYCorner]
-        view.layer.shadowColor = UIColor.black.cgColor
-        view.layer.shadowOpacity = 0.2
-        view.layer.shadowOffset = .zero
-        view.layer.shadowRadius = 2
-        view.layer.cornerRadius = 10
     }
     
-    func dataForTests(){
-        let dictionariesAndWordsData = coreDataManager.statisticDataForDictionariesAndWords(data: context)
-        pointsDictionariesCreatedLabel.text = dictionariesAndWordsData["dictionaries"]
-        pointsWordsAddedLabel.text = dictionariesAndWordsData["words"]
-        let fiveWordsTestData = coreDataManager.statisticDataForFiveWordsTest(data: context)
-        points5wtLaunchesLabel.text = String(fiveWordsTestData["fiveLaunches"]!)
-        points5wtRightAnswersLabel.text = String(fiveWordsTestData["fiveRightAnswers"]!)
-        points5wtMistakesLabel.text = String(fiveWordsTestData["fiveMistakes"]!)
-        points5wtMistakesFixedLabel.text = String(fiveWordsTestData["fiveFixedMistakes"]!)
-        points5wtTotalScoresLabel.text = String(fiveWordsTestData["fiveTotalScores"]!)
-        let threeWordsTestData = coreDataManager.statisticDataForThreeWordsTest(data: context)
-        points3wtLaunchesLabel.text = threeWordsTestData["launches"]
-        points3wtRightAnswersLabel.text = threeWordsTestData["rightAnswers"]
-        points3wtMistakesLabel.text = threeWordsTestData["mistakes"]
-        points3wtMistakesFixedLabel.text = threeWordsTestData["fixedMistakes"]
-        points3wtTotalScoresLabel.text = threeWordsTestData["totalScores"]
-        let findAPairTestData = coreDataManager.statisticDataForFindAPairTest(data: context)
-        pointsFAPTLaunchesLabel.text = findAPairTestData["launches"]
-        pointsFAPTMistakesLabel.text = findAPairTestData["mistakes"]
-        pointsFAPTTotalScoresLabel.text = findAPairTestData["totalScores"]
-        let falseOrTrueTestData = coreDataManager.statisticDataForFalseOrTrueTest(data: context)
-        pointsFOTTLaunchesLabel.text = falseOrTrueTestData["launches"]
-        pointsFOTTMistakesLabel.text = falseOrTrueTestData["mistakes"]
-        pointsFOTTTotalScoresLabel.text = falseOrTrueTestData["totalScores"]
-        let findAnImageTestData = coreDataManager.statisticDataForFindAnImageTest(data: context)
-        pointsFAITLaunchesLabel.text = findAnImageTestData["launches"]
-        pointsFAITMistakesLabel.text = findAnImageTestData["mistakes"]
-        pointsFAITTotalScoresLabel.text = findAnImageTestData["totalScores"]
+    private func loadData(){
+        statisticArray.removeAll()
+        let allStatistic = coreDataManager.loadAllStatisticForUser(userID: mainModel.loadUserData().userID, context: context)
+        if allStatistic.count < 1 {
+            statisticTable.isHidden = true
+            totalView.isHidden = true
+            noStatisticLabel.isHidden = false
+            noStatisticLabel.text = "statisticVC_noStatistic_label".localized
+        } else {
+            statisticTable.isHidden = false
+            totalView.isHidden = false
+            noStatisticLabel.isHidden = true
+            let testsIdArray = TestDataModel.tests.map { $0.identifier }
+            for test in testsIdArray{
+                let testImage = TestDataModel.tests.filter({$0.identifier == test}).first?.image
+                let testsArray = allStatistic.filter({$0.statTestIdentifier == test})
+                let totalScores = testsArray.reduce(0) { $0 + $1.statScores }
+                let toatlMistakes = testsArray.reduce(0) { $0 + $1.statMistekes }
+                let totalRightAnswers = testsArray.reduce(0) { $0 + $1.statRightAnswers }
+                let totalCount = testsArray.count
+                let statData = StatisticForTest(
+                    statTestImage: testImage ?? "NOTESTIMAGE",
+                    statRightAnswers: totalRightAnswers,
+                    statMistakes: toatlMistakes,
+                    statLaunches: totalCount,
+                    statScores: totalScores)
+                switch totalCount{
+                case  0:
+                    continue
+                default:
+                    statisticArray.append(statData)
+                }
+                
+            }
+            totalLaunches = allStatistic.count
+            totalRightAnswers = String(allStatistic.reduce(0) {$0 + $1.statRightAnswers})
+            totalMistakes = String(allStatistic.reduce(0) {$0 + $1.statMistekes})
+            totalScores = String(allStatistic.reduce(0) {$0 + $1.statScores})
+        }
+        }
+       
+
+}
+
+extension StatisticController: UITableViewDelegate, UITableViewDataSource{
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return statisticArray.count
     }
     
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let statCell = statisticTable.dequeueReusableCell(withIdentifier: "statisticCell", for: indexPath) as! StatisticCell
+        statCell.launchesLabel.text = String(statisticArray[indexPath.row].statLaunches)
+        statCell.mistakesLabel.text = String(statisticArray[indexPath.row].statMistakes)
+        statCell.rightAnswersLabel.text = String(statisticArray[indexPath.row].statRightAnswers)
+        statCell.scoresLabel.text = String(statisticArray[indexPath.row].statScores)
+        statCell.testImage.image = UIImage(named: statisticArray[indexPath.row].statTestImage)
+        return statCell
+    }
 }
 

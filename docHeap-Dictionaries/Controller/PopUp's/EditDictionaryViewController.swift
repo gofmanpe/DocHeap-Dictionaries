@@ -24,6 +24,7 @@ class EditDictionaryViewController: UIViewController {
     @IBOutlet weak var changeDicLabel: UILabel!
     @IBOutlet weak var changeDescLabel: UILabel!
     @IBOutlet weak var descriptionTextField: UITextField!
+    @IBOutlet weak var shareDictionaryLabel: UILabel!
     
     func localizeElements(){
         headerLabel.text = "editDictionaryVC_header_label".localized
@@ -31,6 +32,7 @@ class EditDictionaryViewController: UIViewController {
         changeDescLabel.text = "editDictionaryVC_changeDescription_label".localized
         cancelButton.setTitle("editDictionaryVC_cancel_button".localized, for: .normal)
         saveButton.setTitle("editDictionaryVC_save_button".localized, for: .normal)
+        shareDictionaryLabel.text = "editDictionaryVC_shareDictionary_label".localized
     }
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext

@@ -63,7 +63,7 @@
 "5U1-ZF-Bqi.text" = "0";
 
 /* Class = "UITabBarItem"; title = "Tests"; ObjectID = "5m2-kH-rF8"; */
-"5m2-kH-rF8.title" = "Tests";
+"5m2-kH-rF8.title" = "Тесты";
 
 /* Class = "UILabel"; text = "result"; ObjectID = "5sz-wq-Pq8"; */
 "5sz-wq-Pq8.text" = "result";
@@ -93,7 +93,7 @@
 "7u8-5g-CLA.text" = "Round:";
 
 /* Class = "UITabBarItem"; title = "Tests"; ObjectID = "7wY-ww-CRv"; */
-"7wY-ww-CRv.title" = "Tests";
+"7wY-ww-CRv.title" = "Тесты";
 
 /* Class = "UILabel"; text = "TL"; ObjectID = "8OY-ca-sJ1"; */
 "8OY-ca-sJ1.text" = "TL";
@@ -234,7 +234,7 @@
 "LR7-lc-M2S.text" = "Round:";
 
 /* Class = "UITabBarItem"; title = "Tests"; ObjectID = "LTp-CG-Pkb"; */
-"LTp-CG-Pkb.title" = "Tests";
+"LTp-CG-Pkb.title" = "Тесты";
 
 /* Class = "UIButton"; normalTitle = "Button"; ObjectID = "LlA-e9-lOe"; */
 "LlA-e9-lOe.normalTitle" = "Button";
@@ -324,7 +324,7 @@
 "S02-RA-YZ8.text" = "Register";
 
 /* Class = "UITabBarItem"; title = "Tests"; ObjectID = "Skx-h3-N4E"; */
-"Skx-h3-N4E.title" = "Tests";
+"Skx-h3-N4E.title" = "Тесты";
 
 /* Class = "UIButton"; normalTitle = "Button"; ObjectID = "Ssr-2V-zTb"; */
 "Ssr-2V-zTb.normalTitle" = "Button";
@@ -354,7 +354,7 @@
 "VOn-xS-FsQ.text" = "Test name";
 
 /* Class = "UITabBarItem"; title = "Profile"; ObjectID = "WGA-Ed-ZVL"; */
-"WGA-Ed-ZVL.title" = "Profile";
+"WGA-Ed-ZVL.title" = "Профиль";
 
 /* Class = "UILabel"; text = "Lisboa"; ObjectID = "Wb8-q3-ObL"; */
 "Wb8-q3-ObL.text" = "Lisboa";
@@ -408,7 +408,7 @@
 "YzI-QV-MkS.text" = "IMG";
 
 /* Class = "UITabBarItem"; title = "Statistic"; ObjectID = "YzR-4E-qUq"; */
-"YzR-4E-qUq.title" = "Statistic";
+"YzR-4E-qUq.title" = "Статистика";
 
 /* Class = "UIButton"; configuration.title = "Add avatar"; ObjectID = "Z5C-cm-Cdw"; */
 "Z5C-cm-Cdw.configuration.title" = "Add avatar";
@@ -420,7 +420,10 @@
 "ZCj-54-FIb.text" = "Mistakes:";
 
 /* Class = "UITabBarItem"; title = "Dictionaries"; ObjectID = "ZbK-we-Cp5"; */
-"ZbK-we-Cp5.title" = "Dictionaries";
+"ZbK-we-Cp5.title" = "Словари";
+
+/* Class = "UITabBarItem"; title = "Network"; ObjectID = "XTW-BC-WqA"; */
+"XTW-BC-WqA.title" = "Сеть";
 
 /* Class = "UILabel"; text = "noWordsLabel"; ObjectID = "a14-0j-pa9"; */
 "a14-0j-pa9.text" = "noWordsLabel";
@@ -447,7 +450,7 @@
 "aaJ-8J-Ez1.placeholder" = "Name";
 
 /* Class = "UITabBarItem"; title = "Dictionaries"; ObjectID = "abS-n8-keM"; */
-"abS-n8-keM.title" = "Dictionaries";
+"abS-n8-keM.title" = "Словари";
 
 /* Class = "UILabel"; text = "Mistakes:"; ObjectID = "acP-ww-61g"; */
 "acP-ww-61g.text" = "Mistakes:";
@@ -492,7 +495,7 @@
 "dH1-m0-N2V.text" = "Dictionaries";
 
 /* Class = "UITabBarItem"; title = "Tests"; ObjectID = "dI2-do-elo"; */
-"dI2-do-elo.title" = "Tests";
+"dI2-do-elo.title" = "Тесты";
 
 /* Class = "UILabel"; text = "0"; ObjectID = "dW3-gm-Sr5"; */
 "dW3-gm-Sr5.text" = "0";
@@ -609,7 +612,7 @@
 "oMj-SW-bc1.normalTitle" = "Button";
 
 /* Class = "UITabBarItem"; title = "Tests"; ObjectID = "oiR-tg-Fix"; */
-"oiR-tg-Fix.title" = "Tests";
+"oiR-tg-Fix.title" = "Тесты";
 
 /* Class = "UILabel"; text = "Launches:"; ObjectID = "ovR-QP-1rM"; */
 "ovR-QP-1rM.text" = "Launches:";

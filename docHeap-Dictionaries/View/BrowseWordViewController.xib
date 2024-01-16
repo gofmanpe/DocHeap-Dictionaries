@@ -578,12 +578,6 @@
                                         <constraint firstItem="Jv4-SJ-HKv" firstAttribute="leading" secondItem="CVC-Ph-BPU" secondAttribute="leading" id="wOa-4z-jKJ"/>
                                         <constraint firstAttribute="trailing" secondItem="Jv4-SJ-HKv" secondAttribute="trailing" id="wOp-bh-H7P"/>
                                     </constraints>
-                                    <variation key="default">
-                                        <mask key="subviews">
-                                            <exclude reference="SOr-lS-QFo"/>
-                                            <exclude reference="Ifb-hO-7r0"/>
-                                        </mask>
-                                    </variation>
                                 </view>
                             </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

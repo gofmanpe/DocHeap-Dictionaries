@@ -42,7 +42,7 @@ class DeleteDictionaryViewController: UIViewController {
     private var defaults = Defaults()
     private let fireDB = Firebase()
     private let alamo = Alamo()
-    private var parentDictionary = [Dictionary]()
+    private var parentDictionary = Dictionary()
    
     
     init() {
@@ -70,18 +70,18 @@ class DeleteDictionaryViewController: UIViewController {
     
     
     func elementsDesign(){
-        let dicName = parentDictionary.first?.dicName ?? "NO_DICTIONARY"
+        let dicName = parentDictionary.dicName ?? "NO_DICTIONARY"
         dictionaryNameLabel.text = dicName
-        if let lrnName = parentDictionary.first?.dicLearningLanguage{
+        if let lrnName = parentDictionary.dicLearningLanguage{
             learningImage.image = UIImage(named: lrnName)
         }
-        if let trnName = parentDictionary.first?.dicTranslateLanguage{
+        if let trnName = parentDictionary.dicTranslateLanguage{
             translateImage.image = UIImage(named: trnName)
         }
-        if let lrnLabel = parentDictionary.first?.dicLearningLanguage{
+        if let lrnLabel = parentDictionary.dicLearningLanguage{
             learningLanguageLabel.text = lrnLabel
         }
-        if let trnLabel = parentDictionary.first?.dicTranslateLanguage{
+        if let trnLabel = parentDictionary.dicTranslateLanguage{
             translateLanguageLabel.text = trnLabel
         }
         commentView.layer.cornerRadius = 10
@@ -146,7 +146,7 @@ class DeleteDictionaryViewController: UIViewController {
         //let dicID = coreDataManager.parentDictionaryData.first!.dicID!
         mainModel.deleteFolderInDocuments(folderName: "\(mainModel.loadUserData().userID)/\(dicID)")
         let dictionaryWords = coreDataManager.loadWordsByDictionryID(dicID: dicID, data: context)
-        if parentDictionary.first!.dicReadOnly{
+        if parentDictionary.dicReadOnly{
             if mainModel.isInternetAvailable(){
                 coreDataManager.delWordsFromDictionaryByDicID(dicID: dicID, userID: mainModel.loadUserData().userID, context: context)
                 coreDataManager.deleteRODictionaryFromCoreData(dicID: dicID, userID: mainModel.loadUserData().userID, context: context)

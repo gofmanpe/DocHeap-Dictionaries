@@ -105,6 +105,7 @@ struct MainModel{
             wordsWithImagesSet.insert(randomEl)
         }
         let convertedFromSetArray = Array(wordsWithImagesSet) // convert Set into Array
+        print("Converted array is: \(convertedFromSetArray)\n")
         let mainWord = arrayOfWords[mainWordIndex].wrdWord!
         let mainWordImage = arrayOfWords[mainWordIndex].imageName!
         var fourImagesWordsArray = [String]()
@@ -278,6 +279,8 @@ struct MainModel{
         }
         return lang
     }
+    
+    
     
     func renameDictionaryFolder(oldName: String, newName: String) {
         let oldFolderURL = getDocumentsFolderPath().appendingPathComponent("\(loadUserData().email)/\(oldName)")

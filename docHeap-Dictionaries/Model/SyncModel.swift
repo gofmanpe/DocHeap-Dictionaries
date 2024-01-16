@@ -18,20 +18,38 @@ struct SyncModel {
     
     
     func syncUserDataWithFirebase(userID:String, context:NSManagedObjectContext){
-        let userData = coreData.loadUserDataByID(userID: userID, data: context) //get CoreData user data
-        if !userData.userSyncronized{
-            firebase.updateUserDataFirebase(userData: userData)
-        } else {
-            return
-        }
+        if let userData = coreData.loadUserDataByID(userID: userID, context: context).first{
+            if !userData.userSyncronized{
+                firebase.updateUserDataFirebase(userData: userData)
+            } else {
+                return
+            }
+        } //get CoreData user data
+       
+    }
+    
+    func syncMessages(coreDataMessages:[ChatMessage]){
+       
+        let unsyncMessages = coreDataMessages.filter({$0.msgSyncronized == false})
+            if !unsyncMessages.isEmpty{
+                for message in unsyncMessages{
+                    firebase.createUnsynchronedMessage(
+                        msgSenderID: message.msgSenderID,
+                        msgDicID: message.msgDicID,
+                        msgBody: message.msgBody,
+                        msgID: message.msgID,
+                        msgDateTime: message.msgDateTime,
+                        msgOrdering: Int(message.msgOrdering), 
+                        msgSyncronized: true
+                    )
+                   
+                }
+            }
+        
     }
     
     func syncNetworkUsersDataWithFirebase(context:NSManagedObjectContext){
-        // 1. get nuID from CoreData
-        // 2. in loop, for each nuID get data from Firebase and update it in CoreData (exclude avatar path)
-        // 3. check, if avatar path is not equals, download new avatar, and upddate it locally
         firebase.updateNetworkUsersDataInCoreData(context: context)
-       
     }
     
     func syncWordsCoreDataAndFirebase(userID: String, context:NSManagedObjectContext){

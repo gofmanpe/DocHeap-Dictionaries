@@ -119,6 +119,8 @@ class ThreeWordsTestController: UIViewController, PerformToSegue, UpdateView{
     private var defaults = Defaults()
     private var mainModel = MainModel()
     private var coreDataManager = CoreDataManager()
+    private var wordsArray = [Word]()
+    private var parentDictionaryData : Dictionary?
     
 //MARK: - Lifecycle functions
     override func viewDidLoad() {
@@ -134,6 +136,10 @@ class ThreeWordsTestController: UIViewController, PerformToSegue, UpdateView{
     }
     
 //MARK: - Test engine functions
+    func loadData(){
+        wordsArray = coreDataManager.getAllWords(data: context)
+        parentDictionaryData = coreDataManager.getParentDictionaryData(dicID: selectedDictionary, userID: mainModel.loadUserData().userID, data: context)
+    }
     
     func threeWordsTestStart(){
         threeWordsTestUIState()

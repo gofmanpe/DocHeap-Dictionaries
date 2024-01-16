@@ -20,12 +20,12 @@ class FindAnImageTestController: UIViewController , PerformToSegue, UpdateView {
     
     func didUpdateView(sender: String) {
         
-        coreDataManager.loadParentDictionaryData(dicID: selectedDictionary, userID: mainModel.loadUserData().userID, data: context)
-        coreDataManager.loadWordsForSelectedDictionary(dicID: coreDataManager.parentDictionaryData.first?.dicID ?? "", userID: mainModel.loadUserData().userID, data: context)
-       // coreDataManager.loadTestData(testIdentifier: selectedTestIdentifier, data: context)
+       // coreDataManager.loadParentDictionaryData(dicID: selectedDictionary, userID: mainModel.loadUserData().userID, data: context)
+//        coreDataManager.loadWordsForSelectedDictionary(dicID: coreDataManager.parentDictionaryData.first?.dicID ?? "", userID: mainModel.loadUserData().userID, data: context)
+        loadData()
         standartState()
-        mainModel.wordsStatusClearing(array: coreDataManager.wordsArray, statusToClear: 1, data: context)
-        mainModel.wordsStatusClearing(array: coreDataManager.wordsArray, statusToClear: 2, data: context)
+        mainModel.wordsStatusClearing(array: /*coreDataManager.wordsArray*/wordsForTestArray, statusToClear: 1, data: context)
+        mainModel.wordsStatusClearing(array: /*coreDataManager.wordsArray*/wordsForTestArray, statusToClear: 2, data: context)
         reloadTestData()
         coreDataManager.saveData(data: context)
         testStart()
@@ -59,8 +59,11 @@ class FindAnImageTestController: UIViewController , PerformToSegue, UpdateView {
     @IBOutlet weak var progressBarLabel: UILabel!
     @IBOutlet weak var progressBar: UIProgressView!
     
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    func localizeElements(){
+        
+    }
     
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     var fourImagesWordsArray = [String?]()
     var fourImagesPathArray = [String]()
     var mainWord = String()
@@ -68,7 +71,7 @@ class FindAnImageTestController: UIViewController , PerformToSegue, UpdateView {
     var filteredArray = [Word]()
     var mainWordIndex = Int()
     var numberOfRounds = Int()
-    var selectedDictionary = String()
+    var selectedDicID = String()
     var selectedTestIdentifier = String()
     var wordsArray = [Word]()
     var wordsWithImagesArray = [Word]()
@@ -84,28 +87,31 @@ class FindAnImageTestController: UIViewController , PerformToSegue, UpdateView {
     private var coreDataManager = CoreDataManager()
     private var currentUserEmail = String()
     private var dicID = String()
-   // private var selectedTestName = String()
+    private var wordsForTestArray = [Word]()
+    private var parentDictionaryData = Dictionary()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        coreDataManager.loadWordsWithImagesForSelectedDictionary(data: context, dicID: selectedDictionary)
-       // coreDataManager.loadTestData(testIdentifier: selectedTestIdentifier, data: context)
-        coreDataManager.loadParentDictionaryData(dicID: selectedDictionary, userID: mainModel.loadUserData().userID, data: context)
-        mainModel.wordsStatusClearing(array: coreDataManager.wordsArray, statusToClear: 0, data: context)
-        //mainModel.findAnImageTestEngine(arrayOfImages: coreDataManager.wordsWithImagesArray)
+        localizeElements()
+        loadData()
+        //coreDataManager.loadWordsWithImagesForSelectedDictionary(data: context, dicID: selectedDictionary)
+        //coreDataManager.loadParentDictionaryData(dicID: selectedDictionary, userID: mainModel.loadUserData().userID, data: context)
+        mainModel.wordsStatusClearing(array: /*coreDataManager.wordsArray*/wordsForTestArray, statusToClear: 0, data: context)
         standartState()
         testStart()
     }
     
+    func loadData(){
+        wordsForTestArray = coreDataManager.getWordsForDictionary(dicID: selectedDicID, userID: mainModel.loadUserData().userID, data: context)
+        parentDictionaryData = coreDataManager.getParentDictionaryData(dicID: selectedDicID, userID: mainModel.loadUserData().userID, data: context)
+    }
+    
     func testStart(){
-        
         fourImagesWordsArray.removeAll() // clearing array of translations
         fourImagesPathArray.removeAll()
-       // let arrayOfWords = coreDataManager.wordsArray
-        let wordsArray = coreDataManager.wordsArray
+       // let wordsArray = coreDataManager.wordsArray
         let wordsNumber = numberOfRounds + 3
-        let arrayOfWords = Array(wordsArray.prefix(wordsNumber))
+        let arrayOfWords = Array(/*wordsArray*/wordsForTestArray.prefix(wordsNumber))
         let filteredByImageArray = arrayOfWords.filter({$0.wrdImageIsSet == true}) // filtering an array of words by image status 1
         filteredArray = filteredByImageArray.filter({$0.wrdStatus == 0})
         mainWordIndex = Int.random(in: 0..<filteredArray.count) // randomizing select the main testing word index
@@ -116,8 +122,9 @@ class FindAnImageTestController: UIViewController , PerformToSegue, UpdateView {
         mainWord = queryResult.0
         mainWordImage = queryResult.1
         fourImagesWordsArray = queryResult.2
+        print("Images words array: \(fourImagesWordsArray)\n")
         fourImagesPathArray = queryResult.3
-       
+        print("Images path array: \(fourImagesPathArray)\n")
         roundNumber += 1
         roundNumberLabel.text = String(roundNumber)
         standartState()
@@ -126,7 +133,7 @@ class FindAnImageTestController: UIViewController , PerformToSegue, UpdateView {
        // let documentsDirectory = mainModel.getDocumentsFolderPath()//FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
        // let userCatalog = mainModel.loadUserEmail().email
         for i in 0...3 {
-            let filePath = "\(mainModel.loadUserData().userID)/\(dicID)/\(fourImagesPathArray[i])"
+            let filePath = "\(mainModel.loadUserData().userID)/\(selectedDicID)/\(fourImagesPathArray[i])"
             let image = UIImage(contentsOfFile:  mainModel.getDocumentsFolderPath().appendingPathComponent(filePath).path)
             fourButtonsArray[i].setImage(image, for: .normal)
         }
@@ -141,7 +148,7 @@ class FindAnImageTestController: UIViewController , PerformToSegue, UpdateView {
         toResultsButton.isHidden = true
         warningLabel.isHidden = true
         currentUserEmail = mainModel.loadUserData().email
-        dicID = coreDataManager.parentDictionaryData.first!.dicID!
+        //dicID = parentDictionaryData.dicID!
         fourButtonsArray = [firstButton,secondButton,thirdButton,fouthButton]
         for button in fourButtonsArray {
             button.clipsToBounds = true
@@ -154,15 +161,15 @@ class FindAnImageTestController: UIViewController , PerformToSegue, UpdateView {
         wordsBackgroundView.layer.shadowRadius = 2
         commentView.layer.cornerRadius = 10
         commentView.layer.borderWidth = 3
-        dictionaryNameLabel.text = coreDataManager.parentDictionaryData.first?.dicName
+        dictionaryNameLabel.text = parentDictionaryData.dicName
         let foundTest = TestDataModel.tests.first(where: { $0.identifier == selectedTestIdentifier})
         testNameLabel.text = foundTest!.name
-        learningLanguageLabel.text = coreDataManager.parentDictionaryData.first?.dicLearningLanguage
-        let learnImage:String = coreDataManager.parentDictionaryData.first!.dicLearningLanguage!
-        let translateImage:String = coreDataManager.parentDictionaryData.first!.dicTranslateLanguage!
+        learningLanguageLabel.text = parentDictionaryData.dicLearningLanguage
+        let learnImage:String = parentDictionaryData.dicLearningLanguage!
+        let translateImage:String = parentDictionaryData.dicTranslateLanguage!
         learningLanguageImage.image = UIImage(named: "\(learnImage).png")
         translateLanguageImage.image = UIImage(named: "\(translateImage).png")
-        translateLanguageLabel.text = coreDataManager.parentDictionaryData.first?.dicTranslateLanguage
+        translateLanguageLabel.text = parentDictionaryData.dicTranslateLanguage
         //progressLabel.text = defaults.labelTestProgressText
         scoresNumberLabel.text = String(rightAnswers)
         nextButton.layer.cornerRadius = 10
@@ -259,7 +266,7 @@ class FindAnImageTestController: UIViewController , PerformToSegue, UpdateView {
         overLayerView.wordsCount = wordsCount
         overLayerView.roundsNumber = roundNumber
         //overLayerView.errorsFixed = errorsFixed
-        overLayerView.selectedDictionary = selectedDictionary
+        overLayerView.selectedDictionary = selectedDicID
         overLayerView.selectedTestIdentifier = selectedTestIdentifier
         overLayerView.appearOverlayer(sender: self)
     }
@@ -334,7 +341,7 @@ class FindAnImageTestController: UIViewController , PerformToSegue, UpdateView {
         }
         commentView.isHidden = true
         if filteredArray.count <= 4 {
-            mainModel.wordsStatusClearing(array: coreDataManager.wordsArray, statusToClear: 1, data: context)
+            mainModel.wordsStatusClearing(array: /*coreDataManager.wordsArray*/wordsForTestArray, statusToClear: 1, data: context)
             buttonsBhvrTheEnd()
             coreDataManager.saveData(data: context)
         } else {

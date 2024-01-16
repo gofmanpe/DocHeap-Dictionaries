@@ -11,7 +11,7 @@ import Firebase
 
 class DictionariesController: UIViewController, UpdateView, CellButtonPressed{
     
-//MARK: - Protocsl delegate functions
+//MARK: - Protocol delegate functions
     func cellButtonPressed(dicID: String, button:String) {
         switch button{
         case "Edit":
@@ -29,6 +29,7 @@ class DictionariesController: UIViewController, UpdateView, CellButtonPressed{
         }
         setupData()
         dictionaryCheck()
+        
     }
     
 //MARK: - Outlets
@@ -53,7 +54,7 @@ class DictionariesController: UIViewController, UpdateView, CellButtonPressed{
     private var dicID = String()
     var userID = String()
     private var dictionariesArray = [Dictionary]()
-    private var usersArray : Users?
+    private var usersArray : UserData?
     private var dicOwnerData = [DicOwnerData]()
     private var sharedDictionaries: [SharedDictionaryShortData]?
     
@@ -67,15 +68,16 @@ class DictionariesController: UIViewController, UpdateView, CellButtonPressed{
         if mainModel.isInternetAvailable(){
             sync.syncDictionariesCoreDataAndFirebase(userID: mainModel.loadUserData().userID, context: context)
             sync.syncWordsCoreDataAndFirebase(userID: mainModel.loadUserData().userID, context: context)
-            sync.syncNetworkUsersDataWithFirebase(context: context)
         }
+        localizeElements()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         if mainModel.isInternetAvailable(){
             sync.syncDictionariesCoreDataAndFirebase(userID: mainModel.loadUserData().userID, context: context)
+            sync.syncNetworkUsersDataWithFirebase(context: context)
         }
-        //loadDataForSharedDictionary()
         avatarSet()
         setupData()
         dictionaryCheck()
@@ -84,7 +86,7 @@ class DictionariesController: UIViewController, UpdateView, CellButtonPressed{
 //MARK: - Controller functions
     func setupData(){
         dictionariesArray = coreDataManager.loadUserDictionaries(userID: mainModel.loadUserData().userID, data: context)
-        usersArray = coreDataManager.loadUserDataByID(userID: mainModel.loadUserData().userID, data: context)
+        usersArray = coreDataManager.loadUserDataByID(userID: mainModel.loadUserData().userID, context: context).first
         dictionariesTable.delegate = self
         dictionariesTable.dataSource = self
         dictionariesTable.reloadData()
@@ -101,29 +103,8 @@ class DictionariesController: UIViewController, UpdateView, CellButtonPressed{
         }
     }
     
-//    func loadDataForSharedDictionary(){
-//        firebase.getDictionaryShortData { dicArray in
-//        let sharedDictionaries = dicArray
-//        }
-//    }
-    
-    func getDicOwnerDataFromFirestore(ownerID:String){
-        let db = Firestore.firestore()
-        db.collection("Users").whereField("userID", isEqualTo: ownerID).getDocuments { (querySnapshot, error) in
-            if let error = error {
-                print("Error getting documents: \(error)")
-            } else {
-                for document in querySnapshot!.documents {
-                    let ownerData = document.data()
-                    if let ownerName = ownerData["userName"] as? String,
-                       let ownerID = ownerData["userID"] as? String
-                    {
-                        let owner = DicOwnerData(ownerName: ownerName, ownerID: ownerID)
-                        self.dicOwnerData.append(owner)
-                    }
-                }
-            }
-        }
+    func localizeElements(){
+        myDictionariesLabel.text = "dictionariesVC_myDictionaries_label".localized
     }
     
     func elementsDesign(){
@@ -132,7 +113,6 @@ class DictionariesController: UIViewController, UpdateView, CellButtonPressed{
         avatarImageView.clipsToBounds = true
         avatarImageView.layer.borderWidth = 0.5
         avatarImageView.layer.borderColor = UIColor.lightGray.cgColor
-        myDictionariesLabel.text = "dictionariesVC_myDictionaries_label".localized
         profileButtonView.layer.cornerRadius = 45
         profileButtonView.layer.shadowColor = UIColor.black.cgColor
         profileButtonView.layer.shadowOpacity = 0.2
@@ -142,6 +122,7 @@ class DictionariesController: UIViewController, UpdateView, CellButtonPressed{
         newDictionaryButton.layer.shadowOpacity = 0.2
         newDictionaryButton.layer.shadowOffset = .zero
         newDictionaryButton.layer.shadowRadius = 2
+        newDictionaryButton.layer.cornerRadius = 10
     }
     
     func avatarSet(){
@@ -211,13 +192,12 @@ extension DictionariesController: UITableViewDelegate, UITableViewDataSource{
         let dictionaryCell = dictionariesTable.dequeueReusableCell(withIdentifier: "dictionaryCell") as! DictionaryCell
         
         dictionaryCell.cellView.layer.cornerRadius = 5
-        dictionaryCell.sharedDictionaryImage.image = UIImage(systemName: "person.2.fill")
+        dictionaryCell.sharedDictionaryImage.image = UIImage(systemName: "person.icloud")
         dictionaryCell.sharedDictionaryImage.isHidden = true
         dictionaryCell.cellView.clipsToBounds = true
         dictionaryCell.dictionaryNameLabel.text = dictionariesArray[indexPath.row].dicName
         dictionaryCell.learningLanguageLabel.text = dictionariesArray[indexPath.row].dicLearningLanguage
         dictionaryCell.translateLanguageLabel.text = dictionariesArray[indexPath.row].dicTranslateLanguage
-        dictionaryCell.descriptionLabel.text = dictionariesArray[indexPath.row].dicDescription ?? ""
         dictionaryCell.dicName = dictionariesArray[indexPath.row].dicName ?? "no_dicName"
         dictionaryCell.dicID = dictionariesArray[indexPath.row].dicID ?? "no_dicID"
         if let learnImage:String = dictionariesArray[indexPath.row].dicLearningLanguage{
@@ -229,21 +209,17 @@ extension DictionariesController: UITableViewDelegate, UITableViewDataSource{
         dictionaryCell.wordsInDictionaryLabel.text = String(dictionariesArray[indexPath.row].dicWordsCount)
         dictionaryCell.cellButtonActionDelegate = self
         if dictionariesArray[indexPath.row].dicReadOnly{
-            dictionaryCell.sharedDictionaryImage.image = UIImage(systemName: "tray.and.arrow.down.fill")
+            dictionaryCell.sharedDictionaryImage.image = UIImage(systemName: "icloud.and.arrow.down")
             dictionaryCell.sharedDictionaryImage.isHidden = false
-            dictionaryCell.separatorTwoButtons.isHidden = true
             dictionaryCell.editButton.isHidden = true
             dictionaryCell.createDateLabel.text = "dictionariesVC_ownerName_label".localized
-            DispatchQueue.main.async {
-                self.getDicOwnerDataFromFirestore(ownerID: self.dictionariesArray[indexPath.row].dicOwnerID ?? "")
-            }
-            dictionaryCell.creatinDateLabel.text = dicOwnerData.first?.ownerName ?? "Anonimus"
+            let ownerName = coreDataManager.getNetworkUserNameByID(userID: dictionariesArray[indexPath.row].dicOwnerID ?? "NONAME", context: context)
+            dictionaryCell.creatinDateLabel.text = ownerName
         } else {
             dictionaryCell.creatinDateLabel.text = dictionariesArray[indexPath.row].dicAddDate
             dictionaryCell.createDateLabel.text = "dictionariesVC_createDate_label".localized
-            dictionaryCell.separatorOneButton.isHidden = true
             dictionaryCell.editButton.isHidden = false
-            dictionaryCell.separatorTwoButtons.isHidden = false
+           
         }
         if dictionariesArray[indexPath.row].dicShared{
             dictionaryCell.sharedDictionaryImage.isHidden = false
@@ -260,6 +236,9 @@ extension DictionariesController: UITableViewDelegate, UITableViewDataSource{
             let destinationVC = segue.destination as! BrowseDictionaryController
             if let indexPath = dictionariesTable.indexPathForSelectedRow{
                 destinationVC.dicOwnerData = dicOwnerData
+                let ownerName = coreDataManager.getNetworkUserNameByID(userID: dictionariesArray[indexPath.row].dicOwnerID ?? "NONAME", context: context)
+                destinationVC.ownerName = ownerName
+                destinationVC.selectedDictionary = dictionariesArray[indexPath.row]
                 destinationVC.selectedDictionary = dictionariesArray[indexPath.row]
             }
     }

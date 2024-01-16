@@ -79,6 +79,10 @@ class NetworkViewController: UIViewController, GetFilteredData, SetDownloadedMar
     @IBOutlet weak var currentFilterLabel: UILabel!
     @IBOutlet weak var learnFilterImage: UIImageView!
     @IBOutlet weak var transFilterImage: UIImageView!
+    
+    func localizeElemants(){
+       
+    }
 
 //MARK: - Constants and variables
     private let firebase = Firebase()
@@ -87,29 +91,33 @@ class NetworkViewController: UIViewController, GetFilteredData, SetDownloadedMar
     private var filteredDictionaries = [SharedDictionary]()
     private var originalArray = [SharedDictionary]()
     private var sharedWords = [SharedWord]()
+    private var dictionariesCounts = [DictionaryCounts]()
     private let mainModel = MainModel()
     private let coreData = CoreDataManager()
     private var userDictionaries = [Dictionary]()
-    private var dicOwnerData = [DicOwnerData]()
+    private var dicOwnersData = [DicOwnerData]()
     private var defaults = Defaults()
     private var selectedLearnFromDelegate = String()
     private var selectedTransFromDelegate = String()
     private var filterIsSet = Bool()
-    private var messagesArray : [ChatMessage]?
+    private var usersIdArray = [String]()
+    private var messagesCount : String?
+    private var ownerName = String()
     
 //MARK: - Lifecycle functions
     override func viewDidLoad() {
         super.viewDidLoad()
+        localizeElemants()
         if mainModel.isInternetAvailable(){
             sharedTable.isHidden = false
             noInetView.isHidden = true
             sharedTable.dataSource = self
             sharedTable.delegate = self
-            sharedTable.reloadData()
         } else {
             noInetView.isHidden = false
             sharedTable.isHidden = true
         }
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -120,20 +128,26 @@ class NetworkViewController: UIViewController, GetFilteredData, SetDownloadedMar
                 fetchData { success in
                     self.hideHUD()
                     if success {
-                    self.getWords(dicArray: self.sharedDictionaries)
+//                        self.firebase.getDictionariesOwnersArray(sharedDictionariesArray: self.sharedDictionaries) { dicUsersData in
+//                            self.dicOwnersData = dicUsersData ?? [DicOwnerData]()
+//                        }
+                        self.getWords(dicArray: self.sharedDictionaries)
                     } else {
                         print("Failed to load data.")
                     }
                 }
+                sharedTable.reloadData()
             }
             isFilterSet()
-            sharedTable.dataSource = self
-            sharedTable.delegate = self
-            sharedTable.reloadData()
+            
         } else {
             noInetView.isHidden = false
             sharedTable.isHidden = true
         }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        sharedTable.reloadData()
     }
 
 //MARK: - Controller functions
@@ -151,12 +165,6 @@ class NetworkViewController: UIViewController, GetFilteredData, SetDownloadedMar
             let filteredArray = sharedDictionaries.filter({$0.dicTransLang == selectedTransFromDelegate && $0.dicTransLang == selectedTransFromDelegate})
             sharedDictionaries = filteredArray
         }
-    }
-    
-    func loadAllMessages(){
-        firebase.getAllMessages(completion: { messArray in
-            self.messagesArray = messArray
-        })
     }
     
     func standartState(){
@@ -193,7 +201,15 @@ class NetworkViewController: UIViewController, GetFilteredData, SetDownloadedMar
                             let dic = SharedDictionary(dicID: dicID, dicDescription: dicDescription, dicName: dicName, dicWordsCount: dicWordsCount, dicLearnLang: dicLearnLang, dicTransLang: dicTransLang, dicAddDate: dicAddDate!, dicUserID: dicUserID, dicImagesCount: dicImagesCount, dicDownloaded: false, dicDownloadedUsers: dicDownloadedUsers, dicLikes: dicLikes)
                             self.originalArray.append(dic)
                             self.sharedDictionaries.append(dic)
+                            self.firebase.getMessagesCountForDictionary(dicID: dicID) { count in
+                                let messagesCount = count ?? "0"
+                                let dictionaryCounts = DictionaryCounts(dicID: dicID, likesCount: String(dicLikes.count), downloadsCount: String(dicDownloadedUsers.count), messagesCount: messagesCount)
+                                self.dictionariesCounts.append(dictionaryCounts)
+                               
+                            }
+                            
                         }
+                       
                     } else {
                         continue
                     }
@@ -203,29 +219,11 @@ class NetworkViewController: UIViewController, GetFilteredData, SetDownloadedMar
         }
     }
     
+  
     func getWords(dicArray:[SharedDictionary]){
         sharedWords.removeAll()
         for dic in dicArray{
             getWordsDataFromFirestore(dicID: dic.dicID)
-        }
-    }
-
-    func getDicOwnerDataFromFirestore(ownerID:String){
-        let db = Firestore.firestore()
-        db.collection("Users").whereField("userID", isEqualTo: ownerID).getDocuments { (querySnapshot, error) in
-            if let error = error {
-                print("Error getting documents: \(error)")
-            } else {
-                for document in querySnapshot!.documents {
-                    let ownerData = document.data()
-                    if let ownerName = ownerData["userName"] as? String,
-                       let ownerID = ownerData["userID"] as? String
-                    {
-                        let owner = DicOwnerData(ownerName: ownerName, ownerID: ownerID)
-                        self.dicOwnerData.append(owner)
-                    }
-                }
-            }
         }
     }
     
@@ -263,10 +261,9 @@ class NetworkViewController: UIViewController, GetFilteredData, SetDownloadedMar
     private func fetchData(completion: @escaping (Bool) -> Void) {
            DispatchQueue.global().async {
                self.getDataFromFirestore()
-               self.loadAllMessages()
-               Thread.sleep(forTimeInterval: 2.0)
+               Thread.sleep(forTimeInterval: 1.0)
                completion(true)
-           }
+                }
        }
     
     private func showHUD() {
@@ -305,8 +302,16 @@ extension NetworkViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = sharedTable.dequeueReusableCell(withIdentifier: "sharedCell") as! SharedDictionaryCell
+        
         let dictionary = sharedDictionaries[indexPath.row]
-        getDicOwnerDataFromFirestore(ownerID: dictionary.dicUserID)
+        DispatchQueue.global().async {
+            self.firebase.getUserNameByID(userID: dictionary.dicUserID) { userName, error in
+                self.ownerName = userName
+            }
+        }
+        
+        //let ownerName = dicOwnersData.filter({$0.ownerID == dictionary.dicUserID}).first?.ownerName
+        cell.userName.text = ownerName
         cell.downloadedView.isHidden = true
         if sharedDictionaries[indexPath.row].dicDownloaded{
             cell.downloadedView.isHidden = false
@@ -314,7 +319,8 @@ extension NetworkViewController: UITableViewDelegate, UITableViewDataSource {
         cell.cellView.clipsToBounds = true
         cell.cellView.layer.cornerRadius = 10
         cell.dicDescription.text = dictionary.dicDescription
-        cell.userName.text = dicOwnerData.first?.ownerName ?? "Anonimus"
+        let dicOwnerData = dicOwnersData.filter({$0.ownerID == dictionary.dicUserID})
+        
         cell.dictionaryName.text = dictionary.dicName
         cell.learningLanguage.text = dictionary.dicLearnLang
         cell.translateLanguage.text = dictionary.dicTransLang
@@ -328,7 +334,6 @@ extension NetworkViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-       
         performSegue(withIdentifier: "openSharedDictionary", sender: self)
     }
     
@@ -339,9 +344,12 @@ extension NetworkViewController: UITableViewDelegate, UITableViewDataSource {
                 destinationVC.dicID = dicID
                 destinationVC.sharedDictionary = sharedDictionaries[indexPath.row]
                 let filteredByDicWords = sharedWords.filter({$0.wrdDicID == dicID})
-                destinationVC.messagesCount = String(messagesArray?.filter{$0.msgDicID == dicID}.count ?? 0)
+                let currentCounts = dictionariesCounts.filter({$0.dicID == dicID})
+                destinationVC.messagesCount = currentCounts.first?.messagesCount ?? "0"
                 destinationVC.sharedWordsArray = filteredByDicWords
+                let dicOwnerData = dicOwnersData.filter({$0.ownerID == sharedDictionaries[indexPath.row].dicUserID})
                 destinationVC.dicOwnerData = dicOwnerData.first
+                destinationVC.ownerID = sharedDictionaries[indexPath.row].dicUserID
                 destinationVC.setDownloadedDelegate = self
             }
     }
