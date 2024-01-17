@@ -54,6 +54,8 @@ class TestsController: UIViewController, PerformToSegue{
 //MARK: - Outlets
     @IBOutlet weak var testsTable: UITableView!
     @IBOutlet weak var noDictionariesLabel: UILabel!
+    @IBOutlet weak var testsLabel: UILabel!
+    
     
 //MARK: - Constants and variables
     private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
@@ -101,6 +103,7 @@ class TestsController: UIViewController, PerformToSegue{
         testsTable.dataSource = self
         testsTable.delegate = self
         self.navigationItem.setHidesBackButton(true, animated: false)
+        testsLabel.text = "testVC_tests_label".localized
     }
 
     func popUpApear(){

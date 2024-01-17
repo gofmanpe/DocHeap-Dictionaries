@@ -22,6 +22,16 @@ class FilterSharedDicController: UIViewController {
     @IBOutlet weak var warningView: UIView!
     @IBOutlet weak var warningLabel: UILabel!
     
+    func localizeElements(){
+        headerLabel.text = "filterSharedDictionariesPopUp_header".localized
+        lernLangNameLabel.text = "filterSharedDictionariesPopUp_learnLang_label".localized
+        transLangNameLabel.text = "filterSharedDictionariesPopUp_transLang_label".localized
+        learnLangButton.setTitle("filterSharedDictionariesPopUp_learnLang_button".localized, for: .normal)
+        transLangButton.setTitle("filterSharedDictionariesPopUp_transLang_button".localized, for: .normal)
+        clearButton.setTitle("filterSharedDictionariesPopUp_clear_button".localized, for: .normal)
+        applyButton.setTitle("filterSharedDictionariesPopUp_apply_button".localized, for: .normal)
+    }
+    
     var dictionarisArray = [SharedDictionary]()
     var sendFilteredDataDelegate: GetFilteredData?
     private let defaults = Defaults()
@@ -41,6 +51,7 @@ class FilterSharedDicController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        localizeElements()
         popUpBackgroundSettings()
         standartState()
         isFilterApplied()
@@ -64,14 +75,22 @@ class FilterSharedDicController: UIViewController {
     
     func standartState(){
         mainView.layer.cornerRadius = 10
-        learnLangButton.layer.cornerRadius = 5
-        transLangButton.layer.cornerRadius = 5
+        learnLangButton.layer.cornerRadius = 10
+        transLangButton.layer.cornerRadius = 10
         langPicker.isHidden = true
         langPicker.delegate = self
         warningView.isHidden = true
         selectedLearning = selectedLearn
         selectedTranslate = selectedTrans
         langPicker.layer.cornerRadius = 10
+        let buttons = [learnLangButton!,transLangButton!]
+            for button in buttons{
+                button.layer.shadowColor = UIColor.systemGray2.cgColor
+                button.layer.shadowOffset = CGSize(width: 1, height: 1)
+                button.layer.shadowRadius = 2.0
+                button.layer.shadowOpacity = 0.5
+                button.layer.cornerRadius = 10
+            }
     }
     
     func popUpBackgroundSettings(){
@@ -120,7 +139,16 @@ class FilterSharedDicController: UIViewController {
         }
     }
     
+    func buttonScaleAnimation(targetButton:UIButton){
+        UIView.animate(withDuration: 0.2) {
+            targetButton.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
+        } completion: { (bool) in
+            targetButton.transform = .identity
+        }
+    }
+    
     @IBAction func learnLangButtonPressed(_ sender: UIButton) {
+        buttonScaleAnimation(targetButton: learnLangButton)
         if langPicker.isHidden{
             langPicker.isHidden = false
         } else {
@@ -130,6 +158,7 @@ class FilterSharedDicController: UIViewController {
     }
     
     @IBAction func transLangButtonPressed(_ sender: UIButton) {
+        buttonScaleAnimation(targetButton: transLangButton)
         if langPicker.isHidden{
             langPicker.isHidden = false
         } else {

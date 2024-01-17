@@ -41,44 +41,37 @@ class DictionariesController: UIViewController, UpdateView, CellButtonPressed{
     @IBOutlet weak var avatarImageView: UIImageView!
     @IBOutlet weak var userNameLabel: UILabel!
     
+    
 //MARK: - Constants and variables
     private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     private var coreDataManager = CoreDataManager()
+    private let sync = SyncModel()
+    private let mainModel = MainModel()
+    private var firebase = Firebase()
     private var currentUser = String()
     private var currentUserEmail = String()
     private var currentUserNickname = String()
-    private var firebase = Firebase()
     private var avatarName = String()
-    private let mainModel = MainModel()
-    private let sync = SyncModel()
     private var dicID = String()
     var userID = String()
     private var dictionariesArray = [Dictionary]()
-    private var usersArray : UserData?
-    private var dicOwnerData = [DicOwnerData]()
-    private var sharedDictionaries: [SharedDictionaryShortData]?
+    private var userDataArray = [UserData]()
     
 //MARK: - Lifecycle functions
     override func viewDidLoad() {
         super.viewDidLoad()
         setupData()
-        avatarSet()
         dictionaryCheck()
         elementsDesign()
-        if mainModel.isInternetAvailable(){
-            sync.syncDictionariesCoreDataAndFirebase(userID: mainModel.loadUserData().userID, context: context)
-            sync.syncWordsCoreDataAndFirebase(userID: mainModel.loadUserData().userID, context: context)
-        }
         localizeElements()
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         if mainModel.isInternetAvailable(){
             sync.syncDictionariesCoreDataAndFirebase(userID: mainModel.loadUserData().userID, context: context)
             sync.syncNetworkUsersDataWithFirebase(context: context)
+            sync.syncUserDataWithFirebase(userID: mainModel.loadUserData().userID, context: context)
         }
-        avatarSet()
         setupData()
         dictionaryCheck()
     }
@@ -86,7 +79,9 @@ class DictionariesController: UIViewController, UpdateView, CellButtonPressed{
 //MARK: - Controller functions
     func setupData(){
         dictionariesArray = coreDataManager.loadUserDictionaries(userID: mainModel.loadUserData().userID, data: context)
-        usersArray = coreDataManager.loadUserDataByID(userID: mainModel.loadUserData().userID, context: context).first
+        userDataArray = coreDataManager.loadUserDataByID(userID: mainModel.loadUserData().userID, context: context) 
+        let userName = userDataArray.first?.userName
+        let userEmail = userDataArray.first?.userEmail
         dictionariesTable.delegate = self
         dictionariesTable.dataSource = self
         dictionariesTable.reloadData()
@@ -94,12 +89,18 @@ class DictionariesController: UIViewController, UpdateView, CellButtonPressed{
             noDicltionariesLabel.isHidden = false}
         else {
             dictionariesTable.reloadData()
-                noDicltionariesLabel.isHidden = true
-            }
-        if let userNickname = usersArray?.userName, userNickname.isEmpty {
-            userNameLabel.text = usersArray?.userEmail
+            noDicltionariesLabel.isHidden = true
+        }
+        if userName != nil {
+            userNameLabel.text = userName
         } else {
-            userNameLabel.text = usersArray?.userName
+            userNameLabel.text = userEmail
+        }
+        let avatarExtention = userDataArray.first?.userAvatarExtention
+        if avatarExtention != nil{
+            avatarName = "userAvatar.\(avatarExtention ?? "")"
+            let avatarPath = "\(mainModel.loadUserData().userID)/\(avatarName)"
+            avatarImageView.image = UIImage(contentsOfFile:  mainModel.getDocumentsFolderPath().appendingPathComponent(avatarPath).path)
         }
     }
     
@@ -123,16 +124,6 @@ class DictionariesController: UIViewController, UpdateView, CellButtonPressed{
         newDictionaryButton.layer.shadowOffset = .zero
         newDictionaryButton.layer.shadowRadius = 2
         newDictionaryButton.layer.cornerRadius = 10
-    }
-    
-    func avatarSet(){
-        if usersArray?.userAvatarExtention != nil{
-            if let ava = usersArray?.userAvatarExtention{
-                avatarName = "userAvatar.\(ava)"
-            }
-            let avatarPath = "\(mainModel.loadUserData().userID)/\(avatarName)"
-            avatarImageView.image = UIImage(contentsOfFile:  mainModel.getDocumentsFolderPath().appendingPathComponent(avatarPath).path)
-        }
     }
     
     func popUpApear(dictionaryIDFromCell:String, senderAction:String){
@@ -166,7 +157,7 @@ class DictionariesController: UIViewController, UpdateView, CellButtonPressed{
     func dictionaryCheck(){
         dictionariesTable.reloadData()
         if dictionariesArray.isEmpty {
-           dictionariesTable.isHidden = true
+            dictionariesTable.isHidden = true
             noDicltionariesLabel.text = "dictionariesVC_attention_label".localized
             noDicltionariesLabel.isHidden = false
         } else {
@@ -190,7 +181,6 @@ extension DictionariesController: UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let dictionaryCell = dictionariesTable.dequeueReusableCell(withIdentifier: "dictionaryCell") as! DictionaryCell
-        
         dictionaryCell.cellView.layer.cornerRadius = 5
         dictionaryCell.sharedDictionaryImage.image = UIImage(systemName: "person.icloud")
         dictionaryCell.sharedDictionaryImage.isHidden = true
@@ -219,7 +209,6 @@ extension DictionariesController: UITableViewDelegate, UITableViewDataSource{
             dictionaryCell.creatinDateLabel.text = dictionariesArray[indexPath.row].dicAddDate
             dictionaryCell.createDateLabel.text = "dictionariesVC_createDate_label".localized
             dictionaryCell.editButton.isHidden = false
-           
         }
         if dictionariesArray[indexPath.row].dicShared{
             dictionaryCell.sharedDictionaryImage.isHidden = false
@@ -235,7 +224,6 @@ extension DictionariesController: UITableViewDelegate, UITableViewDataSource{
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
             let destinationVC = segue.destination as! BrowseDictionaryController
             if let indexPath = dictionariesTable.indexPathForSelectedRow{
-                destinationVC.dicOwnerData = dicOwnerData
                 let ownerName = coreDataManager.getNetworkUserNameByID(userID: dictionariesArray[indexPath.row].dicOwnerID ?? "NONAME", context: context)
                 destinationVC.ownerName = ownerName
                 destinationVC.selectedDictionary = dictionariesArray[indexPath.row]

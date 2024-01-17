@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7617D8822B54036700358EBC /* StatisticDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7617D8812B54036700358EBC /* StatisticDataModel.swift */; };
 		7617D8852B547AE900358EBC /* StatisticCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7617D8832B547AE900358EBC /* StatisticCell.swift */; };
 		7617D8862B547AE900358EBC /* StatisticCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7617D8842B547AE900358EBC /* StatisticCell.xib */; };
 		7618E5262B3DA8CC0090F183 /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7618E5242B3DA8CC0090F183 /* EditProfileViewController.swift */; };
@@ -33,6 +32,9 @@
 		765A886A29DF0BA200252AE8 /* SelectDictionaryForTestController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 765A886829DF0BA100252AE8 /* SelectDictionaryForTestController.xib */; };
 		765A886C29E3138100252AE8 /* FiveWordsTestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765A886B29E3138000252AE8 /* FiveWordsTestController.swift */; };
 		765A886E29E42F4700252AE8 /* ThreeWordsTestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765A886D29E42F4700252AE8 /* ThreeWordsTestController.swift */; };
+		766E579D2B57503B00A3FBB9 /* LogOutPopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766E579B2B57503B00A3FBB9 /* LogOutPopUp.swift */; };
+		766E579E2B57503B00A3FBB9 /* LogOutPopUp.xib in Resources */ = {isa = PBXBuildFile; fileRef = 766E579C2B57503B00A3FBB9 /* LogOutPopUp.xib */; };
+		766E57A02B57D51600A3FBB9 /* TestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766E579F2B57D51500A3FBB9 /* TestModel.swift */; };
 		76733D7229D0849500379116 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76733D7129D0849500379116 /* AppDelegate.swift */; };
 		76733D7429D0849500379116 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76733D7329D0849500379116 /* SceneDelegate.swift */; };
 		76733D7929D0849500379116 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 76733D7729D0849500379116 /* Main.storyboard */; };
@@ -96,7 +98,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		7617D8812B54036700358EBC /* StatisticDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticDataModel.swift; sourceTree = "<group>"; };
 		7617D8832B547AE900358EBC /* StatisticCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticCell.swift; sourceTree = "<group>"; };
 		7617D8842B547AE900358EBC /* StatisticCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = StatisticCell.xib; sourceTree = "<group>"; };
 		7618E5242B3DA8CC0090F183 /* EditProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
@@ -120,6 +121,9 @@
 		765A886829DF0BA100252AE8 /* SelectDictionaryForTestController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SelectDictionaryForTestController.xib; sourceTree = "<group>"; };
 		765A886B29E3138000252AE8 /* FiveWordsTestController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiveWordsTestController.swift; sourceTree = "<group>"; };
 		765A886D29E42F4700252AE8 /* ThreeWordsTestController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreeWordsTestController.swift; sourceTree = "<group>"; };
+		766E579B2B57503B00A3FBB9 /* LogOutPopUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogOutPopUp.swift; sourceTree = "<group>"; };
+		766E579C2B57503B00A3FBB9 /* LogOutPopUp.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LogOutPopUp.xib; sourceTree = "<group>"; };
+		766E579F2B57D51500A3FBB9 /* TestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestModel.swift; sourceTree = "<group>"; };
 		76733D6E29D0849400379116 /* docHeap-Dictionaries.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "docHeap-Dictionaries.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		76733D7129D0849500379116 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		76733D7329D0849500379116 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -220,6 +224,7 @@
 				768A1F332B3A25E600EF877A /* FilterSharedDicController.swift */,
 				7618E5242B3DA8CC0090F183 /* EditProfileViewController.swift */,
 				7678A7352B4DE12D00630946 /* UserInfoViewController.swift */,
+				766E579B2B57503B00A3FBB9 /* LogOutPopUp.swift */,
 			);
 			path = "PopUp's";
 			sourceTree = "<group>";
@@ -275,17 +280,17 @@
 			isa = PBXGroup;
 			children = (
 				76733D7A29D0849500379116 /* docHeap_Dictionaries.xcdatamodeld */,
-				7643D2042B1F550300A6896E /* SyncModel.swift */,
-				76A7534E29D453BC009F5E54 /* Defaults.swift */,
-				762EB71A2A26641B0073F7E8 /* MainModel.swift */,
-				7620787D2A38C1B600A76AFB /* CoreDataManager.swift */,
-				768F05A12A51A179002D32C5 /* Protocols.swift */,
-				76EEC2F52B00DECF00C2B11B /* Firebase.swift */,
-				76C8ABF32B0A595300CE41BE /* Extentions.swift */,
-				76C8ABFB2B0BD0CF00CE41BE /* TestsDataModel.swift */,
-				76C8ABFD2B0E179C00CE41BE /* Alamo.swift */,
 				768A08D22B3396A20058D972 /* CustomDataTypes.swift */,
-				7617D8812B54036700358EBC /* StatisticDataModel.swift */,
+				76A7534E29D453BC009F5E54 /* Defaults.swift */,
+				768F05A12A51A179002D32C5 /* Protocols.swift */,
+				7620787D2A38C1B600A76AFB /* CoreDataManager.swift */,
+				76EEC2F52B00DECF00C2B11B /* Firebase.swift */,
+				76C8ABFD2B0E179C00CE41BE /* Alamo.swift */,
+				76C8ABF32B0A595300CE41BE /* Extentions.swift */,
+				7643D2042B1F550300A6896E /* SyncModel.swift */,
+				762EB71A2A26641B0073F7E8 /* MainModel.swift */,
+				766E579F2B57D51500A3FBB9 /* TestModel.swift */,
+				76C8ABFB2B0BD0CF00CE41BE /* TestsDataModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -333,6 +338,7 @@
 				7678A7362B4DE12D00630946 /* UserInfoViewController.xib */,
 				7678A73A2B4DFE2E00630946 /* ChatUserCell.xib */,
 				7617D8842B547AE900358EBC /* StatisticCell.xib */,
+				766E579C2B57503B00A3FBB9 /* LogOutPopUp.xib */,
 				76733D7F29D0849700379116 /* LaunchScreen.storyboard */,
 			);
 			path = View;
@@ -449,6 +455,7 @@
 				761C830E29D21C9500ABD5E0 /* CreatePopUpViewController.xib in Resources */,
 				767CDCF52AA7BF2500AFEB9D /* BrowseWordViewController.xib in Resources */,
 				76A3FB7329E9B51900AF87C1 /* ResultsPopUpController.xib in Resources */,
+				766E579E2B57503B00A3FBB9 /* LogOutPopUp.xib in Resources */,
 				7678A73C2B4DFE2E00630946 /* ChatUserCell.xib in Resources */,
 				76A7535729D73CC2009F5E54 /* AddWordPopUpViewController.xib in Resources */,
 				7617D8862B547AE900358EBC /* StatisticCell.xib in Resources */,
@@ -486,6 +493,7 @@
 				762EB71B2A26641B0073F7E8 /* MainModel.swift in Sources */,
 				7655BD942B2B7E5600240961 /* UserProfileViewController.swift in Sources */,
 				76733D7229D0849500379116 /* AppDelegate.swift in Sources */,
+				766E57A02B57D51600A3FBB9 /* TestModel.swift in Sources */,
 				76EEC2DD2AF5246200C2B11B /* RegisterController.swift in Sources */,
 				767DA1FB29D0A819004E0FA5 /* TestsController.swift in Sources */,
 				76C8ABF42B0A595300CE41BE /* Extentions.swift in Sources */,
@@ -507,10 +515,10 @@
 				762CD09A2A7D446F00635AF7 /* FindAnImageTestController.swift in Sources */,
 				76A7534F29D453BC009F5E54 /* Defaults.swift in Sources */,
 				765A886C29E3138100252AE8 /* FiveWordsTestController.swift in Sources */,
+				766E579D2B57503B00A3FBB9 /* LogOutPopUp.swift in Sources */,
 				76733D7C29D0849500379116 /* docHeap_Dictionaries.xcdatamodeld in Sources */,
 				76C8ABFE2B0E179C00CE41BE /* Alamo.swift in Sources */,
 				768A08D12B337D380058D972 /* SharedWordCell.swift in Sources */,
-				7617D8822B54036700358EBC /* StatisticDataModel.swift in Sources */,
 				76733D7429D0849500379116 /* SceneDelegate.swift in Sources */,
 				76A9CBB429F6D4CF0035A0ED /* FindAPairController.swift in Sources */,
 				76EEC2DB2AF51C2F00C2B11B /* StartController.swift in Sources */,

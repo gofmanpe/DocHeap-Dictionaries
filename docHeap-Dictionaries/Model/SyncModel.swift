@@ -25,7 +25,16 @@ struct SyncModel {
                 return
             }
         } //get CoreData user data
-       
+    }
+    
+    func syncStatistic(userID:String, context:NSManagedObjectContext){
+        let allUserStat = coreData.loadAllStatisticForUser(userID: mainModel.loadUserData().userID, context: context)
+        let unSyncStat = allUserStat.filter({$0.statSyncronized == false})
+        if !unSyncStat.isEmpty{
+            for element in unSyncStat{
+                firebase.createStatisticRecord(statData: element)
+            }
+        }
     }
     
     func syncMessages(coreDataMessages:[ChatMessage]){
@@ -142,7 +151,7 @@ struct SyncModel {
                             dictionary.dicShared = dicShared ?? false
                             dictionary.dicReadOnly = false
                              coreData.saveData(data: context)
-                         self.loadWordsFromFirestore(dicID: dicID, context: context)
+                         self.loadWordsFromFirebase(dicID: dicID, context: context)
                     }
                      
                  }
@@ -150,7 +159,7 @@ struct SyncModel {
          }
      }
     
-    func loadWordsFromFirestore(dicID: String, context:NSManagedObjectContext) {
+    func loadWordsFromFirebase(dicID: String, context:NSManagedObjectContext) {
         fireDB.collection("Words").whereField("wrdDicID", isEqualTo: dicID).getDocuments { (querySnapshot, error) in
              if let error = error {
                  
@@ -197,6 +206,20 @@ struct SyncModel {
                  }
          }
      }
+    
+    func loadStatisticFromFirebase(userID:String, context:NSManagedObjectContext){
+        firebase.getStatisticByUserID(userID: userID) { loadedUserStatistic, error in
+            if let error = error{
+                print("Error to load user statistic: \(error)")
+            } else {
+                if let stat = loadedUserStatistic{
+                    for element in stat{
+                        coreData.createStatisticRecord(statisticData: element, context: context)
+                    }
+                }
+            }
+        }
+    }
     
     func syncDictionariesCoreDataAndFirebase(userID: String, context:NSManagedObjectContext){
        let allDictionaries = coreData.loadAllUserDictionaries(userID: userID, data: context)

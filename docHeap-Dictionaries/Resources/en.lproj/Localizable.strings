@@ -160,6 +160,7 @@
 "testVC_findApairtest_ico" = "fApico_en.png";
 "testVC_findAnImagetest_ico" = "fAiico_en.png";
 "testVC_trueOrFalsetest_ico" = "tOfico_en.png";
+"testVC_tests_label" = "Tests";
 // SelectDictionaryForTestVC
 "selectDictionaryVC_header_label" = "Select Dictionary for Test";
 "selectDictionaryVC_selectDictionary_label" = "Select a Dictionary";
@@ -186,6 +187,12 @@
 "profileVC_setAvatar_button" = "Set avatar";
 "profileVC_registred_label" = "registered:";
 "profileVC_addInfo_label" = "Additional info";
+"profileVC_dateOfBirth_label"= "Date of birth:";
+"profileVC_country_label"= "Country:";
+"profileVC_nativeLanguage_label"= "Native language:";
+"profileVC_scores_label"= "Scores:";
+"profileVC_showEmail_label"= "Show user email in public profile";
+"profileVC_profile_label"= "Profile";
 
 //StatisticVC
 "statisticVC_noStatistic_label" = "You don't have any statistics, because you haven't taken any tests yet!";
@@ -194,3 +201,28 @@
 "statisticVC_right_label" = "Right";
 "statisticVC_wrong_label" = "Wrong";
 "statisticVC_scores_label" = "Scores";
+"statisticVC_statistic_label" = "Statistic";
+
+//NetworkVC
+"networkVC_sharedDictioanries_label" = "Shared dictionaries";
+"networkVC_currentFilter_label" = "Current filter";
+"networkVC_filter_button" = "Filter";
+
+//SharedDictionaryCell
+"sharedDicCell_wordsName_label" = "Words:";
+"sharedDicCell_ownerName_label" = "Owner:";
+
+//FilterSharedDictionariesPopUp
+"filterSharedDictionariesPopUp_header" = "Filter dictionaries";
+"filterSharedDictionariesPopUp_learnLang_label" = "Learning language";
+"filterSharedDictionariesPopUp_transLang_label" = "Translate language";
+"filterSharedDictionariesPopUp_learnLang_button" = "Select";
+"filterSharedDictionariesPopUp_transLang_button" = "Select";
+"filterSharedDictionariesPopUp_clear_button" = "Clear";
+"filterSharedDictionariesPopUp_apply_button" = "Apply";
+
+//LogOutPopUp
+"logoutPopUp_header_label" = "Log out from account";
+"logoutPopUp_dialog_label" = "Are you sure you want to log out of your account?";
+"logoutPopUp_cancel_button" = "Cancel";
+"logoutPopUp_logout_button" = "Log out";

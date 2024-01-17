@@ -24,6 +24,7 @@ class TestCell: UITableViewCell {
         testView.layer.shadowOpacity = 0.2
         testView.layer.shadowOffset = .zero
         testView.layer.shadowRadius = 2
+        testDescription.contentMode = .top
         // Configure the view for the selected state
     }
 

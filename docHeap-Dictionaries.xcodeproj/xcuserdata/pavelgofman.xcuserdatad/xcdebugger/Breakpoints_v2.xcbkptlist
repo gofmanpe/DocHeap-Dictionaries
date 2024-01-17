@@ -30,150 +30,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "4BBD4BB6-9D7B-4DE5-9052-C98352150077"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "docHeap-Dictionaries/Controller/FindAnImageTestController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "96"
-            endingLineNumber = "96"
-            landmarkName = "FindAnImageTestController"
-            landmarkType = "3">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "276EB749-58C6-44F6-8FA2-8695113EE9E5"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "docHeap-Dictionaries/Controller/FindAnImageTestController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "121"
-            endingLineNumber = "121"
-            landmarkName = "testStart()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "6FD1C555-E08E-45ED-B1A4-CC398AC84B75"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "docHeap-Dictionaries/Controller/FindAnImageTestController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "118"
-            endingLineNumber = "118"
-            landmarkName = "testStart()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "B5AC33DC-EF85-4927-8F9A-7D3877143E74"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "docHeap-Dictionaries/Controller/FindAnImageTestController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "117"
-            endingLineNumber = "117"
-            landmarkName = "testStart()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "244434E7-C8FA-42BB-BA40-8E6F0F75B3CA"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "docHeap-Dictionaries/Controller/FindAnImageTestController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "116"
-            endingLineNumber = "116"
-            landmarkName = "testStart()"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "244434E7-C8FA-42BB-BA40-8E6F0F75B3CA - dd3c0d4894a6daab"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "docHeap_Dictionaries.FindAnImageTestController.testStart() -&gt; ()"
-                  moduleName = "docHeap-Dictionaries"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/pavelgofman/Documents/Project_copy/DocHeap/docHeap-Dictionaries/Controller/FindAnImageTestController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "112"
-                  endingLineNumber = "112"
-                  offsetFromSymbolStart = "864">
-               </Location>
-               <Location
-                  uuid = "244434E7-C8FA-42BB-BA40-8E6F0F75B3CA - 1751f3a9b9a53060"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #2 (docHeap_Dictionaries.Word) -&gt; Swift.Bool in docHeap_Dictionaries.FindAnImageTestController.testStart() -&gt; ()"
-                  moduleName = "docHeap-Dictionaries"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/pavelgofman/Documents/Project_copy/DocHeap/docHeap-Dictionaries/Controller/FindAnImageTestController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "112"
-                  endingLineNumber = "112"
-                  offsetFromSymbolStart = "32">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "E47B6515-F4F2-4E7D-8CE4-1CF6DA132541"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "docHeap-Dictionaries/Controller/FindAnImageTestController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "110"
-            endingLineNumber = "110"
-            landmarkName = "loadData()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "2F07F8F0-8433-43C6-A6E2-F3CB9D6CE498"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "docHeap-Dictionaries/Controller/FindAnImageTestController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "111"
-            endingLineNumber = "111"
-            landmarkName = "loadData()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "45319C1F-BCF7-43C2-AD53-16DE4919135D"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -200,162 +56,6 @@
             startingLineNumber = "291"
             endingLineNumber = "291"
             landmarkName = "pickerView(_:didSelectRow:inComponent:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "D36363DF-850C-48E5-8922-BB61F3F7B590"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "docHeap-Dictionaries/Controller/FindAnImageTestController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "91"
-            endingLineNumber = "91"
-            landmarkName = "FindAnImageTestController"
-            landmarkType = "3">
-            <Locations>
-               <Location
-                  uuid = "D36363DF-850C-48E5-8922-BB61F3F7B590 - d4b73dccda0f3b62"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "docHeap_Dictionaries.FindAnImageTestController.parentDictionaryData.getter : docHeap_Dictionaries.Dictionary"
-                  moduleName = "docHeap-Dictionaries"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/pavelgofman/Documents/Project_copy/DocHeap/docHeap-Dictionaries/Controller/FindAnImageTestController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "0"
-                  endingLineNumber = "0"
-                  offsetFromSymbolStart = "16">
-               </Location>
-               <Location
-                  uuid = "D36363DF-850C-48E5-8922-BB61F3F7B590 - 57517970e481742d"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "docHeap_Dictionaries.FindAnImageTestController.parentDictionaryData.setter : docHeap_Dictionaries.Dictionary"
-                  moduleName = "docHeap-Dictionaries"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/pavelgofman/Documents/Project_copy/DocHeap/docHeap-Dictionaries/Controller/FindAnImageTestController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "87"
-                  endingLineNumber = "87"
-                  offsetFromSymbolStart = "0">
-               </Location>
-               <Location
-                  uuid = "D36363DF-850C-48E5-8922-BB61F3F7B590 - 37ff2542fa623e29"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "docHeap_Dictionaries.FindAnImageTestController.parentDictionaryData.modify : docHeap_Dictionaries.Dictionary"
-                  moduleName = "docHeap-Dictionaries"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/pavelgofman/Documents/Project_copy/DocHeap/docHeap-Dictionaries/Controller/FindAnImageTestController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "87"
-                  endingLineNumber = "87"
-                  offsetFromSymbolStart = "0">
-               </Location>
-               <Location
-                  uuid = "D36363DF-850C-48E5-8922-BB61F3F7B590 - e3eff51a88d85191"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "docHeap_Dictionaries.FindAnImageTestController.parentDictionaryData.modify : docHeap_Dictionaries.Dictionary with unmangled suffix &quot;.resume.0&quot;"
-                  moduleName = "docHeap-Dictionaries"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/pavelgofman/Documents/Project_copy/DocHeap/%3Ccompiler-generated%3E"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "0"
-                  endingLineNumber = "0"
-                  offsetFromSymbolStart = "16">
-               </Location>
-               <Location
-                  uuid = "D36363DF-850C-48E5-8922-BB61F3F7B590 - 704e18d302c2b821"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "docHeap_Dictionaries.FindAnImageTestController.init(nibName: Swift.Optional&lt;Swift.String&gt;, bundle: Swift.Optional&lt;__C.NSBundle&gt;) -&gt; docHeap_Dictionaries.FindAnImageTestController"
-                  moduleName = "docHeap-Dictionaries"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/pavelgofman/Documents/Project_copy/DocHeap/docHeap-Dictionaries/Controller/FindAnImageTestController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "87"
-                  endingLineNumber = "87"
-                  offsetFromSymbolStart = "2756">
-               </Location>
-               <Location
-                  uuid = "D36363DF-850C-48E5-8922-BB61F3F7B590 - 9b4399ab35314ce6"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "docHeap_Dictionaries.FindAnImageTestController.init(coder: __C.NSCoder) -&gt; Swift.Optional&lt;docHeap_Dictionaries.FindAnImageTestController&gt;"
-                  moduleName = "docHeap-Dictionaries"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/pavelgofman/Documents/Project_copy/DocHeap/docHeap-Dictionaries/Controller/FindAnImageTestController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "87"
-                  endingLineNumber = "87"
-                  offsetFromSymbolStart = "2732">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "CA6A729C-A09C-4B29-A908-5FF14C7712AA"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "docHeap-Dictionaries/Controller/FindAnImageTestController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "99"
-            endingLineNumber = "99"
-            landmarkName = "viewDidLoad()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "A1228020-C4DD-44B2-A452-EE0619B8E370"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "docHeap-Dictionaries/Controller/FindAnImageTestController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "139"
-            endingLineNumber = "139"
-            landmarkName = "testStart()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "3F0523CA-F4E1-4D2E-A9A7-C64756A71580"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "docHeap-Dictionaries/Controller/FindAnImageTestController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "140"
-            endingLineNumber = "140"
-            landmarkName = "testStart()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -433,8 +133,8 @@
             filePath = "docHeap-Dictionaries/Controller/DictionariesController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "228"
-            endingLineNumber = "228"
+            startingLineNumber = "217"
+            endingLineNumber = "217"
             landmarkName = "tableView(_:cellForRowAt:)"
             landmarkType = "7">
             <Locations>
@@ -496,8 +196,8 @@
             filePath = "docHeap-Dictionaries/Controller/DictionariesController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "217"
-            endingLineNumber = "217"
+            startingLineNumber = "207"
+            endingLineNumber = "207"
             landmarkName = "tableView(_:cellForRowAt:)"
             landmarkType = "7">
             <Locations>
@@ -537,54 +237,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "0A45660B-39E1-491D-9F3C-14B0CE371C0E"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "docHeap-Dictionaries/Controller/NetworkViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "133"
-            endingLineNumber = "133"
-            landmarkName = "viewWillAppear(_:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "0A45660B-39E1-491D-9F3C-14B0CE371C0E - d598e4f9dde399c4"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Bool) -&gt; () in docHeap_Dictionaries.NetworkViewController.viewWillAppear(Swift.Bool) -&gt; ()"
-                  moduleName = "docHeap-Dictionaries"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/pavelgofman/Documents/Project_copy/DocHeap/docHeap-Dictionaries/Controller/NetworkViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "128"
-                  endingLineNumber = "128"
-                  offsetFromSymbolStart = "188">
-               </Location>
-               <Location
-                  uuid = "0A45660B-39E1-491D-9F3C-14B0CE371C0E - b7b95a7a551e9483"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Optional&lt;Swift.Array&lt;docHeap_Dictionaries.DicOwnerData&gt;&gt;) -&gt; () in closure #1 (Swift.Bool) -&gt; () in docHeap_Dictionaries.NetworkViewController.viewWillAppear(Swift.Bool) -&gt; ()"
-                  moduleName = "docHeap-Dictionaries"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/pavelgofman/Documents/Project_copy/DocHeap/docHeap-Dictionaries/Controller/NetworkViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "128"
-                  endingLineNumber = "128"
-                  offsetFromSymbolStart = "120">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "27A446A4-4E94-49A3-A2AA-DD0B727BAAC3"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -592,9 +244,9 @@
             filePath = "docHeap-Dictionaries/Controller/BrowseSharedDicViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "148"
-            endingLineNumber = "148"
-            landmarkName = "createSharedDictionaryOwnerData()"
+            startingLineNumber = "155"
+            endingLineNumber = "155"
+            landmarkName = "createDownloadedDictionaryUsers()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -608,8 +260,8 @@
             filePath = "docHeap-Dictionaries/Controller/BrowseSharedDicViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "151"
-            endingLineNumber = "151"
+            startingLineNumber = "158"
+            endingLineNumber = "158"
             landmarkName = "createDownloadedDictionaryUsers()"
             landmarkType = "7">
          </BreakpointContent>
@@ -624,13 +276,13 @@
             filePath = "docHeap-Dictionaries/Controller/BrowseSharedDicViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "162"
-            endingLineNumber = "162"
-            landmarkName = "createDownloadedDictionaryUsers()"
+            startingLineNumber = "169"
+            endingLineNumber = "169"
+            landmarkName = "createMessagesForDictionary()"
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "5E2F4CC4-7C28-4754-B94A-B8401EEE2F80 - 575417f339123fbf"
+                  uuid = "5E2F4CC4-7C28-4754-B94A-B8401EEE2F80 - 575417f339123e2a"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -640,12 +292,12 @@
                   urlString = "file:///Users/pavelgofman/Documents/Project_copy/DocHeap/docHeap-Dictionaries/Controller/BrowseSharedDicViewController.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "158"
-                  endingLineNumber = "158"
-                  offsetFromSymbolStart = "92">
+                  startingLineNumber = "169"
+                  endingLineNumber = "169"
+                  offsetFromSymbolStart = "1092">
                </Location>
                <Location
-                  uuid = "5E2F4CC4-7C28-4754-B94A-B8401EEE2F80 - 575417f339123fbf"
+                  uuid = "5E2F4CC4-7C28-4754-B94A-B8401EEE2F80 - 575417f339123e2a"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -655,249 +307,11 @@
                   urlString = "file:///Users/pavelgofman/Documents/Project_copy/DocHeap/docHeap-Dictionaries/Controller/BrowseSharedDicViewController.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "158"
-                  endingLineNumber = "158"
-                  offsetFromSymbolStart = "124">
-               </Location>
-               <Location
-                  uuid = "5E2F4CC4-7C28-4754-B94A-B8401EEE2F80 - 575417f339123f33"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Optional&lt;Swift.Array&lt;docHeap_Dictionaries.ChatMessage&gt;&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in docHeap_Dictionaries.BrowseSharedDicViewController.createMessagesForDictionary() -&gt; ()"
-                  moduleName = "docHeap-Dictionaries"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/pavelgofman/Documents/Project_copy/DocHeap/docHeap-Dictionaries/Controller/BrowseSharedDicViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "162"
-                  endingLineNumber = "162"
+                  startingLineNumber = "169"
+                  endingLineNumber = "169"
                   offsetFromSymbolStart = "124">
                </Location>
             </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "D6AE9812-9B9F-4BC0-9FA0-0401796B5AED"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "docHeap-Dictionaries/Controller/PopUp&apos;s/ResultsPopUpController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "64"
-            endingLineNumber = "64"
-            landmarkName = "viewDidLoad()"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "D6AE9812-9B9F-4BC0-9FA0-0401796B5AED - ea604a06670945f5"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "docHeap_Dictionaries.ResultsPopUpController.viewDidLoad() -&gt; ()"
-                  moduleName = "docHeap-Dictionaries"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/pavelgofman/Documents/Project_copy/DocHeap/docHeap-Dictionaries/Controller/PopUp&apos;s/ResultsPopUpController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "65"
-                  endingLineNumber = "65"
-                  offsetFromSymbolStart = "460">
-               </Location>
-               <Location
-                  uuid = "D6AE9812-9B9F-4BC0-9FA0-0401796B5AED - ea604a0667094414"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "docHeap_Dictionaries.ResultsPopUpController.viewDidLoad() -&gt; ()"
-                  moduleName = "docHeap-Dictionaries"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/pavelgofman/Documents/Project_copy/DocHeap/docHeap-Dictionaries/Controller/PopUp&apos;s/ResultsPopUpController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "64"
-                  endingLineNumber = "64"
-                  offsetFromSymbolStart = "300">
-               </Location>
-               <Location
-                  uuid = "D6AE9812-9B9F-4BC0-9FA0-0401796B5AED - ea604a0667094414"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "docHeap_Dictionaries.ResultsPopUpController.viewDidLoad() -&gt; ()"
-                  moduleName = "docHeap-Dictionaries"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/pavelgofman/Documents/Project_copy/DocHeap/docHeap-Dictionaries/Controller/PopUp&apos;s/ResultsPopUpController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "64"
-                  endingLineNumber = "64"
-                  offsetFromSymbolStart = "460">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "1D2D0890-7391-4FA6-B54D-1044A72643EF"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "docHeap-Dictionaries/Controller/PopUp&apos;s/ResultsPopUpController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "220"
-            endingLineNumber = "220"
-            landmarkName = "statisticUpload()"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "1D2D0890-7391-4FA6-B54D-1044A72643EF - eda4eb50f273b8d1"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "docHeap_Dictionaries.ResultsPopUpController.statisticUpload() -&gt; ()"
-                  moduleName = "docHeap-Dictionaries"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/pavelgofman/Documents/Project_copy/DocHeap/docHeap-Dictionaries/Controller/PopUp&apos;s/ResultsPopUpController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "222"
-                  endingLineNumber = "222"
-                  offsetFromSymbolStart = "860">
-               </Location>
-               <Location
-                  uuid = "1D2D0890-7391-4FA6-B54D-1044A72643EF - eda4eb50f273b893"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "docHeap_Dictionaries.ResultsPopUpController.statisticUpload() -&gt; ()"
-                  moduleName = "docHeap-Dictionaries"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/pavelgofman/Documents/Project_copy/DocHeap/docHeap-Dictionaries/Controller/PopUp&apos;s/ResultsPopUpController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "220"
-                  endingLineNumber = "220"
-                  offsetFromSymbolStart = "672">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "FCF995D5-3EE8-49C4-AC86-026F486726D5"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "docHeap-Dictionaries/Controller/PopUp&apos;s/ResultsPopUpController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "221"
-            endingLineNumber = "221"
-            landmarkName = "statisticUpload()"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "FCF995D5-3EE8-49C4-AC86-026F486726D5 - eda4eb50f273b8d1"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "docHeap_Dictionaries.ResultsPopUpController.statisticUpload() -&gt; ()"
-                  moduleName = "docHeap-Dictionaries"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/pavelgofman/Documents/Project_copy/DocHeap/docHeap-Dictionaries/Controller/PopUp&apos;s/ResultsPopUpController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "222"
-                  endingLineNumber = "222"
-                  offsetFromSymbolStart = "860">
-               </Location>
-               <Location
-                  uuid = "FCF995D5-3EE8-49C4-AC86-026F486726D5 - eda4eb50f273b8b2"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "docHeap_Dictionaries.ResultsPopUpController.statisticUpload() -&gt; ()"
-                  moduleName = "docHeap-Dictionaries"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/pavelgofman/Documents/Project_copy/DocHeap/docHeap-Dictionaries/Controller/PopUp&apos;s/ResultsPopUpController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "221"
-                  endingLineNumber = "221"
-                  offsetFromSymbolStart = "708">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "F29CD4AA-9659-49AD-A79C-35AB4125836C"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "docHeap-Dictionaries/Controller/PopUp&apos;s/ResultsPopUpController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "222"
-            endingLineNumber = "222"
-            landmarkName = "statisticUpload()"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "F29CD4AA-9659-49AD-A79C-35AB4125836C - eda4eb50f273b8f0"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "docHeap_Dictionaries.ResultsPopUpController.statisticUpload() -&gt; ()"
-                  moduleName = "docHeap-Dictionaries"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/pavelgofman/Documents/Project_copy/DocHeap/docHeap-Dictionaries/Controller/PopUp&apos;s/ResultsPopUpController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "223"
-                  endingLineNumber = "223"
-                  offsetFromSymbolStart = "860">
-               </Location>
-               <Location
-                  uuid = "F29CD4AA-9659-49AD-A79C-35AB4125836C - eda4eb50f273b8d1"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "docHeap_Dictionaries.ResultsPopUpController.statisticUpload() -&gt; ()"
-                  moduleName = "docHeap-Dictionaries"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/pavelgofman/Documents/Project_copy/DocHeap/docHeap-Dictionaries/Controller/PopUp&apos;s/ResultsPopUpController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "222"
-                  endingLineNumber = "222"
-                  offsetFromSymbolStart = "944">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "5C2402DB-9CF7-40C4-9497-D871C574EED2"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "docHeap-Dictionaries/Model/CoreDataManager.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "596"
-            endingLineNumber = "596"
-            landmarkName = "createStatisticRecord(statisticData:context:)"
-            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

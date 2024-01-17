@@ -22,6 +22,7 @@ class StatisticController: UIViewController {
     @IBOutlet weak var rightLabel: UILabel!
     @IBOutlet weak var wrongLabel: UILabel!
     @IBOutlet weak var scoresLabel: UILabel!
+    @IBOutlet weak var statisticLabel: UILabel!
     
     func localizeElements(){
         totalyLabel.text = "statisticVC_totaly_label".localized
@@ -29,6 +30,7 @@ class StatisticController: UIViewController {
         rightLabel.text = "statisticVC_right_label".localized
         wrongLabel.text = "statisticVC_wrong_label".localized
         scoresLabel.text = "statisticVC_scores_label".localized
+        statisticLabel.text = "statisticVC_statistic_label".localized
     }
     
     private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext

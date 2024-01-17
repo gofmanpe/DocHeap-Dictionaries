@@ -135,9 +135,7 @@ struct CoreDataManager{
             request.predicate = NSPredicate(format: "dicID MATCHES %@", dicID)
         do {
            let oneDictionaryArray = try context.fetch(request)
-            print("Array before filtering count: \(oneDictionaryArray.count)\n")
             let filteredArray = oneDictionaryArray.filter({$0.dicUserID == userID})
-            print("Array for del count: \(filteredArray.count)\n")
             for dictionary in filteredArray {
                 context.delete(dictionary)
             }
@@ -155,6 +153,19 @@ struct CoreDataManager{
         do {
             oneWordArray = try context.fetch(request)
             oneWordArray.remove(at: 0)
+            saveData(data: context)
+        }
+        catch { print ("Error fetching data \(error)") }
+    }
+    
+    func deleteMessagesFromCoreData(dicID: String, context: NSManagedObjectContext){
+        let request: NSFetchRequest<DicMessage> = DicMessage.fetchRequest()
+            request.predicate = NSPredicate(format: "msgDicID MATCHES %@", dicID)
+        do {
+            let userMessagesForDic = try context.fetch(request)
+            for message in userMessagesForDic {
+                context.delete(message)
+            }
             saveData(data: context)
         }
         catch { print ("Error fetching data \(error)") }
@@ -592,6 +603,7 @@ struct CoreDataManager{
         newStatisticData.statMistakes = Int64(statisticData.statMistekes)
         newStatisticData.statScores = Int64(statisticData.statScores)
         newStatisticData.statRightAnswers = Int64(statisticData.statRightAnswers)
+        newStatisticData.statSyncronized = statisticData.statSyncronized
         saveData(data: context)
     }
     
@@ -610,7 +622,8 @@ struct CoreDataManager{
                     statScores: Int(data.statScores),
                     statUserID: data.statUserID ?? "",
                     statTestIdentifier: data.statTestIdentifier ?? "", 
-                    statRightAnswers: Int(data.statRightAnswers))
+                    statRightAnswers: Int(data.statRightAnswers),
+                    statSyncronized: data.statSyncronized)
                 statisticData.append(statDataElement)
             }
         } catch {

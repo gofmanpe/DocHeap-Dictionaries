@@ -79,9 +79,12 @@ class NetworkViewController: UIViewController, GetFilteredData, SetDownloadedMar
     @IBOutlet weak var currentFilterLabel: UILabel!
     @IBOutlet weak var learnFilterImage: UIImageView!
     @IBOutlet weak var transFilterImage: UIImageView!
+    @IBOutlet weak var sharedDictionariesLabel: UILabel!
     
     func localizeElemants(){
-       
+        sharedDictionariesLabel.text = "networkVC_sharedDictioanries_label".localized
+        currentFilterLabel.text = "networkVC_currentFilter_label".localized
+        useFilterButton.setTitle("networkVC_filter_button".localized, for: .normal)
     }
 
 //MARK: - Constants and variables
@@ -96,13 +99,15 @@ class NetworkViewController: UIViewController, GetFilteredData, SetDownloadedMar
     private let coreData = CoreDataManager()
     private var userDictionaries = [Dictionary]()
     private var dicOwnersData = [DicOwnerData]()
+    private var networkUsersArray = [String:String]()
     private var defaults = Defaults()
     private var selectedLearnFromDelegate = String()
     private var selectedTransFromDelegate = String()
     private var filterIsSet = Bool()
-    private var usersIdArray = [String]()
+    private var netUsersIDsArray = [String]()
     private var messagesCount : String?
     private var ownerName = String()
+    private let dispatchGroup = DispatchGroup()
     
 //MARK: - Lifecycle functions
     override func viewDidLoad() {
@@ -128,26 +133,18 @@ class NetworkViewController: UIViewController, GetFilteredData, SetDownloadedMar
                 fetchData { success in
                     self.hideHUD()
                     if success {
-//                        self.firebase.getDictionariesOwnersArray(sharedDictionariesArray: self.sharedDictionaries) { dicUsersData in
-//                            self.dicOwnersData = dicUsersData ?? [DicOwnerData]()
-//                        }
                         self.getWords(dicArray: self.sharedDictionaries)
+                        
                     } else {
                         print("Failed to load data.")
                     }
                 }
-                sharedTable.reloadData()
             }
             isFilterSet()
-            
         } else {
             noInetView.isHidden = false
             sharedTable.isHidden = true
         }
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        sharedTable.reloadData()
     }
 
 //MARK: - Controller functions
@@ -170,7 +167,11 @@ class NetworkViewController: UIViewController, GetFilteredData, SetDownloadedMar
     func standartState(){
         sharedTable.isHidden = false
         noInetView.isHidden = true
-        useFilterButton.layer.cornerRadius = 5
+        useFilterButton.layer.shadowColor = UIColor.black.cgColor
+        useFilterButton.layer.shadowOpacity = 0.2
+        useFilterButton.layer.shadowOffset = .zero
+        useFilterButton.layer.shadowRadius = 2
+        useFilterButton.layer.cornerRadius = 10
     }
     
     func getDataFromFirestore(){
@@ -182,6 +183,7 @@ class NetworkViewController: UIViewController, GetFilteredData, SetDownloadedMar
                 self.userDictionaries = self.coreData.loadUserDictionaries(userID: self.mainModel.loadUserData().userID, data: self.context)
                 self.sharedDictionaries.removeAll()
                 self.originalArray.removeAll()
+                self.networkUsersArray.removeAll()
                 for document in querySnapshot!.documents {
                     let dicData = document.data()
                     let dicID = dicData["dicID"] as? String ?? "NO_dicID"
@@ -201,20 +203,25 @@ class NetworkViewController: UIViewController, GetFilteredData, SetDownloadedMar
                             let dic = SharedDictionary(dicID: dicID, dicDescription: dicDescription, dicName: dicName, dicWordsCount: dicWordsCount, dicLearnLang: dicLearnLang, dicTransLang: dicTransLang, dicAddDate: dicAddDate!, dicUserID: dicUserID, dicImagesCount: dicImagesCount, dicDownloaded: false, dicDownloadedUsers: dicDownloadedUsers, dicLikes: dicLikes)
                             self.originalArray.append(dic)
                             self.sharedDictionaries.append(dic)
+                            self.dispatchGroup.enter()
+                            self.firebase.getNetworkUserNameByID(userID: dicUserID) { userID, userName in
+                                let uID = userID ?? ""
+                                self.networkUsersArray[uID] = userName
+                                self.dispatchGroup.leave()
+                            }
+                            self.dispatchGroup.enter()
                             self.firebase.getMessagesCountForDictionary(dicID: dicID) { count in
                                 let messagesCount = count ?? "0"
                                 let dictionaryCounts = DictionaryCounts(dicID: dicID, likesCount: String(dicLikes.count), downloadsCount: String(dicDownloadedUsers.count), messagesCount: messagesCount)
                                 self.dictionariesCounts.append(dictionaryCounts)
-                               
+                                self.dispatchGroup.leave()
                             }
                             
                         }
-                       
                     } else {
                         continue
                     }
                 }
-                self.sharedTable.reloadData()
             }
         }
     }
@@ -259,12 +266,15 @@ class NetworkViewController: UIViewController, GetFilteredData, SetDownloadedMar
     }
     
     private func fetchData(completion: @escaping (Bool) -> Void) {
-           DispatchQueue.global().async {
-               self.getDataFromFirestore()
-               Thread.sleep(forTimeInterval: 1.0)
-               completion(true)
-                }
-       }
+        DispatchQueue.global().async {
+            self.getDataFromFirestore()
+            Thread.sleep(forTimeInterval: 0.5)
+            DispatchQueue.main.async {
+                self.sharedTable.reloadData()
+            }
+            completion(true)
+        }
+    }
     
     private func showHUD() {
             DispatchQueue.main.async {
@@ -287,8 +297,17 @@ class NetworkViewController: UIViewController, GetFilteredData, SetDownloadedMar
                 overLayerView.appear(sender: self)
     }
     
+    func buttonScaleAnimation(targetButton:UIButton){
+        UIView.animate(withDuration: 0.2) {
+            targetButton.transform = CGAffineTransform(scaleX: 1.25, y: 1.25)
+        } completion: { (bool) in
+            targetButton.transform = .identity
+        }
+    }
+    
 //MARK: - Actions
     @IBAction func useFilterButtonPressed(_ sender: UIButton) {
+        buttonScaleAnimation(targetButton: useFilterButton)
         popUpApear()
     }
   
@@ -302,25 +321,10 @@ extension NetworkViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = sharedTable.dequeueReusableCell(withIdentifier: "sharedCell") as! SharedDictionaryCell
-        
         let dictionary = sharedDictionaries[indexPath.row]
-        DispatchQueue.global().async {
-            self.firebase.getUserNameByID(userID: dictionary.dicUserID) { userName, error in
-                self.ownerName = userName
-            }
-        }
-        
-        //let ownerName = dicOwnersData.filter({$0.ownerID == dictionary.dicUserID}).first?.ownerName
-        cell.userName.text = ownerName
-        cell.downloadedView.isHidden = true
-        if sharedDictionaries[indexPath.row].dicDownloaded{
-            cell.downloadedView.isHidden = false
-        }
+        cell.userName.text = networkUsersArray[dictionary.dicUserID]
         cell.cellView.clipsToBounds = true
         cell.cellView.layer.cornerRadius = 10
-        cell.dicDescription.text = dictionary.dicDescription
-        let dicOwnerData = dicOwnersData.filter({$0.ownerID == dictionary.dicUserID})
-        
         cell.dictionaryName.text = dictionary.dicName
         cell.learningLanguage.text = dictionary.dicLearnLang
         cell.translateLanguage.text = dictionary.dicTransLang
@@ -342,6 +346,8 @@ extension NetworkViewController: UITableViewDelegate, UITableViewDataSource {
             if let indexPath = sharedTable.indexPathForSelectedRow{
                 let dicID = sharedDictionaries[indexPath.row].dicID
                 destinationVC.dicID = dicID
+                let ownerName = networkUsersArray[sharedDictionaries[indexPath.row].dicUserID] ?? "Anon"
+                destinationVC.ownerName = ownerName
                 destinationVC.sharedDictionary = sharedDictionaries[indexPath.row]
                 let filteredByDicWords = sharedWords.filter({$0.wrdDicID == dicID})
                 let currentCounts = dictionariesCounts.filter({$0.dicID == dicID})

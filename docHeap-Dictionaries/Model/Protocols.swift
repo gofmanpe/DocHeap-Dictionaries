@@ -34,3 +34,7 @@ protocol SetDownloadedMarkToDictionary{
     func dictionaryWasDownloaded(dicID:String)
 }
 
+protocol LogOutUser{
+    func performToStart()
+}
+

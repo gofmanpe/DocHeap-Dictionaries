@@ -134,6 +134,7 @@ struct StatisticData{
     let statUserID: String
     let statTestIdentifier: String
     let statRightAnswers: Int
+    let statSyncronized: Bool
 }
 
 struct StatisticForTest{

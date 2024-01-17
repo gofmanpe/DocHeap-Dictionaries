@@ -94,30 +94,31 @@ class ThreeWordsTestController: UIViewController, PerformToSegue, UpdateView{
     }
     
 //MARK: - Constants and variables
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    var mainWord = String()
-    var mainWordTranslation = String()
-    var threeButtonsTranstlationsArray = [String]()
-    var threeButtonsVolumesDictionary = [Int:String]()
-    var filteredArray = [Word]()
-    var mainWordIndex = Int()
-    var wrongWordsArray = [Word]()
+    private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    private var mainWord = String()
+    private var mainWordTranslation = String()
+    private var threeButtonsTranstlationsArray = [String]()
+    private var threeButtonsVolumesDictionary = [Int:String]()
+    private var filteredArray = [Word]()
+    private var mainWordIndex = Int()
+    private var wrongWordsArray = [Word]()
     var numberOfRounds = Int()
     var selectedDictionary = String()
     var selectedTestIdentifier = String()
-    var answer = false
-    var rightAnswers = Int()
-    var wordsCount = Int()
-    var choiseMaided = false
-    var progressBarProgress = Double()
-    var errorsFixed = Bool()
-    var errorsRepetitionMode = false
-    var roundNumber = Int()
-    var pressedButton = UIButton()
-    var selectedWord = String()
-    var threeUIButtonsArray = [UIButton]()
+    private var answer = false
+    private var rightAnswers = Int()
+    private var wordsCount = Int()
+    private var choiseMaided = false
+    private var progressBarProgress = Double()
+    private var errorsFixed = Bool()
+    private var errorsRepetitionMode = false
+    private var roundNumber = Int()
+    private var pressedButton = UIButton()
+    private var selectedWord = String()
+    private var threeUIButtonsArray = [UIButton]()
     private var defaults = Defaults()
     private var mainModel = MainModel()
+    private var testModel = TestModel()
     private var coreDataManager = CoreDataManager()
     private var wordsArray = [Word]()
     private var parentDictionaryData : Dictionary?
@@ -151,7 +152,7 @@ class ThreeWordsTestController: UIViewController, PerformToSegue, UpdateView{
         mainWordIndex = Int.random(in: 0..<filteredArray.count) // randomizing select the main testing word index
         filteredArray[mainWordIndex].wrdStatus = 1 // setting status 1 to the main testing word (for avoid repeating)
         
-        let queryRestult = mainModel.wordsTestingEngine(arrayOfWords: filteredArray, mainWordIndex: mainWordIndex, numberOfWords: 3)
+        let queryRestult = testModel.wordsTestingEngine(arrayOfWords: filteredArray, mainWordIndex: mainWordIndex, numberOfWords: 3)
         mainWord = queryRestult.0
         mainWordTranslation = queryRestult.1
         threeButtonsTranstlationsArray = queryRestult.2
@@ -173,7 +174,7 @@ class ThreeWordsTestController: UIViewController, PerformToSegue, UpdateView{
         wrongWordsArray = arrayOfWords.filter({$0.wrdStatus == 2})
         mainWordIndex = Int.random(in: 0..<wrongWordsArray.count)
         wrongWordsArray[mainWordIndex].wrdStatus = 1
-        let queryResult = mainModel.errorsRepetitionMode(arrayOfWords: coreDataManager.wordsArray, arrayOfMistakes:wrongWordsArray, mainWordIndex: mainWordIndex, numberOfWords: 3)
+        let queryResult = testModel.errorsRepetitionMode(arrayOfWords: coreDataManager.wordsArray, arrayOfMistakes:wrongWordsArray, mainWordIndex: mainWordIndex, numberOfWords: 3)
         mainWord = queryResult.0
         mainWordTranslation = queryResult.1
         threeButtonsTranstlationsArray = queryResult.2

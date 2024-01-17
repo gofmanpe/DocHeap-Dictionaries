@@ -77,36 +77,36 @@ class FindAPairController: UIViewController, PerformToSegue, UpdateView {
 //MARK: - Constants and variables
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
-    var sevenUIButtonsWordsArray = [UIButton]()
-    var sevenUIButtonsTranslationsArray = [UIButton]()
-    var sevenWordsArray = [Word]()
-    var sevenTranslationsArray = [Word]()
-    var sevenButtonsWordsArray = [String]()
-    var wordsButtonsVolumesDictionary = [Int:String]()
-    var sevenButtonsTranslationsArray = [String]()
-    var translationsButtonsVolumesDictionary = [Int:String]()
+    private var sevenUIButtonsWordsArray = [UIButton]()
+    private var sevenUIButtonsTranslationsArray = [UIButton]()
+    private var sevenWordsArray = [Word]()
+    private var sevenTranslationsArray = [Word]()
+    private var sevenButtonsWordsArray = [String]()
+    private var wordsButtonsVolumesDictionary = [Int:String]()
+    private var sevenButtonsTranslationsArray = [String]()
+    private var translationsButtonsVolumesDictionary = [Int:String]()
     
     var selectedDicID = String()
     var selectedTestIdentifier = String()
-    var translationsForCheckArray = [String]()
-    var isWordSelected = Bool()
-    var isTranslationSelected = Bool()
-    var selectedWord = String()
-    var selectedTranslation = String()
-    var selectedWordTranslation = String()
-    var selectedTranslationWord = String()
-    var translateButtonPressed = UIButton()
-    var wordButtonPressed = UIButton()
-    var pressedWordButtonId = Int()
-    var pressedTranslationButtonId = Int()
-    var scores = Int()
-    var errors = Int()
-    var filteredByStatusWordsArray = [Word]()
+    private var translationsForCheckArray = [String]()
+    private var isWordSelected = Bool()
+    private var isTranslationSelected = Bool()
+    private var selectedWord = String()
+    private var selectedTranslation = String()
+    private var selectedWordTranslation = String()
+    private var selectedTranslationWord = String()
+    private var translateButtonPressed = UIButton()
+    private var wordButtonPressed = UIButton()
+    private var pressedWordButtonId = Int()
+    private var pressedTranslationButtonId = Int()
+    private var scores = Int()
+    private var errors = Int()
+    private var filteredByStatusWordsArray = [Word]()
     var roundNumber = Int()
     private let defaults = Defaults()
-    private var mainModel = MainModel()
+    private let mainModel = MainModel()
     private var coreDataManager = CoreDataManager()
-  //  private var selectedTestName = String()
+    private let testModel = TestModel()
     
 //MARK: - View Did Load Functions
     override func viewDidLoad() {
@@ -123,7 +123,7 @@ class FindAPairController: UIViewController, PerformToSegue, UpdateView {
     
 //MARK: - Test engine functions
     private func startTest(){
-        let queryResults = mainModel.findAPairEngine(arrayOfWords: coreDataManager.wordsArray)
+        let queryResults = testModel.findAPairEngine(arrayOfWords: coreDataManager.wordsArray)
         sevenWordsArray = queryResults.0
         sevenButtonsWordsArray = queryResults.1
         wordsButtonsVolumesDictionary = queryResults.2
@@ -175,10 +175,22 @@ class FindAPairController: UIViewController, PerformToSegue, UpdateView {
         checkButton.isHidden = false
         warningLabel.isHidden = true
         againButton.isHidden = true
-        sevenUIButtonsWordsArray =
-        [firstWordButton,secondWordButton,thirdWordButton,fouthWordButton,fifthWordButton,sixthWordButton,seventhWordButton]
-        sevenUIButtonsTranslationsArray =
-        [firstTranslateButton,secondTranslateButton,thirdTranslateButton,fouthTranslateButton,fifthTranslateButton,sixthTranslateButton,seventhTranslateButton]
+        sevenUIButtonsWordsArray = [
+            firstWordButton,
+            secondWordButton,
+            thirdWordButton,
+            fouthWordButton,
+            fifthWordButton,
+            sixthWordButton,
+            seventhWordButton]
+        sevenUIButtonsTranslationsArray = [
+            firstTranslateButton,
+            secondTranslateButton,
+            thirdTranslateButton,
+            fouthTranslateButton,
+            fifthTranslateButton,
+            sixthTranslateButton,
+            seventhTranslateButton]
         dictionaryNameLabel.text = coreDataManager.parentDictionaryData.first?.dicName
         let foundTest = TestDataModel.tests.first(where: { $0.identifier == selectedTestIdentifier})
         testNameLabel.text = foundTest!.name
@@ -234,6 +246,7 @@ class FindAPairController: UIViewController, PerformToSegue, UpdateView {
         default: break
         }
     }
+    
     private func commentViewSettings(_ feedback:String){
         switch feedback {
         case "right":
@@ -269,7 +282,8 @@ class FindAPairController: UIViewController, PerformToSegue, UpdateView {
         default: break
         }
     }
-    func resultsPopUpApear(){
+    
+   private func resultsPopUpApear(){
         let overLayerView = ResultsPopUpController()
         overLayerView.performToSegueDelegate = self
         overLayerView.didUpdateViewDelegate = self
@@ -279,6 +293,19 @@ class FindAPairController: UIViewController, PerformToSegue, UpdateView {
         overLayerView.selectedDictionary = selectedDicID
         overLayerView.selectedTestIdentifier = selectedTestIdentifier
         overLayerView.appearOverlayer(sender: self)
+    }
+    
+    private func warningViewAppearAnimate(_ text:String){
+        warningLabel.isHidden = false
+        warningLabel.text = text
+        warningLabel.alpha = 0
+        UIView.animate(withDuration: 0.75) {
+            self.warningLabel.alpha = 1
+        } completion: { Bool in
+            UIView.animate(withDuration: 0.75) {
+                self.warningLabel.alpha = 0
+            }
+        }
     }
     
 //MARK: - Action functions
@@ -332,7 +359,6 @@ class FindAPairController: UIViewController, PerformToSegue, UpdateView {
             if selectedWordTranslation == selectedTranslation {
                 wordButtonPressed.layer.borderWidth = 0
                 wordButtonPressed.layer.cornerRadius = 5
-                //wordButtonPressed.layer.borderColor = UIColor(red: 0.00, green: 0.80, blue: 0.00, alpha: 1.00).cgColor
                 wordButtonPressed.backgroundColor = .clear
                 translateButtonPressed.layer.borderWidth = 0
                 translateButtonPressed.layer.cornerRadius = 5
@@ -350,12 +376,10 @@ class FindAPairController: UIViewController, PerformToSegue, UpdateView {
                 filteredByStatusWordsArray = sevenWordsArray.filter({$0.wrdStatus == 0})
                 coreDataManager.saveData(data: context)
             } else {
-                //wordButtonPressed.layer.borderColor = UIColor(red: 0.87, green: 0.00, blue: 0.00, alpha: 1.00).cgColor
                 wordButtonPressed.layer.borderWidth = 0
                 wordButtonPressed.backgroundColor = .clear
                 translateButtonPressed.layer.borderWidth = 0
                 translateButtonPressed.backgroundColor = .clear
-               // translateButtonPressed.layer.borderColor = UIColor(red: 0.87, green: 0.00, blue: 0.00, alpha: 1.00).cgColor
                 commentViewSettings("wrong")
                 againButton.isHidden = false
                 checkButton.isHidden = true
@@ -372,26 +396,11 @@ class FindAPairController: UIViewController, PerformToSegue, UpdateView {
                 warningLabel.text = defaults.findApairChooseTranslationText
                 warningLabel.isHidden = false
             } else {
-//                warningLabel.isHidden = false
-//                warningLabel.text = defaults.warningText
                 warningViewAppearAnimate("sharedElements_noChose_label".localized)
             }
         }
     }
-    
-    func warningViewAppearAnimate(_ text:String){
-        warningLabel.isHidden = false
-        warningLabel.text = text
-        warningLabel.alpha = 0
-        UIView.animate(withDuration: 0.75) {
-            self.warningLabel.alpha = 1
-        } completion: { Bool in
-            UIView.animate(withDuration: 0.75) {
-                              self.warningLabel.alpha = 0
-                            }
-        }
-    }
-    
+  
     @IBAction func againButtonPressed(_ sender: UIButton) {
         for button in sevenUIButtonsWordsArray {
             button.backgroundColor = .clear

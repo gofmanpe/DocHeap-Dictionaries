@@ -127,6 +127,7 @@ class StartController: UIViewController{
                                         let userScores = result["userScores"] as? Int64 ?? 0
                                         DispatchQueue.main.async {
                                             self.sync.loadDictionariesFromFirebase(userID: userID, context: self.context)
+                                            self.sync.loadStatisticFromFirebase(userID: userID, context: self.context)
                                         }
                                         self.userID = userID
                                         let recoveredUser = Users(context: self.context)

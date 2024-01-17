@@ -35,6 +35,7 @@ class BrowseSharedDicViewController: UIViewController {
     var sharedDictionary : SharedDictionary?
     var sharedWordsArray = [SharedWord]()
     var dicOwnerData : DicOwnerData?
+    var ownerName = String()
     var ownerID = String()
     var messagesCount = String()
     private let mainModel = MainModel()
@@ -62,16 +63,18 @@ class BrowseSharedDicViewController: UIViewController {
         transLangLabel.text = sharedDictionary?.dicTransLang ?? ""
         dicNameLabel.text = sharedDictionary?.dicName ?? ""
         wordsCountLabel.text = String(sharedDictionary?.dicWordsCount ?? 0)
-        ownerLabel.text = dicOwnerData?.ownerName ?? "Anonimus"
+        ownerLabel.text = ownerName
         guard let downloadedTimes = sharedDictionary?.dicDownloadedUsers else {return}
         downloadedTimesLabel.text = String(downloadedTimes.count)
         guard let dicLikes = sharedDictionary?.dicLikes else {return}
         dicLikesLabel.text = String(dicLikes.count)
-        downloadButton.layer.cornerRadius = 5
+        downloadButton.layer.cornerRadius = 10
         messagesCountLabel.text = messagesCount
     }
     
     func createDictionaryCoreData(){
+        let likesArray = sharedDictionary?.dicLikes ?? [String]()
+        let isUserLikedDictionaryBefore = likesArray.filter({$0 == mainModel.loadUserData().userID})
         let newDictionary = Dictionary(context: context)
         newDictionary.dicName = sharedDictionary?.dicName
         newDictionary.dicDescription = sharedDictionary?.dicDescription
@@ -84,7 +87,11 @@ class BrowseSharedDicViewController: UIViewController {
         newDictionary.dicDeleted = false
         newDictionary.dicShared = false
         newDictionary.dicReadOnly = true
-        newDictionary.dicLike = false
+        if isUserLikedDictionaryBefore.isEmpty{
+            newDictionary.dicLike = false
+        } else {
+            newDictionary.dicLike = true
+        }
         newDictionary.dicOwnerID = sharedDictionary?.dicUserID
         newDictionary.dicWordsCount = Int64(sharedDictionary?.dicWordsCount ?? 0)
         newDictionary.dicImagesCount = Int64(sharedDictionary?.dicImagesCount ?? 0)

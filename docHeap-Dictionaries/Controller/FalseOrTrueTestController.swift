@@ -12,7 +12,6 @@ class FalseOrTrueTestController: UIViewController, PerformToSegue, UpdateView {
     func didUpdateView(sender: String) {
         coreDataManager.loadWordsForSelectedDictionary(dicID: coreDataManager.parentDictionaryData.first?.dicID ?? "", userID: mainModel.loadUserData().userID, data: context)
         coreDataManager.loadParentDictionaryData(dicID: selectedDictionary, userID: mainModel.loadUserData().userID, data: context)
-        //coreDataManager.loadTestData(testIdentifier: selectedTestIdentifier, data: context)
         standartState()
         mainModel = MainModel()
         reloadTestData()
@@ -59,23 +58,23 @@ class FalseOrTrueTestController: UIViewController, PerformToSegue, UpdateView {
         
     }
     
-    var filteredArray = [Word]()
-    var mainWordIndex = Int()
-    var mainWord = String()
-    var mainWordTranslation = String()
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    private var filteredArray = [Word]()
+    private var mainWordIndex = Int()
+    private var mainWord = String()
+    private var mainWordTranslation = String()
+    private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     var selectedDictionary = String()
     var selectedTestIdentifier = String()
-    var scores = 0
-    var mistakes = 0
-    var roundsNumber = 0
-    var rightWord = String()
-    var rightTranslation = String()
-    var randomTranslation = String()
-    var rightAnswer = 2
-    var coreDataManager = CoreDataManager()
-    var mainModel = MainModel()
-    let defaults = Defaults()
+    private  var scores = 0
+    private var mistakes = 0
+    private var roundsNumber = 0
+    private var rightWord = String()
+    private var rightTranslation = String()
+    private var randomTranslation = String()
+    private var rightAnswer = 2
+    private var coreDataManager = CoreDataManager()
+    private var mainModel = MainModel()
+    private let defaults = Defaults()
     var numberOfRounds = Int()
    // private var selectedTestName = String()
     
@@ -83,7 +82,6 @@ class FalseOrTrueTestController: UIViewController, PerformToSegue, UpdateView {
     override func viewDidLoad() {
         super.viewDidLoad()
         localizeElements()
-       // coreDataManager.loadTestData(testIdentifier: selectedTestIdentifier, data: context)
         coreDataManager.loadParentDictionaryData(dicID: selectedDictionary, userID: mainModel.loadUserData().userID, data: context)
         coreDataManager.loadWordsForSelectedDictionary(dicID: coreDataManager.parentDictionaryData.first?.dicID ?? "", userID: mainModel.loadUserData().userID, data: context)
         mainModel.wordsStatusClearing(array: coreDataManager.wordsArray, statusToClear: 0, data: context)
@@ -115,13 +113,11 @@ class FalseOrTrueTestController: UIViewController, PerformToSegue, UpdateView {
         let wordsNumber = numberOfRounds
         let arrayOfWords = Array(wordsArray.prefix(wordsNumber))
         filteredArray = arrayOfWords.filter({$0.wrdStatus == 0})
-        
         mainWordIndex = Int.random(in: 0..<filteredArray.count)
         mainWord = filteredArray[mainWordIndex].wrdWord ?? "no word"
         mainWordTranslation = filteredArray[mainWordIndex].wrdTranslation ?? "no translation"
         randomTranslation = filteredArray.randomElement()?.wrdTranslation ?? "none"
         filteredArray[mainWordIndex].wrdStatus = 1
-        
         if !filteredArray.isEmpty{
             wordLabel.text = mainWord
             translationLabel.text = randomTranslation

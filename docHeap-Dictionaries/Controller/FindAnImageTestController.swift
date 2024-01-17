@@ -63,62 +63,56 @@ class FindAnImageTestController: UIViewController , PerformToSegue, UpdateView {
         
     }
     
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    var fourImagesWordsArray = [String?]()
-    var fourImagesPathArray = [String]()
-    var mainWord = String()
-    var mainWordImage = String()
-    var filteredArray = [Word]()
-    var mainWordIndex = Int()
+    private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    private var fourImagesWordsArray = [String?]()
+    private var fourImagesPathArray = [String]()
+    private var mainWord = String()
+    private var mainWordImage = String()
+    private var filteredArray = [Word]()
+    private var mainWordIndex = Int()
     var numberOfRounds = Int()
     var selectedDicID = String()
     var selectedTestIdentifier = String()
-    var wordsArray = [Word]()
-    var wordsWithImagesArray = [Word]()
-    var wordsCount = Int()
-    var fourButtonsArray = [UIButton]()
-    var pressedButton = UIButton()
-    var choiseMaided = Bool()
-    var selectedImage = String()
-    var rightAnswers = 0
-    var roundNumber = 0
+    private var wordsArray = [Word]()
+    private var wordsWithImagesArray = [Word]()
+    private var wordsForTestArray = [Word]()
+    private var parentDictionaryData = Dictionary()
+    private var wordsCount = Int()
+    private var fourButtonsArray = [UIButton]()
+    private var pressedButton = UIButton()
+    private var choiseMaided = Bool()
+    private var selectedImage = String()
+    private var rightAnswers = 0
+    private var roundNumber = 0
     private var defaults = Defaults()
     private var mainModel = MainModel()
     private var coreDataManager = CoreDataManager()
-    private var currentUserEmail = String()
-    private var dicID = String()
-    private var wordsForTestArray = [Word]()
-    private var parentDictionaryData = Dictionary()
+    private let testModel = TestModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         localizeElements()
         loadData()
-        //coreDataManager.loadWordsWithImagesForSelectedDictionary(data: context, dicID: selectedDictionary)
-        //coreDataManager.loadParentDictionaryData(dicID: selectedDictionary, userID: mainModel.loadUserData().userID, data: context)
-        mainModel.wordsStatusClearing(array: /*coreDataManager.wordsArray*/wordsForTestArray, statusToClear: 0, data: context)
+        mainModel.wordsStatusClearing(array: wordsForTestArray, statusToClear: 0, data: context)
         standartState()
         testStart()
     }
     
-    func loadData(){
+    private func loadData(){
         wordsForTestArray = coreDataManager.getWordsForDictionary(dicID: selectedDicID, userID: mainModel.loadUserData().userID, data: context)
         parentDictionaryData = coreDataManager.getParentDictionaryData(dicID: selectedDicID, userID: mainModel.loadUserData().userID, data: context)
     }
     
-    func testStart(){
+    private func testStart(){
         fourImagesWordsArray.removeAll() // clearing array of translations
         fourImagesPathArray.removeAll()
-       // let wordsArray = coreDataManager.wordsArray
         let wordsNumber = numberOfRounds + 3
-        let arrayOfWords = Array(/*wordsArray*/wordsForTestArray.prefix(wordsNumber))
+        let arrayOfWords = Array(wordsForTestArray.prefix(wordsNumber))
         let filteredByImageArray = arrayOfWords.filter({$0.wrdImageIsSet == true}) // filtering an array of words by image status 1
         filteredArray = filteredByImageArray.filter({$0.wrdStatus == 0})
         mainWordIndex = Int.random(in: 0..<filteredArray.count) // randomizing select the main testing word index
         filteredArray[mainWordIndex].wrdStatus = 1 // setting status 1 to the main testing word (for avoid repeating)
-        
-        
-        let queryResult = mainModel.findAnImageTestEngine(arrayOfWords: filteredArray, mainWordIndex: mainWordIndex)
+        let queryResult = testModel.findAnImageTestEngine(arrayOfWords: filteredArray, mainWordIndex: mainWordIndex)
         mainWord = queryResult.0
         mainWordImage = queryResult.1
         fourImagesWordsArray = queryResult.2
@@ -128,27 +122,21 @@ class FindAnImageTestController: UIViewController , PerformToSegue, UpdateView {
         roundNumber += 1
         roundNumberLabel.text = String(roundNumber)
         standartState()
-
         mainWordLabel.text = mainWord
-       // let documentsDirectory = mainModel.getDocumentsFolderPath()//FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-       // let userCatalog = mainModel.loadUserEmail().email
         for i in 0...3 {
             let filePath = "\(mainModel.loadUserData().userID)/\(selectedDicID)/\(fourImagesPathArray[i])"
             let image = UIImage(contentsOfFile:  mainModel.getDocumentsFolderPath().appendingPathComponent(filePath).path)
             fourButtonsArray[i].setImage(image, for: .normal)
         }
     }
-    
    
-    func standartState(){
+   private func standartState(){
         blockView.isHidden = true
         commentView.isHidden = true
         nextButton.isHidden = true
         checkButton.isHidden = false
         toResultsButton.isHidden = true
         warningLabel.isHidden = true
-        currentUserEmail = mainModel.loadUserData().email
-        //dicID = parentDictionaryData.dicID!
         fourButtonsArray = [firstButton,secondButton,thirdButton,fouthButton]
         for button in fourButtonsArray {
             button.clipsToBounds = true
@@ -182,10 +170,9 @@ class FindAnImageTestController: UIViewController , PerformToSegue, UpdateView {
         nextButton.layer.maskedCorners = [.layerMinXMaxYCorner,.layerMaxXMaxYCorner]
         toResultsButton.layer.maskedCorners = [.layerMinXMaxYCorner,.layerMaxXMaxYCorner]
         toResultsButton.layer.cornerRadius = 10
-       
     }
     
-    func pressedButtonBehavor(buttonId:Int,button:UIButton){
+    private func pressedButtonBehavor(buttonId:Int,button:UIButton){
         for button in fourButtonsArray{
             button.isEnabled = true
             button.layer.borderWidth = 0
@@ -248,30 +235,27 @@ class FindAnImageTestController: UIViewController , PerformToSegue, UpdateView {
         }
     }
     
-    func buttonsBhvrTheEnd(){
+   private func buttonsBhvrTheEnd(){
         for button in fourButtonsArray{
             button.isEnabled = false
             button.backgroundColor = .clear
         }
         commentViewSettings("finish")
-        
-      //  progressLabel.text = defaults.labelTestProgressText
     }
     
-    func resultsPopUpApear(){
+   private func resultsPopUpApear(){
         let overLayerView = ResultsPopUpController()
         overLayerView.performToSegueDelegate = self
         overLayerView.didUpdateViewDelegate = self
         overLayerView.rightAnswers = rightAnswers
         overLayerView.wordsCount = wordsCount
         overLayerView.roundsNumber = roundNumber
-        //overLayerView.errorsFixed = errorsFixed
         overLayerView.selectedDictionary = selectedDicID
         overLayerView.selectedTestIdentifier = selectedTestIdentifier
         overLayerView.appearOverlayer(sender: self)
     }
     
-    func reloadTestData(){
+   private func reloadTestData(){
         choiseMaided = false
         rightAnswers = 0
         roundNumber = 0
@@ -301,13 +285,8 @@ class FindAnImageTestController: UIViewController , PerformToSegue, UpdateView {
     @IBAction func checkButtonPressed(_ sender: Any) {
         if choiseMaided{
             if mainWord == selectedImage{
-              //  answer = true
                 wordsCount += 1
                 filteredArray[mainWordIndex].wrdRightAnswers += 1
-//                pressedButton.layer.borderWidth = 0
-//                pressedButton.layer.cornerRadius = 10
-//                pressedButton.layer.borderColor = UIColor(red: 0.00, green: 0.80, blue: 0.00, alpha: 1.00).cgColor
-//                pressedButton.backgroundColor = .clear
                 blockView.isHidden = false
                 blockView.backgroundColor = .systemGreen
                 blockView.alpha = 0.5
@@ -319,10 +298,6 @@ class FindAnImageTestController: UIViewController , PerformToSegue, UpdateView {
             } else {
                 filteredArray[mainWordIndex].wrdWrongAnswers += 1
                 filteredArray[mainWordIndex].wrdStatus = 2
-//                pressedButton.layer.borderWidth = 0
-//                pressedButton.layer.cornerRadius = 10
-//                pressedButton.layer.borderColor = UIColor(red: 0.87, green: 0.00, blue: 0.00, alpha: 1.00).cgColor
-//                pressedButton.backgroundColor = .clear
                 blockView.isHidden = false
                 blockView.backgroundColor = .systemRed
                 blockView.alpha = 0.5
@@ -341,13 +316,10 @@ class FindAnImageTestController: UIViewController , PerformToSegue, UpdateView {
         }
         commentView.isHidden = true
         if filteredArray.count <= 4 {
-            mainModel.wordsStatusClearing(array: /*coreDataManager.wordsArray*/wordsForTestArray, statusToClear: 1, data: context)
+            mainModel.wordsStatusClearing(array: wordsForTestArray, statusToClear: 1, data: context)
             buttonsBhvrTheEnd()
             coreDataManager.saveData(data: context)
         } else {
-//            for button in fourButtonsArray{
-//                button.isEnabled = true
-//            }
             blockView.isHidden = true
             testStart()
         }

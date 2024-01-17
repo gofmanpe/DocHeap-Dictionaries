@@ -24,15 +24,8 @@ class DictionaryCell: UITableViewCell {
     @IBOutlet weak var editButton: UIButton!
     @IBOutlet weak var wordsCountLabel: UILabel!
     @IBOutlet weak var createDateLabel: UILabel!
-    @IBOutlet weak var btSeparatorView: UIView!
-    
-    @IBOutlet weak var descriptionLabel: UILabel!
-    @IBOutlet weak var separatorOneButton: UIImageView!
-    @IBOutlet weak var separatorTwoButtons: UIImageView!
+    @IBOutlet weak var buttonsStackView: UIStackView!
     @IBOutlet weak var sharedDictionaryImage: UIImageView!
-    @IBOutlet weak var infoIconsStack: UIStackView!
-    @IBOutlet weak var likesLabel: UILabel!
-    @IBOutlet weak var messagesLabel: UILabel!
     
     private func localizeElements(){
         wordsCountLabel.text = "dictionariesVC_wordsCount_label".localized
@@ -58,6 +51,7 @@ class DictionaryCell: UITableViewCell {
         backgroundCell.layer.shadowRadius = 2
         learningLanguageImage.layer.cornerRadius = 5
         translateLanguageImage.layer.cornerRadius = 5
+        buttonsStackView.roundCorners(corners: [.topRight, .bottomRight] , radius: 15)
     }
     
     func buttonScaleAnimation(targetButton:UIButton){

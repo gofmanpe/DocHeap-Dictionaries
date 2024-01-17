@@ -164,6 +164,7 @@
 "testVC_findApairtest_ico" = "fApico_ru.png";
 "testVC_findAnImagetest_ico" = "fAiico_ru.png";
 "testVC_trueOrFalsetest_ico" = "tOfico_ru.png";
+"testVC_tests_label" = "Тесты";
 //SelectDictionaryForTestVC
 "selectDictionaryVC_header_label" = "Выбор словаря для теста";
 "selectDictionaryVC_selectDictionary_label" = "Выберите словарь";
@@ -189,6 +190,12 @@
 "profileVC_setAvatar_button" = "Сменить";
 "profileVC_registred_label" = "регистрация:";
 "profileVC_addInfo_label" = "Доп. инфо";
+"profileVC_dateOfBirth_label"= "Дата рождения:";
+"profileVC_country_label"= "Страна:";
+"profileVC_nativeLanguage_label"= "Родной язык:";
+"profileVC_scores_label"= "Очки:";
+"profileVC_showEmail_label"= "Показывать почту пользователя в общедоступном профиле";
+"profileVC_profile_label"= "Профиль";
 
 //StatisticVC
 "statisticVC_noStatistic_label" = "У вас еще нет статистики, потому что вы пока не прошли ни одного теста!";
@@ -197,3 +204,28 @@
 "statisticVC_right_label" = "Верно";
 "statisticVC_wrong_label" = "Ошибка";
 "statisticVC_scores_label" = "Очки";
+"statisticVC_statistic_label" = "Статистика";
+
+//NetworkVC
+"networkVC_sharedDictioanries_label" = "Общедоступные словари";
+"networkVC_currentFilter_label" = "Текущий фильтр";
+"networkVC_filter_button" = "Фильтр";
+
+//SharedDictionaryCell
+"sharedDicCell_wordsName_label" = "Слов:";
+"sharedDicCell_ownerName_label" = "Владелец:";
+
+//FilterSharedDictionariesPopUp
+"filterSharedDictionariesPopUp_header" = "Фильтр словарей";
+"filterSharedDictionariesPopUp_learnLang_label" = "Язык изучения";
+"filterSharedDictionariesPopUp_transLang_label" = "Язык перевода";
+"filterSharedDictionariesPopUp_learnLang_button" = "Выбрать";
+"filterSharedDictionariesPopUp_transLang_button" = "Выбрать";
+"filterSharedDictionariesPopUp_clear_button" = "Очистить";
+"filterSharedDictionariesPopUp_apply_button" = "Применить";
+
+//LogOutPopUp
+"logoutPopUp_header_label" = "Выход из учетной записи";
+"logoutPopUp_dialog_label" = "Вы уверены, что хотите выйти из вашей учетной записи?";
+"logoutPopUp_cancel_button" = "Отмена";
+"logoutPopUp_logout_button" = "Выход";

@@ -320,7 +320,7 @@ class BrowseDictionaryController: UIViewController, UpdateView, SaveWordsPairToD
                 button.layer.shadowOffset = CGSize(width: 1, height: 1)
                 button.layer.shadowRadius = 2.0
                 button.layer.shadowOpacity = 0.5
-                button.layer.cornerRadius = 5
+                button.layer.cornerRadius = 10
             }
     }
    
@@ -349,25 +349,20 @@ class BrowseDictionaryController: UIViewController, UpdateView, SaveWordsPairToD
     @IBAction func likeButtonPressed(_ sender: UIButton) {
         if let dicLike = selectedDictionary?.dicLike{
             if dicLike{
-                fireDB.setLikeForDictionaryFirebase(dicID: dicID, userID: mainModel.loadUserData().userID, like: false)
                 buttonScaleAnimation(targetButton: likeButton)
-//                let handFillImage = UIImage(systemName: "hand.thumbsup.fill")
-//                likeButton.setImage(handFillImage, for: .normal)
+                fireDB.setLikeForDictionaryFirebase(dicID: dicID, userID: mainModel.loadUserData().userID, like: false)
                 likeButton.tintColor = UIColor(named: "Wrong answer")
                 selectedDictionary?.dicLike = false
                 dictionaryData()
             } else {
-                fireDB.setLikeForDictionaryFirebase(dicID: dicID, userID: mainModel.loadUserData().userID, like: true)
                 buttonScaleAnimation(targetButton: likeButton)
-//                let handBorderedImage = UIImage(systemName: "hand.thumbsup")
-//                likeButton.setImage(handBorderedImage, for: .normal)
+                fireDB.setLikeForDictionaryFirebase(dicID: dicID, userID: mainModel.loadUserData().userID, like: true)
                 likeButton.tintColor = .systemGray
                 selectedDictionary?.dicLike = true
                 dictionaryData()
             }
             coreDataManager.saveData(data: context)
         }
-        
     }
     
     @IBAction func chatButtonPressed(_ sender: UIButton) {

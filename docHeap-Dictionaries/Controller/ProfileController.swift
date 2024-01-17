@@ -11,12 +11,15 @@ import CoreData
 import FirebaseFirestore
 import FirebaseStorage
 
-class ProfileController: UIViewController, UIImagePickerControllerDelegate & UINavigationControllerDelegate, UpdateView {
+class ProfileController: UIViewController, UIImagePickerControllerDelegate & UINavigationControllerDelegate, UpdateView, LogOutUser{
     
 //MARK: - Protocols delegate functions
     func didUpdateView(sender: String) {
         setupUserData()
         elementsDesign()
+    }
+    func performToStart() {
+        performSegue(withIdentifier: "logoutSegue", sender: self)
     }
     
 //MARK: - Outlets
@@ -36,6 +39,11 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate & UIN
     @IBOutlet weak var editButton: UIButton!
     @IBOutlet weak var showEmailLabel: UILabel!
     @IBOutlet weak var emailSwitch: UISwitch!
+    @IBOutlet weak var dateOfBirthNameLabel: UILabel!
+    @IBOutlet weak var countryNameLabel: UILabel!
+    @IBOutlet weak var nativeLanguageNameLabel: UILabel!
+    @IBOutlet weak var scoresNameLabel: UILabel!
+    @IBOutlet weak var profileLabel: UILabel!
     
 //MARK: - Localization
     func localizeElements(){
@@ -43,6 +51,12 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate & UIN
         setAvatarButton.setTitle("profileVC_setAvatar_button".localized, for: .normal)
         registredLabel.text = "profileVC_registred_label".localized
         addInfoLabel.text = "profileVC_addInfo_label".localized
+        dateOfBirthNameLabel.text = "profileVC_dateOfBirth_label".localized
+        countryNameLabel.text = "profileVC_country_label".localized
+        nativeLanguageNameLabel.text = "profileVC_nativeLanguage_label".localized
+        scoresNameLabel.text = "profileVC_scores_label".localized
+        showEmailLabel.text = "profileVC_showEmail_label".localized
+        profileLabel.text = "profileVC_profile_label".localized
     }
     
 //MARK: - Constants and variables
@@ -105,8 +119,8 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate & UIN
         }
         emailLabel.text = userData?.userEmail
         registerDateLabel.text = userData?.userRegisterDate
-        setAvatarButton.layer.cornerRadius = 5
-        logoutButton.layer.cornerRadius = 5
+        setAvatarButton.layer.cornerRadius = 10
+        logoutButton.layer.cornerRadius = 10
         windowView.clipsToBounds = true
         windowView.layer.cornerRadius = 10
         windowView.layer.borderWidth = 0.5
@@ -116,7 +130,14 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate & UIN
         } else {
             emailSwitch.isOn = false
         }
-        
+        logoutButton.layer.shadowColor = UIColor.black.cgColor
+        logoutButton.layer.shadowOpacity = 0.2
+        logoutButton.layer.shadowOffset = .zero
+        logoutButton.layer.shadowRadius = 2
+        setAvatarButton.layer.shadowColor = UIColor.black.cgColor
+        setAvatarButton.layer.shadowOpacity = 0.2
+        setAvatarButton.layer.shadowOffset = .zero
+        setAvatarButton.layer.shadowRadius = 2
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
@@ -184,36 +205,38 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate & UIN
         }
     }
     
-    func popUpApear(){
+    func popUpApear(sender:String){
+        switch sender{
+        case "edit":
             let overLayedView = EditProfileViewController()
             overLayedView.updateViewDelegate = self
             overLayedView.appear(sender: self)
+        case "logout":
+            let overLayedView = LogOutPopUp()
+            overLayedView.delegateLogOut = self
+            overLayedView.appear(sender: self)
+        default: break
+        }
+           
+    }
+    
+    func buttonScaleAnimation(targetButton:UIButton){
+        UIView.animate(withDuration: 0.2) {
+            targetButton.transform = CGAffineTransform(scaleX: 1.25, y: 1.25)
+        } completion: { (bool) in
+            targetButton.transform = .identity
+        }
     }
     
 //MARK: - Actions
     @IBAction func logoutButtonPressed(_ sender: UIButton) {
-        let accountType = mainModel.loadUserData().accType
-        switch accountType{
-        case "google":
-            userDefaults.set("", forKey: "userID")
-            userDefaults.set("", forKey: "userEmail")
-            userDefaults.set("", forKey: "accType")
-            userDefaults.set(false, forKey: "keepSigned")
-            performSegue(withIdentifier: "logoutSegue", sender: self)
-        case "auth":
-            userDefaults.set("", forKey: "userID")
-            userDefaults.set("", forKey: "accType")
-            userDefaults.set(false, forKey: "keepSigned")
-            performSegue(withIdentifier: "logoutSegue", sender: self)
-        default:
-            return
-        }
-        
+        buttonScaleAnimation(targetButton: logoutButton)
+        popUpApear(sender: "logout")
     }
+    
     @IBAction func emailSwitchToggled(_ sender: UISwitch) {
         switch (emailSwitch.isOn, mainModel.isInternetAvailable()){
         case (true,true):
-           // userData?.userShowEmail = true
             coreDataManager.updateUserData(
                 userID: mainModel.loadUserData().userID,
                 field: "userShowEmail",
@@ -221,8 +244,6 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate & UIN
                 context: context)
             firebase.updateUserEmailShowStatus(userID: userData?.userID ?? "", status: true)
         case (false,false):
-//            userData?.userShowEmail = false
-//            userData?.userSyncronized = false
             coreDataManager.updateUserData(
                 userID: mainModel.loadUserData().userID,
                 field: "userShowEmail",
@@ -234,8 +255,6 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate & UIN
                 argument: false,
                 context: context)
         case(true,false):
-//            userData?.userShowEmail = true
-//            userData?.userSyncronized = false
             coreDataManager.updateUserData(
                 userID: mainModel.loadUserData().userID,
                 field: "userShowEmail",
@@ -247,7 +266,6 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate & UIN
                 argument: false,
                 context: context)
         case(false,true):
-            //userData?.userShowEmail = false
             coreDataManager.updateUserData(
                 userID: mainModel.loadUserData().userID,
                 field: "userShowEmail",
@@ -259,6 +277,7 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate & UIN
     }
     
     @IBAction func setAvatarPressed(_ sender: UIButton) {
+        buttonScaleAnimation(targetButton: setAvatarButton)
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
         imagePicker.sourceType = .photoLibrary
@@ -267,7 +286,8 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate & UIN
     }
     
     @IBAction func editButtonPressed(_ sender: UIButton) {
-        popUpApear()
+        buttonScaleAnimation(targetButton: editButton)
+        popUpApear(sender: "edit")
     }
 
 }

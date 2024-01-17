@@ -206,21 +206,36 @@ class ResultsPopUpController: UIViewController{
     
     func statisticUpload(){
         let statID = mainModel.uniqueIDgenerator(prefix: "stat")
-       // let testName = testsArray.filter({$0.identifier == selectedTestIdentifier}).first?.name ?? "NOTESTNAME"
         let date = mainModel.convertDateToString(currentDate: Date(), time:true)!
-        let statisticData = StatisticData(
-            statID: statID,
-            statDate: date,
-            statMistekes: errorsCount,
-            statDicID: selectedDictionary,
-            statScores: rightAnswers,
-            statUserID: mainModel.loadUserData().userID,
-            statTestIdentifier: selectedTestIdentifier, 
-            statRightAnswers: rightAnswers
-        )
-        coreDataManager.createStatisticRecord(statisticData: statisticData, context: context)
+        if mainModel.isInternetAvailable(){
+            let statisticData = StatisticData(
+                statID: statID,
+                statDate: date,
+                statMistekes: errorsCount,
+                statDicID: selectedDictionary,
+                statScores: rightAnswers,
+                statUserID: mainModel.loadUserData().userID,
+                statTestIdentifier: selectedTestIdentifier,
+                statRightAnswers: rightAnswers,
+                statSyncronized: true
+            )
+            coreDataManager.createStatisticRecord(statisticData: statisticData, context: context)
+            firebase.createStatisticRecord(statData: statisticData)
+        } else {
+            let statisticData = StatisticData(
+                statID: statID,
+                statDate: date,
+                statMistekes: errorsCount,
+                statDicID: selectedDictionary,
+                statScores: rightAnswers,
+                statUserID: mainModel.loadUserData().userID,
+                statTestIdentifier: selectedTestIdentifier,
+                statRightAnswers: rightAnswers,
+                statSyncronized: false
+            )
+            coreDataManager.createStatisticRecord(statisticData: statisticData, context: context)
+        }
     }
- 
     
     func starsSetting(_ testId:String){
         switch testId {

@@ -143,19 +143,19 @@ class DeleteDictionaryViewController: UIViewController {
         hide()
     }
     @IBAction func deleteButtonPressed(_ sender: UIButton) {
-        //let dicID = coreDataManager.parentDictionaryData.first!.dicID!
         mainModel.deleteFolderInDocuments(folderName: "\(mainModel.loadUserData().userID)/\(dicID)")
         let dictionaryWords = coreDataManager.loadWordsByDictionryID(dicID: dicID, data: context)
         if parentDictionary.dicReadOnly{
             if mainModel.isInternetAvailable(){
                 coreDataManager.delWordsFromDictionaryByDicID(dicID: dicID, userID: mainModel.loadUserData().userID, context: context)
                 coreDataManager.deleteRODictionaryFromCoreData(dicID: dicID, userID: mainModel.loadUserData().userID, context: context)
-                //fireDB.setDictionaryDownloadedByUserUser(dicID: dicID, remove: true)
+                coreDataManager.deleteMessagesFromCoreData(dicID: dicID, context: context)
             } else {
                 coreDataManager.setDeletedStatusForDictionary(data: context, dicID: dicID)
                 coreDataManager.setSyncronizedStatusForDictionary(data: context, dicID: dicID, sync: false)
                 coreDataManager.setDeletedStatusForWordsInDictionary(data: context, dicID: dicID)
                 coreDataManager.setSyncronizedStatusForWordsInDictionary(data: context, dicID: dicID, sync: false)
+                coreDataManager.deleteMessagesFromCoreData(dicID: dicID, context: context)
             }
             
             coreDataManager.saveData(data: context)
@@ -180,11 +180,13 @@ class DeleteDictionaryViewController: UIViewController {
                 coreDataManager.saveData(data: context)
                 let arrayOfWords = coreDataManager.loadWordsForDictionary(dicID: dicID, data: context)
                 fireDB.deleteAllImagesFromDictionaryStorage(userID: mainModel.loadUserData().userID, dicID: dicID, arrayOfWords: arrayOfWords)
+                coreDataManager.deleteMessagesFromCoreData(dicID: dicID, context: context)
             } else {
                 coreDataManager.setDeletedStatusForDictionary(data: context, dicID: dicID)
                 coreDataManager.setSyncronizedStatusForDictionary(data: context, dicID: dicID, sync: false)
                 coreDataManager.setDeletedStatusForWordsInDictionary(data: context, dicID: dicID)
                 coreDataManager.setSyncronizedStatusForWordsInDictionary(data: context, dicID: dicID, sync: false)
+                coreDataManager.deleteMessagesFromCoreData(dicID: dicID, context: context)
             }
         }
         deleteButton.isEnabled = false
