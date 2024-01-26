@@ -17,6 +17,7 @@ struct Firebase {
     private let coreDataManager = CoreDataManager()
     private let alamo = Alamo()
     private let defaults = Defaults()
+    
 //MARK: - Create functions
     func createUser(userID:String, userEmail: String, userName: String, userInterfaceLanguage:String, userAvatarFirestorePath:URL?, accType:String) {
         let date = mainModel.convertDateToString(currentDate: Date(), time: false)
@@ -31,7 +32,9 @@ struct Firebase {
             "userBirthDate": "",
             "userNativeLanguage": "",
             "userScores": 0,
-            "userShowEmail": false
+            "userShowEmail": false,
+            "userLikes": 0,
+            "userSharedDics": 0
         ]
         if userAvatarFirestorePath != nil {
             data["userAvatarFirestorePath"] = userAvatarFirestorePath?.absoluteString
@@ -41,7 +44,6 @@ struct Firebase {
         fireDB.collection("Users").document(userID).setData(data) { (error) in
             if let err = error{
                 print("FirebaseModel: Error to saving data: \(err)")
-                
             }
         }
     }
@@ -67,7 +69,8 @@ struct Firebase {
             "dicSyncronized": true,
             "dicShared" : dicShared,
             "dicDownloadedUsers": [],
-            "dicLikes": []
+            "dicLikes": [],
+            "dicCommentsOn": false
         ]) { (error) in
             if let err = error{
                 
@@ -170,7 +173,7 @@ struct Firebase {
  
     
 //MARK: - Read functions
-    func getUserDataByEmail(userEmail: String, completion: @escaping ([String: Any]?) -> Void) {
+    func getUserDataByEmail(userEmail: String, completion: @escaping (UserData?) -> Void) {
         fireDB.collection("Users").whereField("userEmail", isEqualTo: userEmail).getDocuments { (querySnapshot, error) in
             if error != nil {
                 completion(nil)
@@ -179,47 +182,23 @@ struct Firebase {
                     completion(nil)
                     return
                 }
-                let userData = document.data()
-                completion(userData)
-            }
-        }
-    }
-    
-   
-    
-    func createNetworkUsersInCoreData(userID: String, context: NSManagedObjectContext) {
-        fireDB.collection("Users").whereField("userID", isEqualTo: userID).getDocuments { (querySnapshot, error) in
-            if let error = error {
-                print("Error to get user data: \(error)\n")
-            } else {
-                for document in querySnapshot!.documents {
-                    let userData = document.data()
-                    let userID = userData["userID"] as! String
-                    let userName = userData["userName"] as? String ?? ""
-                    let userBirthDate = userData["userBirthDate"] as? String ?? ""
-                    let userCountry = userData["userCountry"] as? String ?? ""
-                    let userNativeLanguage = userData["userNativeLanguage"] as? String ?? ""
-                    let userEmail = userData["userEmail"] as? String ?? ""
-                    let userScores = userData["userScores"] as? Int ?? 0
-                    let userRegisterDate = userData["userRegisterDate"] as! String
-                    let userAvatarFirestorePath = userData["userAvatarFirestorePath"] as! String
-                    let userShowEmail = userData["userShowEmail"] as! Bool
-                    let result = NetworkUserData(
-                        userID: userID,
-                        userName: userName,
-                        userCountry: userCountry,
-                        userNativeLanguage: userNativeLanguage,
-                        userBirthDate: userBirthDate,
-                        userRegisterDate: userRegisterDate,
-                        userAvatarFirestorePath: userAvatarFirestorePath,
-                        userShowEmail: userShowEmail,
-                        userEmail: userEmail,
-                        userScores: userScores)
-                    coreDataManager.createNetworkUser(userData: result, context: context)
-                    alamo.downloadChatUserAvatar(url: userAvatarFirestorePath, senderID: userID, userID: self.mainModel.loadUserData().userID) { avatarName in
-                        self.coreDataManager.updateNetworkUserLocalAvatarName(userID: userID, avatarName: avatarName, context: context)
-                    }
-                }
+                let userFBdata = document.data()
+                let result = UserData(
+                    userID: userFBdata["userID"] as! String,
+                    userName: userFBdata["userName"] as? String ?? "",
+                    userBirthDate: userFBdata["userBirthDate"] as? String ?? "",
+                    userCountry: userFBdata["userCountry"] as? String ?? "",
+                    userAvatarFirestorePath: userFBdata["userAvatarFirestorePath"] as? String ?? "",
+                    userAvatarExtention: "jpg",
+                    userNativeLanguage: userFBdata["userNativeLanguage"] as? String ?? "",
+                    userScores: userFBdata["userScores"] as? Int ?? 0,
+                    userShowEmail: userFBdata["userShowEmail"] as? Bool ?? false,
+                    userEmail: userFBdata["userEmail"] as? String ?? "",
+                    userSyncronized: true,
+                    userType: "",
+                    userRegisterDate: userFBdata["userRegisterDate"] as! String,
+                    userInterfaceLanguage: userFBdata["userInterfaceLanguage"] as? String ?? "")
+                completion(result)
             }
         }
     }
@@ -239,21 +218,51 @@ struct Firebase {
         }
     }
     
-    func getDictionaryShortData(completion: @escaping ([SharedDictionaryShortData]?) -> Void) {
-        fireDB.collection("Dictionaries").whereField("dicShared", isEqualTo: true).getDocuments { (querySnapshot, error) in
-            if error != nil {
-                completion(nil)
+//    func getDictionaryShortData(completion: @escaping ([SharedDictionaryShortData]?) -> Void) {
+//        fireDB.collection("Dictionaries").whereField("dicShared", isEqualTo: true).getDocuments { (querySnapshot, error) in
+//            if error != nil {
+//                completion(nil)
+//            } else {
+//                guard let document = querySnapshot?.documents.first else {
+//                    completion(nil)
+//                    return
+//                }
+//                let dictionaryData = document.data()
+//                 let dictionaryName = dictionaryData["dicName"] as! String
+//                 let dicID = dictionaryData["dicID"] as! String
+//                 let dicLikes = dictionaryData["dicLikes"] as? [String] ?? [String]()
+//                 let dicArray = [SharedDictionaryShortData(dicID: dicID, dicName: dictionaryName, dicLikes: dicLikes)]
+//                completion(dicArray)
+//            }
+//        }
+//    }
+    
+    func getSharedDictionaryData(dicID:String, completion: @escaping (SharedDictionary?, Error?) -> Void) {
+        fireDB.collection("Dictionaries").whereField("dicID", isEqualTo: dicID).getDocuments { (querySnapshot, error) in
+            if let error = error {
+                completion(nil, error)
             } else {
                 guard let document = querySnapshot?.documents.first else {
-                    completion(nil)
+                    completion(nil, error)
                     return
                 }
-                let dictionaryData = document.data()
-                 let dictionaryName = dictionaryData["dicName"] as! String
-                 let dicID = dictionaryData["dicID"] as! String
-                 let dicLikes = dictionaryData["dicLikes"] as? [String] ?? [String]()
-                 let dicArray = [SharedDictionaryShortData(dicID: dicID, dicName: dictionaryName, dicLikes: dicLikes)]
-                completion(dicArray)
+                let dicData = document.data()
+                let sharedDic = SharedDictionary(
+                    dicID: dicData["dicID"] as! String,
+                    dicDescription: dicData["dicDescription"] as? String ?? "",
+                    dicName: dicData["dicName"] as! String,
+                    dicWordsCount: dicData["dicWordsCount"] as? Int ?? 0,
+                    dicLearnLang: dicData["dicLearningLanguage"] as! String,
+                    dicTransLang: dicData["dicTranslateLanguage"] as! String,
+                    dicAddDate: dicData["dicAddDate"] as! String,
+                    dicUserID: dicData["dicUserID"] as! String,
+                    dicImagesCount: dicData["dicImagesCount"] as? Int ?? 0,
+                    dicDownloaded: false,
+                    dicDownloadedUsers: dicData["dicDownloadedUsers"] as? [String] ?? [String](),
+                    dicLikes: dicData["dicLikes"] as? [String] ?? [String](),
+                    dicCommentsOn: dicData["dicCommentsOn"] as! Bool,
+                    dicShared: dicData["dicShared"] as! Bool)
+                completion(sharedDic, nil)
             }
         }
     }
@@ -282,57 +291,75 @@ struct Firebase {
         }
     }
     
+    func getDownloadedWordsData(dicID:String, completion: @escaping ([SharedWord]?, Error?) -> Void) {
+        fireDB.collection("Words").whereField("wrdDicID", isEqualTo: dicID).getDocuments { (querySnapshot, error) in
+            if let error = error {
+                completion(nil, error)
+            } else {
+                var wordsArray = [SharedWord]()
+                for document in querySnapshot!.documents {
+                    let word = document.data()
+                    let sharedWord = SharedWord(
+                        wrdWord: word["wrdWord"] as! String,
+                        wrdTranslation: word["wrdTranslation"] as! String,
+                        wrdDicID: word["wrdDicID"] as! String,
+                        wrdOwnerID: word["wrdUserID"] as! String,
+                        wrdID: word["wrdID"] as! String,
+                        wrdImageFirestorePath: word["wrdImageFirestorePath"] as? String ?? "",
+                        wrdImageName: word["wrdImageName"] as? String ?? "")
+                    wordsArray.append(sharedWord)
+                }
+                completion(wordsArray,nil)
+            }
+        }
+    }
+    
     func getAllDictionaries(forUser userID: String, completion: @escaping ([String: Any]?, Error?) -> Void) {
         fireDB.collection("Dictionaries").whereField("dicUserID", isEqualTo: userID).whereField("dicDeleted", isEqualTo: false).getDocuments { (querySnapshot, error) in
             if let error = error {
-                      completion(nil, error)
-                  } else {
-                      var allDictionaries: [String: Any] = [:]
-
-                      for document in querySnapshot!.documents {
-                          let dictionaryData = document.data()
-                          let dictionaryID = document.documentID
-                          allDictionaries[dictionaryID] = dictionaryData
-                      }
-
-                      completion(allDictionaries, nil)
-                  }
+                completion(nil, error)
+            } else {
+                var allDictionaries: [String: Any] = [:]
+                for document in querySnapshot!.documents {
+                    let dictionaryData = document.data()
+                    let dictionaryID = document.documentID
+                    allDictionaries[dictionaryID] = dictionaryData
+                }
+                completion(allDictionaries, nil)
+            }
         }
     }
     
-    func getAllSharedDictionaries( completion: @escaping ([String: Any]?, Error?) -> Void) {
+    func getUsersIDsFromSharedDictionaries(completion: @escaping ([String]?, Error?) -> Void) {
         fireDB.collection("Dictionaries").whereField("dicShared", isEqualTo: true).getDocuments { (querySnapshot, error) in
             if let error = error {
-                      completion(nil, error)
-                  } else {
-                      var allDictionaries: [String: Any] = [:]
-
-                      for document in querySnapshot!.documents {
-                          let dictionaryData = document.data()
-                          let dictionaryID = document.documentID
-                          allDictionaries[dictionaryID] = dictionaryData
-                      }
-
-                      completion(allDictionaries, nil)
-                  }
+                completion(nil, error)
+            } else {
+                var sharedDictionariesUsersID = [String]()
+                for document in querySnapshot!.documents {
+                    let dicData = document.data()
+                    let dicUserID = dicData["dicUserID"] as? String ?? ""
+                    sharedDictionariesUsersID.append(dicUserID)
+                }
+                completion(sharedDictionariesUsersID, nil)
+            }
         }
     }
     
-    func getSharedDictionaryData( dicID:String, completion: @escaping ([String: Any]?, Error?) -> Void) {
-        fireDB.collection("Dictionaries").whereField("dicID", isEqualTo: dicID).getDocuments { (querySnapshot, error) in
+    func getUserAvatarPath(userID:String, completion: @escaping ([String:String]?, Error?) -> Void){
+        fireDB.collection("Users").whereField("userID", isEqualTo: userID).getDocuments { (querySnapshot, error) in
             if let error = error {
-                      completion(nil, error)
-                  } else {
-                      var allDictionaries: [String: Any] = [:]
-
-                      for document in querySnapshot!.documents {
-                          let dictionaryData = document.data()
-                          let dictionaryID = document.documentID
-                          allDictionaries[dictionaryID] = dictionaryData
-                      }
-
-                      completion(allDictionaries, nil)
-                  }
+                completion(nil, error)
+            } else {
+                var usersDic = [String:String]()
+                for document in querySnapshot!.documents{
+                    let userData = document.data()
+                    let userID = userData["userID"] as? String ?? ""
+                    let userAvatarFirestorePath = userData["userAvatarFirestorePath"] as? String
+                    usersDic[userID] = userAvatarFirestorePath
+                }
+                completion(usersDic,nil)
+            }
         }
     }
     
@@ -422,6 +449,24 @@ struct Firebase {
                 let userData = document.data()
                 let userName = userData["userName"] as? String ?? "Anonimus"
                 completion(userName, nil)
+            }
+        }
+    }
+    
+    func getNetworkUsersWhichCommentsDictionary(dicID: String, completion: @escaping ([String], Error?) -> Void){
+        fireDB.collection("Messages").whereField("msgDicID", isEqualTo: dicID).getDocuments { (querySnapshot, error) in
+            if let error = error {
+                print("Error getting messages: \(error)\n")
+                completion([String](), error)
+            } else {
+                var netUsersArray = Set<String>()
+                for document in querySnapshot!.documents{
+                    let messageData = document.data()
+                    let userID = messageData["msgSenderID"] as? String ?? ""
+                    netUsersArray.insert(userID)
+                }
+                let convertedSet = Array(netUsersArray)
+                completion(convertedSet,nil)
             }
         }
     }
@@ -571,6 +616,14 @@ struct Firebase {
                     if user.nuCountry != userCountry{
                         user.nuCountry = userCountry
                     }
+                    let userLikes = userData["userLikes"] as? Int ?? 0
+                    if user.nuLikes != userLikes{
+                        user.nuLikes = Int64(userLikes)
+                    }
+                    let userSharedDics = userData["userSharedDics"] as? Int ?? 0
+                    if user.nuSharedDics != userSharedDics{
+                        user.nuLikes = Int64(userSharedDics)
+                    }
                     let userNativeLanguage = userData["userNativeLanguage"] as? String
                     if user.nuNativeLanguage != userNativeLanguage{
                         user.nuNativeLanguage = userNativeLanguage
@@ -597,17 +650,17 @@ struct Firebase {
         }
     }
     
-    func getNetworkUserDataByID(userID:String, completion: @escaping (NetworkUserData?) -> Void){
+    func getNetworkUserDataByID(userID:String, completion: @escaping (NetworkUserData?, Error?) -> Void){
         fireDB.collection("Users")
             .whereField("userID", isEqualTo: userID)
             .getDocuments { (querySnapshot, error) in
                 if error != nil {
                     print("Error getting user data: \(error!)")
-                    completion(nil)
+                    completion(nil,error)
                 } else {
                     var resultData : NetworkUserData?
                     guard let document = querySnapshot?.documents.first else {
-                        completion(nil)
+                        completion(nil,error)
                         return
                     }
                         let userData = document.data()
@@ -620,6 +673,8 @@ struct Firebase {
                            let userAvatarFirestorePath = userData["userAvatarFirestorePath"] as? String,
                            let userEmail = userData["userEmail"] as? String,
                            let userScores = userData["userScores"] as? Int,
+                           let userLikes = userData["userLikes"] as? Int,
+                           let userSharedDics = userData["userSharedDics"] as? Int,
                            let userShowEmail = userData["userShowEmail"] as? Bool
                         {
                             var userSharedEmail = String()
@@ -628,10 +683,10 @@ struct Firebase {
                             } else {
                                 userSharedEmail = String()
                             }
-                           resultData = NetworkUserData(userID: userID, userName: userName, userCountry: userCountry, userNativeLanguage: userNativeLanguage, userBirthDate: userBirthDate, userRegisterDate: userRegisterDate, userAvatarFirestorePath: userAvatarFirestorePath, userShowEmail: userShowEmail, userEmail: userSharedEmail, userScores: userScores)
+                           resultData = NetworkUserData(userID: userID, userName: userName, userCountry: userCountry, userNativeLanguage: userNativeLanguage, userBirthDate: userBirthDate, userRegisterDate: userRegisterDate, userAvatarFirestorePath: userAvatarFirestorePath, userShowEmail: userShowEmail, userEmail: userSharedEmail, userScores: userScores, userLocalAvatar: nil, userSharedDics: userSharedDics, userLikes: userLikes)
                         }
                     
-                    completion(resultData)
+                    completion(resultData,nil)
                 }
             }
     }
@@ -654,6 +709,61 @@ struct Firebase {
         }
     }
     
+    func listenDictionaryLikesCount(dicID:String, completion: @escaping (Int?, Error?) -> Void){
+        fireDB.collection("Dictionaries").whereField("dicID", isEqualTo: dicID).addSnapshotListener { (querySnapshot, error) in
+            if error != nil {
+                print("Error getting messages: \(error!)")
+                completion(nil, error)
+            } else {
+                guard let document = querySnapshot?.documents.first else {
+                    completion(nil,error)
+                    return
+                }
+                let dictionaryData = document.data()
+                let dicLikes = dictionaryData["dicLikes"] as? [String]
+                if let dlikes = dicLikes{
+                    let likesCount = dlikes.count
+                    completion(likesCount,nil)
+                }
+            }
+        }
+    }
+    
+    func listenUserLikesCount(userID:String, completion: @escaping (Int?, Error?) -> Void){
+        fireDB.collection("Users").whereField("userID", isEqualTo: userID).addSnapshotListener { (querySnapshot, error) in
+            if error != nil {
+                print("Error getting messages: \(error!)")
+                completion(nil, error)
+            } else {
+                guard let document = querySnapshot?.documents.first else {
+                    completion(nil,error)
+                    return
+                }
+                let userData = document.data()
+                let userLikes = userData["userLikes"] as? Int
+                completion(userLikes,nil)
+            }
+        }
+    }
+    
+    func listenDictionaryCommentsCount(dicID:String, completion: @escaping (Int?, Error?) -> Void){
+        fireDB.collection("Messages").whereField("msgDicID", isEqualTo: dicID).addSnapshotListener { (querySnapshot, error) in
+            if error != nil {
+                print("Error getting messages: \(error!)")
+                completion(nil, error)
+            } else {
+                guard let document = querySnapshot?.documents.first else {
+                    completion(nil,error)
+                    return
+                }
+              //  let messagesData = document.data()
+                
+                let messagesCount = querySnapshot?.documents.count ?? 0
+                completion(messagesCount,nil)
+            }
+        }
+    }
+    
     func getMessagesCountForDictionary(dicID:String, completion: @escaping (String?) -> Void){
         fireDB.collection("Messages").whereField("msgDicID", isEqualTo: dicID).getDocuments { (querySnapshot, error) in
             if error != nil {
@@ -666,25 +776,24 @@ struct Firebase {
         }
     }
     
-    func getDictionaryShortData1(completion: @escaping ([SharedDictionaryShortData]?) -> Void) {
-        fireDB.collection("Dictionaries").whereField("dicShared", isEqualTo: true).getDocuments { (querySnapshot, error) in
-            if error != nil {
-                completion(nil)
-            } else {
-                guard let document = querySnapshot?.documents.first else {
-                    completion(nil)
-                    return
-                }
-                let dictionaryData = document.data()
-                 let dictionaryName = dictionaryData["dicName"] as! String
-                 let dicID = dictionaryData["dicID"] as! String
-                 let dicLikes = dictionaryData["dicLikes"] as? [String] ?? [String]()
-                 let dicArray = [SharedDictionaryShortData(dicID: dicID, dicName: dictionaryName, dicLikes: dicLikes)]
-                completion(dicArray)
-            }
-        }
-    }
-    
+//    func getDictionaryShortData1(completion: @escaping ([SharedDictionaryShortData]?) -> Void) {
+//        fireDB.collection("Dictionaries").whereField("dicShared", isEqualTo: true).getDocuments { (querySnapshot, error) in
+//            if error != nil {
+//                completion(nil)
+//            } else {
+//                guard let document = querySnapshot?.documents.first else {
+//                    completion(nil)
+//                    return
+//                }
+//                let dictionaryData = document.data()
+//                 let dictionaryName = dictionaryData["dicName"] as! String
+//                 let dicID = dictionaryData["dicID"] as! String
+//                 let dicLikes = dictionaryData["dicLikes"] as? [String] ?? [String]()
+//                 let dicArray = [SharedDictionaryShortData(dicID: dicID, dicName: dictionaryName, dicLikes: dicLikes)]
+//                completion(dicArray)
+//            }
+//        }
+//    }
     
     func getAllWordForSharedDictionary(dicID:String, completion: @escaping ([String: Any]?, Error?) -> Void) {
         fireDB.collection("Words").whereField("wrdDicID", isEqualTo: dicID).getDocuments { (querySnapshot, error) in
@@ -702,7 +811,6 @@ struct Firebase {
                   }
         }
     }
-
     
     func checkIsWordExistsInDictionary(wrdID:String, completion: @escaping (Bool, Error?) -> Void) {
         
@@ -737,6 +845,27 @@ struct Firebase {
             }
         }
     }
+    
+    func checkIsDictionaryExistAndShared(dicID:String, completion: @escaping (Bool, Bool, Error?) -> Void) {
+        fireDB.collection("Dictionaries").whereField("dicID", isEqualTo: dicID).getDocuments { (querySnapshot, error) in
+            if let error = error {
+                completion(false, false, error)
+            } else {
+                guard let document = querySnapshot?.documents.first else {
+                    completion(false, false, error)
+                    return
+                }
+                let dictionary = document.data()
+                let dictionaryShared = dictionary["dicShared"] as! Bool
+                if dictionaryShared{
+                    completion(true, true, nil)
+                } else {
+                    completion(true, false, nil)
+                }
+            }
+        }
+    }
+    
     
 //MARK: - Update functions
     func updateUserDataFirebase(userData: UserData){
@@ -819,6 +948,62 @@ struct Firebase {
         }
     }
     
+    func getLikesFromDictionary(dicID: String, completion: @escaping ([String]?, Error?) -> Void){
+        fireDB.collection("Dictionaries").whereField("dicID", isEqualTo: dicID).getDocuments { (querySnapshot, error) in
+            if let error = error {
+                completion(nil, error)
+            } else {
+                guard let document = querySnapshot?.documents.first else {
+                    completion(nil, error)
+                    return
+                }
+                let dictionary = document.data()
+                let usersID = dictionary["dicLikes"] as? [String]
+                completion(usersID,nil)
+            }
+        }
+    }
+    
+    func updateNetworkUserLikeCount(userID: String, increment:Bool) {
+        switch increment{
+        case true:
+            fireDB.collection("Users").document(userID).updateData(
+                ["userLikes": FieldValue.increment(Int64(1))]
+            ){ error in
+                if let error = error {
+                    print("FirebaseModel: Error updating network user likes count: \(error)")
+                }
+            }
+        case false:
+            fireDB.collection("Users").document(userID).updateData(
+                ["userLikes": FieldValue.increment(Int64(-1))]) { error in
+                    if let error = error {
+                        print("FirebaseModel: Error updating network user likes count: \(error)")
+                    }
+                }
+        }
+    }
+    
+    func updateNetworkUserSharedDicsCount(userID: String, increment:Bool) {
+        switch increment{
+        case true:
+            fireDB.collection("Users").document(userID).updateData(
+                ["userSharedDics": FieldValue.increment(Int64(1))]
+            ){ error in
+                if let error = error {
+                    print("FirebaseModel: Error updating network user sharedDics count: \(error)")
+                }
+            }
+        case false:
+            fireDB.collection("Users").document(userID).updateData(
+                ["userSharedDics": FieldValue.increment(Int64(-1))]) { error in
+                    if let error = error {
+                        print("FirebaseModel: Error updating network user sharedDics count: \(error)")
+                    }
+                }
+        }
+    }
+    
     func updateWordsCountFirebase(dicID: String, increment:Bool) {
         switch increment{
         case true:
@@ -868,10 +1053,12 @@ struct Firebase {
         }
     }
     
-    func updateDictionaryInFirebase(dicID: String, dicName:String, dicDescription:String, dicShared:Bool) {
-        
+    func updateDictionaryInFirebase(dicID: String, dicName:String, dicDescription:String, dicShared:Bool, dicComments:Bool) {
         fireDB.collection("Dictionaries").document(dicID).updateData(
-            ["dicName": dicName, "dicDescription": dicDescription, "dicShared":dicShared]
+            ["dicName": dicName,
+             "dicDescription": dicDescription,
+             "dicShared": dicShared,
+             "dicCommentsOn": dicComments]
         ) { error in
             if let error = error {
                 print("FirebaseModel: Error updating dictionary in Firestore: \(error)")

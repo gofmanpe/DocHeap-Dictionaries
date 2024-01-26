@@ -105,6 +105,8 @@ class AddWordPopUpViewController: UIViewController, UITextFieldDelegate {
         translationLngImage.image = UIImage(named: "\(translateImage).png")
         translationTextField.delegate = self
         wordTextField.delegate = self
+        parseWordButton.isHidden = true
+        parseTranslationButton.isHidden = true
     }
     
     func elementsDesign(){

@@ -121,24 +121,28 @@ class ChatViewController: UIViewController, UITextViewDelegate{
                                    let userCountry = userData["userCountry"] as? String,
                                    let userRegisterDate = userData["userRegisterDate"] as? String,
                                    let userShowEmail = userData["userShowEmail"] as? Bool,
-                                   let userEmail = userData["userEmail"] as? String
+                                   let userEmail = userData["userEmail"] as? String,
+                                   let userScores = userData["userScores"] as? Int,
+                                   let userLikes = userData["userLikes"] as? Int,
+                                   let userSharedDics = userData["userSharedDics"] as? Int
                                 {
-                                    let newNetworkUser = NetworkUser(context: self.context)
-                                    newNetworkUser.nuID = userID
-                                    newNetworkUser.nuName = userName
-                                    newNetworkUser.nuFirebaseAvatarPath = userAvatarFirestorePath
-                                    newNetworkUser.nuBirthDate = userBirthDate
-                                    newNetworkUser.nuNativeLanguage = userNativeLanguage
-                                    newNetworkUser.nuCountry = userCountry
-                                    newNetworkUser.nuRegisterDate = userRegisterDate
-                                    newNetworkUser.nuShowEmail = userShowEmail
-                                    if userShowEmail{
-                                        newNetworkUser.nuEmail = userEmail
-                                    }
-                                    self.coreData.saveData(data: self.context)
                                     self.alamo.downloadChatUserAvatar(url: userAvatarFirestorePath, senderID: userID, userID: self.mainModel.loadUserData().userID) { avatarName in
-                                        newNetworkUser.nuLocalAvatar = avatarName
-                                        self.coreData.saveData(data: self.context)
+                                        let userAvatarName = avatarName
+                                        let networkUser = NetworkUserData(
+                                            userID: userID,
+                                            userName: userName,
+                                            userCountry: userCountry,
+                                            userNativeLanguage: userNativeLanguage,
+                                            userBirthDate: userBirthDate,
+                                            userRegisterDate: userRegisterDate,
+                                            userAvatarFirestorePath: userAvatarFirestorePath,
+                                            userShowEmail: userShowEmail,
+                                            userEmail: userEmail,
+                                            userScores: userScores,
+                                            userLocalAvatar: userAvatarName,
+                                            userSharedDics: userSharedDics,
+                                            userLikes: userLikes)
+                                        self.coreData.createNetworkUser(userData: networkUser, context: self.context)
                                     }
                                 }
                                 self.networkUsers = self.coreData.loadAllNetworkUsers(data: self.context)

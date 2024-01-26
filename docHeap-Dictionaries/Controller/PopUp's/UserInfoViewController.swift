@@ -28,6 +28,10 @@ class UserInfoViewController: UIViewController {
     @IBOutlet weak var scoresLabel: UILabel!
     @IBOutlet weak var okButton: UIButton!
     @IBOutlet weak var addInfoNameLabel: UILabel!
+    @IBOutlet weak var likesNameLabel: UILabel!
+    @IBOutlet weak var sharedDicNameLabel: UILabel!
+    @IBOutlet weak var likesLabel: UILabel!
+    @IBOutlet weak var sharedDicLabel: UILabel!
     
     private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     var networkUser = NetworkUser()
@@ -59,6 +63,8 @@ class UserInfoViewController: UIViewController {
         countryLabel.text = networkUser.nuCountry
         nativeLanguageLabel.text = networkUser.nuNativeLanguage
         scoresLabel.text = String(networkUser.nuScores)
+        sharedDicLabel.text = String(networkUser.nuSharedDics)
+        likesLabel.text = String(networkUser.nuLikes)
         
         
     }

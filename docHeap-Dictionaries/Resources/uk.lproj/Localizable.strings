@@ -22,8 +22,13 @@
 "dictionariesVC_attention_label" = "У вас поки що не створено словників.\nСтворіть новий, натиснувши кнопку +";
 "dictionariesVC_wordsCount_label" = "Слів:";
 "dictionariesVC_createDate_label" = "Створено:";
-"dictionariesVC_myDictionaries_label" = "Мої словники";
+"dictionariesVC_myDictionaries_label" = "Cловники";
 "dictionariesVC_ownerName_label" = "Власник:";
+"dictionariesVC_dicCell_shared_label" = "ЗАГАЛЬНИЙ";
+"dictionariesVC_dicCell_downloaded_label" = "ЗАВАНТАЖЕНО";
+"dictionariesVC_likes_label" = "Лайки";
+"dictionariesVC_scores_label" = "Очки";
+"dictionariesVC_testRuns_label" = "Тести";
 //CreatePopUpViewController
 "createDictionaryPopUpVC_header_label" = "Створити новий словник";
 "createDictionaryPopUpVC_enterName_label" = "Введіть назву словника";
@@ -49,6 +54,8 @@
 "editDictionaryVC_nothingToChange_message" = "Нічого не змінилося, немає чого зберігати";
 "editDictionaryVC_successSave_message" = "Зміни успішно збережені";
 "editDictionaryVC_shareDictionary_label" = "Зробити загальнодоступним";
+"editDictionaryVC_notEnoughWords_message" = "Щоб зробити словник загальнодоступним, він повинен містити мінімум 7 пар слів";
+"editDictionaryVC_allowComments_label" = "Дозволити коментарі";
 //DeleteDictionaryViewController
 "deleteDictionaryVC_header_label" = "Видалення словника";
 "deleteDictionaryVC_dialog_label" = "Ви дійсно хочете видалити словник:";
@@ -141,15 +148,15 @@
 "sharedElements_noChose_label" = "Зробіть вибір!";
 //TestsController
 "testVC_fiveWords_name" = "Тест П'ять Слів";
-"testVC_fiveWords_description" = "Ви можете перевірити свій словниковий запас, обираючи одне правильне слово з п'яти запропонованих відповідей. Після цього ви зможете переглянути свої помилки.";
+"testVC_threeWords_description" = "Ви можете перевірити свій словниковий запас, обираючи одне правильне слово з п'яти запропонованих відповідей. Після цього ви зможете переглянути свої помилки.";
 "testVC_threeWords_name" = "Тест Три Слова";
-"testVC_threeWords_description" = "Ви можете перевірити свій словниковий запас, обираючи одне правильне слово з трьох запропонованих відповідей. Після цього ви зможете переглянути свої помилки.";
+"testVC_fiveWords_description" = "Цей тест, в цілому, схожий на Тест три слова, відмінність у кількості слів, а значить і в множинному виборі!";
 "testVC_findApair_name" = "Тест Знайди Пару";
 "testVC_findApair_description" = "Вам буде запропоновано сім пар слів. Ваше завдання - вибрати правильну пару.";
 "testVC_falseOrTrue_name" = "Тест Правда чи Брехня";
 "testVC_falseOrTrue_description" = "Вам потрібно визначити, чи правильно перекладено подане слово.";
 "testVC_findAnImage_name" = "Тест Знайти Зображення";
-"testVC_falseOrTrue_description" = "Вам потрібно вибрати правильне зображення для заданого слова.";
+"testVC_findAnImage_description" = "Вам потрібно вибрати правильне зображення для заданого слова.";
 "testVC_noDictionariesCreated_message" = "У вас поки що немає словників.\nДля початку тестування необхідно створити хоча б один словник і додати до нього 5 слів.";
 "testVC_5wordstest_ico" = "5wrdico_ua.png";
 "testVC_3wordstest_ico" = "3wrdico_ua.png";
@@ -167,6 +174,9 @@
 "selectDictionaryVC_startTest_button" = "Почати тест";
 "selectDictionaryVC_noDictionary_message" = "Будь ласка, виберіть словник";
 "selectDictionaryVC_wordsInDictionary_message" = "слів";
+"selectDictionaryVC_notEnough_message" = "У цьому словнику менш ніж ";
+"selectDictionaryVC_notEnoughWords_message" = " слів! Будь ласка, додайте слова або виберіть інший словник!";
+"selectDictionaryVC_notEnoughImages_message" = " слів із картинками! Будь ласка, додайте зображення до слів або виберіть інший словник!";
 
 // ThreeWordsTestVC
 "threeWordsTestVC_repetitionMode_label" = "Фіксація помилок";
@@ -200,7 +210,7 @@
 "statisticVC_statistic_label" = "Статистика";
 
 //NetworkVC
-"networkVC_sharedDictioanries_label" = "Спільнодоступні словники";
+"networkVC_sharedDictioanries_label" = "Мережа";
 "networkVC_currentFilter_label" = "Поточний фільтр";
 "networkVC_filter_button" = "Фільтр";
 
@@ -222,3 +232,7 @@
 "logoutPopUp_dialog_label" = "Ви впевнені, що хочете вийти з вашого облікового запису?";
 "logoutPopUp_cancel_button" = "Відміна";
 "logoutPopUp_logout_button" = "Вихід";
+
+//BrowseSharedWordPairPopUp
+"browseSharedWordPopUp_header_label" = "Пара слів";
+"browseSharedWordPopUp_close_button" = "Закрити";

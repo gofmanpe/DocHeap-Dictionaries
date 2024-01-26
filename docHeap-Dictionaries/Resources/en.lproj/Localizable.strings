@@ -26,8 +26,13 @@
 "dictionariesVC_attention_label" = "You have not created any dictionaries yet.\nCreate a new one by clicking on the + button";
 "dictionariesVC_wordsCount_label" = "Words:";
 "dictionariesVC_createDate_label" = "Created:";
-"dictionariesVC_myDictionaries_label" = "My dictionaries";
+"dictionariesVC_myDictionaries_label" = "Dictionaries";
 "dictionariesVC_ownerName_label" = "Qwner:";
+"dictionariesVC_dicCell_shared_label" = "SHARED";
+"dictionariesVC_dicCell_downloaded_label" = "DOWNLOADED";
+"dictionariesVC_likes_label" = "Likes";
+"dictionariesVC_scores_label" = "Scores";
+"dictionariesVC_testRuns_label" = "Tested";
 //CreatePopUpViewController
 "createDictionaryPopUpVC_header_label" = "Create new dictionary";
 "createDictionaryPopUpVC_enterName_label" = "Enter dictionary name";
@@ -53,6 +58,8 @@
 "editDictionaryVC_nothingToChange_message" = "Nothing has changed, there is nothing to save";
 "editDictionaryVC_successSave_message" = "Changes have been successfully saved";
 "editDictionaryVC_shareDictionary_label" = "Share dictionary";
+"editDictionaryVC_notEnoughWords_message" = "To share dictionary, it must contain at least 7 words pairs";
+"editDictionaryVC_allowComments_label" = "Allow comments";
 //DeleteDictionaryViewController
 "deleteDictionaryVC_header_label" = "Deleting dictionary";
 "deleteDictionaryVC_dialog_label" = "Do you really want to delete the dictionary:";
@@ -145,9 +152,9 @@
 "sharedElements_noChose_label" = "Make your choise!";
 //TestsController
 "testVC_fiveWords_name" = "Five Words Test";
-"testVC_fiveWords_description" = "You can test your vocabulary by selecting one correct word from five suggested answers. After that, you can review your mistakes.";
+"testVC_threeWords_description" = "You can test your vocabulary by selecting one correct word from five suggested answers. After that, you can review your mistakes.";
 "testVC_threeWords_name" = "Three Words Test";
-"testVC_threeWords_description" = "You can test your vocabulary by selecting one correct word from three suggested answers. After that, you can review your mistakes.";
+"testVC_fiveWords_description" = "This test is generally similar to the Three Word Test, the difference is in the number of words, and therefore in the multiple choice!";
 "testVC_findApair_name" = "Find a Pair Test";
 "testVC_findApair_description" = "You will be presented with seven pairs of words. Your task is to choose the correct pair.";
 "testVC_falseOrTrue_name" = "True or False Test";
@@ -171,6 +178,9 @@
 "selectDictionaryVC_startTest_button" = "Start Test";
 "selectDictionaryVC_noDictionary_message" = "Please select a dictionary";
 "selectDictionaryVC_wordsInDictionary_message" = "words";
+"selectDictionaryVC_notEnough_message" = "In this dictionary less then ";
+"selectDictionaryVC_notEnoughWords_message" = " words! Please add words into it or select other dictionary";
+"selectDictionaryVC_notEnoughImages_message" = " words with saved images! Please add images for words or select other dictionary";
 
 // ThreeWordsTestVC
 "threeWordsTestVC_repetitionMode_label" = "Error Fixation";
@@ -204,7 +214,7 @@
 "statisticVC_statistic_label" = "Statistic";
 
 //NetworkVC
-"networkVC_sharedDictioanries_label" = "Shared dictionaries";
+"networkVC_sharedDictioanries_label" = "Network";
 "networkVC_currentFilter_label" = "Current filter";
 "networkVC_filter_button" = "Filter";
 
@@ -226,3 +236,7 @@
 "logoutPopUp_dialog_label" = "Are you sure you want to log out of your account?";
 "logoutPopUp_cancel_button" = "Cancel";
 "logoutPopUp_logout_button" = "Log out";
+
+//BrowseSharedWordPairPopUp
+"browseSharedWordPopUp_header_label" = "Words pair";
+"browseSharedWordPopUp_close_button" = "Close";

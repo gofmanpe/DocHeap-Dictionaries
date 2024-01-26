@@ -12,6 +12,7 @@
     </entity>
     <entity name="Dictionary" representedClassName=".Dictionary" syncable="YES" codeGenerationType="class">
         <attribute name="dicAddDate" attributeType="String"/>
+        <attribute name="dicCommentsOn" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="dicDeleted" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="dicDescription" optional="YES" attributeType="String"/>
         <attribute name="dicID" attributeType="String"/>
@@ -34,11 +35,13 @@
         <attribute name="nuEmail" optional="YES" attributeType="String"/>
         <attribute name="nuFirebaseAvatarPath" optional="YES" attributeType="String"/>
         <attribute name="nuID" optional="YES" attributeType="String"/>
+        <attribute name="nuLikes" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="nuLocalAvatar" optional="YES" attributeType="String"/>
         <attribute name="nuName" optional="YES" attributeType="String"/>
         <attribute name="nuNativeLanguage" optional="YES" attributeType="String"/>
         <attribute name="nuRegisterDate" optional="YES" attributeType="String"/>
         <attribute name="nuScores" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="nuSharedDics" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="nuShowEmail" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
     </entity>
     <entity name="Statistic" representedClassName="Statistic" syncable="YES" codeGenerationType="class">

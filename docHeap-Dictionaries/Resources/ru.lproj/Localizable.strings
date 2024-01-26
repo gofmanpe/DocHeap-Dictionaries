@@ -30,8 +30,13 @@
 "dictionariesVC_attention_label" = "У вас пока не создано словарей.\nСоздайте новый, нажав на кнопку +";
 "dictionariesVC_wordsCount_label" = "Слов:";
 "dictionariesVC_createDate_label" = "Создан:";
-"dictionariesVC_myDictionaries_label" = "Мои словари";
+"dictionariesVC_myDictionaries_label" = "Cловари";
 "dictionariesVC_ownerName_label" = "Владелец:";
+"dictionariesVC_dicCell_shared_label" = "ОБЩИЙ";
+"dictionariesVC_dicCell_downloaded_label" = "ЗАГРУЖЕН";
+"dictionariesVC_likes_label" = "Лайки";
+"dictionariesVC_scores_label" = "Очки";
+"dictionariesVC_testRuns_label" = "Тесты";
 //CreatePopUpViewController
 "createDictionaryPopUpVC_header_label" = "Создать новый словарь";
 "createDictionaryPopUpVC_enterName_label" = "Введите название словаря";
@@ -57,6 +62,8 @@
 "editDictionaryVC_dictionaryNameIsEmpty_message" = "Невозможно сохранить без имени словаря";
 "editDictionaryVC_successSave_message" = "Изменения успешно сохранены";
 "editDictionaryVC_shareDictionary_label" = "Сделать общедоступным";
+"editDictionaryVC_notEnoughWords_message" = "Для открытия общего доступа к словарю, он должен содержать минимум 7 пар слов";
+"editDictionaryVC_allowComments_label" = "Разрешить комментарии";
 //DeleteDictionaryPopUpViewController
 "deleteDictionaryVC_header_label" = "Удаление словаря";
 "deleteDictionaryVC_dialog_label" = "Вы действительно хотите удалить словарь:";
@@ -149,9 +156,9 @@
 "sharedElements_noChose_label" = "Сделайте выбор!";
 //TestsController
 "testVC_fiveWords_name" = "Тест Пять слов";
-"testVC_fiveWords_description" = "Вы можете проверить свой словарный запас, выбрав одно правильное слово из пяти предложенных ответов. После этого вы сможете исправить ошибки.";
+"testVC_threeWords_description" = "Вы можете проверить свой словарный запас, выбрав одно правильное слово из пяти предложенных ответов. После этого вы сможете исправить ошибки.";
 "testVC_threeWords_name" = "Тест Три слова";
-"testVC_threeWords_description" = "Вы можете проверить свой словарный запас, выбрав одно правильное слово из трех предложенных ответов. После этого вы сможете исправить ошибки.";
+"testVC_fiveWords_description" = "Этот тест, в целом, похож на Тест три слова, различие в количестве слов, а значит и в множественном выборе!";
 "testVC_findApair_name" = "Тест Найди пару";
 "testVC_findApair_description" = "Вам будет предложено семь пар слов. Ваша задача – выбрать правильную пару.";
 "testVC_falseOrTrue_name" = "Тест Правда или ложь";
@@ -175,6 +182,10 @@
 "selectDictionaryVC_startTest_button" = "Старт теста";
 "selectDictionaryVC_noDictionary_message" = "Пожалуйста, выберите словарь";
 "selectDictionaryVC_wordsInDictionary_message" = "слов(а)";
+"selectDictionaryVC_notEnough_message" = "В этом словаре менее чем ";
+"selectDictionaryVC_notEnoughWords_message" = " слов! Пожалуйста, добавьте слова или выберите другой словарь!";
+"selectDictionaryVC_notEnoughImages_message" = " слов с картинками! Пожалуйста, добавьте картинки к словам или выберите другой словарь!";
+
 //ThreeWordsTestVC
 "threeWordsTestVC_repetitionMode_label" = "Фикс. ошибок";
 "threeWordsTestVC_roundsName_label" = "Раунд";
@@ -207,7 +218,7 @@
 "statisticVC_statistic_label" = "Статистика";
 
 //NetworkVC
-"networkVC_sharedDictioanries_label" = "Общедоступные словари";
+"networkVC_sharedDictioanries_label" = "Сеть";
 "networkVC_currentFilter_label" = "Текущий фильтр";
 "networkVC_filter_button" = "Фильтр";
 
@@ -229,3 +240,7 @@
 "logoutPopUp_dialog_label" = "Вы уверены, что хотите выйти из вашей учетной записи?";
 "logoutPopUp_cancel_button" = "Отмена";
 "logoutPopUp_logout_button" = "Выход";
+
+//BrowseSharedWordPairPopUp
+"browseSharedWordPopUp_header_label" = "Пара слов";
+"browseSharedWordPopUp_close_button" = "Закрыть";

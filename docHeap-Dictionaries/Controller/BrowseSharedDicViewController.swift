@@ -16,14 +16,15 @@ class BrowseSharedDicViewController: UIViewController {
     @IBOutlet weak var transLangLabel: UILabel!
     @IBOutlet weak var dicNameLabel: UILabel!
     @IBOutlet weak var wordsCountNameLabel: UILabel!
-    @IBOutlet weak var ownerNameLabel: UILabel!
     @IBOutlet weak var wordsCountLabel: UILabel!
     @IBOutlet weak var ownerLabel: UILabel!
     @IBOutlet weak var downloadButton: UIButton!
     @IBOutlet weak var sharedWordsTable: UITableView!
-    @IBOutlet weak var downloadedTimesLabel: UILabel!
-    @IBOutlet weak var dicLikesLabel: UILabel!
-    @IBOutlet weak var messagesCountLabel: UILabel!
+    @IBOutlet weak var userLikesLabel: UILabel!
+    @IBOutlet weak var userSharedDicsLabel: UILabel!
+    @IBOutlet weak var userScoresLabel: UILabel!
+    @IBOutlet weak var userAvatarImage: UIImageView!
+    @IBOutlet weak var descriptionButton: UIButton!
     
     func localizeElemants(){
        
@@ -34,6 +35,8 @@ class BrowseSharedDicViewController: UIViewController {
     var dicID = String()
     var sharedDictionary : SharedDictionary?
     var sharedWordsArray = [SharedWord]()
+    private var wordsPairForPopUp : SharedWord?
+    var networkUserData : NetworkUserData?
     var dicOwnerData : DicOwnerData?
     var ownerName = String()
     var ownerID = String()
@@ -44,6 +47,7 @@ class BrowseSharedDicViewController: UIViewController {
     var setDownloadedDelegate: SetDownloadedMarkToDictionary?
     private let firebase = Firebase()
     private var dicWasDownloaded = Bool()
+    private let dispatchGroup = DispatchGroup()
 
 //MARK: - Lifecycle functions
     override func viewDidLoad() {
@@ -64,64 +68,67 @@ class BrowseSharedDicViewController: UIViewController {
         dicNameLabel.text = sharedDictionary?.dicName ?? ""
         wordsCountLabel.text = String(sharedDictionary?.dicWordsCount ?? 0)
         ownerLabel.text = ownerName
-        guard let downloadedTimes = sharedDictionary?.dicDownloadedUsers else {return}
-        downloadedTimesLabel.text = String(downloadedTimes.count)
-        guard let dicLikes = sharedDictionary?.dicLikes else {return}
-        dicLikesLabel.text = String(dicLikes.count)
+      //  guard let downloadedTimes = sharedDictionary?.dicDownloadedUsers else {return}
         downloadButton.layer.cornerRadius = 10
-        messagesCountLabel.text = messagesCount
+        let filePath = "\(mainModel.loadUserData().userID)/Temp/\(networkUserData?.userLocalAvatar ?? "")"
+        let image = UIImage(contentsOfFile:  mainModel.getDocumentsFolderPath().appendingPathComponent(filePath).path)
+        userAvatarImage.layer.cornerRadius = userAvatarImage.frame.size.width/2
+        userAvatarImage.image = image
+        userScoresLabel.text = String(networkUserData?.userScores ?? 0)
+        userSharedDicsLabel.text = String(networkUserData?.userSharedDics ?? 0)
+        userLikesLabel.text = String(networkUserData?.userLikes ?? 0)
+        if sharedDictionary?.dicDescription == ""{
+            descriptionButton.tintColor = .systemGray2
+            descriptionButton.isEnabled = false
+        } else{
+            descriptionButton.tintColor = UIColor(named: "Main_header")
+            descriptionButton.isEnabled = true
+        }
+        downloadButton.layer.shadowColor = UIColor.black.cgColor
+        downloadButton.layer.shadowOpacity = 0.2
+        downloadButton.layer.shadowOffset = .zero
+        downloadButton.layer.shadowRadius = 2
+        
     }
     
-    func createDictionaryCoreData(){
-        let likesArray = sharedDictionary?.dicLikes ?? [String]()
-        let isUserLikedDictionaryBefore = likesArray.filter({$0 == mainModel.loadUserData().userID})
-        let newDictionary = Dictionary(context: context)
-        newDictionary.dicName = sharedDictionary?.dicName
-        newDictionary.dicDescription = sharedDictionary?.dicDescription
-        newDictionary.dicLearningLanguage = sharedDictionary?.dicLearnLang
-        newDictionary.dicTranslateLanguage = sharedDictionary?.dicTransLang
-        newDictionary.dicID = dicID
-        newDictionary.dicUserID = mainModel.loadUserData().userID
-        newDictionary.dicAddDate = mainModel.convertDateToString(currentDate: Date(), time: false)
-        mainModel.createFolderInDocuments(withName: "\(mainModel.loadUserData().userID)/\(dicID)")
-        newDictionary.dicDeleted = false
-        newDictionary.dicShared = false
-        newDictionary.dicReadOnly = true
-        if isUserLikedDictionaryBefore.isEmpty{
-            newDictionary.dicLike = false
-        } else {
-            newDictionary.dicLike = true
+    func createRODictionaryCoreData(){
+        guard let sd = sharedDictionary else {return}
+        guard let dicLike = sharedDictionary?.dicLikes.filter({$0 == mainModel.loadUserData().userID}).isEmpty else {
+            return
         }
-        newDictionary.dicOwnerID = sharedDictionary?.dicUserID
-        newDictionary.dicWordsCount = Int64(sharedDictionary?.dicWordsCount ?? 0)
-        newDictionary.dicImagesCount = Int64(sharedDictionary?.dicImagesCount ?? 0)
-        coreData.saveData(data: context)
+        let newDictionaryData = LocalDictionary(
+            dicID: dicID, 
+            dicCommentsOn: sd.dicCommentsOn,
+            dicDeleted: false,
+            dicDescription: sd.dicDescription,
+            dicAddDate: sd.dicAddDate,
+            dicImagesCount: sd.dicImagesCount,
+            dicLearningLanguage: sd.dicLearnLang,
+            dicTranslateLanguage: sd.dicTransLang,
+            dicLike: !dicLike,
+            dicName: sd.dicName,
+            dicOwnerID: sd.dicUserID,
+            dicReadOnly: true,
+            dicShared: false,
+            dicSyncronized: true,
+            dicUserID: mainModel.loadUserData().userID,
+            dicWordsCount: sd.dicWordsCount)
+        coreData.createDictionary(dictionary: newDictionaryData, context: context)
+        mainModel.createFolderInDocuments(withName: "\(mainModel.loadUserData().userID)/\(dicID)")
         let parentDictionary = coreData.getParentDictionaryData(dicID: dicID, userID: mainModel.loadUserData().userID, data: context)
         for word in sharedWordsArray{
-            let newWord = Word(context: context)
-            newWord.wrdID = word.wrdID
-            newWord.wrdWord = word.wrdWord
-            newWord.wrdTranslation = word.wrdTranslation
-            if !word.wrdImageName.isEmpty{
-                newWord.imageName = word.wrdImageName
-                newWord.wrdImageIsSet = true
-                newWord.wrdImageFirestorePath = word.wrdImageFirestorePath
-                alamo.downloadAndSaveImage(
-                    fromURL: word.wrdImageFirestorePath,
-                    userID: mainModel.loadUserData().userID,
-                    dicID: dicID,
-                    imageName: word.wrdImageName) {
-                    }
-            }
-            newWord.parentDictionary = parentDictionary
-            newWord.wrdAddDate = mainModel.convertDateToString(currentDate: Date(), time: false)
-            newWord.wrdBobbleColor = ".systemYellow"
-            newWord.wrdDicID = dicID
-            newWord.wrdDeleted = false
-            newWord.wrdReadOnly = true
-            newWord.wrdUserID = mainModel.loadUserData().userID
-            newWord.wrdSyncronized = true
-            coreData.saveData(data: context)
+            let newWorsPair = WordsPair(
+                wrdWord: word.wrdWord,
+                wrdTranslation: word.wrdTranslation,
+                wrdDicID: word.wrdDicID,
+                wrdUserID: mainModel.loadUserData().userID,
+                wrdID: word.wrdID,
+                wrdImageFirestorePath: word.wrdImageFirestorePath,
+                wrdImageName: word.wrdImageName,
+                wrdReadOnly: true,
+                wrdParentDictionary: parentDictionary, 
+                wrdAddDate: mainModel.convertDateToString(currentDate: Date(), time: false)!)
+            coreData.createWordsPair(wordsPair: newWorsPair, context: context)
         }
     }
     
@@ -137,15 +144,19 @@ class BrowseSharedDicViewController: UIViewController {
         if coreData.isNetworkUserExist(userID: ownerID, data: context){
             return
         } else {
-            firebase.getNetworkUserDataByID(userID: ownerID) { nuData in
-                guard let networkUserData = nuData else {
-                    return
-                }
-                self.coreData.createNetworkUser(userData: networkUserData, context: self.context)
-                let userAvatarFirestorePath = networkUserData.userAvatarFirestorePath
-                let userID = networkUserData.userID
-                self.alamo.downloadChatUserAvatar(url: userAvatarFirestorePath, senderID: userID, userID: self.mainModel.loadUserData().userID) { avatarName in
-                    self.coreData.updateNetworkUserLocalAvatarName(userID: networkUserData.userID, avatarName: avatarName, context: self.context)
+            firebase.getNetworkUserDataByID(userID: ownerID) { nuData, error in
+                if let error = error{
+                    print("Error to get network user data: \(error)\n")
+                } else {
+                    guard let networkUserData = nuData else {
+                        return
+                    }
+                    self.coreData.createNetworkUser(userData: networkUserData, context: self.context)
+                    let userAvatarFirestorePath = networkUserData.userAvatarFirestorePath
+                    let userID = networkUserData.userID
+                    self.alamo.downloadChatUserAvatar(url: userAvatarFirestorePath, senderID: userID, userID: self.mainModel.loadUserData().userID) { avatarName in
+                        self.coreData.updateNetworkUserLocalAvatarName(userID: networkUserData.userID, avatarName: avatarName, context: self.context)
+                    }
                 }
             }
         }
@@ -156,10 +167,20 @@ class BrowseSharedDicViewController: UIViewController {
             return }
         let excludeCurrentUserArray = usersIDsArray.filter({$0 != mainModel.loadUserData().userID})
         for userID in excludeCurrentUserArray{
-            if coreData.isNetworkUserExist(userID: userID, data: context){
-                return
-            } else {
-                firebase.createNetworkUsersInCoreData(userID: userID, context: context)
+            if !coreData.isNetworkUserExist(userID: userID, data: context){
+                firebase.getNetworkUserDataByID(userID: userID) { nuData, error in
+                    if let error = error{
+                        print("Error to get network user data: \(error)\n")
+                    } else {
+                        if let userData = nuData{
+                            self.coreData.createNetworkUser(userData: userData, context: self.context)
+                            self.alamo.downloadChatUserAvatar(url: userData.userAvatarFirestorePath, senderID: userID, userID: self.mainModel.loadUserData().userID) { avatarName in
+                                self.coreData.updateNetworkUserLocalAvatarName(userID: userID, avatarName: avatarName, context: self.context)
+                            }
+                        }
+                        
+                    }
+                }
             }
         }
     }
@@ -170,7 +191,6 @@ class BrowseSharedDicViewController: UIViewController {
                 print("Error to get messages: \(error)")
             } else {
                 if let messArray = messagesArray{
-                    // check is message already exist in CoreData
                     for message in messArray{
                         let newMessageID = message.msgID
                         let corDataMessages = self.coreData.getMessagesByDicID(dicID: self.dicID, context: self.context)
@@ -179,14 +199,34 @@ class BrowseSharedDicViewController: UIViewController {
                             self.coreData.createChatMessage(message: message, context: self.context)
                         }
                     }
-                    
                 }
             }
         }
     }
+    
+    func popUpApear(popUpName:String){
+        switch popUpName{
+        case "DescriptionPopUp":
+            let overLayerView = DescriptionPopUpController()
+            overLayerView.dicDescription = sharedDictionary?.dicDescription ?? ""
+            overLayerView.netUserName = networkUserData?.userName ?? ""
+            overLayerView.appear(sender: self)
+        case "BrowseSharedWordsPairPopUp":
+            let overLayerView = BrowseSharedWordViewController()
+            overLayerView.wordsPair = wordsPairForPopUp
+            overLayerView.dicLearnLang = sharedDictionary!.dicLearnLang
+            overLayerView.dicTransLang = sharedDictionary!.dicTransLang
+            overLayerView.appear(sender: self)
+        default: break
+        }
+    
+        
+    }
+   
 
 //MARK: - Actions
     @IBAction func downloadButtonPressed(_ sender: UIButton) {
+        //downloadButton.isEnabled = false
         switch dicWasDownloaded{
         case true:
             return
@@ -195,7 +235,7 @@ class BrowseSharedDicViewController: UIViewController {
             firebase.setDictionaryDownloadedByUserUser(dicID: dicID, remove: false)
             buttonScaleAnimation(targetButton: downloadButton)
             if mainModel.isInternetAvailable(){
-                createDictionaryCoreData()
+                createRODictionaryCoreData()
                 downloadButton.tintColor = .white
                 downloadButton.backgroundColor = UIColor(named: "Right answer")
             }
@@ -205,6 +245,12 @@ class BrowseSharedDicViewController: UIViewController {
             createMessagesForDictionary()
         }
     }
+    
+    @IBAction func descriptionButtonPressed(_ sender: UIButton) {
+        buttonScaleAnimation(targetButton: descriptionButton)
+        popUpApear(popUpName: "DescriptionPopUp")
+    }
+    
     
 }
 
@@ -224,5 +270,28 @@ extension BrowseSharedDicViewController: UITableViewDelegate, UITableViewDataSou
         wordCell.wordLabel.text = sharedWordsArray[indexPath.row].wrdWord
         wordCell.translationLabel.text = sharedWordsArray[indexPath.row].wrdTranslation
         return wordCell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        dispatchGroup.enter()
+        var wrdImageName = String()
+        if !sharedWordsArray[indexPath.row].wrdImageFirestorePath.isEmpty{
+            alamo.downloadChatUserAvatar(
+                url: sharedWordsArray[indexPath.row].wrdImageFirestorePath,
+                senderID: sharedWordsArray[indexPath.row].wrdID,
+                userID: "\(self.mainModel.loadUserData().userID)/Temp") { imageName in
+                    wrdImageName = imageName
+                    self.wordsPairForPopUp = SharedWord(
+                        wrdWord: self.sharedWordsArray[indexPath.row].wrdWord,
+                        wrdTranslation: self.sharedWordsArray[indexPath.row].wrdTranslation,
+                        wrdDicID: self.sharedWordsArray[indexPath.row].wrdDicID,
+                        wrdOwnerID: self.sharedWordsArray[indexPath.row].wrdOwnerID,
+                        wrdID: self.sharedWordsArray[indexPath.row].wrdID,
+                        wrdImageFirestorePath: self.sharedWordsArray[indexPath.row].wrdImageFirestorePath,
+                        wrdImageName: wrdImageName)
+                    self.popUpApear(popUpName: "BrowseSharedWordsPairPopUp")
+                }
+        }
+        dispatchGroup.leave()
     }
 }

@@ -24,7 +24,34 @@ struct SyncModel {
             } else {
                 return
             }
-        } //get CoreData user data
+        }
+    }
+   
+    func syncUserLikesForSharedDictionaries(userID:String, context:NSManagedObjectContext){
+        let allRODictionaries = coreData.loadAllRODictionaries(userID: userID, context: context)
+        let unsyncRODics = allRODictionaries.filter({$0.dicSyncronized == false})
+        if !unsyncRODics.isEmpty{
+            for dic in unsyncRODics{
+                let dicID = dic.dicID ?? ""
+                firebase.getLikesFromDictionary(dicID: dicID) { idsArray, error in
+                    if let error = error{
+                        print("Error to get likes data: \(error)")
+                    } else {
+                        if let result = idsArray{
+                            if result.contains(self.mainModel.loadUserData().userID){
+                                if !dic.dicLike{  //remove userID from dictionary Firebase
+                                    firebase.setLikeForDictionaryFirebase(dicID: dicID, userID: mainModel.loadUserData().userID, like: false)
+                                }
+                            } else {
+                                if dic.dicLike{ // add userID in dictionary Firebase
+                                    firebase.setLikeForDictionaryFirebase(dicID: dicID, userID: mainModel.loadUserData().userID, like: true)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
     
     func syncStatistic(userID:String, context:NSManagedObjectContext){
@@ -38,23 +65,20 @@ struct SyncModel {
     }
     
     func syncMessages(coreDataMessages:[ChatMessage]){
-       
         let unsyncMessages = coreDataMessages.filter({$0.msgSyncronized == false})
-            if !unsyncMessages.isEmpty{
-                for message in unsyncMessages{
-                    firebase.createUnsynchronedMessage(
-                        msgSenderID: message.msgSenderID,
-                        msgDicID: message.msgDicID,
-                        msgBody: message.msgBody,
-                        msgID: message.msgID,
-                        msgDateTime: message.msgDateTime,
-                        msgOrdering: Int(message.msgOrdering), 
-                        msgSyncronized: true
-                    )
-                   
-                }
+        if !unsyncMessages.isEmpty{
+            for message in unsyncMessages{
+                firebase.createUnsynchronedMessage(
+                    msgSenderID: message.msgSenderID,
+                    msgDicID: message.msgDicID,
+                    msgBody: message.msgBody,
+                    msgID: message.msgID,
+                    msgDateTime: message.msgDateTime,
+                    msgOrdering: Int(message.msgOrdering),
+                    msgSyncronized: true
+                )
             }
-        
+        }
     }
     
     func syncNetworkUsersDataWithFirebase(context:NSManagedObjectContext){
@@ -126,31 +150,25 @@ struct SyncModel {
              if let allDictionaries = allDictionaries{
                  for dictionary in allDictionaries {
                      if let dictionaryData = dictionary.value as? [String: Any] {
-                         let dicName = dictionaryData["dicName"] as? String
-                         let dicID = dictionaryData["dicID"] as? String ?? "NO_DICID"
-                         let dicLearningLang = dictionaryData["dicLearningLanguage"] as? String
-                         let dicTranslateLang = dictionaryData["dicTranslateLanguage"] as? String
-                         let dicAddDate = dictionaryData["dicAddDate"] as? String
-                         let dicWordsCount = dictionaryData["dicWordsCount"] as? Int64
-                         let dicImagesCount = dictionaryData["dicImagesCount"] as? Int64
-                         let dicDescription = dictionaryData["dicDescription"] as? String
-                         let dicShared = dictionaryData["dicShared"] as? Bool
-                         self.mainModel.createFolderInDocuments(withName: "\(userID)/\(dicID)")
-                             let dictionary = Dictionary(context: context)
-                             dictionary.dicName = dicName
-                             dictionary.dicLearningLanguage = dicLearningLang
-                             dictionary.dicTranslateLanguage = dicTranslateLang
-                             dictionary.dicAddDate = dicAddDate
-                             dictionary.dicImagesCount = dicImagesCount ?? 0
-                             dictionary.dicUserID = userID
-                             dictionary.dicDescription = dicDescription
-                             dictionary.dicID = dicID
-                             dictionary.dicWordsCount = Int64(dicWordsCount!)
-                             dictionary.dicDeleted = false
-                             dictionary.dicSyncronized = true
-                            dictionary.dicShared = dicShared ?? false
-                            dictionary.dicReadOnly = false
-                             coreData.saveData(data: context)
+                         let dicID = dictionaryData["dicID"] as! String
+                         let dicForSave = LocalDictionary(
+                            dicID: dicID,
+                            dicCommentsOn: dictionaryData["dicCommentsOn"] as! Bool,
+                            dicDeleted: false,
+                            dicDescription: dictionaryData["dicDescription"] as? String ?? "",
+                            dicAddDate: dictionaryData["dicAddDate"] as! String,
+                            dicImagesCount: dictionaryData["dicImagesCount"] as? Int ?? 0,
+                            dicLearningLanguage: dictionaryData["dicLearningLanguage"] as! String,
+                            dicTranslateLanguage: dictionaryData["dicTranslateLanguage"] as! String,
+                            dicLike: false,
+                            dicName: dictionaryData["dicName"] as? String ?? "",
+                            dicOwnerID: "",
+                            dicReadOnly: false,
+                            dicShared: dictionaryData["dicShared"] as! Bool,
+                            dicSyncronized: true,
+                            dicUserID: dictionaryData["dicUserID"] as! String,
+                            dicWordsCount: dictionaryData["dicWordsCount"] as? Int ?? 0)
+                         coreData.createDictionary(dictionary: dicForSave, context: context)
                          self.loadWordsFromFirebase(dicID: dicID, context: context)
                     }
                      
@@ -221,6 +239,117 @@ struct SyncModel {
         }
     }
     
+    func syncDownloadedDictionariesData(userID:String, context:NSManagedObjectContext){
+        let allDictionaries = coreData.getAllUserDictionaries(userID: userID, data: context)
+        let allDownloadedDictionaries = allDictionaries.filter({$0.dicReadOnly == true}).filter({$0.dicDeleted == false})
+        if !allDownloadedDictionaries.isEmpty{
+            for dictionary in allDownloadedDictionaries{
+                firebase.checkIsDictionaryExistAndShared(dicID: dictionary.dicID) { dicExist, dicShared, error  in
+                    if let error = error{
+                        print("Error to get dictionary from Firebase: \(error)\n")
+                    } else {
+                        switch (dicExist,dicShared){
+                        case (true,true):
+                            firebase.getSharedDictionaryData(dicID: dictionary.dicID) { sharedDictionary, error in
+                                if let error = error{
+                                    print("Error to get dhared dcitionary from Firebase: \(error)\n")
+                                } else {
+                                    if dictionary.dicName != sharedDictionary?.dicName{
+                                        coreData.updateDownloadedDictionaryData(dicID: dictionary.dicID, userID: mainModel.loadUserData().userID, field: "dicName", argument: sharedDictionary!.dicName as String, context: context)
+                                    }
+                                    if dictionary.dicDescription != sharedDictionary?.dicDescription{
+                                        coreData.updateDownloadedDictionaryData(dicID: dictionary.dicID, userID: mainModel.loadUserData().userID, field: "dicDescription", argument: sharedDictionary!.dicDescription as String, context: context)
+                                    }
+                                    if dictionary.dicCommentsOn != sharedDictionary?.dicCommentsOn{
+                                        coreData.updateDownloadedDictionaryData(dicID: dictionary.dicID, userID: mainModel.loadUserData().userID, field: "dicCommentsOn", argument: sharedDictionary!.dicCommentsOn as Bool, context: context)
+                                    }
+                                    if dictionary.dicWordsCount != sharedDictionary?.dicWordsCount{
+                                        coreData.updateDownloadedDictionaryData(dicID: dictionary.dicID, userID: mainModel.loadUserData().userID, field: "dicWordsCount", argument: sharedDictionary!.dicWordsCount as Int, context: context)
+                                        syncWordsForDownloadedDictionary(dicID: dictionary.dicID, context: context)
+                                    } else {
+                                        if dictionary.dicImagesCount != sharedDictionary?.dicImagesCount{
+                                            coreData.updateDownloadedDictionaryData(dicID: dictionary.dicID, userID: mainModel.loadUserData().userID, field: "dicImagesCount", argument: sharedDictionary!.dicImagesCount as Int, context: context)
+                                            syncWordsForDownloadedDictionary(dicID: dictionary.dicID, context: context)
+                                        } else {
+                                            syncWordsForDownloadedDictionary(dicID: dictionary.dicID, context: context)
+                                        }
+                                    }
+                                }
+                            }
+                        case (true,false):
+                            mainModel.deleteFolderInDocuments(folderName: "\(mainModel.loadUserData().userID)/\(dictionary.dicID)")
+                            coreData.delWordsFromDictionaryByDicID(dicID: dictionary.dicID, userID: mainModel.loadUserData().userID, context: context)
+                            coreData.deleteRODictionaryFromCoreData(dicID: dictionary.dicID, userID: mainModel.loadUserData().userID, context: context)
+                            coreData.deleteMessagesFromCoreData(dicID: dictionary.dicID, context: context)
+                        case (false,true),(false,false):
+                            coreData.updateDownloadedDictionaryData(dicID: dictionary.dicID, userID: mainModel.loadUserData().userID, field: "dicDeleted", argument: true, context: context)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    func syncWordsForDownloadedDictionary(dicID:String, context:NSManagedObjectContext){
+        let allDictionaryWordsFromCoreData = coreData.getAllWordsForDownloadedDictionary(userID: mainModel.loadUserData().userID, dicID: dicID, context: context)
+        firebase.getDownloadedWordsData(dicID: dicID) { sharedWordsArray, error in
+            if let error = error{
+                print("Error to get shared words for dictionary: \(error)\n")
+            } else {
+                guard let sharedWords = sharedWordsArray else {
+                    return
+                }
+                for word in sharedWords{
+                    let checkIsWordExistInCoreData = allDictionaryWordsFromCoreData.filter({$0.wrdID == word.wrdID})
+                    if checkIsWordExistInCoreData.isEmpty{
+                        let newWorsPair = WordsPair(
+                            wrdWord: word.wrdWord,
+                            wrdTranslation: word.wrdTranslation,
+                            wrdDicID: word.wrdDicID,
+                            wrdUserID: mainModel.loadUserData().userID,
+                            wrdID: word.wrdID,
+                            wrdImageFirestorePath: word.wrdImageFirestorePath,
+                            wrdImageName: word.wrdImageName,
+                            wrdReadOnly: true,
+                            wrdParentDictionary: coreData.getParentDictionaryData(dicID: word.wrdDicID, userID: mainModel.loadUserData().userID, data: context),
+                            wrdAddDate: mainModel.convertDateToString(currentDate: Date(), time: false)!)
+                        coreData.createWordsPair(wordsPair: newWorsPair, context: context)
+                    } else {
+                        let coreDataWordsPair = checkIsWordExistInCoreData.first
+                        if coreDataWordsPair?.wrdWord != word.wrdWord{
+                            coreData.updateDownloadedWordData(wrdID: coreDataWordsPair!.wrdID, userID: mainModel.loadUserData().userID, field: "wrdWord", argument: word.wrdWord, context: context)
+                        }
+                        if coreDataWordsPair?.wrdTranslation != word.wrdTranslation{
+                            coreData.updateDownloadedWordData(wrdID: coreDataWordsPair!.wrdID, userID: mainModel.loadUserData().userID, field: "wrdTranslation", argument: word.wrdTranslation, context: context)
+                        }
+                        if coreDataWordsPair?.wrdImageFirestorePath != word.wrdImageFirestorePath{
+                            if !word.wrdImageFirestorePath.isEmpty{
+                                coreData.updateDownloadedWordData(wrdID: coreDataWordsPair!.wrdID, userID: mainModel.loadUserData().userID, field: "wrdImageFirestorePath", argument: word.wrdImageFirestorePath, context: context)
+                                coreData.updateDownloadedWordData(wrdID: coreDataWordsPair!.wrdID, userID: mainModel.loadUserData().userID, field: "imageName", argument: word.wrdImageName, context: context)
+                                coreData.updateDownloadedWordData(wrdID: coreDataWordsPair!.wrdID, userID: mainModel.loadUserData().userID, field: "wrdImageIsSet", argument: true, context: context)
+                                alamo.downloadAndSaveImage(
+                                    fromURL: word.wrdImageFirestorePath,
+                                    userID: coreDataWordsPair!.wrdUserID,
+                                    dicID: word.wrdDicID,
+                                    imageName: word.wrdImageName) {}
+                            } else {
+                                coreData.updateDownloadedWordData(wrdID: coreDataWordsPair!.wrdID, userID: mainModel.loadUserData().userID, field: "wrdImageFirestorePath", argument: "" as String, context: context)
+                                coreData.updateDownloadedWordData(wrdID: coreDataWordsPair!.wrdID, userID: mainModel.loadUserData().userID, field: "imageName", argument: "" as String, context: context)
+                                coreData.updateDownloadedWordData(wrdID: coreDataWordsPair!.wrdID, userID: mainModel.loadUserData().userID, field: "wrdImageIsSet", argument: false, context: context)
+                            }
+                        }
+                    }
+                }
+                for word in allDictionaryWordsFromCoreData{
+                    let wordExistInFirebase = sharedWords.filter({$0.wrdID == word.wrdID})
+                    if wordExistInFirebase.isEmpty{
+                        coreData.deleteDownloadedWordFromCoreData(wrdID: word.wrdID, context: context)
+                    }
+                }
+            }
+        }
+    }
+    
     func syncDictionariesCoreDataAndFirebase(userID: String, context:NSManagedObjectContext){
        let allDictionaries = coreData.loadAllUserDictionaries(userID: userID, data: context)
         let allUserDictionaries = allDictionaries.filter({$0.dicReadOnly == false})
@@ -228,7 +357,7 @@ struct SyncModel {
         if !unsyncDictionaries.isEmpty{
             for unsyncDictionary in unsyncDictionaries {
                 let dicID = unsyncDictionary.dicID!
-                switch unsyncDictionary.dicReadOnly{ // start switch
+                switch unsyncDictionary.dicReadOnly{
                 case false:
                     firebase.checkIsExistsDictionary(dicID: dicID){ dictionaryExist, error in
                         if let error = error {
@@ -240,6 +369,9 @@ struct SyncModel {
                                     if let error = error {
                                         print("Error deleting dictionary from Firebase: \(error)\n")
                                     }
+                                }
+                                if unsyncDictionary.dicShared{
+                                    firebase.updateNetworkUserSharedDicsCount(userID: mainModel.loadUserData().userID, increment: false)
                                 }
                                 coreData.deleteDictionaryFromCoreData(dicID: dicID, userID: mainModel.loadUserData().userID, context: context)
                                 context.delete(unsyncDictionary)

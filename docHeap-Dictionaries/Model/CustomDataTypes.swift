@@ -26,6 +26,27 @@ struct SharedDictionary{
     var dicDownloaded:Bool
     let dicDownloadedUsers:[String]
     let dicLikes:[String]
+    let dicCommentsOn: Bool
+    let dicShared:Bool
+}
+
+struct LocalDictionary{
+    let dicID: String
+    let dicCommentsOn: Bool
+    let dicDeleted: Bool
+    let dicDescription: String
+    let dicAddDate: String
+    let dicImagesCount: Int
+    let dicLearningLanguage: String
+    let dicTranslateLanguage: String
+    let dicLike: Bool
+    let dicName: String
+    let dicOwnerID: String
+    let dicReadOnly: Bool
+    let dicShared: Bool
+    let dicSyncronized: Bool?
+    let dicUserID: String
+    let dicWordsCount: Int
 }
 
 struct SharedDictionaryShortData{
@@ -52,8 +73,9 @@ struct WordsPair{
     let wrdID:String
     let wrdImageFirestorePath:String
     let wrdImageName:String
-    let wrdReadOnly:String
-    
+    let wrdReadOnly:Bool
+    let wrdParentDictionary:Dictionary
+    let wrdAddDate:String
 }
 
 struct LanguagesArray{
@@ -106,6 +128,9 @@ struct NetworkUserData{
     let userShowEmail:Bool
     let userEmail:String
     let userScores:Int
+    let userLocalAvatar:String?
+    let userSharedDics:Int
+    let userLikes:Int
 }
 
 struct ChatMessage{
@@ -143,4 +168,11 @@ struct StatisticForTest{
     let statMistakes: Int
     let statLaunches: Int
     let statScores: Int
+}
+
+struct TotalStatistic{
+    let scores: Int
+    let testRuns: Int
+    let mistakes: Int
+    let rightAnswers: Int
 }

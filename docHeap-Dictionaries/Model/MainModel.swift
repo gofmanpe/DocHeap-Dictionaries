@@ -62,14 +62,20 @@ struct MainModel{
         case 0:
             var textComment: String {
                 get{
-                    return "In this dictionary less then \(minWordsCount) words! Please add words into it or select other dictionary"
+                    let part1 = "selectDictionaryVC_notEnough_message".localized
+                    let part2 = "selectDictionaryVC_notEnoughWords_message".localized
+                    let comment = "\(part1)\(minWordsCount)\(part2)"
+                    return comment
                 }
             }
             return textComment
         case 1:
             var textComment: String {
                 get{
-                    return "In this dictionary less then \(minWordsCount) words with saved images! Please add images for words or select other dictionary"
+                    let part1 = "selectDictionaryVC_notEnough_message".localized
+                    let part2 = "selectDictionaryVC_notEnoughImages_message".localized
+                    let comment = "\(part1)\(minWordsCount)\(part2)"
+                    return comment
                 }
             }
             return textComment
@@ -95,6 +101,20 @@ struct MainModel{
         }
     }
     
+    func deleteAllFilesInFolder(folderName: String) {
+        let fileManager = FileManager.default
+        do {
+            let documentsDirectory = try fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+            let folderURL = documentsDirectory.appendingPathComponent(folderName)
+            let fileURLs = try fileManager.contentsOfDirectory(at: folderURL, includingPropertiesForKeys: nil, options: .skipsHiddenFiles)
+            for fileURL in fileURLs {
+                try fileManager.removeItem(at: fileURL)
+            }
+        } catch {
+            print("Error deleting files in folder: \(error)")
+        }
+    }
+    
     func deleteFolderInDocuments(folderName: String) {
         let fileManager = FileManager.default
         do {
@@ -115,6 +135,11 @@ struct MainModel{
         let imagePath = "\(loadUserData().userID)/\(dicID)/\(imageName)"
         let relativeImagePath = getDocumentsFolderPath().appendingPathComponent(imagePath).path
         return relativeImagePath
+    }
+    
+    func relativeDocumentsFolderPath(insidePath: String)->String{
+        let relativePath = getDocumentsFolderPath().appendingPathComponent(insidePath).path
+        return relativePath
     }
     
     func spacesToUnderscores(value:String) ->String{

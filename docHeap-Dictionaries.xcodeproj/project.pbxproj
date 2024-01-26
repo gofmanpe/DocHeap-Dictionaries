@@ -63,6 +63,10 @@
 		768B540229D0FB68006124F0 /* DictionaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 768B540029D0FB68006124F0 /* DictionaryCell.swift */; };
 		768F05A22A51A179002D32C5 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 768F05A12A51A179002D32C5 /* Protocols.swift */; };
 		7692FEBE2B306438005CB445 /* SharedDictionaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7692FEBD2B306438005CB445 /* SharedDictionaryCell.swift */; };
+		76A3653C2B59DC8500B4A259 /* TestNewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A3653A2B59DC8500B4A259 /* TestNewCell.swift */; };
+		76A3653D2B59DC8500B4A259 /* TestNewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76A3653B2B59DC8500B4A259 /* TestNewCell.xib */; };
+		76A365402B59FEF900B4A259 /* DescriptionPopUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A3653E2B59FEF900B4A259 /* DescriptionPopUpController.swift */; };
+		76A365412B59FEF900B4A259 /* DescriptionPopUpController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76A3653F2B59FEF900B4A259 /* DescriptionPopUpController.xib */; };
 		76A3FB7229E9B51900AF87C1 /* ResultsPopUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A3FB7029E9B51900AF87C1 /* ResultsPopUpController.swift */; };
 		76A3FB7329E9B51900AF87C1 /* ResultsPopUpController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76A3FB7129E9B51900AF87C1 /* ResultsPopUpController.xib */; };
 		76A7534F29D453BC009F5E54 /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76A7534E29D453BC009F5E54 /* Defaults.swift */; };
@@ -77,6 +81,8 @@
 		76C8ABF82B0A7A6F00CE41BE /* ChangeLanguagePopUpController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76C8ABF62B0A7A6F00CE41BE /* ChangeLanguagePopUpController.xib */; };
 		76C8ABFC2B0BD0CF00CE41BE /* TestsDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C8ABFB2B0BD0CF00CE41BE /* TestsDataModel.swift */; };
 		76C8ABFE2B0E179C00CE41BE /* Alamo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C8ABFD2B0E179C00CE41BE /* Alamo.swift */; };
+		76DE1D552B612DF500DF4913 /* BrowseSharedWordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76DE1D532B612DF500DF4913 /* BrowseSharedWordViewController.swift */; };
+		76DE1D562B612DF500DF4913 /* BrowseSharedWordViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76DE1D542B612DF500DF4913 /* BrowseSharedWordViewController.xib */; };
 		76DFBD572A35F8E7009966AE /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 76DFBD562A35F8E7009966AE /* IQKeyboardManagerSwift */; };
 		76EEC2DB2AF51C2F00C2B11B /* StartController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76EEC2DA2AF51C2E00C2B11B /* StartController.swift */; };
 		76EEC2DD2AF5246200C2B11B /* RegisterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76EEC2DC2AF5246200C2B11B /* RegisterController.swift */; };
@@ -150,6 +156,10 @@
 		768B540029D0FB68006124F0 /* DictionaryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryCell.swift; sourceTree = "<group>"; };
 		768F05A12A51A179002D32C5 /* Protocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
 		7692FEBD2B306438005CB445 /* SharedDictionaryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedDictionaryCell.swift; sourceTree = "<group>"; };
+		76A3653A2B59DC8500B4A259 /* TestNewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestNewCell.swift; sourceTree = "<group>"; };
+		76A3653B2B59DC8500B4A259 /* TestNewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TestNewCell.xib; sourceTree = "<group>"; };
+		76A3653E2B59FEF900B4A259 /* DescriptionPopUpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionPopUpController.swift; sourceTree = "<group>"; };
+		76A3653F2B59FEF900B4A259 /* DescriptionPopUpController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DescriptionPopUpController.xib; sourceTree = "<group>"; };
 		76A3FB7029E9B51900AF87C1 /* ResultsPopUpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsPopUpController.swift; sourceTree = "<group>"; };
 		76A3FB7129E9B51900AF87C1 /* ResultsPopUpController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ResultsPopUpController.xib; sourceTree = "<group>"; };
 		76A7534E29D453BC009F5E54 /* Defaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
@@ -163,6 +173,8 @@
 		76C8ABF62B0A7A6F00CE41BE /* ChangeLanguagePopUpController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ChangeLanguagePopUpController.xib; sourceTree = "<group>"; };
 		76C8ABFB2B0BD0CF00CE41BE /* TestsDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestsDataModel.swift; sourceTree = "<group>"; };
 		76C8ABFD2B0E179C00CE41BE /* Alamo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alamo.swift; sourceTree = "<group>"; };
+		76DE1D532B612DF500DF4913 /* BrowseSharedWordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseSharedWordViewController.swift; sourceTree = "<group>"; };
+		76DE1D542B612DF500DF4913 /* BrowseSharedWordViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BrowseSharedWordViewController.xib; sourceTree = "<group>"; };
 		76EEC2DA2AF51C2E00C2B11B /* StartController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartController.swift; sourceTree = "<group>"; };
 		76EEC2DC2AF5246200C2B11B /* RegisterController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterController.swift; sourceTree = "<group>"; };
 		76EEC2F52B00DECF00C2B11B /* Firebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Firebase.swift; sourceTree = "<group>"; };
@@ -212,6 +224,7 @@
 			isa = PBXGroup;
 			children = (
 				761C830B29D21C9500ABD5E0 /* CreatePopUpViewController.swift */,
+				76DE1D532B612DF500DF4913 /* BrowseSharedWordViewController.swift */,
 				76A7535429D73CC2009F5E54 /* AddWordPopUpViewController.swift */,
 				765A886729DF0BA100252AE8 /* SelectDictionaryForTestController.swift */,
 				76A3FB7029E9B51900AF87C1 /* ResultsPopUpController.swift */,
@@ -225,6 +238,7 @@
 				7618E5242B3DA8CC0090F183 /* EditProfileViewController.swift */,
 				7678A7352B4DE12D00630946 /* UserInfoViewController.swift */,
 				766E579B2B57503B00A3FBB9 /* LogOutPopUp.swift */,
+				76A3653E2B59FEF900B4A259 /* DescriptionPopUpController.swift */,
 			);
 			path = "PopUp's";
 			sourceTree = "<group>";
@@ -272,6 +286,7 @@
 				768A08D02B337D380058D972 /* SharedWordCell.swift */,
 				7678A7392B4DFE2E00630946 /* ChatUserCell.swift */,
 				7617D8832B547AE900358EBC /* StatisticCell.swift */,
+				76A3653A2B59DC8500B4A259 /* TestNewCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -327,6 +342,7 @@
 				761C830C29D21C9500ABD5E0 /* CreatePopUpViewController.xib */,
 				76A7535529D73CC2009F5E54 /* AddWordPopUpViewController.xib */,
 				76A3FB7129E9B51900AF87C1 /* ResultsPopUpController.xib */,
+				76A3653F2B59FEF900B4A259 /* DescriptionPopUpController.xib */,
 				765A886829DF0BA100252AE8 /* SelectDictionaryForTestController.xib */,
 				76C8ABF62B0A7A6F00CE41BE /* ChangeLanguagePopUpController.xib */,
 				76F9B13F2AD326C4003CC792 /* EditDictionaryViewController.xib */,
@@ -339,7 +355,9 @@
 				7678A73A2B4DFE2E00630946 /* ChatUserCell.xib */,
 				7617D8842B547AE900358EBC /* StatisticCell.xib */,
 				766E579C2B57503B00A3FBB9 /* LogOutPopUp.xib */,
+				76A3653B2B59DC8500B4A259 /* TestNewCell.xib */,
 				76733D7F29D0849700379116 /* LaunchScreen.storyboard */,
+				76DE1D542B612DF500DF4913 /* BrowseSharedWordViewController.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -448,9 +466,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				7655BD952B2B7E5600240961 /* UserProfileViewController.xib in Resources */,
+				76A365412B59FEF900B4A259 /* DescriptionPopUpController.xib in Resources */,
 				76F9B1452AD47D6F003CC792 /* DeleteDictionaryViewController.xib in Resources */,
 				76C8ABF82B0A7A6F00CE41BE /* ChangeLanguagePopUpController.xib in Resources */,
 				76EEC3032B03D69200C2B11B /* Localizable.strings in Resources */,
+				76A3653D2B59DC8500B4A259 /* TestNewCell.xib in Resources */,
 				76733D8129D0849700379116 /* LaunchScreen.storyboard in Resources */,
 				761C830E29D21C9500ABD5E0 /* CreatePopUpViewController.xib in Resources */,
 				767CDCF52AA7BF2500AFEB9D /* BrowseWordViewController.xib in Resources */,
@@ -464,6 +484,7 @@
 				76733D7929D0849500379116 /* Main.storyboard in Resources */,
 				76F9B1412AD326C4003CC792 /* EditDictionaryViewController.xib in Resources */,
 				765A886A29DF0BA200252AE8 /* SelectDictionaryForTestController.xib in Resources */,
+				76DE1D562B612DF500DF4913 /* BrowseSharedWordViewController.xib in Resources */,
 				7618E5272B3DA8CC0090F183 /* EditProfileViewController.xib in Resources */,
 				7678A7382B4DE12D00630946 /* UserInfoViewController.xib in Resources */,
 				7655BD802B28919D00240961 /* GoogleService-Info.plist in Resources */,
@@ -490,6 +511,7 @@
 				76F9B1402AD326C4003CC792 /* EditDictionaryViewController.swift in Sources */,
 				767DA1F929D0A7D5004E0FA5 /* DictionariesController.swift in Sources */,
 				768A1F352B3A25E600EF877A /* FilterSharedDicController.swift in Sources */,
+				76DE1D552B612DF500DF4913 /* BrowseSharedWordViewController.swift in Sources */,
 				762EB71B2A26641B0073F7E8 /* MainModel.swift in Sources */,
 				7655BD942B2B7E5600240961 /* UserProfileViewController.swift in Sources */,
 				76733D7229D0849500379116 /* AppDelegate.swift in Sources */,
@@ -500,6 +522,7 @@
 				768A08D32B3396A20058D972 /* CustomDataTypes.swift in Sources */,
 				76EEC2F62B00DECF00C2B11B /* Firebase.swift in Sources */,
 				76350B072A4E04B6009820AC /* FalseOrTrueTestController.swift in Sources */,
+				76A365402B59FEF900B4A259 /* DescriptionPopUpController.swift in Sources */,
 				76B912242B38C15100F9BFEC /* BrowseSharedDicViewController.swift in Sources */,
 				7692FEBE2B306438005CB445 /* SharedDictionaryCell.swift in Sources */,
 				76F9B1442AD47D6F003CC792 /* DeleteDictionaryViewController.swift in Sources */,
@@ -521,6 +544,7 @@
 				768A08D12B337D380058D972 /* SharedWordCell.swift in Sources */,
 				76733D7429D0849500379116 /* SceneDelegate.swift in Sources */,
 				76A9CBB429F6D4CF0035A0ED /* FindAPairController.swift in Sources */,
+				76A3653C2B59DC8500B4A259 /* TestNewCell.swift in Sources */,
 				76EEC2DB2AF51C2F00C2B11B /* StartController.swift in Sources */,
 				76C8ABF72B0A7A6F00CE41BE /* ChangeLanguagePopUpController.swift in Sources */,
 				76A7535329D72CD7009F5E54 /* WordCell.swift in Sources */,

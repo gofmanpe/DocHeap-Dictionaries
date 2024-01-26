@@ -106,9 +106,9 @@ class SelectDictionaryForTestController: UIViewController {
         case "findAnImageTest":
             coreDataManager.loadWordsForSelectedDictionary(dicID: selectedDicID, userID: mainModel.loadUserData().userID , data: context)
             let filteredByImageArray = coreDataManager.wordsArray.filter({$0.wrdImageIsSet == true})
-            if filteredByImageArray.count < 4 {
+            if filteredByImageArray.count <= 4 {
                 warningView.isHidden = false
-                warningLabel.text = mainModel.commentWithState(minWordsCount: 4, isSetImage: 1)
+                warningLabel.text = mainModel.commentWithState(minWordsCount: 5, isSetImage: 1)
                 selectButton.isEnabled = false
             } else {
                 warningView.isHidden = true
@@ -122,6 +122,7 @@ class SelectDictionaryForTestController: UIViewController {
     
     func numberOfRounds(identifier:String, row:Int)->Int{
         let wordsCount = coreDataManager.dictionariesArray[row].dicWordsCount
+        let wordsWithImages = coreDataManager.dictionariesArray[row].dicImagesCount
         switch identifier {
         case "fiveWordsTest":
             let number = wordsCount - 4
@@ -135,7 +136,7 @@ class SelectDictionaryForTestController: UIViewController {
             let number = wordsCount - 1
             return Int(number)
         case "findAnImageTest":
-            let number = wordsCount - 3
+            let number = wordsWithImages - 3
             return Int(number)
         default:
             return 0
@@ -160,7 +161,6 @@ class SelectDictionaryForTestController: UIViewController {
         } else {
             warningView.isHidden = true
             performToSegueDelegate?.performToSegue(identifier: selectedTestIdentifier, dicID: selectedDicID, roundsNumber:numberOfRounds)
-           
             hide()
         }
         

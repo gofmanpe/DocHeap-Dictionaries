@@ -170,7 +170,6 @@ struct Alamo {
                 }
             }
         }
-        
     }
     
 //    func deleteImageFolderFromStorage1(folderURL: String, completion: @escaping (Error?) -> Void) {

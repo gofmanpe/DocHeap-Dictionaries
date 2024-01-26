@@ -16,10 +16,12 @@ class SharedDictionaryCell: UITableViewCell {
     @IBOutlet weak var userName: UILabel!
     @IBOutlet weak var lLangImage: UIImageView!
     @IBOutlet weak var tLangImage: UIImageView!
-    @IBOutlet weak var wordsNameLabel: UILabel!
-    @IBOutlet weak var ownerNameLabel: UILabel!
     @IBOutlet weak var cellView: UIView!
-
+    @IBOutlet weak var likesLabel: UILabel!
+    @IBOutlet weak var downloadsLabel: UILabel!
+    @IBOutlet weak var messagesLabel: UILabel!
+    @IBOutlet weak var userAvatarImage: UIImageView!
+    @IBOutlet weak var messagesStack: UIStackView!
     override func awakeFromNib() {
         super.awakeFromNib()
         
@@ -34,8 +36,8 @@ class SharedDictionaryCell: UITableViewCell {
         cellView.layer.shadowRadius = 2
         lLangImage.layer.cornerRadius = 5
         tLangImage.layer.cornerRadius = 5
-        wordsNameLabel.text = "sharedDicCell_wordsName_label".localized
-        ownerNameLabel.text = "sharedDicCell_ownerName_label".localized
+        userAvatarImage.layer.cornerRadius = userAvatarImage.frame.size.width/2
+        
     }
     
 

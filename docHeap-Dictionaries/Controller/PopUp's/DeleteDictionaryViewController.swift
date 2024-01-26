@@ -174,6 +174,9 @@ class DeleteDictionaryViewController: UIViewController {
                         print("Error deleting dictionary from Firestore: \(error)\n")
                     }
                 }
+                if parentDictionary.dicShared{
+                    fireDB.updateNetworkUserSharedDicsCount(userID: mainModel.loadUserData().userID, increment: false)
+                }
                 coreDataManager.delWordsFromDictionaryByDicID(dicID: dicID, userID: mainModel.loadUserData().userID, context: context)
                 context.delete(coreDataManager.parentDictionaryData.first!)
                 coreDataManager.parentDictionaryData.remove(at: 0)

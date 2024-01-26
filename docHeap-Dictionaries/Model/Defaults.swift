@@ -29,6 +29,7 @@ struct Defaults{
     
     let emptyAvatarPath = "https://firebasestorage.googleapis.com/v0/b/docheap-dictionaries-1c1be.appspot.com/o/Resources%2FnoAvatar.png?alt=media&token=8542c73b-f70e-4030-aedb-3a662e724033"
     
+    
     let labelTestFinishedText = "TEST FINISHED!"
     let labelMistakesFixedText = "MISTAKES FIXED!"
     let labelTestProgressText = "Test progress:"

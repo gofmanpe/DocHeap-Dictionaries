@@ -18,7 +18,7 @@ class CreatePopUpViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var translateButton: UIButton!
     @IBOutlet weak var cancelButton: UIButton!
     @IBOutlet weak var dictionaryNameTextField: UITextField!
-    @IBOutlet weak var descriptionTextField: UITextField!
+    //@IBOutlet weak var descriptionTextField: UITextField!
     @IBOutlet weak var descriptionLabel: UILabel!
     @IBOutlet weak var createButton: UIButton!
     @IBOutlet weak var pickerView: UIPickerView!
@@ -27,13 +27,14 @@ class CreatePopUpViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var headerLabel: UILabel!
     @IBOutlet weak var enterNameLabel: UILabel!
     @IBOutlet weak var chooseLangLabel: UILabel!
+    @IBOutlet weak var descriptionTextView: UITextView!
     
     func localizeElements(){
         descriptionLabel.text = "createDictionaryPopUpVC_description_label".localized
-        descriptionTextField.placeholder = "createDictionaryPopUpVC_description_placeholder".localized
+        //descriptionTextField.placeholder = "createDictionaryPopUpVC_description_placeholder".localized
         headerLabel.text = "createDictionaryPopUpVC_header_label".localized
         enterNameLabel.text = "createDictionaryPopUpVC_enterName_label".localized
-        dictionaryNameTextField.placeholder = "createDictionaryPopUpVC_dictionaryName_placeholder".localized
+       // dictionaryNameTextField.placeholder = "createDictionaryPopUpVC_dictionaryName_placeholder".localized
         chooseLangLabel.text = "createDictionaryPopUpVC_chooseLanguages_label".localized
         learningButton.setTitle("createDictionaryPopUpVC_langSelect_Button".localized, for: .normal)
         translateButton.setTitle("createDictionaryPopUpVC_langSelect_Button".localized, for: .normal)
@@ -50,9 +51,9 @@ class CreatePopUpViewController: UIViewController, UITextFieldDelegate {
     private var userID = String()
     private var dictionariesArray = [Dictionary]()
     private let defaults = Defaults()
-    private let coreDataManager = CoreDataManager()
+    private let coreData = CoreDataManager()
     private let mainModel = MainModel()
-    private let fireDB = Firebase()
+    private let firebase = Firebase()
     
     init() {
         super.init(nibName: "CreatePopUpViewController", bundle: nil)
@@ -122,6 +123,7 @@ class CreatePopUpViewController: UIViewController, UITextFieldDelegate {
         warningView.layer.borderColor = UIColor(red: 0.92, green: 0.92, blue: 0.92, alpha: 1.00).cgColor
         dictionaryNameTextField.layer.cornerRadius = 3
         dictionaryNameTextField.clipsToBounds = true
+        descriptionTextView.layer.cornerRadius = 5
     }
     
     internal func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
@@ -140,7 +142,27 @@ class CreatePopUpViewController: UIViewController, UITextFieldDelegate {
         translateButton.setTitleColor(.white, for: .normal)
         learningButton.backgroundColor = UIColor(red: 0.00, green: 0.68, blue: 1.00, alpha: 1.00)
         learningButton.setTitleColor(.white, for: .normal)
+//        descriptionTextView.delegate = self
+//        descriptionTextView.text = "createDictionaryPopUpVC_description_placeholder".localized
+//        descriptionTextView.textColor = UIColor.lightGray
     }
+    
+//    func textViewDidBeginEditing(_ textView: UITextView) {
+//           // Очищаем placeholder, если начинаем вводить текст
+//           if textView.textColor == UIColor.lightGray {
+//               textView.text = nil
+//               textView.textColor = UIColor.black
+//           }
+//       }
+//
+//       // Реализуем метод делегата, который будет вызываться при окончании редактирования
+//       func textViewDidEndEditing(_ textView: UITextView) {
+//           // Восстанавливаем placeholder, если текст не был введен
+//           if textView.text.isEmpty {
+//               textView.text = "Введите текст..."
+//               textView.textColor = UIColor.lightGray
+//           }
+//       }
     
     func activeButton(button:Int){
         switch button {
@@ -229,37 +251,43 @@ class CreatePopUpViewController: UIViewController, UITextFieldDelegate {
     
     @IBAction func createButtonPressed(_ sender: UIButton) {
         if checkRulesForSelectedLanguages(learningLanguage: selectedLearning, translateLanguage: selectedTranslate, dicName: dictionaryNameTextField.text ?? ""){
-            let newDictionary = Dictionary(context: context)
-            newDictionary.dicName = dictionaryNameTextField.text
-            newDictionary.dicDescription = descriptionTextField.text
-            newDictionary.dicLearningLanguage = selectedLearning
-            newDictionary.dicTranslateLanguage = selectedTranslate
             let dicID = mainModel.uniqueIDgenerator(prefix: "dic")
-            newDictionary.dicID = dicID
-            newDictionary.dicUserID = mainModel.loadUserData().userID
-            newDictionary.dicAddDate = mainModel.convertDateToString(currentDate: Date(), time: false)
+            let newDictionaryData = LocalDictionary(
+                dicID: dicID,
+                dicCommentsOn: false,
+                dicDeleted: false,
+                dicDescription: descriptionTextView.text ?? "",
+                dicAddDate: mainModel.convertDateToString(currentDate: Date(), time: false)!,
+                dicImagesCount: 0,
+                dicLearningLanguage: selectedLearning,
+                dicTranslateLanguage: selectedTranslate,
+                dicLike: false,
+                dicName: dictionaryNameTextField.text ?? "",
+                dicOwnerID: "",
+                dicReadOnly: false,
+                dicShared: false,
+                dicSyncronized: false,
+                dicUserID: mainModel.loadUserData().userID,
+                dicWordsCount: 0)
+            coreData.createDictionary(dictionary: newDictionaryData, context: context)
             mainModel.createFolderInDocuments(withName: "\(mainModel.loadUserData().userID)/\(dicID)")
-            newDictionary.dicDeleted = false
-            newDictionary.dicShared = false
-            newDictionary.dicReadOnly = false
             if mainModel.isInternetAvailable(){
-                fireDB.createDictionary(
+                firebase.createDictionary(
                     dicName: dictionaryNameTextField.text!,
                     dicUserID: mainModel.loadUserData().userID,
                     dicLearningLang: selectedLearning,
                     dicTranslationLang: selectedTranslate,
-                    dicDescription: descriptionTextField.text ?? "",
+                    dicDescription: descriptionTextView.text ?? "",
                     dicWordsCount: 0,
                     dicID: dicID,
                     dicImagesCount: 0,
                     dicAddDate: mainModel.convertDateToString(currentDate: Date(), time: false), 
                     dicShared: false
                 )
-                newDictionary.dicSyncronized = true
+                coreData.setSyncronizedStatusForDictionary(data: context, dicID: dicID, sync: true)
             } else {
-                newDictionary.dicSyncronized = false
+                coreData.setSyncronizedStatusForDictionary(data: context, dicID: dicID, sync: true)
             }
-            coreDataManager.saveData(data: context)
             tableReloadDelegate?.didUpdateView(sender:"")
             hide()
         }

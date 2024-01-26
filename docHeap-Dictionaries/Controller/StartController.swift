@@ -56,13 +56,26 @@ class StartController: UIViewController{
 //MARK: - Lifecycle functions
     override func viewDidLoad() {
         super.viewDidLoad()
+        if mainModel.loadUserData().signed{
+            performSegue(withIdentifier: "goFromStart", sender: self)
+        } else if !userEmail.isEmpty{
+            emailTextField.text = userEmail
+            if coreDataManager.usersArray.first?.userAvatarExtention != nil{
+                if let ava = coreDataManager.usersArray.first?.userAvatarExtention{
+                    avatarName = "userAvatar.\(ava)"
+                }
+                let avatarPath = "\(userID)/\(avatarName)"
+                avatarImageView.image = UIImage(contentsOfFile:  mainModel.getDocumentsFolderPath().appendingPathComponent(avatarPath).path)
+            }
+        }
         print(mainModel.getDocumentsFolderPath())
         localizeElements()
         loadCurrentUser()
         coreDataManager.loadCurrentUserData(userID: userID, data: context)
         elementsDesign()
-        userCheck()
     }
+    
+   
     
 //MARK: - Controller functions
     private func setupGoogleSignIn(){
@@ -112,50 +125,41 @@ class StartController: UIViewController{
                     } else { // No user found in CoreData
                         firebase.checkUserExistsInFirebase(userEmail: userEmail) { userExist in
                             if userExist{ // User exist in Firebase
-                                self.firebase.getUserDataByEmail(userEmail: userEmail) { userData in
-                                    if let result = userData{
-                                        let userInterfaceLanguage = result["userInterfaceLanguage"] as? String
-                                        let userName = result["userName"] as? String
-                                        let userID = result["userID"] as? String ?? "NO_USER_ID"
-                                        let userRegisterDate = result["userRegisterDate"] as? String
-                                        let userEmail = result["userEmail"] as? String
-                                        let userAvatarFirestorePath = result["userAvatarFirestorePath"] as? String
-                                        let userCountry = result["userCountry"] as? String ?? ""
-                                        let userBirthDate = result["userBithDate"] as? String ?? ""
-                                        let userNativeLanguage = result["userNativeLanguage"] as? String ?? ""
-                                        let userShowEmail = result["userShowEmail"] as? Bool ?? false
-                                        let userScores = result["userScores"] as? Int64 ?? 0
+                                self.firebase.getUserDataByEmail(userEmail: userEmail) { result in
+                                    guard let data = result else {return}
+                                    let userData = UserData(
+                                        userID: data.userID,
+                                        userName: data.userName,
+                                        userBirthDate: data.userBirthDate,
+                                        userCountry: data.userCountry,
+                                        userAvatarFirestorePath: data.userAvatarFirestorePath,
+                                        userAvatarExtention: data.userAvatarExtention,
+                                        userNativeLanguage: data.userNativeLanguage,
+                                        userScores: data.userScores,
+                                        userShowEmail: data.userShowEmail,
+                                        userEmail: data.userEmail,
+                                        userSyncronized: data.userSyncronized,
+                                        userType: data.userType,
+                                        userRegisterDate: data.userRegisterDate,
+                                        userInterfaceLanguage: data.userInterfaceLanguage)
+                                        self.userID = userData.userID
                                         DispatchQueue.main.async {
-                                            self.sync.loadDictionariesFromFirebase(userID: userID, context: self.context)
-                                            self.sync.loadStatisticFromFirebase(userID: userID, context: self.context)
+                                            self.sync.loadDictionariesFromFirebase(userID: userData.userID, context: self.context)
+                                            self.sync.loadStatisticFromFirebase(userID: userData.userID, context: self.context)
                                         }
-                                        self.userID = userID
-                                        let recoveredUser = Users(context: self.context)
-                                        recoveredUser.userID = userID
-                                        recoveredUser.userName = userName
-                                        recoveredUser.userEmail = userEmail
-                                        recoveredUser.userRegisterDate = userRegisterDate
-                                        recoveredUser.userInterfaceLanguage = userInterfaceLanguage
-                                        recoveredUser.userAvatarExtention = "jpg"
-                                        recoveredUser.userAvatarFirestorePath = userAvatarFirestorePath
-                                        recoveredUser.userCountry = userCountry
-                                        recoveredUser.userBirthDate = userBirthDate
-                                        recoveredUser.userNativeLanguage = userNativeLanguage
-                                        recoveredUser.userShowEmail = userShowEmail
-                                        recoveredUser.userScores = userScores
-                                        self.coreDataManager.saveData(data: self.context)
-                                        if !self.mainModel.isUserFolderExist(folderName: userID) { // User folder dont exist
-                                            self.mainModel.createFolderInDocuments(withName: userID)
+                                        self.coreDataManager.createLocalUser(userData: userData, context: self.context)
+                                    if !self.mainModel.isUserFolderExist(folderName: userData.userID) { // User folder dont exist
+                                        self.mainModel.createFolderInDocuments(withName: userData.userID)
+                                        self.mainModel.createFolderInDocuments(withName: "\(userData.userID)/Temp")
                                         }
-                                        self.userDefaults.set(userID, forKey: "userID")
+                                        self.userDefaults.set(userData.userID, forKey: "userID")
                                         self.userDefaults.set(email, forKey: "userEmail")
                                         self.userDefaults.set(true, forKey: "keepSigned")
                                         self.userDefaults.set("google", forKey: "accType")
                                         self.userDefaults.set(userName, forKey: "userName")
-                                        if let userAvatarFirestorePath = userAvatarFirestorePath {
-                                                self.alamo.downloadAndSaveAvatar(from: userAvatarFirestorePath, forUser: userID) {
-                                                    self.goToApp()
-                                                }
+                                    if !userData.userAvatarFirestorePath.isEmpty {
+                                        self.alamo.downloadAndSaveAvatar(from: userData.userAvatarFirestorePath, forUser: userData.userID) {
+                                            self.goToApp()
                                         }
                                     }
                                 }
@@ -163,21 +167,24 @@ class StartController: UIViewController{
                                 let userID = self.mainModel.uniqueIDgenerator(prefix: "usr")
                                 self.userID = userID
                                 self.firebase.createUser(userID: userID, userEmail: userEmail, userName: userName, userInterfaceLanguage: self.mainModel.currentSystemLanguage(), userAvatarFirestorePath: userPhoto, accType: "google")
-                                let newUser = Users(context: self.context)
-                                newUser.userID = userID
-                                newUser.userName = userName
-                                newUser.userEmail = userEmail
-                                newUser.userRegisterDate = self.mainModel.convertDateToString(currentDate: Date(), time: false)
-                                newUser.userInterfaceLanguage = self.mainModel.currentSystemLanguage()
-                                newUser.userAvatarExtention = "jpg"
-                                newUser.userAvatarFirestorePath = userPhoto?.absoluteString
-                                newUser.userCountry = ""
-                                newUser.userBirthDate = ""
-                                newUser.userNativeLanguage = ""
-                                newUser.userScores = 0
-                                newUser.userShowEmail = false
-                                self.coreDataManager.saveData(data: self.context)
+                                let newUserData = UserData(
+                                    userID: userID,
+                                    userName: userName,
+                                    userBirthDate: "",
+                                    userCountry: "",
+                                    userAvatarFirestorePath: userPhoto!.absoluteString,
+                                    userAvatarExtention: "jpg",
+                                    userNativeLanguage: "",
+                                    userScores: 0,
+                                    userShowEmail: false,
+                                    userEmail: userEmail,
+                                    userSyncronized: true,
+                                    userType: "",
+                                    userRegisterDate: self.mainModel.convertDateToString(currentDate: Date(), time: false)!,
+                                    userInterfaceLanguage: self.mainModel.currentSystemLanguage())
+                                self.coreDataManager.createLocalUser(userData: newUserData, context: self.context)
                                 self.mainModel.createFolderInDocuments(withName: userID)
+                                self.mainModel.createFolderInDocuments(withName: "\(userID)/Temp")
                                 if let userPhoto = userPhoto{
                                     self.alamo.downloadAndSaveAvatar(from: userPhoto.absoluteString, forUser: userID) {
                                         let localImagePath = self.mainModel.getDocumentsFolderPath().appendingPathComponent("\(userID)/userAvatar.jpg")
@@ -215,21 +222,6 @@ class StartController: UIViewController{
         userSigned = mainModel.loadUserData().signed
     }
     
-    private func userCheck(){
-        if userSigned{
-            performSegue(withIdentifier: "goFromStart", sender: self)
-        } else if !userEmail.isEmpty{
-            emailTextField.text = userEmail
-            if coreDataManager.usersArray.first?.userAvatarExtention != nil{
-                if let ava = coreDataManager.usersArray.first?.userAvatarExtention{
-                    avatarName = "userAvatar.\(ava)"
-                }
-                let avatarPath = "\(userID)/\(avatarName)"
-                avatarImageView.image = UIImage(contentsOfFile:  mainModel.getDocumentsFolderPath().appendingPathComponent(avatarPath).path)
-            }
-        }
-    }
-    
     func showErrorPopUp(text:String){
                 let overLayerView = LoginErrorViewController()
                 overLayerView.appearOverlayer(sender: self, text:text)
@@ -246,69 +238,67 @@ class StartController: UIViewController{
     
     @IBAction func signInButtonPressed(_ sender: UIButton) {
         if let email = emailTextField.text, let password = passwordTextField.text {
-               Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
-                   if let err = error as? NSError{
-                       if let errorRequest = err.userInfo["FIRAuthErrorUserInfoNameKey"] as? String{
-                           switch errorRequest{
-                           case "ERROR_WRONG_PASSWORD":
-                               self.showErrorPopUp(text:"Wrong password or email")
-                           case "ERROR_NETWORK_REQUEST_FAILED":
-                               self.showErrorPopUp(text:"No internet connection")
-                           default:
-                               break
-                           }
-                       }
-                   } else {
-                       if self.coreDataManager.isUserExistInCoreData(userEmail: email, context: self.context){
-                           self.userID = self.coreDataManager.loadUserData(userEmail: email, data: self.context).first?.userID ?? "noUserID"
-                           self.userName = self.coreDataManager.loadUserData(userEmail: email, data: self.context).first?.userName ?? "noUserName"
-                           self.userDefaults.set(self.userID, forKey: "userID")
-                           self.userDefaults.set(email, forKey: "userEmail")
-                           self.userDefaults.set(self.switchStatus, forKey: "keepSigned")
-                           self.userDefaults.set("auth", forKey: "accType")
-                           self.userDefaults.set(self.userName, forKey: "userName")
-                           self.goToApp()
-                       } else {
-                           self.firebase.getUserDataByEmail(userEmail: email) { userData in
-                               if let result = userData{
-                                   let userInterfaceLanguage = result["userInterfaceLanguage"] as? String
-                                   let userName = result["userName"] as? String
-                                   let userID = result["userID"] as? String ?? "NO_USER_ID"
-                                   let userRegisterDate = result["userRegisterDate"] as? String
-                                   let userEmail = result["userEmail"] as? String
-                                   let userAvatarFirestorePath = result["userAvatarFirestorePath"] as? String
-                                   let userShowEmail = result["userShowEmail"] as? Bool ?? false
-                                   DispatchQueue.main.async {
-                                       self.sync.loadDictionariesFromFirebase(userID: userID, context: self.context)
-                                   }
-                                   let recoveredUser = Users(context: self.context)
-                                   recoveredUser.userID = userID
-                                   recoveredUser.userName = userName
-                                   recoveredUser.userEmail = userEmail
-                                   recoveredUser.userRegisterDate = userRegisterDate
-                                   recoveredUser.userInterfaceLanguage = userInterfaceLanguage
-                                   recoveredUser.userAvatarExtention = "jpg"
-                                   recoveredUser.userAvatarFirestorePath = userAvatarFirestorePath
-                                   recoveredUser.userShowEmail = userShowEmail
-                                   self.coreDataManager.saveData(data: self.context)
-                                   if !self.mainModel.isUserFolderExist(folderName: userID) { // User folder dont exist
-                                       self.mainModel.createFolderInDocuments(withName: userID)
-                                   }
-                                   self.userDefaults.set(userID, forKey: "userID")
-                                   self.userDefaults.set(email, forKey: "userEmail")
-                                   self.userDefaults.set(self.switchStatus, forKey: "keepSigned")
-                                   self.userDefaults.set("auth", forKey: "accType")
-                                   self.userDefaults.set(userName, forKey: "userName")
-                                   if let userAvatarFirestorePath = userAvatarFirestorePath {
-                                           self.alamo.downloadAndSaveAvatar(from: userAvatarFirestorePath, forUser: userID) {
-                                               self.goToApp()
-                                           }
-                                   }
-                               }
-                           }
-                       }
-                  }
-              }
+            Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
+                if let err = error as? NSError{
+                    if let errorRequest = err.userInfo["FIRAuthErrorUserInfoNameKey"] as? String{
+                        switch errorRequest{
+                        case "ERROR_WRONG_PASSWORD":
+                            self.showErrorPopUp(text:"Wrong password or email")
+                        case "ERROR_NETWORK_REQUEST_FAILED":
+                            self.showErrorPopUp(text:"No internet connection")
+                        default:
+                            break
+                        }
+                    }
+                } else {
+                    if self.coreDataManager.isUserExistInCoreData(userEmail: email, context: self.context){
+                        self.userID = self.coreDataManager.loadUserData(userEmail: email, data: self.context).first?.userID ?? "noUserID"
+                        self.userName = self.coreDataManager.loadUserData(userEmail: email, data: self.context).first?.userName ?? "noUserName"
+                        self.userDefaults.set(self.userID, forKey: "userID")
+                        self.userDefaults.set(email, forKey: "userEmail")
+                        self.userDefaults.set(self.switchStatus, forKey: "keepSigned")
+                        self.userDefaults.set("auth", forKey: "accType")
+                        self.userDefaults.set(self.userName, forKey: "userName")
+                        self.goToApp()
+                    } else {
+                        self.firebase.getUserDataByEmail(userEmail: email) { result in
+                            guard let data = result else {return}
+                            let userData = UserData(
+                                userID: data.userID,
+                                userName: data.userName,
+                                userBirthDate: data.userBirthDate,
+                                userCountry: data.userCountry,
+                                userAvatarFirestorePath: data.userAvatarFirestorePath,
+                                userAvatarExtention: data.userAvatarExtention,
+                                userNativeLanguage: data.userNativeLanguage,
+                                userScores: data.userScores,
+                                userShowEmail: data.userShowEmail,
+                                userEmail: data.userEmail,
+                                userSyncronized: data.userSyncronized,
+                                userType: "",
+                                userRegisterDate: data.userRegisterDate,
+                                userInterfaceLanguage: data.userInterfaceLanguage)
+                            DispatchQueue.main.async {
+                                self.sync.loadDictionariesFromFirebase(userID: userData.userID, context: self.context)
+                            }
+                            self.coreDataManager.createLocalUser(userData: userData, context: self.context)
+                            if !self.mainModel.isUserFolderExist(folderName: userData.userID) { // User folder dont exist
+                                self.mainModel.createFolderInDocuments(withName: userData.userID)
+                            }
+                            self.userDefaults.set(userData.userID, forKey: "userID")
+                            self.userDefaults.set(email, forKey: "userEmail")
+                            self.userDefaults.set(self.switchStatus, forKey: "keepSigned")
+                            self.userDefaults.set("auth", forKey: "accType")
+                            self.userDefaults.set(userData.userName, forKey: "userName")
+                            if !userData.userAvatarFirestorePath.isEmpty {
+                                self.alamo.downloadAndSaveAvatar(from: userData.userAvatarFirestorePath, forUser: userData.userID) {
+                                    self.goToApp()
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
   

@@ -104,6 +104,7 @@ class TestsController: UIViewController, PerformToSegue{
         testsTable.delegate = self
         self.navigationItem.setHidesBackButton(true, animated: false)
         testsLabel.text = "testVC_tests_label".localized
+        testsTable.register(UINib(nibName: "TestNewCell", bundle: nil), forCellReuseIdentifier: "testNewCell")
     }
 
     func popUpApear(){
@@ -121,8 +122,9 @@ extension TestsController: UITableViewDelegate, UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let testCell = testsTable.dequeueReusableCell(withIdentifier: "testCell") as! TestCell
-        testCell.testNameLabel.text = testsArray[indexPath.row].name
+        //let testCell = testsTable.dequeueReusableCell(withIdentifier: "testCell") as! TestCell
+        let testCell = testsTable.dequeueReusableCell(withIdentifier: "testNewCell") as! TestNewCell
+        testCell.testName.text = testsArray[indexPath.row].name
         testCell.testImage.image = UIImage(named: testsArray[indexPath.row].image)
         testCell.testDescription.text = testsArray[indexPath.row].testDescription
         testCell.selectionStyle = .none

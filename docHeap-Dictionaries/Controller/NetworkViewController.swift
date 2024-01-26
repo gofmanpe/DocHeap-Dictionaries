@@ -9,6 +9,7 @@ import UIKit
 import Firebase
 import CoreData
 import MBProgressHUD
+import AlamofireImage
 
 class NetworkViewController: UIViewController, GetFilteredData, SetDownloadedMarkToDictionary{
     
@@ -89,6 +90,7 @@ class NetworkViewController: UIViewController, GetFilteredData, SetDownloadedMar
 
 //MARK: - Constants and variables
     private let firebase = Firebase()
+    private let alamo = Alamo()
     private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     private var sharedDictionaries = [SharedDictionary]()
     private var filteredDictionaries = [SharedDictionary]()
@@ -99,7 +101,7 @@ class NetworkViewController: UIViewController, GetFilteredData, SetDownloadedMar
     private let coreData = CoreDataManager()
     private var userDictionaries = [Dictionary]()
     private var dicOwnersData = [DicOwnerData]()
-    private var networkUsersArray = [String:String]()
+    private var networkUsersArray = [NetworkUserData]()
     private var defaults = Defaults()
     private var selectedLearnFromDelegate = String()
     private var selectedTransFromDelegate = String()
@@ -108,6 +110,7 @@ class NetworkViewController: UIViewController, GetFilteredData, SetDownloadedMar
     private var messagesCount : String?
     private var ownerName = String()
     private let dispatchGroup = DispatchGroup()
+    var someData : String?
     
 //MARK: - Lifecycle functions
     override func viewDidLoad() {
@@ -197,17 +200,40 @@ class NetworkViewController: UIViewController, GetFilteredData, SetDownloadedMar
                            let dicUserID = dicData["dicUserID"] as? String,
                            let dicImagesCount = dicData["dicImagesCount"] as? Int,
                            let dicDownloadedUsers = dicData["dicDownloadedUsers"] as? [String],
-                           let dicLikes = dicData["dicLikes"] as? [String]
+                           let dicLikes = dicData["dicLikes"] as? [String],
+                           let dicCommentsOn = dicData["dicCommentsOn"] as? Bool
                         {
                             let dicAddDate = self.mainModel.convertDateToString(currentDate: Date(), time: false)
-                            let dic = SharedDictionary(dicID: dicID, dicDescription: dicDescription, dicName: dicName, dicWordsCount: dicWordsCount, dicLearnLang: dicLearnLang, dicTransLang: dicTransLang, dicAddDate: dicAddDate!, dicUserID: dicUserID, dicImagesCount: dicImagesCount, dicDownloaded: false, dicDownloadedUsers: dicDownloadedUsers, dicLikes: dicLikes)
+                            let dic = SharedDictionary(dicID: dicID, dicDescription: dicDescription, dicName: dicName, dicWordsCount: dicWordsCount, dicLearnLang: dicLearnLang, dicTransLang: dicTransLang, dicAddDate: dicAddDate!, dicUserID: dicUserID, dicImagesCount: dicImagesCount, dicDownloaded: false, dicDownloadedUsers: dicDownloadedUsers, dicLikes: dicLikes, dicCommentsOn: dicCommentsOn, dicShared: false)
                             self.originalArray.append(dic)
                             self.sharedDictionaries.append(dic)
                             self.dispatchGroup.enter()
-                            self.firebase.getNetworkUserNameByID(userID: dicUserID) { userID, userName in
-                                let uID = userID ?? ""
-                                self.networkUsersArray[uID] = userName
-                                self.dispatchGroup.leave()
+                            self.firebase.getNetworkUserDataByID(userID: dicUserID) { userData, error in
+                                if let error = error{
+                                    print("Error to get network user data: \(error)\n")
+                                } else {
+                                    guard let nUserData = userData else {
+                                        return
+                                    }
+                                    self.alamo.downloadChatUserAvatar(url: nUserData.userAvatarFirestorePath, senderID: nUserData.userID, userID: "\(self.mainModel.loadUserData().userID)/Temp") { fileName in
+                                        let nuData = NetworkUserData(
+                                            userID: nUserData.userID,
+                                            userName: nUserData.userName,
+                                            userCountry: nUserData.userCountry,
+                                            userNativeLanguage: nUserData.userNativeLanguage,
+                                            userBirthDate: nUserData.userBirthDate,
+                                            userRegisterDate: nUserData.userRegisterDate,
+                                            userAvatarFirestorePath: nUserData.userAvatarFirestorePath,
+                                            userShowEmail: nUserData.userShowEmail,
+                                            userEmail: nUserData.userEmail,
+                                            userScores: nUserData.userScores,
+                                            userLocalAvatar: fileName,
+                                            userSharedDics: nUserData.userSharedDics,
+                                            userLikes: nUserData.userLikes)
+                                        self.networkUsersArray.append(nuData)
+                                    }
+                                    self.dispatchGroup.leave()
+                                }
                             }
                             self.dispatchGroup.enter()
                             self.firebase.getMessagesCountForDictionary(dicID: dicID) { count in
@@ -216,7 +242,6 @@ class NetworkViewController: UIViewController, GetFilteredData, SetDownloadedMar
                                 self.dictionariesCounts.append(dictionaryCounts)
                                 self.dispatchGroup.leave()
                             }
-                            
                         }
                     } else {
                         continue
@@ -268,7 +293,7 @@ class NetworkViewController: UIViewController, GetFilteredData, SetDownloadedMar
     private func fetchData(completion: @escaping (Bool) -> Void) {
         DispatchQueue.global().async {
             self.getDataFromFirestore()
-            Thread.sleep(forTimeInterval: 0.5)
+            Thread.sleep(forTimeInterval: 2)
             DispatchQueue.main.async {
                 self.sharedTable.reloadData()
             }
@@ -322,7 +347,20 @@ extension NetworkViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = sharedTable.dequeueReusableCell(withIdentifier: "sharedCell") as! SharedDictionaryCell
         let dictionary = sharedDictionaries[indexPath.row]
-        cell.userName.text = networkUsersArray[dictionary.dicUserID]
+        if dictionary.dicCommentsOn{
+            cell.messagesStack.isHidden = false
+        } else {
+            cell.messagesStack.isHidden = true
+        }
+        let currentNetworkUser = networkUsersArray.filter({$0.userID == dictionary.dicUserID}).first
+        cell.userName.text = currentNetworkUser?.userName
+        let currentCounts = dictionariesCounts.filter({$0.dicID == dictionary.dicID})
+        let dicLikes = dictionary.dicLikes.count
+        let downloads = currentCounts.first?.downloadsCount
+        let messages = currentCounts.first?.messagesCount
+        cell.likesLabel.text = String(dicLikes)
+        cell.downloadsLabel.text = downloads
+        cell.messagesLabel.text = messages
         cell.cellView.clipsToBounds = true
         cell.cellView.layer.cornerRadius = 10
         cell.dictionaryName.text = dictionary.dicName
@@ -333,6 +371,12 @@ extension NetworkViewController: UITableViewDelegate, UITableViewDataSource {
         cell.lLangImage.image = UIImage(named: "\(learnImage).png")
         let transImage = dictionary.dicTransLang
         cell.tLangImage.image = UIImage(named: "\(transImage).png")
+        let filePath = "\(mainModel.loadUserData().userID)/Temp/\(currentNetworkUser?.userLocalAvatar ?? "")"
+        let image = UIImage(contentsOfFile:  mainModel.getDocumentsFolderPath().appendingPathComponent(filePath).path)
+        cell.userAvatarImage.image = image
+//        if let url = URL(string: currentNetworkUser?.userAvatarFirestorePath ?? "") {
+//            cell.userAvatarImage.af.setImage(withURL: url)
+//        }
         cell.selectionStyle = .none
         return cell
     }
@@ -345,8 +389,9 @@ extension NetworkViewController: UITableViewDelegate, UITableViewDataSource {
             let destinationVC = segue.destination as! BrowseSharedDicViewController
             if let indexPath = sharedTable.indexPathForSelectedRow{
                 let dicID = sharedDictionaries[indexPath.row].dicID
+                let currentNetworkUser = networkUsersArray.filter({$0.userID == sharedDictionaries[indexPath.row].dicUserID}).first
                 destinationVC.dicID = dicID
-                let ownerName = networkUsersArray[sharedDictionaries[indexPath.row].dicUserID] ?? "Anon"
+                let ownerName = currentNetworkUser?.userName ?? "Anon"
                 destinationVC.ownerName = ownerName
                 destinationVC.sharedDictionary = sharedDictionaries[indexPath.row]
                 let filteredByDicWords = sharedWords.filter({$0.wrdDicID == dicID})
@@ -355,6 +400,7 @@ extension NetworkViewController: UITableViewDelegate, UITableViewDataSource {
                 destinationVC.sharedWordsArray = filteredByDicWords
                 let dicOwnerData = dicOwnersData.filter({$0.ownerID == sharedDictionaries[indexPath.row].dicUserID})
                 destinationVC.dicOwnerData = dicOwnerData.first
+                destinationVC.networkUserData = currentNetworkUser
                 destinationVC.ownerID = sharedDictionaries[indexPath.row].dicUserID
                 destinationVC.setDownloadedDelegate = self
             }
