@@ -18,6 +18,7 @@ class ResultsPopUpController: UIViewController{
     @IBOutlet weak var secondStarImage: UIImageView!
     @IBOutlet weak var thirdStarImage: UIImageView!
     @IBOutlet weak var fouthStarImage: UIImageView!
+    @IBOutlet weak var scoresNameLabel: UILabel!
     
     @IBOutlet weak var testNameLabel: UILabel!
     @IBOutlet weak var scoresLabel: UILabel!
@@ -25,6 +26,12 @@ class ResultsPopUpController: UIViewController{
     @IBOutlet weak var closeButton: UIButton!
     @IBOutlet weak var restartTestButton: UIButton!
     @IBOutlet weak var retestErrorsButton: UIButton!
+    
+    private func localazeElements(){
+        closeButton.setTitle("resultsPopUp_close_button".localized, for: .normal)
+        restartTestButton.setTitle("resultsPopUp_restart_button".localized, for: .normal)
+        scoresNameLabel.text = "resultsPopUp_scoresName_label".localized
+    }
     
     private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     var rightAnswers = Int()
@@ -55,6 +62,7 @@ class ResultsPopUpController: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        localazeElements()
         loadData()
         elementsDesign(selectedTestIdentifier)
         starsSetting(selectedTestIdentifier)
@@ -62,29 +70,41 @@ class ResultsPopUpController: UIViewController{
         updateUserScoresData(userID: mainModel.loadUserData().userID)
         statisticUpload()
     }
+    
     func loadData(){
-        userData = coreDataManager.loadUserDataByID(userID: mainModel.loadUserData().userID, context: context).first
+        userData = coreDataManager.loadUserDataByID(userID: mainModel.loadUserData().userID, context: context)
     }
     
     func updateUserScoresData(userID:String){
-        let existedScores =  userData?.userScores ?? 0
-        let dataForAdd = rightAnswers - errors
-        let userScores = existedScores + dataForAdd
-        coreDataManager.updateUserData(
-            userID: mainModel.loadUserData().userID,
-            field: "userScores",
-            argument: userScores,
-            context: context)
-        userData = coreDataManager.loadUserDataByID(userID: userID, context: context).first
+        let userResults = UserData(
+            userID: userData!.userID,
+            userName: userData!.userName,
+            userBirthDate: userData!.userBirthDate,
+            userCountry: userData?.userCountry ?? "",
+            userAvatarFirestorePath: userData?.userAvatarFirestorePath ?? "",
+            userAvatarExtention: "jpg",
+            userNativeLanguage: userData?.userNativeLanguage ?? "",
+            userScores: rightAnswers,
+            userShowEmail: userData?.userShowEmail ?? false,
+            userEmail: userData?.userEmail ?? "",
+            userSyncronized: userData?.userSyncronized ?? false,
+            userType: "",
+            userRegisterDate: userData!.userRegisterDate,
+            userInterfaceLanguage: userData?.userInterfaceLanguage ?? "",
+            userMistakes: errorsCount,
+            userRightAnswers: rightAnswers,
+            userTestsCompleted: 1)
         if mainModel.isInternetAvailable(){
-            firebase.updateUserDataFirebase(userData: userData!)
-            coreDataManager.updateUserData(
+            firebase.updateUserDataFirebase(userData: userResults)
+            coreDataManager.updateUserDataAfterTest(userData: userResults, context: context)
+            coreDataManager.updateUserFieldData(
                 userID: mainModel.loadUserData().userID,
                 field: "userSyncronized",
                 argument: true,
                 context: context)
         } else {
-            coreDataManager.updateUserData(
+            coreDataManager.updateUserDataAfterTest(userData: userResults, context: context)
+            coreDataManager.updateUserFieldData(
                 userID: mainModel.loadUserData().userID,
                 field: "userSyncronized",
                 argument: false,
@@ -185,21 +205,21 @@ class ResultsPopUpController: UIViewController{
         case "threeWordsTest","fiveWordsTest":
             scoresLabel.text = String(rightAnswers)
             errorsCount = wordsCount - rightAnswers
-            messageLabel.text = "Finished \(wordsCount) rounds \n with \(errorsCount) mistakes"
+            messageLabel.text = String(format: NSLocalizedString("resultsPopUp_threeWordsTest_message", comment: ""), wordsCount, errorsCount)
         case "findAPairTest":
             wordsCount = 7
             scoresLabel.text = String(rightAnswers-errors)
             errorsCount = errors
-            messageLabel.text = "Finded \(String(rightAnswers)) pairs \n with \(String(errors)) mistakes"
+            messageLabel.text = String(format: NSLocalizedString("resultsPopUp_findAPairTest_message", comment: ""), errors)
         case "falseOrTrueTest":
             scoresLabel.text = String(rightAnswers)
             errorsCount = errors
-            messageLabel.text = "Totaly \(String(rightAnswers)) right answers \n and \(String(errors)) mistakes"
+            messageLabel.text = String(format: NSLocalizedString("resultsPopUp_falseOrTrueTest_message", comment: ""), rightAnswers, errors)
         case "findAnImageTest":
             errors = roundsNumber - rightAnswers
             errorsCount = errors
             scoresLabel.text = String(rightAnswers)
-            messageLabel.text = "Selected \(String(rightAnswers)) right images \n with \(String(errors)) mistakes"
+            messageLabel.text = String(format: NSLocalizedString("resultsPopUp_falseOrTrueTest_message", comment: ""), rightAnswers, errors)
         default: break
         }
     }
@@ -207,33 +227,27 @@ class ResultsPopUpController: UIViewController{
     func statisticUpload(){
         let statID = mainModel.uniqueIDgenerator(prefix: "stat")
         let date = mainModel.convertDateToString(currentDate: Date(), time:true)!
+        let statisticData = StatisticData(
+            statID: statID,
+            statDate: date,
+            statMistekes: errorsCount,
+            statDicID: selectedDictionary,
+            statScores: rightAnswers,
+            statUserID: mainModel.loadUserData().userID,
+            statTestIdentifier: selectedTestIdentifier,
+            statRightAnswers: rightAnswers,
+            statSyncronized: true
+        )
         if mainModel.isInternetAvailable(){
-            let statisticData = StatisticData(
-                statID: statID,
-                statDate: date,
-                statMistekes: errorsCount,
-                statDicID: selectedDictionary,
-                statScores: rightAnswers,
-                statUserID: mainModel.loadUserData().userID,
-                statTestIdentifier: selectedTestIdentifier,
-                statRightAnswers: rightAnswers,
-                statSyncronized: true
-            )
             coreDataManager.createStatisticRecord(statisticData: statisticData, context: context)
             firebase.createStatisticRecord(statData: statisticData)
         } else {
-            let statisticData = StatisticData(
-                statID: statID,
-                statDate: date,
-                statMistekes: errorsCount,
-                statDicID: selectedDictionary,
-                statScores: rightAnswers,
-                statUserID: mainModel.loadUserData().userID,
-                statTestIdentifier: selectedTestIdentifier,
-                statRightAnswers: rightAnswers,
-                statSyncronized: false
-            )
             coreDataManager.createStatisticRecord(statisticData: statisticData, context: context)
+            coreDataManager.updateStatisticFieldData(
+                statID: statID,
+                field: "statSyncronized",
+                argument: false,
+                context: context)
         }
     }
     

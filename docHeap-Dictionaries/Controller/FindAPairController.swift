@@ -14,7 +14,7 @@ class FindAPairController: UIViewController, PerformToSegue, UpdateView {
     func didUpdateView(sender: String) {
        // coreDataManager.loadTestData(testIdentifier: selectedTestIdentifier, data: context)
         coreDataManager.loadParentDictionaryData(dicID: selectedDicID, userID: mainModel.loadUserData().userID, data: context)
-        coreDataManager.loadWordsForSelectedDictionary(dicID: coreDataManager.parentDictionaryData.first?.dicID ?? "", userID: mainModel.loadUserData().userID, data: context)
+        coreDataManager.loadWordsForSelectedDictionary(dicID: coreDataManager.parentDictionaryData.first?.dicID ?? "", userID: mainModel.loadUserData().userID, context: context)
         mainModel.wordsStatusClearing(array: coreDataManager.wordsArray, statusToClear: 0, data: context)
         restartTest()
         standartState()
@@ -32,7 +32,6 @@ class FindAPairController: UIViewController, PerformToSegue, UpdateView {
     }
  
 //MARK: - Outlets
-   // @IBOutlet weak var testFifishedLabel: UILabel!
     @IBOutlet weak var blockView: UIView!
     @IBOutlet weak var commentImage: UIImageView!
     @IBOutlet weak var commentLabel: UILabel!
@@ -53,6 +52,10 @@ class FindAPairController: UIViewController, PerformToSegue, UpdateView {
     @IBOutlet weak var toResultsButton: UIButton!
     @IBOutlet weak var againButton: UIButton!
     @IBOutlet weak var warningLabel: UILabel!
+    @IBOutlet weak var mistakesNameLabel: UILabel!
+    @IBOutlet weak var scoresNameLabel: UILabel!
+    @IBOutlet weak var instructionLabel: UILabel!
+    
 //MARK: - words buttons outlets
     @IBOutlet weak var firstWordButton: UIButton!
     @IBOutlet weak var secondWordButton: UIButton!
@@ -71,7 +74,14 @@ class FindAPairController: UIViewController, PerformToSegue, UpdateView {
     @IBOutlet weak var seventhTranslateButton: UIButton!
    
     func localizeElemants(){
-        
+        mistakesNameLabel.text = "findApairTestVC_mistakesName_label".localized
+        scoresNameLabel.text = "findApairTestVC_scoresName_label".localized
+        instructionLabel.text = "findApairTestVC_instructionLabel_label".localized
+        warningLabel.text = "findApairTestVC_makeChoise_label".localized
+        checkButton.setTitle("findApairTestVC_check_button".localized, for: .normal)
+        nextButton.setTitle("findApairTestVC_next_button".localized, for: .normal)
+        toResultsButton.setTitle("findApairTestVC_toResults_button".localized, for: .normal)
+        againButton.setTitle("findApairTestVC_again_button".localized, for: .normal)
     }
     
 //MARK: - Constants and variables
@@ -112,9 +122,8 @@ class FindAPairController: UIViewController, PerformToSegue, UpdateView {
     override func viewDidLoad() {
         super.viewDidLoad()
         localizeElemants()
-       // coreDataManager.loadTestData(testIdentifier: selectedTestIdentifier, data: context)
         coreDataManager.loadParentDictionaryData(dicID: selectedDicID, userID: mainModel.loadUserData().userID, data: context)
-        coreDataManager.loadWordsForSelectedDictionary(dicID: coreDataManager.parentDictionaryData.first?.dicID ?? "", userID: mainModel.loadUserData().userID, data: context)
+        coreDataManager.loadWordsForSelectedDictionary(dicID: coreDataManager.parentDictionaryData.first?.dicID ?? "", userID: mainModel.loadUserData().userID, context: context)
         mainModel.wordsStatusClearing(array: coreDataManager.wordsArray, statusToClear: 0, data: context)
         standartState()
         designUI()

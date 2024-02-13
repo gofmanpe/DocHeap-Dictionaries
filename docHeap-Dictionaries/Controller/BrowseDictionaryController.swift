@@ -10,97 +10,41 @@ import CoreData
 import FirebaseStorage
 
 
-class BrowseDictionaryController: UIViewController, UpdateView, SaveWordsPairToDictionary{
+class BrowseDictionaryController: UIViewController, UpdateView, UploadImageToFirestore{
  
 //MARK: - Protocols delegate functions
     func didUpdateView(sender:String) {
-        setupData()
-        wordsTable.reloadData()
-        issetWordsInDictionary()
         dictionaryData()
+        issetWordsInDictionary()
         updateBubbleState()
+        wordsTable.reloadData()
     }
     
-    func saveWordsPair(word: String, translation: String, imageName: String?, wrdID:String) { // Creating record in CoreData Words entity
-        let newWord = Word(context: context)
-        var isSetImage = false
-        newWord.wrdWord = word
-        newWord.wrdTranslation = translation
-        if !imageName!.isEmpty{
-            let imageForWord = imageName!
-            newWord.imageName = imageForWord
-            newWord.wrdImageIsSet = true
-            isSetImage = true
-        }
-        newWord.parentDictionary = selectedDictionary
-        newWord.wrdAddDate = mainModel.convertDateToString(currentDate: Date(), time: false)
-        newWord.wrdBobbleColor = ".systemYellow"
-        newWord.wrdID = wrdID
-        newWord.wrdDicID = selectedDictionary?.dicID ?? ""
-        newWord.wrdDeleted = false
-        newWord.wrdReadOnly = false
-        newWord.wrdUserID = mainModel.loadUserData().userID
-        if mainModel.isInternetAvailable(){
-            firebase.createWord(
-                wrdUserID: mainModel.loadUserData().userID,
-                wrdDicID: selectedDictionary?.dicID ?? "",
-                wrdWord: word,
-                wrdTanslation: translation,
-                wrdImageName: imageName ?? "",
-                wrdID: wrdID,
-                wrdAddDate: mainModel.convertDateToString(currentDate: Date(), time: false),
-                wrdImageFirestorePath: nil)
-            firebase.updateWordsCountFirebase(dicID: selectedDictionary?.dicID ?? "", increment: true)
-            firebase.checkIsWordExistsInDictionary(wrdID: wrdID)  { exists, error in
+    func uploadImage(imageName: String?, wrdID:String) {
+        guard let imageName = imageName else {return}
+        switch (mainModel.isInternetAvailable(),imageName.isEmpty){
+        case (true,true),(false,true):
+            return
+        case (true,false):
+            firebase.uploadWordImage(imageName: imageName, userID: mainModel.loadUserData().userID, dicID: dicID) { imagePath, error in
                 if let error = error {
-                    newWord.wrdSyncronized = false
-                        print("Error checking word existence: \(error)")
-                    } else {
-                        if exists {
-                            newWord.wrdSyncronized = true
-                        }
-                    }
-            }
-        } else {
-            newWord.wrdSyncronized = false
-            coreData.setSyncronizedStatusForDictionary(data: context, dicID: selectedDictionary?.dicID ?? "", sync: false)
-            coreData.setCountsInParentDictionary(increment: true, isSetImage: isSetImage, dicID: dicID, context: context)
-        }
-        coreData.saveData(data: context)
-        setupData()
-        coreData.setCountsInParentDictionary(increment: true, isSetImage: isSetImage, dicID: dicID, context: context)
-        wordsTable.reloadData()
-        dictionaryData()
-        if mainModel.isInternetAvailable(){ // Uplod image, updating imageURL in Firestore, updating imageFirestorePath in CoreData
-            if isSetImage{
-                let storage = Storage.storage()
-                let imageRef = storage.reference().child(mainModel.loadUserData().userID).child(dicID).child(imageName ?? "")
-                let localImagePath = mainModel.getDocumentsFolderPath().appendingPathComponent("\(mainModel.loadUserData().userID)/\(dicID)/\(imageName ?? "")")
-                imageRef.putFile(from: localImagePath, metadata: nil) { metadata, error in
-                    guard metadata != nil else {
-                        return
-                    }
-                    imageRef.downloadURL { url, error in
-                        guard let downloadURL = url else { return }
-                        let currentWord = self.wordsArray.filter({$0.wrdWord == word})
-                        currentWord.first?.wrdImageFirestorePath = downloadURL.absoluteString
-                        currentWord.first?.wrdImageIsSet = true
-                        currentWord.first?.imageUploaded = true
-                        self.coreData.saveData(data: self.context)
-                        let wrdID = currentWord.first?.wrdID ?? ""
-                        self.firebase.updateImageURLaddressFirebase(wrdID: wrdID, word: word, fsURL: downloadURL.absoluteString, imageName: imageName ?? "")
-                        self.firebase.updateImagesCountFirebase(dicID: self.dicID, increment: true)
-                        self.coreData.setWasSynchronizedStatusForWord(data: self.context, wrdID: self.selectedDictionary?.dicID ?? "", sync: true)
-                    }
+                    print("Error to upload words pair image: \(error)\n")
+                } else {
+                    guard let path = imagePath else {return}
+                    self.coreData.updateWordsPairFirestoreImagePath(wrdID: wrdID, userID: self.mainModel.loadUserData().userID, path: path, context: self.context)
+                    self.firebase.updateWordsPairImagePath(wrdID: wrdID, path: path)
+                    self.firebase.updateImagesCountFirebase(dicID: self.dicID, increment: true)
+                    self.coreData.setWasSynchronizedStatusForWord(data: self.context, wrdID: wrdID, sync: true)
+                    self.coreData.setImagesCountForDictionary(dicID: self.dicID, increment: true, context: self.context)
                 }
             }
-        } else {
-            newWord.imageUploaded = false
-            coreData.setWasSynchronizedStatusForWord(data: context, wrdID: selectedDictionary?.dicID ?? "", sync: false)
-            coreData.saveData(data: context)
+        case (false,false):
+            self.coreData.setWasSynchronizedStatusForWord(data: self.context, wrdID: wrdID, sync: false)
+            self.coreData.setImagesCountForDictionary(dicID: self.dicID, increment: true, context: self.context)
         }
-        issetWordsInDictionary()
+        
     }
+ 
     
 //MARK: - Outlets
     @IBOutlet weak var dictionaryNameLabel: UILabel!
@@ -123,23 +67,23 @@ class BrowseDictionaryController: UIViewController, UpdateView, SaveWordsPairToD
 //MARK: - Localize functions
     func localizeElements(){
         wordsLabel.text = "browseDictionaryVC_wordsInDictionary_label".localized
-        if let dicROStatus = selectedDictionary?.dicReadOnly{
+        guard let dicROStatus = selectedDictionary?.dicReadOnly else {return}
             if dicROStatus{
                 createdLabel.text = "browseDictionaryVC_dicOwner_label".localized
             } else {
                 createdLabel.text = "browseDictionaryVC_createDate_label".localized
             }
-        }
+        
     }
     
 //MARK: - Constants and variables
-    var selectedDictionary : Dictionary?
+    var selectedDictionary : LocalDictionary?
     private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     private var coreData = CoreDataManager()
     private let mainModel = MainModel()
     private let defaults = Defaults()
     private let firebase = Firebase()
-    private var dicID = String()
+    var dicID = String()
     private var wordTranslation = String()
     private var imagePath = String()
     private var clickedWordID = String()
@@ -153,10 +97,10 @@ class BrowseDictionaryController: UIViewController, UpdateView, SaveWordsPairToD
 //MARK: - Lifecycle functions
     override func viewDidLoad() {
         super.viewDidLoad()
-            localizeElements()
             setupData()
             dictionaryData()
             elementsDesign()
+            localizeElements()
             wordsTable.dataSource = self
             wordsTable.delegate = self
             issetWordsInDictionary()
@@ -170,8 +114,6 @@ class BrowseDictionaryController: UIViewController, UpdateView, SaveWordsPairToD
     
     override func viewDidAppear(_ animated: Bool) {
         setupData()
-//        wordsTable.dataSource = self
-//        wordsTable.delegate = self
         wordsTable.reloadData()
         updateBubbleState()
         if mainModel.isInternetAvailable(){
@@ -226,7 +168,7 @@ class BrowseDictionaryController: UIViewController, UpdateView, SaveWordsPairToD
                         let corDataMessages = self.coreData.getMessagesByDicID(dicID: self.dicID, context: self.context)
                         let filteredCDMessages = corDataMessages.filter({$0.msgID == newMessageID})
                         if filteredCDMessages.isEmpty{
-                            self.coreData.createChatMessage(message: message, context: self.context)
+                            self.coreData.createCommentForDictionary(message: message, context: self.context)
                         }
                     }
                 }
@@ -260,7 +202,7 @@ class BrowseDictionaryController: UIViewController, UpdateView, SaveWordsPairToD
     func setupData(){
         guard let dicID = selectedDictionary?.dicID else {
             return}
-        wordsArray = coreData.getWordsForDictionary(dicID: dicID, userID: mainModel.loadUserData().userID, data: context)
+        
     }
     
     func flipView(view:UIView) {
@@ -282,6 +224,8 @@ class BrowseDictionaryController: UIViewController, UpdateView, SaveWordsPairToD
     }
   
     func dictionaryData(){
+        wordsArray = coreData.getWordsForDictionary(dicID: dicID, userID: mainModel.loadUserData().userID, context: context)
+        selectedDictionary = coreData.getLocalDictionaryByID(userID: mainModel.loadUserData().userID, dicID: dicID, data: context)
         dictionaryNameLabel.text = selectedDictionary?.dicName
         dicID = selectedDictionary?.dicID ?? ""
         wordsCountLabel.text = String(selectedDictionary!.dicWordsCount)
@@ -294,17 +238,17 @@ class BrowseDictionaryController: UIViewController, UpdateView, SaveWordsPairToD
         }
         learningLanguageLabel.text = selectedDictionary?.dicLearningLanguage
         translateLanguageLabel.text = selectedDictionary?.dicTranslateLanguage
-        let learnImage:String = selectedDictionary!.dicLearningLanguage!
+        let learnImage:String = selectedDictionary!.dicLearningLanguage
         learningLanguageImage.image = UIImage(named: "\(learnImage).png")
-        let translateImage:String = selectedDictionary!.dicTranslateLanguage!
+        let translateImage:String = selectedDictionary!.dicTranslateLanguage
         translateLanguageImage.image = UIImage(named: "\(translateImage).png")
-        if let dicLike = selectedDictionary?.dicLike{
+        guard let dicLike = selectedDictionary?.dicLike else {return}
             if dicLike{
                 likeButton.tintColor = UIColor(named: "Wrong answer")
             } else {
                 likeButton.tintColor = UIColor.systemGray
             }
-        }
+        
         if selectedDictionary?.dicCommentsOn == true{
             chatButton.isHidden = false
         } else {
@@ -344,7 +288,7 @@ class BrowseDictionaryController: UIViewController, UpdateView, SaveWordsPairToD
         case "addButton":
             let overLayedView = AddWordPopUpViewController()
             overLayedView.tableReloadDelegate = self
-            overLayedView.saveWordformPopupDelegate = self
+            overLayedView.uploadImageDelegate = self
             overLayedView.dictionaryID = dicID
             overLayedView.appear(sender: self)
         case "wordPressed":
@@ -375,33 +319,29 @@ class BrowseDictionaryController: UIViewController, UpdateView, SaveWordsPairToD
         dictionaryView.layer.shadowOpacity = 0.2
         dictionaryView.layer.shadowOffset = .zero
         dictionaryView.layer.shadowRadius = 2
-       // likeAndChatStack.isHidden = true
         if let dicROStatus = selectedDictionary?.dicReadOnly{
             if dicROStatus{
                 addButton.isHidden = true
-               // likeAndChatStack.isHidden = false
             } else if let dicShared = selectedDictionary?.dicShared{
                 if dicShared{
                     addButton.isHidden = false
-                  //  likeAndChatStack.isHidden = false
                     likeButton.isHidden = true
                 } else {
-                //    likeAndChatStack.isHidden = false
                     likeButton.isHidden = true
                     chatButton.isHidden = true
                 }
             }
         }
         let buttons = [chatButton!,addButton!,likeButton!]
-            for button in buttons{
-                button.layer.shadowColor = UIColor.systemGray2.cgColor
-                button.layer.shadowOffset = CGSize(width: 1, height: 1)
-                button.layer.shadowRadius = 2.0
-                button.layer.shadowOpacity = 0.5
-                button.layer.cornerRadius = 10
-            }
+        for button in buttons{
+            button.layer.shadowColor = UIColor.systemGray2.cgColor
+            button.layer.shadowOffset = CGSize(width: 1, height: 1)
+            button.layer.shadowRadius = 2.0
+            button.layer.shadowOpacity = 0.5
+            button.layer.cornerRadius = 10
+        }
     }
-   
+    
     func updateBubbleState(){
         for i in 0..<wordsArray.count{
             let rightAnswer = wordsArray[i].wrdRightAnswers
@@ -425,32 +365,30 @@ class BrowseDictionaryController: UIViewController, UpdateView, SaveWordsPairToD
     }
     
     @IBAction func likeButtonPressed(_ sender: UIButton) {
-        if let dicLike = selectedDictionary?.dicLike{
+        guard let dicLike = selectedDictionary?.dicLike else {return}
             if dicLike{
                 buttonScaleAnimation(targetButton: likeButton)
                 if mainModel.isInternetAvailable(){
                     firebase.setLikeForDictionaryFirebase(dicID: dicID, userID: mainModel.loadUserData().userID, like: false)
-                    firebase.updateNetworkUserLikeCount(userID: selectedDictionary?.dicOwnerID ?? "", increment: false)
+                    firebase.updateNetworkUserLikeCount(userID: selectedDictionary!.dicOwnerID, increment: false)
                 } else {
-                    selectedDictionary?.dicSyncronized = false
+                    coreData.setSyncronizedStatusForDictionary(data: context, dicID: dicID, sync: false)
                 }
                 likeButton.tintColor = UIColor(named: "Wrong answer")
-                selectedDictionary?.dicLike = false
+                coreData.setLikeStatusForDictionary(context: context, dicID: dicID, userID: mainModel.loadUserData().userID, sync: false)
                 dictionaryData()
             } else {
                 buttonScaleAnimation(targetButton: likeButton)
                 if mainModel.isInternetAvailable(){
                     firebase.setLikeForDictionaryFirebase(dicID: dicID, userID: mainModel.loadUserData().userID, like: true)
-                    firebase.updateNetworkUserLikeCount(userID: selectedDictionary?.dicOwnerID ?? "", increment: true)
+                    firebase.updateNetworkUserLikeCount(userID: selectedDictionary!.dicOwnerID, increment: true)
                 } else {
-                    selectedDictionary?.dicSyncronized = false
+                    coreData.setSyncronizedStatusForDictionary(data: context, dicID: dicID, sync: false)
                 }
                 likeButton.tintColor = .systemGray
-                selectedDictionary?.dicLike = true
+                coreData.setLikeStatusForDictionary(context: context, dicID: dicID, userID: mainModel.loadUserData().userID, sync: true)
                 dictionaryData()
             }
-            coreData.saveData(data: context)
-        }
     }
     
     @IBAction func descriptionButtonPressed(_ sender: UIButton) {

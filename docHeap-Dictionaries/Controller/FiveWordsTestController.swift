@@ -18,7 +18,7 @@ class FiveWordsTestController: UIViewController, PerformToSegue, UpdateView {
             errorsFixed = false
             errorsRepetitionMode = false
             coreDataManager.loadParentDictionaryData(dicID: selectedDicID, userID: mainModel.loadUserData().userID, data: context)
-            coreDataManager.loadWordsForSelectedDictionary(dicID: coreDataManager.parentDictionaryData.first?.dicID ?? "", userID: mainModel.loadUserData().userID, data: context)
+            coreDataManager.loadWordsForSelectedDictionary(dicID: coreDataManager.parentDictionaryData.first?.dicID ?? "", userID: mainModel.loadUserData().userID, context: context)
             standartState()
             mainModel.wordsStatusClearing(array: coreDataManager.wordsArray, statusToClear: 1, data: context)
             mainModel.wordsStatusClearing(array: coreDataManager.wordsArray, statusToClear: 2, data: context)
@@ -31,7 +31,7 @@ class FiveWordsTestController: UIViewController, PerformToSegue, UpdateView {
             errorsModeLabel.isHidden = false
             roundNumber = 0
             coreDataManager.loadParentDictionaryData(dicID: selectedDicID, userID: mainModel.loadUserData().userID, data: context)
-            coreDataManager.loadWordsForSelectedDictionary(dicID: coreDataManager.parentDictionaryData.first?.dicID ?? "", userID: mainModel.loadUserData().userID, data: context)
+            coreDataManager.loadWordsForSelectedDictionary(dicID: coreDataManager.parentDictionaryData.first?.dicID ?? "", userID: mainModel.loadUserData().userID, context: context)
             standartState()
             mainModel.wordsStatusClearing(array: coreDataManager.wordsArray, statusToClear: 1, data: context)
             reloadTestData()
@@ -79,9 +79,21 @@ class FiveWordsTestController: UIViewController, PerformToSegue, UpdateView {
     @IBOutlet weak var errorsModeLabel: UILabel!
     @IBOutlet weak var headerMainWord: UILabel!
     @IBOutlet weak var warningView: UIView!
+    @IBOutlet weak var roundNameLabel: UILabel!
+    @IBOutlet weak var scoresNameLabel: UILabel!
+    @IBOutlet weak var testProgressLabel: UILabel!
+    @IBOutlet weak var rulesLabel: UILabel!
     
     func localizeElements(){
-       
+        errorsModeLabel.text = "fiveWordsTestVC_repetitionMode_label".localized
+        roundNameLabel.text = "fiveWordsTestVC_roundsName_label".localized
+        scoresNameLabel.text = "fiveWordsTestVC_scoresName_label".localized
+        rulesLabel.text = "fiveWordsTestVC_instructionLabel_label".localized
+        warningLabel.text = "fiveWordsTestVC_makeChoise_label".localized
+        checkButton.setTitle("fiveWordsTestVC_check_button".localized, for: .normal)
+        nextButton.setTitle("fiveWordsTestVC_next_button".localized, for: .normal)
+        toResultsButton.setTitle("fiveWordsTestVC_toResults_button".localized, for: .normal)
+        testProgressLabel.text = "fiveWordsTestVC_testProgress_label".localized
     }
     
 //MARK: - Constants and variables
@@ -120,7 +132,7 @@ class FiveWordsTestController: UIViewController, PerformToSegue, UpdateView {
         super.viewDidLoad()
         localizeElements()
         coreDataManager.loadParentDictionaryData(dicID: selectedDicID, userID: mainModel.loadUserData().userID, data: context)
-        coreDataManager.loadWordsForSelectedDictionary(dicID: coreDataManager.parentDictionaryData.first?.dicID ?? "", userID: mainModel.loadUserData().userID, data: context)
+        coreDataManager.loadWordsForSelectedDictionary(dicID: coreDataManager.parentDictionaryData.first?.dicID ?? "", userID: mainModel.loadUserData().userID, context: context)
         standartState()
         mainModel.wordsStatusClearing(array: coreDataManager.wordsArray, statusToClear: 1, data: context)
         mainModel.wordsStatusClearing(array: coreDataManager.wordsArray, statusToClear: 2, data: context)

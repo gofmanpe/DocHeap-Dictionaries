@@ -17,7 +17,7 @@ class EditDictionaryViewController: UIViewController {
     @IBOutlet weak var sharedSwitch: UISwitch!
     @IBOutlet weak var cancelButton: UIButton!
     @IBOutlet weak var saveButton: UIButton!
-    @IBOutlet weak var mainWindowView: UIView!
+    @IBOutlet weak var mainView: UIView!
     @IBOutlet weak var warningImage: UIImageView!
     @IBOutlet weak var headerLabel: UILabel!
     @IBOutlet weak var changeDicLabel: UILabel!
@@ -56,6 +56,8 @@ class EditDictionaryViewController: UIViewController {
     private var sharedStatusChanged = false
     private var newAllowedCommentsStatus = Bool()
     private var allowedCommentsStatus = Bool()
+    private var currentFramePosY = CGFloat()
+    private var bottomYPosition = CGFloat()
     
     init() {
         super.init(nibName: "EditDictionaryViewController", bundle: nil)
@@ -67,15 +69,50 @@ class EditDictionaryViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-            localizeElements()
-            coreDataManager.loadParentDictionaryData(dicID: dicID, userID: mainModel.loadUserData().userID, data: context)
-            standartState()
-            popUpBackgroundSettings()
-            elementsDesign()
+        localizeElements()
+        coreDataManager.loadParentDictionaryData(dicID: dicID, userID: mainModel.loadUserData().userID, data: context)
+        standartState()
+        popUpBackgroundSettings()
+        elementsDesign()
+        keyboardBehavorSettings()
     }
     
+    private func keyboardBehavorSettings(){
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillShow),
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillHide),
+            name: UIResponder.keyboardWillHideNotification,
+            object: nil)
+        currentFramePosY = mainView.frame.origin.y
+        bottomYPosition = UIScreen.main.bounds.height - mainView.frame.origin.y - mainView.frame.size.height
+    }
+    
+    @objc func hideKeyboard() {
+        view.endEditing(true)
+    }
+    
+    @objc func keyboardWillShow(_ notification: Notification) {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            let keyboardHeight = keyboardSize.height
+            mainView.frame.origin.y = currentFramePosY + (bottomYPosition - keyboardHeight) - 5.0
+        }
+    }
+
+    @objc func keyboardWillHide(_ notification: Notification) {
+        mainView.frame.origin.y = currentFramePosY
+    }
+    
+    deinit {
+            NotificationCenter.default.removeObserver(self)
+        }
+    
     private func standartState(){
-        allowCommentsStackView.isHidden = true
+        //allowCommentsStackView.isHidden = true
         oldName = coreDataManager.parentDictionaryData.first?.dicName ?? ""
         oldDescription = coreDataManager.parentDictionaryData.first?.dicDescription ?? ""
         dictionaryNameTextField.text = oldName
@@ -85,15 +122,21 @@ class EditDictionaryViewController: UIViewController {
         allowedCommentsStatus = coreDataManager.parentDictionaryData.first!.dicCommentsOn
         newAllowedCommentsStatus = allowedCommentsStatus
         sharedSwitch.isOn = systemSharedStatus
-        allowCommentsStackView.isHidden = !systemSharedStatus
+        //allowCommentsStackView.isHidden = !systemSharedStatus
+        if systemSharedStatus{
+            commentsSwitch.isEnabled = true
+        } else {
+            commentsSwitch.isEnabled = false
+        }
         commentsSwitch.isOn = allowedCommentsStatus
         warningView.isHidden = true
+        
     }
     
     private func elementsDesign(){
         warningView.layer.cornerRadius = 10
-        mainWindowView.clipsToBounds = true
-        mainWindowView.layer.cornerRadius = 10
+        mainView.clipsToBounds = true
+        mainView.layer.cornerRadius = 10
         descriptionTextView.layer.cornerRadius = 5
     }
     
@@ -101,7 +144,7 @@ class EditDictionaryViewController: UIViewController {
         self.view.backgroundColor = .clear
         backgroundView.backgroundColor = .black.withAlphaComponent(0.6)
         backgroundView.alpha = 0
-        mainWindowView.alpha = 0
+        mainView.alpha = 0
     }
     
     func appear(sender: DictionariesController) {
@@ -112,7 +155,7 @@ class EditDictionaryViewController: UIViewController {
 
     private func show() {
         UIView.animate(withDuration: 0.3, delay: 0) {
-            self.mainWindowView.alpha = 1
+            self.mainView.alpha = 1
             self.backgroundView.alpha = 1
         }
     }
@@ -120,7 +163,7 @@ class EditDictionaryViewController: UIViewController {
     private func hide() {
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut) {
             self.backgroundView.alpha = 0
-            self.mainWindowView.alpha = 0
+            self.mainView.alpha = 0
         } completion: { _ in
             self.dismiss(animated: false)
             self.removeFromParent()
@@ -141,9 +184,8 @@ class EditDictionaryViewController: UIViewController {
             newName = isSetNewName
             newDescription = isDescriptionSet
         }
-        switch (oldName == newName, oldDescription == newDescription, systemSharedStatus == newSharedStatus/*sharedStatusChanged == false*/){
-        case (true,true,true): //Here show message about nothing to change
-            // If allowedCommentsSwitch is not changed, show nothing to change message, and checkOK = false, else, checkOK = true
+        switch (oldName == newName, oldDescription == newDescription, systemSharedStatus == newSharedStatus){
+        case (true,true,true):
             if allowedCommentsStatus == newAllowedCommentsStatus{
                 warningViewAppearAnimate(type: "red", text: "editDictionaryVC_nothingToChange_message".localized)
                 checkOK = false
@@ -154,18 +196,21 @@ class EditDictionaryViewController: UIViewController {
             switch (newName.isEmpty,wordsCount<7){
             case (true,true),(true,false): //Here show message about name emptyness
                 warningViewAppearAnimate(type: "red", text: "editDictionaryVC_dictionaryNameIsEmpty_message".localized)
+                commentsSwitch.isOn = false
                 checkOK = false
             case (false,true): //Here show message about is not enough words
-                warningViewAppearAnimate(type: "red", text: "editDictionaryVC_notEnoughWords_message".localized)
-                checkOK = false
-                sharedSwitch.isOn = systemSharedStatus
-                newSharedStatus = systemSharedStatus
-                UIStackView.animate(withDuration: 0.3) {
-                    self.allowCommentsStackView.isHidden = true
-                    self.view.layoutIfNeeded()
+                if oldName != newName && !sharedSwitch.isOn{
+                    checkOK = true
+                } else {
+                    warningViewAppearAnimate(type: "red", text: "editDictionaryVC_notEnoughWords_message".localized)
+                    print("Stage 1")
+                    checkOK = false
+                    sharedSwitch.isOn = systemSharedStatus
+                    newSharedStatus = systemSharedStatus
+                    commentsSwitch.isOn = false
+                    commentsSwitch.isEnabled = false
                 }
-                commentsSwitch.isOn = false
-                //sharedStatusChanged = false
+                
             case (false,false):
                 checkOK = true
             }
@@ -177,11 +222,12 @@ class EditDictionaryViewController: UIViewController {
                 checkOK = false
                 sharedSwitch.isOn = systemSharedStatus
                 newSharedStatus = systemSharedStatus
-                UIStackView.animate(withDuration: 0.3) {
-                    self.allowCommentsStackView.isHidden = true
-                    self.view.layoutIfNeeded()
-                }
+//                UIStackView.animate(withDuration: 0.3) {
+//                    self.allowCommentsStackView.isHidden = true
+//                    self.view.layoutIfNeeded()
+//                }
                 commentsSwitch.isOn = false
+                commentsSwitch.isEnabled = false
                 // sharedStatusChanged = false
             } else {
                 checkOK = true
@@ -229,6 +275,7 @@ class EditDictionaryViewController: UIViewController {
 //    }
     
     private func saveChangedData(sharedStatus:Bool, commentsAllowed:Bool){
+        hideKeyboard()
         coreDataManager.parentDictionaryData.first?.dicName = newName
         coreDataManager.parentDictionaryData.first?.dicDescription = newDescription
         switch (sharedStatus,commentsAllowed){
@@ -246,11 +293,6 @@ class EditDictionaryViewController: UIViewController {
             coreDataManager.parentDictionaryData.first?.dicCommentsOn = false
         }
         // TODO: Check internet connection and realise sync if internet is absent
-        if sharedStatus{
-            fireDB.updateNetworkUserSharedDicsCount(userID: mainModel.loadUserData().userID, increment: true)
-        } else {
-            fireDB.updateNetworkUserSharedDicsCount(userID: mainModel.loadUserData().userID, increment: false)
-        }
         let dicID = coreDataManager.parentDictionaryData.first?.dicID ?? ""
         coreDataManager.saveData(data: context)
         tableReloadDelegate?.didUpdateView(sender: "")
@@ -266,7 +308,7 @@ class EditDictionaryViewController: UIViewController {
         }
         coreDataManager.saveData(data: context)
         UIView.animate(withDuration: 0.2) {
-            self.mainWindowView.alpha = 0
+            self.mainView.alpha = 0
         } completion: { Bool in }
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
@@ -298,20 +340,10 @@ class EditDictionaryViewController: UIViewController {
    
     @IBAction func sharedSwitchToggled(_ sender: UISwitch) {
         newSharedStatus = sharedSwitch.isOn
-        if newSharedStatus{
-            UIStackView.animate(withDuration: 0.3) {
-                self.allowCommentsStackView.isHidden = false
-                self.view.layoutIfNeeded()
-            }
-           // self.newAllowedCommentsStatus = true
-          //  self.commentsSwitch.isOn = true
+        if sharedSwitch.isOn{
+            commentsSwitch.isEnabled = true
         } else {
-            UIStackView.animate(withDuration: 0.3) {
-                self.allowCommentsStackView.isHidden = true
-                self.view.layoutIfNeeded()
-            }
-          //  self.newAllowedCommentsStatus = false
-          //  self.commentsSwitch.isOn = false
+            commentsSwitch.isEnabled = false
         }
     }
     
@@ -320,10 +352,12 @@ class EditDictionaryViewController: UIViewController {
     }
   
     @IBAction func cancelButtonPressed(_ sender: UIButton) {
+        hideKeyboard()
         hide()
     }
     
     @IBAction func saveButtonPressed(_ sender: UIButton) {
+        hideKeyboard()
         if checkForChanges(){
             switch (sharedSwitch.isOn, commentsSwitch.isOn){
             case (true,true):

@@ -98,7 +98,6 @@ class StatisticController: UIViewController {
                 default:
                     statisticArray.append(statData)
                 }
-                
             }
             totalLaunches = allStatistic.count
             totalRightAnswers = String(allStatistic.reduce(0) {$0 + $1.statRightAnswers})

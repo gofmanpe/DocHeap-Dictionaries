@@ -22,6 +22,7 @@
                 <outlet property="restartTestButton" destination="YPl-WO-zNF" id="M4w-h0-ePU"/>
                 <outlet property="retestErrorsButton" destination="XSE-FW-Vcp" id="fiD-O4-tiX"/>
                 <outlet property="scoresLabel" destination="QNz-dK-326" id="nTX-gx-dU7"/>
+                <outlet property="scoresNameLabel" destination="bVO-ow-xuG" id="ruf-h9-BB8"/>
                 <outlet property="secondStarImage" destination="aDA-FN-J8E" id="5Q2-st-vwL"/>
                 <outlet property="testNameLabel" destination="Me0-yl-1cn" id="kus-r3-65u"/>
                 <outlet property="thirdStarImage" destination="4bj-M5-5aK" id="eY3-eE-nTV"/>

@@ -54,6 +54,8 @@ class CreatePopUpViewController: UIViewController, UITextFieldDelegate {
     private let coreData = CoreDataManager()
     private let mainModel = MainModel()
     private let firebase = Firebase()
+    private var currentFramePosY = CGFloat()
+    private var bottomYPosition = CGFloat()
     
     init() {
         super.init(nibName: "CreatePopUpViewController", bundle: nil)
@@ -70,6 +72,37 @@ class CreatePopUpViewController: UIViewController, UITextFieldDelegate {
         dictionaryNameTextField.delegate = self
         elementsDesign()
         standartState()
+        keyboardBehavorSettings()
+    }
+    
+    private func keyboardBehavorSettings(){
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillShow),
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillHide),
+            name: UIResponder.keyboardWillHideNotification,
+            object: nil)
+        currentFramePosY = mainView.frame.origin.y
+        bottomYPosition = UIScreen.main.bounds.height - mainView.frame.origin.y - mainView.frame.size.height
+    }
+    
+    @objc func hideKeyboard() {
+        view.endEditing(true)
+    }
+    
+    @objc func keyboardWillShow(_ notification: Notification) {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            let keyboardHeight = keyboardSize.height
+            mainView.frame.origin.y = currentFramePosY + (bottomYPosition - keyboardHeight) - 5.0
+        }
+    }
+
+    @objc func keyboardWillHide(_ notification: Notification) {
+        mainView.frame.origin.y = currentFramePosY
     }
     
     func appear(sender: DictionariesController) {
@@ -224,10 +257,12 @@ class CreatePopUpViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func cancelPressed(_ sender: Any) {
+        hideKeyboard()
         hide()
     }
     
     @IBAction func learningButtonPressed(_ sender: UIButton) {
+        hideKeyboard()
         pressedButton = 1
         warningView.isHidden = true
         if pickerView.isHidden{
@@ -239,6 +274,7 @@ class CreatePopUpViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func translateButtonPressed(_ sender: UIButton) {
+        hideKeyboard()
         pressedButton = 2
         warningView.isHidden = true
         if pickerView.isHidden{
@@ -250,6 +286,7 @@ class CreatePopUpViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func createButtonPressed(_ sender: UIButton) {
+        hideKeyboard()
         if checkRulesForSelectedLanguages(learningLanguage: selectedLearning, translateLanguage: selectedTranslate, dicName: dictionaryNameTextField.text ?? ""){
             let dicID = mainModel.uniqueIDgenerator(prefix: "dic")
             let newDictionaryData = LocalDictionary(

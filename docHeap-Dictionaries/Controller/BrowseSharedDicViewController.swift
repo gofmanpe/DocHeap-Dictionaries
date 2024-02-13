@@ -21,10 +21,12 @@ class BrowseSharedDicViewController: UIViewController {
     @IBOutlet weak var downloadButton: UIButton!
     @IBOutlet weak var sharedWordsTable: UITableView!
     @IBOutlet weak var userLikesLabel: UILabel!
-    @IBOutlet weak var userSharedDicsLabel: UILabel!
+    @IBOutlet weak var userTestsCompleted: UILabel!
     @IBOutlet weak var userScoresLabel: UILabel!
     @IBOutlet weak var userAvatarImage: UIImageView!
     @IBOutlet weak var descriptionButton: UIButton!
+    @IBOutlet weak var dictionaryView: UIView!
+    @IBOutlet weak var userInfoView: UIView!
     
     func localizeElemants(){
        
@@ -48,18 +50,33 @@ class BrowseSharedDicViewController: UIViewController {
     private let firebase = Firebase()
     private var dicWasDownloaded = Bool()
     private let dispatchGroup = DispatchGroup()
+  //  private var userTotalStat : TotalStatistic?
 
 //MARK: - Lifecycle functions
     override func viewDidLoad() {
         super.viewDidLoad()
         localizeElemants()
+        setupData()
         elementsSetup()
         sharedWordsTable.delegate = self
         sharedWordsTable.dataSource = self
         sharedWordsTable.reloadData()
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+        userInfoView.addGestureRecognizer(tapGesture)
+        userInfoView.isUserInteractionEnabled = true
     }
 
 //MARK: - Controller functions
+    
+    private func setupData(){
+       // userTotalStat = coreData.getTotalStatisticForUser(userID: networkUserData!.userID, context: context).first
+        
+    }
+    
+    @objc func handleTap(_ gesture: UITapGestureRecognizer) {
+            popUpApear(popUpName: "BrowseUserInfoPopUp")
+        }
+    
     func elementsSetup(){
         learnLangImage.image = UIImage(named: sharedDictionary?.dicLearnLang ?? "")
         transLangImage.image = UIImage(named: sharedDictionary?.dicTransLang ?? "")
@@ -75,7 +92,7 @@ class BrowseSharedDicViewController: UIViewController {
         userAvatarImage.layer.cornerRadius = userAvatarImage.frame.size.width/2
         userAvatarImage.image = image
         userScoresLabel.text = String(networkUserData?.userScores ?? 0)
-        userSharedDicsLabel.text = String(networkUserData?.userSharedDics ?? 0)
+        userTestsCompleted.text = String(networkUserData?.userTestsCompleted ?? 0)
         userLikesLabel.text = String(networkUserData?.userLikes ?? 0)
         if sharedDictionary?.dicDescription == ""{
             descriptionButton.tintColor = .systemGray2
@@ -88,7 +105,14 @@ class BrowseSharedDicViewController: UIViewController {
         downloadButton.layer.shadowOpacity = 0.2
         downloadButton.layer.shadowOffset = .zero
         downloadButton.layer.shadowRadius = 2
-        
+        dictionaryView.layer.shadowColor = UIColor.black.cgColor
+        dictionaryView.layer.shadowOpacity = 0.2
+        dictionaryView.layer.shadowOffset = .zero
+        dictionaryView.layer.shadowRadius = 2
+        userInfoView.layer.shadowColor = UIColor.black.cgColor
+        userInfoView.layer.shadowOpacity = 0.2
+        userInfoView.layer.shadowOffset = .zero
+        userInfoView.layer.shadowRadius = 2
     }
     
     func createRODictionaryCoreData(){
@@ -115,7 +139,7 @@ class BrowseSharedDicViewController: UIViewController {
             dicWordsCount: sd.dicWordsCount)
         coreData.createDictionary(dictionary: newDictionaryData, context: context)
         mainModel.createFolderInDocuments(withName: "\(mainModel.loadUserData().userID)/\(dicID)")
-        let parentDictionary = coreData.getParentDictionaryData(dicID: dicID, userID: mainModel.loadUserData().userID, data: context)
+        let parentDictionary = coreData.getParentDictionaryData(dicID: dicID, userID: mainModel.loadUserData().userID, context: context)
         for word in sharedWordsArray{
             let newWorsPair = WordsPair(
                 wrdWord: word.wrdWord,
@@ -196,7 +220,7 @@ class BrowseSharedDicViewController: UIViewController {
                         let corDataMessages = self.coreData.getMessagesByDicID(dicID: self.dicID, context: self.context)
                         let filteredCDMessages = corDataMessages.filter({$0.msgID == newMessageID})
                         if filteredCDMessages.isEmpty{
-                            self.coreData.createChatMessage(message: message, context: self.context)
+                            self.coreData.createCommentForDictionary(message: message, context: self.context)
                         }
                     }
                 }
@@ -217,6 +241,23 @@ class BrowseSharedDicViewController: UIViewController {
             overLayerView.dicLearnLang = sharedDictionary!.dicLearnLang
             overLayerView.dicTransLang = sharedDictionary!.dicTransLang
             overLayerView.appear(sender: self)
+        case "BrowseUserInfoPopUp":
+            let overLayerView = UserInfoViewController()
+            overLayerView.networkUserData = networkUserData
+            overLayerView.appear(sender: self)
+           // let networkUser = coreData.loadNetworkUserByID(userID: networkUserData!.userID, data: context)<>
+//            firebase.getNetworkUserDataByID(userID: networkUserData!.userID) { networkUserData, error in
+//                if let error = error {
+//                    print("Error getting network user data: \(error)\n")
+//                } else {
+//                    overLayerView.networkUserData = networkUserData
+//                    overLayerView.appear(sender: self)
+//                }
+//            }
+           // let userTotalStat = coreData.getTotalStatisticForUser(userID: networkUserData!.userID, context: context).first
+           // overLayerView.networkUserStat = userTotalStat
+           // overLayerView.networkUser = networkUser
+            
         default: break
         }
     

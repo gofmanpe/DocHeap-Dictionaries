@@ -23,6 +23,7 @@ class RegisterController: UIViewController {
     @IBOutlet weak var addAvatarButton: UIButton!
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var registerButton: UIButton!
+    @IBOutlet weak var background: UIView!
     
     func localizeElements(){
         nickNameTextField.placeholder = "registerVC_name_placeholder".localized
@@ -54,9 +55,15 @@ class RegisterController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
             localizeElements()
             elementsDesign()
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        background.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc func hideKeyboard() {
+        view.endEditing(true)
     }
     
     func elementsDesign(){

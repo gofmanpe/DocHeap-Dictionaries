@@ -19,7 +19,7 @@
 "registerVC_back_button" = "Назад";
 "registerVC_register_button" = "Реєстрація";
 //DictionariesController
-"dictionariesVC_attention_label" = "У вас поки що не створено словників.\nСтворіть новий, натиснувши кнопку +";
+"dictionariesVC_attention_label" = "У вас поки що не створено словників.\nСтворіть новий, натиснувши кнопку '+', або завантажте будь-який у вкладці 'Мережа'";
 "dictionariesVC_wordsCount_label" = "Слів:";
 "dictionariesVC_createDate_label" = "Створено:";
 "dictionariesVC_myDictionaries_label" = "Cловники";
@@ -135,6 +135,20 @@
 "defaults_month10" = "Жовтень";
 "defaults_month11" = "Листопад";
 "defaults_month12" = "Грудень";
+"defaults_postitive_comment1" = "ПРАВИЛЬНО!";
+"defaults_postitive_comment2" = "ЧУДОВО!";
+"defaults_postitive_comment3" = "КРУТО!";
+"defaults_postitive_comment4" = "НЕПЕРЕВЕРШЕНО!";
+"defaults_postitive_comment5" = "ГАРНА РОБОТА!";
+"defaults_postitive_comment6" = "ШМАТОК ТОРТА!";
+"defaults_negative_comment1" = "ВИ ВТОМИЛИСЯ?";
+"defaults_negative_comment2" = "ЩЕ ОДНА СПРОБА!";
+"defaults_negative_comment3" = "УПС, НЕПРАВИЛЬНО!";
+"defaults_negative_comment4" = "НІЗАЩО!";
+"defaults_negative_comment5" = "НІ!";
+"defaults_negative_comment6" = "ОК, АЛЕ НІ!";
+"defaults_testFinished_comment" = "ТЕСТ ЗАВЕРШЕНО!";
+"defaults_mistakesFixed_comment" = "ПОМИЛКИ ВИПРАВЛЕНІ!";
 //ChangeLanguagePopUp
 "changeLanguagePopUp_header_label" = "Вибір мови інтерфейсу";
 "changeLanguagePopUp_attention_label" = "Увага! Ви намагаєтеся змінити мову інтерфейсу додатка. Після цієї дії мова додатка та мова вашої системи будуть різними. Якщо ви погоджуєтеся, ви можете вибрати нову мову інтерфейсу, але вам потрібно буде перезапустити додаток після цього.";
@@ -157,7 +171,7 @@
 "testVC_falseOrTrue_description" = "Вам потрібно визначити, чи правильно перекладено подане слово.";
 "testVC_findAnImage_name" = "Тест Знайти Зображення";
 "testVC_findAnImage_description" = "Вам потрібно вибрати правильне зображення для заданого слова.";
-"testVC_noDictionariesCreated_message" = "У вас поки що немає словників.\nДля початку тестування необхідно створити хоча б один словник і додати до нього 5 слів.";
+"testVC_noDictionariesCreated_message" = "У вас поки що немає словників.\nДля початку тестування необхідно створити хоча б один словник і додати до нього 5 слів. Або завантажте будь-який у вкладці 'Мережа'";
 "testVC_5wordstest_ico" = "5wrdico_ua.png";
 "testVC_3wordstest_ico" = "3wrdico_ua.png";
 "testVC_findApairtest_ico" = "fApico_ua.png";
@@ -178,16 +192,66 @@
 "selectDictionaryVC_notEnoughWords_message" = " слів! Будь ласка, додайте слова або виберіть інший словник!";
 "selectDictionaryVC_notEnoughImages_message" = " слів із картинками! Будь ласка, додайте зображення до слів або виберіть інший словник!";
 
+//ResultsPopUP
+"resultsPopUp_restart_button" = "Рестарт";
+"resultsPopUp_close_button" = "Закрити";
+"resultsPopUp_scoresName_label" = "ОЧКИ";
+"resultsPopUp_threeWordsTest_message" = "Завершено %d раундів\nз %d помилок";
+"resultsPopUp_findAPairTest_message" = "Ззавершено з %d помилок";
+"resultsPopUp_falseOrTrueTest_message" = "Усього %d правильних відповідей \n та %d помилок";
+"resultsPopUp_findAnImageTest_message" = "Вгадано %d зображень з %d помилок";
+
 // ThreeWordsTestVC
 "threeWordsTestVC_repetitionMode_label" = "Фіксація помилок";
-"threeWordsTestVC_roundsName_label" = "Раунд";
-"threeWordsTestVC_scoresName_label" = "Очки";
+"threeWordsTestVC_roundsName_label" = "Раунд:";
+"threeWordsTestVC_scoresName_label" = "Очки:";
 "threeWordsTestVC_instructionLabel_label" = "Виберіть правильний переклад";
 "threeWordsTestVC_makeChoise_label" = "Зробіть вибір";
 "threeWordsTestVC_check_button" = "ПЕРЕВІРИТИ";
 "threeWordsTestVC_next_button" = "ДАЛІ";
 "threeWordsTestVC_toResults_button" = "ДО РЕЗУЛЬТАТІВ";
 "threeWordsTestVC_testProgress_label" = "Прогрес тесту";
+
+//FiveWordsTestVC
+"fiveWordsTestVC_repetitionMode_label" = "Фіксація помилок";
+"fiveWordsTestVC_roundsName_label" = "Раунд:";
+"fiveWordsTestVC_scoresName_label" = "Очки:";
+"fiveWordsTestVC_instructionLabel_label" = "Виберіть правильний переклад";
+"fiveWordsTestVC_makeChoise_label" = "Зробіть вибір";
+"fiveWordsTestVC_check_button" = "ПЕРЕВІРИТИ";
+"fiveWordsTestVC_next_button" = "ДАЛІ";
+"fiveWordsTestVC_toResults_button" = "ДО РЕЗУЛЬТАТІВ";
+"fiveWordsTestVC_testProgress_label" = "Прогрес тесту";
+
+//FindApairTestVC
+"findApairTestVC_mistakesName_label" = "Помилки:";
+"findApairTestVC_scoresName_label" = "Очки:";
+"findApairTestVC_instructionLabel_label" = "Виберіть слово та його переклад";
+"findApairTestVC_makeChoise_label" = "Зробіть вибір";
+"findApairTestVC_check_button" = "ПЕРЕВІРИТИ";
+"findApairTestVC_next_button" = "ДАЛІ";
+"findApairTestVC_toResults_button" = "ДО РЕЗУЛЬТАТІВ";
+"findApairTestVC_again_button" = "ЩЕ РАЗ";
+
+//TrueOrFalseТест
+"trueOrFalseTestVC_roundName_label" = "Раунд:";
+"trueOrFalseTestVC_scoresName_label" = "Очки:";
+"trueOrFalseTestVC_instruction_label" = "Переклад правда чи брехня?";
+"trueOrFalseTestVC_testProgress_label" = "Прогрес тесту";
+"trueOrFalseTestVC_true_button" = "ПРАВДА";
+"trueOrFalseTestVC_false_button" = "БРЕХНЯ";
+"trueOrFalseTestVC_next_button" = "ДАЛІ";
+"trueOrFalseTestVC_toResults_button" = "ДО РЕЗУЛЬТАТІВ";
+
+//FindAnImageTestVC
+"findAnImageVC_round_label" = "Раунд:";
+"findAnImageVC_scores_label" = "Очки:";
+"findAnImageVC_instruction_label" = "Виберіть правильне зображення";
+"findAnImageVC_testProgress_label" = "Прогрес тесту";
+"findAnImageVC_check_button" = "ПЕРЕВІРИТИ";
+"findAnImageVC_toResults_button" = "ДО РЕЗУЛЬТАТІВ";
+"findAnImageVC_next_button" = "ДАЛІ";
+
 //ProfileVC
 "profileVC_logout_button" = "Вихід";
 "profileVC_setAvatar_button" = "Змінити";

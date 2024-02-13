@@ -11,8 +11,8 @@ protocol UpdateView{
     func didUpdateView(sender:String)
 }
 
-protocol SaveWordsPairToDictionary{
-    func saveWordsPair(word:String,translation:String, imageName:String?, wrdID:String)
+protocol UploadImageToFirestore{
+    func uploadImage(imageName:String?, wrdID:String)
 }
 
 protocol CellButtonPressed{

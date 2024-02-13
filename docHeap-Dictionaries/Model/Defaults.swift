@@ -24,14 +24,29 @@ struct Defaults{
         MonthArray(value: "12", name: "defaults_month12".localized)
     ]
     
-    let rightCommentsArray = ["RIGHT!", "GREAT!", "COOL!", "AWSOME!", "GOOD WORK!", "PIECE OF CAKE!"]
-    let wrongCommentsArray = ["ARE YOU TIRED?", "ONE MORE TRY!", "YOU WRONG!", "NO WAY!", "NOPE!", "OK, BUT NO!"]
+    let rightCommentsArray = [
+        "defaults_postitive_comment1".localized,
+        "defaults_postitive_comment2".localized,
+        "defaults_postitive_comment3".localized,
+        "defaults_postitive_comment4".localized,
+        "defaults_postitive_comment5".localized,
+        "defaults_postitive_comment6".localized
+    ]
+    
+    let wrongCommentsArray = [
+        "defaults_negative_comment1".localized,
+        "defaults_negative_comment2".localized,
+        "defaults_negative_comment3".localized,
+        "defaults_negative_comment4".localized,
+        "defaults_negative_comment5".localized,
+        "defaults_negative_comment6".localized
+    ]
     
     let emptyAvatarPath = "https://firebasestorage.googleapis.com/v0/b/docheap-dictionaries-1c1be.appspot.com/o/Resources%2FnoAvatar.png?alt=media&token=8542c73b-f70e-4030-aedb-3a662e724033"
     
     
-    let labelTestFinishedText = "TEST FINISHED!"
-    let labelMistakesFixedText = "MISTAKES FIXED!"
+    let labelTestFinishedText = "defaults_testFinished_comment".localized
+    let labelMistakesFixedText = "defaults_mistakesFixed_comment".localized
     let labelTestProgressText = "Test progress:"
     let findApairChooseWordText = "You must choose a word"
     let findApairChooseTranslationText = "You must choose a translation"

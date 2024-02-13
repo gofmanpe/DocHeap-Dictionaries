@@ -32,6 +32,11 @@ extension String {
         NSLocalizedString(self, comment: "\(self) could not find in Licalizable.settings")
     }
     
+    func localizedPlural(_ arg:Int) -> String{
+        let formatString = NSLocalizedString(self, comment: "\(self) could not find in Licalizable.stringsDict")
+        return Self.localizedStringWithFormat(formatString, arg)
+    }
+    
     func transliterate() -> String {
         let latinString = self.applyingTransform(StringTransform.toLatin, reverse: false) ?? self
         return latinString

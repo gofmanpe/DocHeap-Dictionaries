@@ -14,7 +14,7 @@ class BrowseWordViewController: UIViewController {
     @IBOutlet weak var mainView: UIView!
    
     @IBOutlet weak var headerLabel: UILabel!
-    @IBOutlet weak var wordWindow: UIView!
+  //  @IBOutlet weak var wordWindow: UIView!
     
     @IBOutlet weak var dialogLabel: UILabel!
     @IBOutlet weak var wordImage: UIImageView!
@@ -107,7 +107,7 @@ class BrowseWordViewController: UIViewController {
     var wordID = String()
     
     var dicROstatus = Bool()
-    var dictionaryCatalog = String()
+    var dicID = String()
     private var currentUserEmail = String()
     
     var editedWord = String()
@@ -121,6 +121,8 @@ class BrowseWordViewController: UIViewController {
     private var editScreenActive = false
     private var deleteScreenActive = false
     private var infoScreenActive = false
+    private var currentFramePosY = CGFloat()
+    private var bottomYPosition = CGFloat()
     
     
     init() {
@@ -137,18 +139,49 @@ class BrowseWordViewController: UIViewController {
        
         localizeElements()
         /*!!!*/ coreDataManager.loadParentDictionaryData(dicID: dictionaryID, userID: mainModel.loadUserData().userID, data: context)
-        /*!!!*/ coreDataManager.loadWordsForSelectedDictionary(dicID: coreDataManager.parentDictionaryData.first?.dicID ?? "", userID: mainModel.loadUserData().userID, data: context)
+        /*!!!*/ coreDataManager.loadWordsForSelectedDictionary(dicID: coreDataManager.parentDictionaryData.first?.dicID ?? "", userID: mainModel.loadUserData().userID, context: context)
         popUpBackgroundSettings()
         standartState()
         elementsDesign()
         setDataForWord()
         infoWindowActive()
+        keyboardBehavorSettings()
+    }
+    
+    private func keyboardBehavorSettings(){
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillShow),
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillHide),
+            name: UIResponder.keyboardWillHideNotification,
+            object: nil)
+        currentFramePosY = mainView.frame.origin.y
+        bottomYPosition = UIScreen.main.bounds.height - mainView.frame.origin.y - mainView.frame.size.height
+    }
+    
+    @objc func hideKeyboard() {
+        view.endEditing(true)
+    }
+    
+    @objc func keyboardWillShow(_ notification: Notification) {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            let keyboardHeight = keyboardSize.height
+            mainView.frame.origin.y = currentFramePosY + (bottomYPosition - keyboardHeight) - 5.0
+        }
+    }
+
+    @objc func keyboardWillHide(_ notification: Notification) {
+        mainView.frame.origin.y = currentFramePosY
     }
     
     func standartState(){
         currentUserEmail = mainModel.loadUserData().email
-        dictionaryCatalog = (coreDataManager.parentDictionaryData.first?.dicID)!
-        oneWordArray = coreDataManager.loadWordDataByID(wrdID: wordID, data: context).first!
+        dicID = (coreDataManager.parentDictionaryData.first?.dicID)!
+        oneWordArray = coreDataManager.loadWordDataByID(wrdID: wordID, userID: mainModel.loadUserData().userID, data: context).first!
         
     }
     
@@ -253,7 +286,7 @@ class BrowseWordViewController: UIViewController {
     }
     
     func setDataForWord(){
-        coreDataManager.loadWordsForSelectedDictionary(dicID: coreDataManager.parentDictionaryData.first?.dicID ?? "", userID: mainModel.loadUserData().userID, data: context)
+        coreDataManager.loadWordsForSelectedDictionary(dicID: coreDataManager.parentDictionaryData.first?.dicID ?? "", userID: mainModel.loadUserData().userID, context: context)
         wordLabel.text = oneWordArray.wrdWord
         translationLabel.text = oneWordArray.wrdTranslation
         testedLabel.text = String(oneWordArray.wrdWrongAnswers+oneWordArray.wrdRightAnswers)
@@ -267,6 +300,8 @@ class BrowseWordViewController: UIViewController {
         learningLanguageLabelInfo.text = learningLanguage
         translateLanguageImageInfo.image = UIImage(named: translateLanguage!)
         translateLanguageLabelInfo.text = translateLanguage
+        rightAnswersLabel.text = String(oneWordArray.wrdRightAnswers)
+        wrongAnswersLabel.text = String(oneWordArray.wrdWrongAnswers)
     }
     
     func setImageForWord()->UIImage{
@@ -364,6 +399,7 @@ class BrowseWordViewController: UIViewController {
     }
     
     @IBAction func saveButtonPressed(_ sender: UIButton) {
+        hideKeyboard()
         editedWord = wordTextFieldEditView.text ?? "empty word"
         editedTranslation = translationTextFiedEditView.text ?? "empty translation"
         if enteredChecking(){
@@ -450,6 +486,7 @@ class BrowseWordViewController: UIViewController {
 
     
     @IBAction func cancelButtonPressed(_ sender: UIButton) {
+        hideKeyboard()
         if editScreenActive{
             flipViewAnimation(view: mainView, direction: "right")
             infoWindowActive()
@@ -486,6 +523,7 @@ class BrowseWordViewController: UIViewController {
     
     
     @IBAction func confirmDeletingPressed(_ sender: UIButton) {
+        hideKeyboard()
 //        var wordForDeleting = coreDataManager.wordsArray.filter({$0.wrdWord == word})
         let wrdDicID = oneWordArray.wrdDicID!
 //        let wrdID = wordForDeleting.first?.wrdID ?? ""

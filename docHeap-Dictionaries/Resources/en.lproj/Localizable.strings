@@ -23,7 +23,7 @@
 "registerVC_back_button" = "Back";
 "registerVC_register_button" = "Register";
 //DictionariesController
-"dictionariesVC_attention_label" = "You have not created any dictionaries yet.\nCreate a new one by clicking on the + button";
+"dictionariesVC_attention_label" = "You have not created any dictionaries yet.\nCreate a new one by clicking on the '+' button, or download any one in the 'Network' tab";
 "dictionariesVC_wordsCount_label" = "Words:";
 "dictionariesVC_createDate_label" = "Created:";
 "dictionariesVC_myDictionaries_label" = "Dictionaries";
@@ -139,6 +139,22 @@
 "defaults_month10" = "October";
 "defaults_month11" = "November";
 "defaults_month12" = "December";
+"defaults_postitive_comment1" = "RIGHT!";
+"defaults_postitive_comment2" = "GREAT!";
+"defaults_postitive_comment3" = "COOL!";
+"defaults_postitive_comment4" = "AWSOME!";
+"defaults_postitive_comment5" = "GOOD WORK!";
+"defaults_postitive_comment6" = "PIECE OF CAKE!";
+"defaults_negative_comment1" = "ARE YOU TIRED?";
+"defaults_negative_comment2" = "ONE MORE TRY!";
+"defaults_negative_comment3" = "YOU WRONG!";
+"defaults_negative_comment4" = "NO WAY!";
+"defaults_negative_comment5" = "NOPE!";
+"defaults_negative_comment6" = "OK, BUT NO!";
+"defaults_testFinished_comment" = "TEST FINISHED!";
+"defaults_mistakesFixed_comment" = "MISTAKES FIXED!";
+
+
 //ChangeLanguagePopUp
 "changeLanguagePopUp_header_label" = "Choose Interface Language";
 "changeLanguagePopUp_attention_label" = "Attention! You are attempting to change the application's interface language. After this action, the application language and your system language will be different. If you agree, you can choose a new interface language, but you will need to restart the application afterwards.";
@@ -161,7 +177,7 @@
 "testVC_falseOrTrue_description" = "You need to determine whether the presented word is translated correctly or not.";
 "testVC_findAnImage_name" = "Find the Image Test";
 "testVC_findAnImage_description" = "You need to choose the correct image for the given word.";
-"testVC_noDictionariesCreated_message" = "You don't have any dictionaries yet.\nTo start testing, you need to create at least one dictionary and add 5 words to it.";
+"testVC_noDictionariesCreated_message" = "You don't have any dictionaries yet.\nTo start testing, you need to create at least one dictionary and add 5 words to it. Or download any one in the 'Network' tab";
 "testVC_5wordstest_ico" = "5wrdico_en.png";
 "testVC_3wordstest_ico" = "3wrdico_en.png";
 "testVC_findApairtest_ico" = "fApico_en.png";
@@ -181,17 +197,67 @@
 "selectDictionaryVC_notEnough_message" = "In this dictionary less then ";
 "selectDictionaryVC_notEnoughWords_message" = " words! Please add words into it or select other dictionary";
 "selectDictionaryVC_notEnoughImages_message" = " words with saved images! Please add images for words or select other dictionary";
+//ResultsPopUP
+"resultsPopUp_restart_button" = "Restart test";
+"resultsPopUp_close_button" = "Close";
+"resultsPopUp_scoresName_label" = "SCORES";
+"resultsPopUp_threeWordsTest_message" = "Finished %d rounds\nwith %d mistakes";
+"resultsPopUp_findAPairTest_message" = "Finished with %d mistakes";
+"resultsPopUp_falseOrTrueTest_message" = "Totaly %d right answers \n and %d mistakes";
+"resultsPopUp_findAnImageTest_message" = "Угадано %d картинок с %d ошибок";
 
 // ThreeWordsTestVC
 "threeWordsTestVC_repetitionMode_label" = "Error Fixation";
-"threeWordsTestVC_roundsName_label" = "Round";
-"threeWordsTestVC_scoresName_label" = "Scores";
+"threeWordsTestVC_roundsName_label" = "Round:";
+"threeWordsTestVC_scoresName_label" = "Scores:";
 "threeWordsTestVC_instructionLabel_label" = "Select the Correct Translation";
 "threeWordsTestVC_makeChoise_label" = "Make a Choice";
 "threeWordsTestVC_check_button" = "CHECK";
 "threeWordsTestVC_next_button" = "NEXT";
 "threeWordsTestVC_toResults_button" = "TO RESULTS";
 "threeWordsTestVC_testProgress_label" = "Test Progress";
+
+//FiveWordsTestVC
+"fiveWordsTestVC_repetitionMode_label" = "Repetition Mode";
+"fiveWordsTestVC_roundsName_label" = "Round:";
+"fiveWordsTestVC_scoresName_label" = "Scores:";
+"fiveWordsTestVC_instructionLabel_label" = "Choose the correct translation";
+"fiveWordsTestVC_makeChoise_label" = "Make a Choice";
+"fiveWordsTestVC_check_button" = "CHECK";
+"fiveWordsTestVC_next_button" = "NEXT";
+"fiveWordsTestVC_toResults_button" = "TO RESULTS";
+"fiveWordsTestVC_testProgress_label" = "Test Progress";
+
+//FindApairTestVC
+"findApairTestVC_mistakesName_label" = "Mistakes:";
+"findApairTestVC_scoresName_label" = "Scores:";
+"findApairTestVC_instructionLabel_label" = "Select a word and its translation";
+"findApairTestVC_makeChoise_label" = "Make a Choice";
+"findApairTestVC_check_button" = "CHECK";
+"findApairTestVC_next_button" = "NEXT";
+"findApairTestVC_toResults_button" = "TO RESULTS";
+"findApairTestVC_again_button" = "AGAIN";
+
+//TrueOrFalseTest
+"trueOrFalseTestVC_roundName_label" = "Rounds:";
+"trueOrFalseTestVC_scoresName_label" = "Scores:";
+"trueOrFalseTestVC_instruction_label" = "The translation is true or false?";
+"trueOrFalseTestVC_testProgress_label" = "Test progress";
+"trueOrFalseTestVC_true_button" = "TRUE";
+"trueOrFalseTestVC_false_button" = "FALSE";
+"trueOrFalseTestVC_next_button" = "NEXT";
+"trueOrFalseTestVC_toResults_button" = "TO RESULTS";
+
+//FindAnImageTestVC
+"findAnImageVC_round_label" = "Round:";
+"findAnImageVC_scores_label" = "Scores:";
+"findAnImageVC_instruction_label" = "Choose the correct image";
+"findAnImageVC_testProgress_label" = "Test progress";
+"findAnImageVC_check_button" = "CHECK";
+"findAnImageVC_toResults_button" = "TO RESULTS";
+"findAnImageVC_next_button" = "NEXT";
+
+
 //ProfileVC
 "profileVC_logout_button" = "User logout";
 "profileVC_setAvatar_button" = "Set avatar";

@@ -63,8 +63,8 @@ class DictionariesController: UIViewController, UpdateView, CellButtonPressed{
     private var avatarName = String()
     private var dicID = String()
     var userID = String()
-    private var dictionariesArray = [Dictionary]()
-    private var userDataArray = [UserData]()
+    private var dictionariesArray = [LocalDictionary]()
+    private var userData : UserData?
     
     private var likesCount = Int()
 //    private var messagesCount = Int()
@@ -102,13 +102,13 @@ class DictionariesController: UIViewController, UpdateView, CellButtonPressed{
     
 //MARK: - Controller functions
     func setupData(){
-        dictionariesArray = coreData.loadUserDictionaries(userID: mainModel.loadUserData().userID, data: context)
-        userDataArray = coreData.loadUserDataByID(userID: mainModel.loadUserData().userID, context: context) 
+        dictionariesArray = coreData.loadUserDictionaries(userID: mainModel.loadUserData().userID, context: context)
+        userData = coreData.loadUserDataByID(userID: mainModel.loadUserData().userID, context: context)
         let userTotalStat = coreData.getTotalStatisticForUser(userID: mainModel.loadUserData().userID, context: context).first
         scoresLabel.text = String(userTotalStat?.scores ?? 0)
         testsRunsLabel.text = String(userTotalStat?.testRuns ?? 0)
-        let userName = userDataArray.first?.userName
-        let userEmail = userDataArray.first?.userEmail
+        let userName = userData?.userName
+        let userEmail = userData?.userEmail
         dictionariesTable.delegate = self
         dictionariesTable.dataSource = self
         dictionariesTable.reloadData()
@@ -123,11 +123,13 @@ class DictionariesController: UIViewController, UpdateView, CellButtonPressed{
         } else {
             userNameLabel.text = userEmail
         }
-        let avatarExtention = userDataArray.first?.userAvatarExtention
-        if avatarExtention != nil{
-            avatarName = "userAvatar.\(avatarExtention ?? "")"
+        let avatarExtention = userData?.userAvatarExtention ?? ""
+        if !avatarExtention.isEmpty{
+            avatarName = "userAvatar.\(avatarExtention)"
             let avatarPath = "\(mainModel.loadUserData().userID)/\(avatarName)"
             avatarImageView.image = UIImage(contentsOfFile:  mainModel.getDocumentsFolderPath().appendingPathComponent(avatarPath).path)
+        } else {
+            avatarImageView.image = UIImage(named: "noAvatar")
         }
         firebase.listenUserLikesCount(userID: mainModel.loadUserData().userID) { count, error in
             if let error = error {
@@ -261,14 +263,12 @@ extension DictionariesController: UITableViewDelegate, UITableViewDataSource{
         dictionaryCell.dictionaryNameLabel.text = dictionariesArray[indexPath.row].dicName
         dictionaryCell.learningLanguageLabel.text = dictionariesArray[indexPath.row].dicLearningLanguage
         dictionaryCell.translateLanguageLabel.text = dictionariesArray[indexPath.row].dicTranslateLanguage
-        dictionaryCell.dicName = dictionariesArray[indexPath.row].dicName ?? "no_dicName"
-        dictionaryCell.dicID = dictionariesArray[indexPath.row].dicID ?? "no_dicID"
-        if let learnImage:String = dictionariesArray[indexPath.row].dicLearningLanguage{
-            dictionaryCell.learningLanguageImage.image = UIImage(named: "\(learnImage).png")
-        } else {print("No learning language image")}
-        if let translateImage:String = dictionariesArray[indexPath.row].dicTranslateLanguage{
-            dictionaryCell.translateLanguageImage.image = UIImage(named: "\(translateImage).png")
-        } else {print("No translate language image")}
+        dictionaryCell.dicName = dictionariesArray[indexPath.row].dicName
+        dictionaryCell.dicID = dictionariesArray[indexPath.row].dicID
+        let learnImage = dictionariesArray[indexPath.row].dicLearningLanguage
+        dictionaryCell.learningLanguageImage.image = UIImage(named: "\(learnImage).png")
+        let translateImage = dictionariesArray[indexPath.row].dicTranslateLanguage
+        dictionaryCell.translateLanguageImage.image = UIImage(named: "\(translateImage).png")
         dictionaryCell.wordsInDictionaryLabel.text = String(dictionariesArray[indexPath.row].dicWordsCount)
         dictionaryCell.cellButtonActionDelegate = self
         if dictionariesArray[indexPath.row].dicReadOnly{
@@ -277,7 +277,7 @@ extension DictionariesController: UITableViewDelegate, UITableViewDataSource{
             dictionaryCell.dicTypeLabel.isHidden = false
             dictionaryCell.editButton.isHidden = true
             dictionaryCell.createDateLabel.text = "dictionariesVC_ownerName_label".localized
-            let ownerName = coreData.getNetworkUserNameByID(userID: dictionariesArray[indexPath.row].dicOwnerID ?? "NONAME", context: context)
+            let ownerName = coreData.getNetworkUserNameByID(userID: dictionariesArray[indexPath.row].dicOwnerID, context: context)
             dictionaryCell.creatinDateLabel.text = ownerName
         } else {
             dictionaryCell.infoStack.isHidden = true
@@ -293,7 +293,7 @@ extension DictionariesController: UITableViewDelegate, UITableViewDataSource{
                 dictionaryCell.messagesStackView.isHidden = true
             }
             //listenCounts(dicID: dictionariesArray[indexPath.row].dicID ?? "")
-            firebase.listenDictionaryCommentsCount(dicID: dictionariesArray[indexPath.row].dicID ?? "") { count, error in
+            firebase.listenDictionaryCommentsCount(dicID: dictionariesArray[indexPath.row].dicID) { count, error in
                 if let error = error{
                     print("Error get dictionary likes count: \(error)\n")
                 } else {
@@ -304,7 +304,7 @@ extension DictionariesController: UITableViewDelegate, UITableViewDataSource{
                     dictionaryCell.dicCommentsLabel.text = String(messagesCount)
                 }
             }
-            firebase.listenDictionaryLikesCount(dicID: dictionariesArray[indexPath.row].dicID ?? "") { count, error in
+            firebase.listenDictionaryLikesCount(dicID: dictionariesArray[indexPath.row].dicID) { count, error in
                 if let error = error{
                     print("Error get dictionary likes count: \(error)\n")
                 } else {
@@ -331,9 +331,9 @@ extension DictionariesController: UITableViewDelegate, UITableViewDataSource{
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
             let destinationVC = segue.destination as! BrowseDictionaryController
             if let indexPath = dictionariesTable.indexPathForSelectedRow{
-                let ownerName = coreData.getNetworkUserNameByID(userID: dictionariesArray[indexPath.row].dicOwnerID ?? "NONAME", context: context)
+                let ownerName = coreData.getNetworkUserNameByID(userID: dictionariesArray[indexPath.row].dicOwnerID, context: context)
                 destinationVC.ownerName = ownerName
-                destinationVC.selectedDictionary = dictionariesArray[indexPath.row]
+                destinationVC.dicID = dictionariesArray[indexPath.row].dicID
             }
     }
     

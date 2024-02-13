@@ -53,6 +53,9 @@ class EditProfileViewController: UIViewController {
     private let days = Array(1...31)
     private var months = [MonthArray]()
     private var years = Array(1920...Calendar.current.component(.year, from: Date()) - 3)
+    private var currentFramePosY = CGFloat()
+    private var bottomYPosition = CGFloat()
+
        
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,14 +67,45 @@ class EditProfileViewController: UIViewController {
         dateOfBirthTextField.inputView = pickerView
         dateOfBirthTextField.delegate = self
         years = years.reversed()
+        keyboardBehavorSettings()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         dataSetup()
     }
+    
+    private func keyboardBehavorSettings(){
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillShow),
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillHide),
+            name: UIResponder.keyboardWillHideNotification,
+            object: nil)
+        currentFramePosY = mainView.frame.origin.y
+        bottomYPosition = UIScreen.main.bounds.height - mainView.frame.origin.y - mainView.frame.size.height
+    }
+    
+    @objc func hideKeyboard() {
+        view.endEditing(true)
+    }
+    
+    @objc func keyboardWillShow(_ notification: Notification) {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            let keyboardHeight = keyboardSize.height
+            mainView.frame.origin.y = currentFramePosY + (bottomYPosition - keyboardHeight) - 5.0
+        }
+    }
+
+    @objc func keyboardWillHide(_ notification: Notification) {
+        mainView.frame.origin.y = currentFramePosY
+    }
    
     func dataSetup(){
-        userData = coreData.loadUserDataByID(userID: mainModel.loadUserData().userID, context: context).first
+        userData = coreData.loadUserDataByID(userID: mainModel.loadUserData().userID, context: context)
         userNameTextField.text = userData?.userName
         dateOfBirthTextField.text = userData?.userBirthDate
         countryTextField.text = userData?.userCountry
@@ -149,6 +183,7 @@ class EditProfileViewController: UIViewController {
     }
     
     @IBAction func saveButtonPressed(_ sender: UIButton) {
+        hideKeyboard()
         if checkForChanges(){
             warningViewAppearAnimate("All data was saved!", problem: false)
             let uData = UserData(
@@ -165,10 +200,13 @@ class EditProfileViewController: UIViewController {
                 userSyncronized: true,
                 userType: "",
                 userRegisterDate: "",
-                userInterfaceLanguage: "")
-            coreData.updateUserData(userData: uData, context: context)
-           
-            userData = coreData.loadUserDataByID(userID: mainModel.loadUserData().userID, context: context).first
+                userInterfaceLanguage: "",
+                userMistakes: userData?.userMistakes ?? 0,
+                userRightAnswers: userData?.userRightAnswers ?? 0,
+                userTestsCompleted: userData?.userTestsCompleted ?? 0
+            )
+            coreData.updateUserProfileData(userData: uData, context: context)
+            userData = coreData.loadUserDataByID(userID: mainModel.loadUserData().userID, context: context)
             if mainModel.isInternetAvailable(){
                 firebase.updateUserDataFirebase(userData: userData!)
                 coreData.setSyncronizedStatusForUser(userID: mainModel.loadUserData().userID, status: true, context: context)
@@ -191,6 +229,7 @@ class EditProfileViewController: UIViewController {
    
     
     @IBAction func camcelButtonPressed(_ sender: UIButton) {
+        hideKeyboard()
         hide()
     }
     

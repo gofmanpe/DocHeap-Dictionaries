@@ -10,7 +10,7 @@ import UIKit
 class FalseOrTrueTestController: UIViewController, PerformToSegue, UpdateView {
   
     func didUpdateView(sender: String) {
-        coreDataManager.loadWordsForSelectedDictionary(dicID: coreDataManager.parentDictionaryData.first?.dicID ?? "", userID: mainModel.loadUserData().userID, data: context)
+        coreDataManager.loadWordsForSelectedDictionary(dicID: coreDataManager.parentDictionaryData.first?.dicID ?? "", userID: mainModel.loadUserData().userID, context: context)
         coreDataManager.loadParentDictionaryData(dicID: selectedDictionary, userID: mainModel.loadUserData().userID, data: context)
         standartState()
         mainModel = MainModel()
@@ -36,6 +36,10 @@ class FalseOrTrueTestController: UIViewController, PerformToSegue, UpdateView {
     @IBOutlet weak var translationLanguageLabel: UILabel!
     @IBOutlet weak var roundNumberLabel: UILabel!
     @IBOutlet weak var scoresLabel: UILabel!
+    @IBOutlet weak var roundNameLabel: UILabel!
+    @IBOutlet weak var scoresNameLabel: UILabel!
+    @IBOutlet weak var testProgressLabel: UILabel!
+    @IBOutlet weak var instructionLabel: UILabel!
     
     @IBOutlet weak var wordsBackgroundView: UIView!
     @IBOutlet weak var resultLabel: UILabel!
@@ -55,7 +59,14 @@ class FalseOrTrueTestController: UIViewController, PerformToSegue, UpdateView {
     @IBOutlet weak var progressBar: UIProgressView!
     
     func localizeElements(){
-        
+        roundNameLabel.text = "trueOrFalseTestVC_roundName_label".localized
+        scoresNameLabel.text = "trueOrFalseTestVC_scoresName_label".localized
+        instructionLabel.text = "trueOrFalseTestVC_instruction_label".localized
+        testProgressLabel.text = "trueOrFalseTestVC_testProgress_label".localized
+        trueButton.setTitle("trueOrFalseTestVC_true_button".localized, for: .normal)
+        falseButton.setTitle("trueOrFalseTestVC_false_button".localized, for: .normal)
+        nextButton.setTitle("trueOrFalseTestVC_next_button".localized, for: .normal)
+        toResultsButton.setTitle("trueOrFalseTestVC_toResults_button".localized, for: .normal)
     }
     
     private var filteredArray = [Word]()
@@ -76,14 +87,15 @@ class FalseOrTrueTestController: UIViewController, PerformToSegue, UpdateView {
     private var mainModel = MainModel()
     private let defaults = Defaults()
     var numberOfRounds = Int()
-   // private var selectedTestName = String()
+    private var progressBarProgress = Double()
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         localizeElements()
+        elementsDesign()
         coreDataManager.loadParentDictionaryData(dicID: selectedDictionary, userID: mainModel.loadUserData().userID, data: context)
-        coreDataManager.loadWordsForSelectedDictionary(dicID: coreDataManager.parentDictionaryData.first?.dicID ?? "", userID: mainModel.loadUserData().userID, data: context)
+        coreDataManager.loadWordsForSelectedDictionary(dicID: coreDataManager.parentDictionaryData.first?.dicID ?? "", userID: mainModel.loadUserData().userID, context: context)
         mainModel.wordsStatusClearing(array: coreDataManager.wordsArray, statusToClear: 0, data: context)
         falseOrTrueTestStart()
     }
@@ -105,8 +117,12 @@ class FalseOrTrueTestController: UIViewController, PerformToSegue, UpdateView {
         let translateImage = coreDataManager.parentDictionaryData.first!.dicTranslateLanguage!
         learningImage.image = UIImage(named: "\(learnImage)")
         translationImage.image = UIImage(named: "\(translateImage)")
-        
     }
+    
+    private func elementsDesign(){
+        wordsBackgroundView.layer.cornerRadius = 10
+    }
+    
     func falseOrTrueTestStart(){
         standartState()
         let wordsArray = coreDataManager.wordsArray
@@ -137,9 +153,11 @@ class FalseOrTrueTestController: UIViewController, PerformToSegue, UpdateView {
     }
    
     private func commentViewSettings(_ feedback:String){
+        commentView.layer.cornerRadius = 10
+        commentView.layer.borderWidth = 3
         switch feedback {
         case "right":
-            resultLabel.text = "TRUE"
+            resultLabel.text = "trueOrFalseTestVC_true_button".localized
             scores += 1
             blockView.isHidden = false
             blockView.backgroundColor = .systemGreen
@@ -152,7 +170,7 @@ class FalseOrTrueTestController: UIViewController, PerformToSegue, UpdateView {
             commentLabel.text = defaults.rightCommentsArray.randomElement()
             commentView.backgroundColor = UIColor(red: 0.93, green: 1.00, blue: 0.95, alpha: 1.00)
         case "wrong":
-            resultLabel.text = "FALSE"
+            resultLabel.text = "trueOrFalseTestVC_false_button".localized
             mistakes += 1
             blockView.isHidden = false
             blockView.backgroundColor = .systemRed
@@ -176,7 +194,6 @@ class FalseOrTrueTestController: UIViewController, PerformToSegue, UpdateView {
             commentLabel.textColor = UIColor(red: 0.00, green: 0.67, blue: 1.00, alpha: 1.00)
             commentView.layer.borderColor = UIColor(red: 0.00, green: 0.67, blue: 1.00, alpha: 1.00).cgColor
             commentView.backgroundColor = UIColor(red: 0.90, green: 0.98, blue: 1.00, alpha: 1.00)
-        
         default: break
         }
     }
@@ -188,8 +205,8 @@ class FalseOrTrueTestController: UIViewController, PerformToSegue, UpdateView {
         roundNumberLabel.text = String(roundsNumber)
         mistakes = 0
         scores = 0
-        //progressBarProgress = 0
-       // progressBar.progress = Float(progressBarProgress)
+        progressBarProgress = 0
+        progressBar.progress = Float(progressBarProgress)
     }
     
     
@@ -245,6 +262,9 @@ class FalseOrTrueTestController: UIViewController, PerformToSegue, UpdateView {
     }
     
     @IBAction func nextButtonPressed(_ sender: Any) {
+        let progressStepCount =  numberOfRounds
+        progressBarProgress += (1.0 / Double(progressStepCount))
+        progressBar.progress = Float(progressBarProgress)
         if filteredArray.count <= 1 {
             mainModel.wordsStatusClearing(array: coreDataManager.wordsArray, statusToClear: 1, data: context)
             commentViewSettings("finish")

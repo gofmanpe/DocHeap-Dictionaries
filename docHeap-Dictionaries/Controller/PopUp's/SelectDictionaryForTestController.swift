@@ -25,7 +25,8 @@ class SelectDictionaryForTestController: UIViewController {
     @IBOutlet weak var numberOfRoundsLabel: UILabel!
     @IBOutlet weak var warningImage: UIImageView!
     @IBOutlet weak var stepper: UIStepper!
-    @IBOutlet weak var roundsStack: UIStackView!
+  //  @IBOutlet weak var roundsStack: UIStackView!
+    @IBOutlet weak var roundsNumberView: UIView!
     
     
     func localizeElements(){
@@ -104,7 +105,7 @@ class SelectDictionaryForTestController: UIViewController {
                 selectButton.isEnabled = true
             }
         case "findAnImageTest":
-            coreDataManager.loadWordsForSelectedDictionary(dicID: selectedDicID, userID: mainModel.loadUserData().userID , data: context)
+            coreDataManager.loadWordsForSelectedDictionary(dicID: selectedDicID, userID: mainModel.loadUserData().userID , context: context)
             let filteredByImageArray = coreDataManager.wordsArray.filter({$0.wrdImageIsSet == true})
             if filteredByImageArray.count <= 4 {
                 warningView.isHidden = false
@@ -261,9 +262,9 @@ class SelectDictionaryForTestController: UIViewController {
         pickerView.dataSource = self
         pickerView.isHidden = true
         if selectedTestIdentifier == "findAPairTest"{
-            roundsStack.isHidden = true
+            roundsNumberView.isHidden = true
         } else {
-            roundsStack.isHidden = false
+            roundsNumberView.isHidden = false
         }
     }
     

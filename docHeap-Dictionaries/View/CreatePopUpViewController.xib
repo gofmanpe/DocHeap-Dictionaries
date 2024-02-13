@@ -39,10 +39,10 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Blk-Gh-3l1">
                     <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                     <subviews>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Vvu-HW-paj">
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Vvu-HW-paj" userLabel="mainView">
                             <rect key="frame" x="10" y="222.66666666666663" width="373" height="407"/>
                             <subviews>
-                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uOM-cS-lWQ">
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uOM-cS-lWQ" userLabel="header">
                                     <rect key="frame" x="0.0" y="0.0" width="373" height="40"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Create a new dictionary" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zj1-lI-b9C">
@@ -61,7 +61,7 @@
                                         <constraint firstAttribute="bottom" secondItem="zj1-lI-b9C" secondAttribute="bottom" id="tDc-Dh-o9r"/>
                                     </constraints>
                                 </view>
-                                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="bL0-Ch-Tor">
+                                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="bL0-Ch-Tor" userLabel="buttons">
                                     <rect key="frame" x="0.0" y="347" width="373" height="60"/>
                                     <subviews>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fwU-Ne-rd6">
@@ -91,7 +91,7 @@
                                         <constraint firstAttribute="height" constant="60" id="x4n-G6-sxj"/>
                                     </constraints>
                                 </stackView>
-                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="EFt-K0-kNq">
+                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="EFt-K0-kNq" userLabel="body">
                                     <rect key="frame" x="20" y="50.000000000000028" width="333" height="277"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enter a dictionary name:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WGW-gJ-Ex4">
@@ -195,11 +195,11 @@
                             </constraints>
                         </view>
                         <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="63U-2U-Tp0">
-                            <rect key="frame" x="70" y="649.66666666666663" width="253" height="172.33333333333337"/>
+                            <rect key="frame" x="50" y="659.66666666666663" width="293" height="172.33333333333337"/>
                             <color key="backgroundColor" red="0.92156862750000001" green="0.92156862750000001" blue="0.92156862750000001" alpha="1" colorSpace="calibratedRGB"/>
                             <color key="tintColor" red="0.76078431372549016" green="0.76078431372549016" blue="0.76078431372549016" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         </pickerView>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tIc-wI-lEB">
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tIc-wI-lEB" userLabel="warningView">
                             <rect key="frame" x="30" y="112.66666666666669" width="333" height="80"/>
                             <subviews>
                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="stop" translatesAutoresizingMaskIntoConstraints="NO" id="zDx-zl-8I2">
@@ -235,13 +235,13 @@
                         <constraint firstItem="tIc-wI-lEB" firstAttribute="leading" secondItem="Blk-Gh-3l1" secondAttribute="leading" constant="30" id="7WF-Nb-Bby"/>
                         <constraint firstItem="Vvu-HW-paj" firstAttribute="centerX" secondItem="Blk-Gh-3l1" secondAttribute="centerX" id="GFH-Hb-1pQ"/>
                         <constraint firstItem="63U-2U-Tp0" firstAttribute="centerX" secondItem="Blk-Gh-3l1" secondAttribute="centerX" id="Idi-k0-In5"/>
-                        <constraint firstItem="63U-2U-Tp0" firstAttribute="leading" secondItem="Blk-Gh-3l1" secondAttribute="leading" constant="70" id="KJ8-Sl-z67"/>
+                        <constraint firstItem="63U-2U-Tp0" firstAttribute="leading" secondItem="Blk-Gh-3l1" secondAttribute="leading" constant="50" id="KJ8-Sl-z67"/>
                         <constraint firstItem="Vvu-HW-paj" firstAttribute="centerY" secondItem="Blk-Gh-3l1" secondAttribute="centerY" id="TIY-bx-W5h"/>
                         <constraint firstAttribute="trailing" secondItem="tIc-wI-lEB" secondAttribute="trailing" constant="30" id="X5K-KT-0Y6"/>
-                        <constraint firstItem="63U-2U-Tp0" firstAttribute="top" secondItem="Vvu-HW-paj" secondAttribute="bottom" constant="20" id="YsG-7x-ywO"/>
+                        <constraint firstItem="63U-2U-Tp0" firstAttribute="top" secondItem="Vvu-HW-paj" secondAttribute="bottom" constant="30" id="YsG-7x-ywO"/>
                         <constraint firstItem="Vvu-HW-paj" firstAttribute="top" secondItem="tIc-wI-lEB" secondAttribute="bottom" constant="30" id="ely-sJ-ljP"/>
-                        <constraint firstAttribute="bottom" secondItem="63U-2U-Tp0" secondAttribute="bottom" constant="30" id="h43-UY-o7o"/>
-                        <constraint firstAttribute="trailing" secondItem="63U-2U-Tp0" secondAttribute="trailing" constant="70" id="hrp-wq-Kjo"/>
+                        <constraint firstAttribute="bottom" secondItem="63U-2U-Tp0" secondAttribute="bottom" constant="20" id="h43-UY-o7o"/>
+                        <constraint firstAttribute="trailing" secondItem="63U-2U-Tp0" secondAttribute="trailing" constant="50" id="hrp-wq-Kjo"/>
                         <constraint firstAttribute="trailing" secondItem="Vvu-HW-paj" secondAttribute="trailing" constant="10" id="pYy-OR-qcJ"/>
                     </constraints>
                 </view>

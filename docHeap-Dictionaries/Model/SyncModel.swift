@@ -18,7 +18,7 @@ struct SyncModel {
     
     
     func syncUserDataWithFirebase(userID:String, context:NSManagedObjectContext){
-        if let userData = coreData.loadUserDataByID(userID: userID, context: context).first{
+        if let userData = coreData.loadUserDataByID(userID: userID, context: context){
             if !userData.userSyncronized{
                 firebase.updateUserDataFirebase(userData: userData)
             } else {
@@ -64,7 +64,7 @@ struct SyncModel {
         }
     }
     
-    func syncMessages(coreDataMessages:[ChatMessage]){
+    func syncMessages(coreDataMessages:[Comment]){
         let unsyncMessages = coreDataMessages.filter({$0.msgSyncronized == false})
         if !unsyncMessages.isEmpty{
             for message in unsyncMessages{
@@ -311,7 +311,7 @@ struct SyncModel {
                             wrdImageFirestorePath: word.wrdImageFirestorePath,
                             wrdImageName: word.wrdImageName,
                             wrdReadOnly: true,
-                            wrdParentDictionary: coreData.getParentDictionaryData(dicID: word.wrdDicID, userID: mainModel.loadUserData().userID, data: context),
+                            wrdParentDictionary: coreData.getParentDictionaryData(dicID: word.wrdDicID, userID: mainModel.loadUserData().userID, context: context),
                             wrdAddDate: mainModel.convertDateToString(currentDate: Date(), time: false)!)
                         coreData.createWordsPair(wordsPair: newWorsPair, context: context)
                     } else {
@@ -369,9 +369,6 @@ struct SyncModel {
                                     if let error = error {
                                         print("Error deleting dictionary from Firebase: \(error)\n")
                                     }
-                                }
-                                if unsyncDictionary.dicShared{
-                                    firebase.updateNetworkUserSharedDicsCount(userID: mainModel.loadUserData().userID, increment: false)
                                 }
                                 coreData.deleteDictionaryFromCoreData(dicID: dicID, userID: mainModel.loadUserData().userID, context: context)
                                 context.delete(unsyncDictionary)

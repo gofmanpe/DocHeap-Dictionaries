@@ -44,6 +44,10 @@ class FindAnImageTestController: UIViewController , PerformToSegue, UpdateView {
     @IBOutlet weak var wordsBackgroundView: UIView!
     @IBOutlet weak var blockView: UIView!
     @IBOutlet weak var commentView: UIView!
+    @IBOutlet weak var roundsNameLabel: UILabel!
+    @IBOutlet weak var scoresNameLabel: UILabel!
+    @IBOutlet weak var instructionLabel: UILabel!
+    @IBOutlet weak var testProgressLabel: UILabel!
     
     @IBOutlet weak var commentLabel: UILabel!
     @IBOutlet weak var commentImage: UIImageView!
@@ -60,7 +64,14 @@ class FindAnImageTestController: UIViewController , PerformToSegue, UpdateView {
     @IBOutlet weak var progressBar: UIProgressView!
     
     func localizeElements(){
-        
+        roundsNameLabel.text = "findAnImageVC_round_label".localized
+        instructionLabel.text = "findAnImageVC_instruction_label".localized
+        scoresNameLabel.text = "findAnImageVC_scores_label".localized
+        testProgressLabel.text = "findAnImageVC_testProgress_label".localized
+        checkButton.setTitle("findAnImageVC_check_button".localized, for: .normal)
+        toResultsButton.setTitle("findAnImageVC_toResults_button".localized, for: .normal)
+        nextButton.setTitle("findAnImageVC_next_button".localized, for: .normal)
+        warningLabel.text = "sharedElements_noChose_label".localized
     }
     
     private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
@@ -88,6 +99,7 @@ class FindAnImageTestController: UIViewController , PerformToSegue, UpdateView {
     private var mainModel = MainModel()
     private var coreDataManager = CoreDataManager()
     private let testModel = TestModel()
+    private var progressBarProgress = Double()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -99,11 +111,12 @@ class FindAnImageTestController: UIViewController , PerformToSegue, UpdateView {
     }
     
     private func loadData(){
-        wordsForTestArray = coreDataManager.getWordsForDictionary(dicID: selectedDicID, userID: mainModel.loadUserData().userID, data: context)
-        parentDictionaryData = coreDataManager.getParentDictionaryData(dicID: selectedDicID, userID: mainModel.loadUserData().userID, data: context)
+        wordsForTestArray = coreDataManager.getWordsForDictionary(dicID: selectedDicID, userID: mainModel.loadUserData().userID, context: context)
+        parentDictionaryData = coreDataManager.getParentDictionaryData(dicID: selectedDicID, userID: mainModel.loadUserData().userID, context: context)
     }
     
     private func testStart(){
+        choiseMaided = false
         fourImagesWordsArray.removeAll() // clearing array of translations
         fourImagesPathArray.removeAll()
         let wordsNumber = numberOfRounds + 3
@@ -116,9 +129,9 @@ class FindAnImageTestController: UIViewController , PerformToSegue, UpdateView {
         mainWord = queryResult.0
         mainWordImage = queryResult.1
         fourImagesWordsArray = queryResult.2
-        print("Images words array: \(fourImagesWordsArray)\n")
+       // print("Images words array: \(fourImagesWordsArray)\n")
         fourImagesPathArray = queryResult.3
-        print("Images path array: \(fourImagesPathArray)\n")
+       // print("Images path array: \(fourImagesPathArray)\n")
         roundNumber += 1
         roundNumberLabel.text = String(roundNumber)
         standartState()
@@ -255,15 +268,28 @@ class FindAnImageTestController: UIViewController , PerformToSegue, UpdateView {
         overLayerView.appearOverlayer(sender: self)
     }
     
-   private func reloadTestData(){
+    private func reloadTestData(){
         choiseMaided = false
         rightAnswers = 0
         roundNumber = 0
         scoresNumberLabel.text = String(rightAnswers)
         wordsCount = 0
-//        progressLabel.text = defaults.labelTestProgressText
-//        progressBarProgress = 0
-//        progressBar.progress = Float(progressBarProgress)
+        progressBarProgress = 0
+        progressBar.progress = Float(progressBarProgress)
+        
+    }
+    
+    func warningViewAppearAnimate(_ text:String){
+        warningLabel.isHidden = false
+        warningLabel.text = text
+        warningLabel.alpha = 0
+        UIView.animate(withDuration: 0.75) {
+            self.warningLabel.alpha = 1
+        } completion: { Bool in
+            UIView.animate(withDuration: 0.75) {
+                              self.warningLabel.alpha = 0
+                            }
+        }
     }
 
     @IBAction func firstButtonPressed(_ sender: Any) {
@@ -306,11 +332,15 @@ class FindAnImageTestController: UIViewController , PerformToSegue, UpdateView {
                 commentViewSettings("wrong")
             }
         } else {
-            warningLabel.isHidden = false
+            warningViewAppearAnimate("sharedElements_noChose_label".localized)
+//            warningLabel.isHidden = false
         }
     }
     
     @IBAction func nextButtonPressed(_ sender: Any) {
+        let progressStepCount =  numberOfRounds
+        progressBarProgress += (1.0 / Double(progressStepCount))
+        progressBar.progress = Float(progressBarProgress)
         for button in fourButtonsArray{
             button.layer.borderWidth = 0
         }

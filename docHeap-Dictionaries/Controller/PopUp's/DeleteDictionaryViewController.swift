@@ -65,7 +65,7 @@ class DeleteDictionaryViewController: UIViewController {
     }
     
     func setupData(){
-        parentDictionary = coreDataManager.getParentDictionaryData(dicID: dicID, userID: mainModel.loadUserData().userID, data: context)
+        parentDictionary = coreDataManager.getParentDictionaryData(dicID: dicID, userID: mainModel.loadUserData().userID, context: context)
     }
     
     
@@ -174,9 +174,6 @@ class DeleteDictionaryViewController: UIViewController {
                         print("Error deleting dictionary from Firestore: \(error)\n")
                     }
                 }
-                if parentDictionary.dicShared{
-                    fireDB.updateNetworkUserSharedDicsCount(userID: mainModel.loadUserData().userID, increment: false)
-                }
                 coreDataManager.delWordsFromDictionaryByDicID(dicID: dicID, userID: mainModel.loadUserData().userID, context: context)
                 context.delete(coreDataManager.parentDictionaryData.first!)
                 coreDataManager.parentDictionaryData.remove(at: 0)
@@ -197,9 +194,6 @@ class DeleteDictionaryViewController: UIViewController {
         cancelButton.isEnabled = false
         deleteButton.isEnabled = false
         commentViewAppearAnimate(defaults.succDeleteMessage)
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-//            self.hide()
-//        }
         UIView.animate(withDuration: 0.2) {
             self.mainWindowView.alpha = 0
         } completion: { Bool in }

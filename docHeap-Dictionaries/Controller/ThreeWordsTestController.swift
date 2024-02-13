@@ -17,7 +17,7 @@ class ThreeWordsTestController: UIViewController, PerformToSegue, UpdateView{
             errorsFixed = false
             errorsRepetitionMode = false
             coreDataManager.loadParentDictionaryData(dicID: selectedDictionary, userID: mainModel.loadUserData().userID, data: context)
-            coreDataManager.loadWordsForSelectedDictionary(dicID: coreDataManager.parentDictionaryData.first?.dicID ?? "", userID: mainModel.loadUserData().userID, data: context)
+            coreDataManager.loadWordsForSelectedDictionary(dicID: coreDataManager.parentDictionaryData.first?.dicID ?? "", userID: mainModel.loadUserData().userID, context: context)
             standartState()
             mainModel.wordsStatusClearing(array: coreDataManager.wordsArray, statusToClear: 1, data: context)
             mainModel.wordsStatusClearing(array: coreDataManager.wordsArray, statusToClear: 2, data: context)
@@ -31,7 +31,7 @@ class ThreeWordsTestController: UIViewController, PerformToSegue, UpdateView{
             errorsModeLabel.text = "threeWordsTestVC_repetitionMode_label".localized
             roundNumber = 0
             coreDataManager.loadParentDictionaryData(dicID: selectedDictionary, userID: mainModel.loadUserData().userID, data: context)
-            coreDataManager.loadWordsForSelectedDictionary(dicID: coreDataManager.parentDictionaryData.first?.dicID ?? "", userID: mainModel.loadUserData().userID, data: context)
+            coreDataManager.loadWordsForSelectedDictionary(dicID: coreDataManager.parentDictionaryData.first?.dicID ?? "", userID: mainModel.loadUserData().userID, context: context)
             
             standartState()
             mainModel.wordsStatusClearing(array: coreDataManager.wordsArray, statusToClear: 1, data: context)
@@ -128,7 +128,7 @@ class ThreeWordsTestController: UIViewController, PerformToSegue, UpdateView{
         super.viewDidLoad()
         localizeElements()
         coreDataManager.loadParentDictionaryData(dicID: selectedDictionary, userID: mainModel.loadUserData().userID, data: context)
-        coreDataManager.loadWordsForSelectedDictionary(dicID: coreDataManager.parentDictionaryData.first?.dicID ?? "", userID: mainModel.loadUserData().userID, data: context)
+        coreDataManager.loadWordsForSelectedDictionary(dicID: coreDataManager.parentDictionaryData.first?.dicID ?? "", userID: mainModel.loadUserData().userID, context: context)
         standartState()
         mainModel.wordsStatusClearing(array: coreDataManager.wordsArray, statusToClear: 1, data: context)
         mainModel.wordsStatusClearing(array: coreDataManager.wordsArray, statusToClear: 2, data: context)
@@ -139,7 +139,7 @@ class ThreeWordsTestController: UIViewController, PerformToSegue, UpdateView{
 //MARK: - Test engine functions
     func loadData(){
         wordsArray = coreDataManager.getAllWords(data: context)
-        parentDictionaryData = coreDataManager.getParentDictionaryData(dicID: selectedDictionary, userID: mainModel.loadUserData().userID, data: context)
+        parentDictionaryData = coreDataManager.getParentDictionaryData(dicID: selectedDictionary, userID: mainModel.loadUserData().userID, context: context)
     }
     
     func threeWordsTestStart(){
@@ -201,6 +201,8 @@ class ThreeWordsTestController: UIViewController, PerformToSegue, UpdateView{
     }
     
     private func commentViewSettings(_ feedback:String){
+        commentView.layer.cornerRadius = 10
+        commentView.layer.borderWidth = 3
         switch feedback {
         case "right":
             commentView.isHidden = false
@@ -270,8 +272,6 @@ class ThreeWordsTestController: UIViewController, PerformToSegue, UpdateView{
         wordsBackgroundView.layer.shadowOpacity = 0.2
         wordsBackgroundView.layer.shadowOffset = .zero
         wordsBackgroundView.layer.shadowRadius = 2
-        commentView.layer.cornerRadius = 10
-        commentView.layer.borderWidth = 3
         threeUIButtonsArray = [firstWordButton,secondWordButton,thirdWordButton]
         dictionaryNameLabel.text = coreDataManager.parentDictionaryData.first?.dicName
         let foundTest = TestDataModel.tests.first(where: { $0.identifier == selectedTestIdentifier})

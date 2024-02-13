@@ -19,7 +19,6 @@
 		76350B072A4E04B6009820AC /* FalseOrTrueTestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76350B062A4E04B6009820AC /* FalseOrTrueTestController.swift */; };
 		7643D2052B1F550300A6896E /* SyncModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7643D2042B1F550300A6896E /* SyncModel.swift */; };
 		765317012B443BDB006DEA09 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 765316FF2B443BDB006DEA09 /* ChatViewController.swift */; };
-		7655BD802B28919D00240961 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7655BD7F2B28919D00240961 /* GoogleService-Info.plist */; };
 		7655BD832B2894E600240961 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 7655BD822B2894E600240961 /* GoogleSignIn */; };
 		7655BD852B2894E600240961 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 7655BD842B2894E600240961 /* GoogleSignInSwift */; };
 		7655BD8E2B29D87D00240961 /* LoginErrorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7655BD8C2B29D87D00240961 /* LoginErrorViewController.swift */; };
@@ -41,6 +40,7 @@
 		76733D7C29D0849500379116 /* docHeap_Dictionaries.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 76733D7A29D0849500379116 /* docHeap_Dictionaries.xcdatamodeld */; };
 		76733D7E29D0849700379116 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 76733D7D29D0849700379116 /* Assets.xcassets */; };
 		76733D8129D0849700379116 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 76733D7F29D0849700379116 /* LaunchScreen.storyboard */; };
+		767777C82B767097008C7E75 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 767777CA2B767097008C7E75 /* Localizable.stringsdict */; };
 		7677914E2AE5B1070074EDE9 /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 7677914D2AE5B1070074EDE9 /* IQKeyboardManagerSwift */; };
 		767791502AE5B1B40074EDE9 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 7677914F2AE5B1B40074EDE9 /* Alamofire */; };
 		7678A7372B4DE12D00630946 /* UserInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7678A7352B4DE12D00630946 /* UserInfoViewController.swift */; };
@@ -81,6 +81,7 @@
 		76C8ABF82B0A7A6F00CE41BE /* ChangeLanguagePopUpController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76C8ABF62B0A7A6F00CE41BE /* ChangeLanguagePopUpController.xib */; };
 		76C8ABFC2B0BD0CF00CE41BE /* TestsDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C8ABFB2B0BD0CF00CE41BE /* TestsDataModel.swift */; };
 		76C8ABFE2B0E179C00CE41BE /* Alamo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C8ABFD2B0E179C00CE41BE /* Alamo.swift */; };
+		76CED4822B7B539900DE61F3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 76CED4812B7B539900DE61F3 /* GoogleService-Info.plist */; };
 		76DE1D552B612DF500DF4913 /* BrowseSharedWordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76DE1D532B612DF500DF4913 /* BrowseSharedWordViewController.swift */; };
 		76DE1D562B612DF500DF4913 /* BrowseSharedWordViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76DE1D542B612DF500DF4913 /* BrowseSharedWordViewController.xib */; };
 		76DFBD572A35F8E7009966AE /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 76DFBD562A35F8E7009966AE /* IQKeyboardManagerSwift */; };
@@ -116,7 +117,6 @@
 		76350B062A4E04B6009820AC /* FalseOrTrueTestController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FalseOrTrueTestController.swift; sourceTree = "<group>"; };
 		7643D2042B1F550300A6896E /* SyncModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncModel.swift; sourceTree = "<group>"; };
 		765316FF2B443BDB006DEA09 /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
-		7655BD7F2B28919D00240961 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../GoogleService-Info.plist"; sourceTree = "<group>"; };
 		7655BD8C2B29D87D00240961 /* LoginErrorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginErrorViewController.swift; sourceTree = "<group>"; };
 		7655BD8D2B29D87D00240961 /* LoginErrorViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LoginErrorViewController.xib; sourceTree = "<group>"; };
 		7655BD922B2B7E5600240961 /* UserProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
@@ -138,6 +138,9 @@
 		76733D7D29D0849700379116 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		76733D8029D0849700379116 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		76733D8229D0849700379116 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		767777C92B767097008C7E75 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		767777CB2B767099008C7E75 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ru; path = ru.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		767777CC2B76709A008C7E75 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = uk; path = uk.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		7678A7352B4DE12D00630946 /* UserInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoViewController.swift; sourceTree = "<group>"; };
 		7678A7362B4DE12D00630946 /* UserInfoViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserInfoViewController.xib; sourceTree = "<group>"; };
 		7678A7392B4DFE2E00630946 /* ChatUserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatUserCell.swift; sourceTree = "<group>"; };
@@ -173,6 +176,7 @@
 		76C8ABF62B0A7A6F00CE41BE /* ChangeLanguagePopUpController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ChangeLanguagePopUpController.xib; sourceTree = "<group>"; };
 		76C8ABFB2B0BD0CF00CE41BE /* TestsDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestsDataModel.swift; sourceTree = "<group>"; };
 		76C8ABFD2B0E179C00CE41BE /* Alamo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alamo.swift; sourceTree = "<group>"; };
+		76CED4812B7B539900DE61F3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		76DE1D532B612DF500DF4913 /* BrowseSharedWordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseSharedWordViewController.swift; sourceTree = "<group>"; };
 		76DE1D542B612DF500DF4913 /* BrowseSharedWordViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BrowseSharedWordViewController.xib; sourceTree = "<group>"; };
 		76EEC2DA2AF51C2E00C2B11B /* StartController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartController.swift; sourceTree = "<group>"; };
@@ -268,9 +272,9 @@
 				76A9CBB529F6D4E00035A0ED /* Controller */,
 				76C8ABFF2B0E1AEE00CE41BE /* Resources */,
 				76733D7129D0849500379116 /* AppDelegate.swift */,
+				76CED4812B7B539900DE61F3 /* GoogleService-Info.plist */,
 				76733D7D29D0849700379116 /* Assets.xcassets */,
 				76733D7329D0849500379116 /* SceneDelegate.swift */,
-				7655BD7F2B28919D00240961 /* GoogleService-Info.plist */,
 				76733D8229D0849700379116 /* Info.plist */,
 			);
 			path = "docHeap-Dictionaries";
@@ -365,6 +369,7 @@
 		76C8ABFF2B0E1AEE00CE41BE /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				767777CA2B767097008C7E75 /* Localizable.stringsdict */,
 				76EEC3052B03D69200C2B11B /* Localizable.strings */,
 			);
 			path = Resources;
@@ -467,12 +472,14 @@
 			files = (
 				7655BD952B2B7E5600240961 /* UserProfileViewController.xib in Resources */,
 				76A365412B59FEF900B4A259 /* DescriptionPopUpController.xib in Resources */,
+				76CED4822B7B539900DE61F3 /* GoogleService-Info.plist in Resources */,
 				76F9B1452AD47D6F003CC792 /* DeleteDictionaryViewController.xib in Resources */,
 				76C8ABF82B0A7A6F00CE41BE /* ChangeLanguagePopUpController.xib in Resources */,
 				76EEC3032B03D69200C2B11B /* Localizable.strings in Resources */,
 				76A3653D2B59DC8500B4A259 /* TestNewCell.xib in Resources */,
 				76733D8129D0849700379116 /* LaunchScreen.storyboard in Resources */,
 				761C830E29D21C9500ABD5E0 /* CreatePopUpViewController.xib in Resources */,
+				767777C82B767097008C7E75 /* Localizable.stringsdict in Resources */,
 				767CDCF52AA7BF2500AFEB9D /* BrowseWordViewController.xib in Resources */,
 				76A3FB7329E9B51900AF87C1 /* ResultsPopUpController.xib in Resources */,
 				766E579E2B57503B00A3FBB9 /* LogOutPopUp.xib in Resources */,
@@ -487,7 +494,6 @@
 				76DE1D562B612DF500DF4913 /* BrowseSharedWordViewController.xib in Resources */,
 				7618E5272B3DA8CC0090F183 /* EditProfileViewController.xib in Resources */,
 				7678A7382B4DE12D00630946 /* UserInfoViewController.xib in Resources */,
-				7655BD802B28919D00240961 /* GoogleService-Info.plist in Resources */,
 				768A1F362B3A25E600EF877A /* FilterSharedDicController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -577,6 +583,16 @@
 				76EEC3002B03D60C00C2B11B /* ru */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		767777CA2B767097008C7E75 /* Localizable.stringsdict */ = {
+			isa = PBXVariantGroup;
+			children = (
+				767777C92B767097008C7E75 /* en */,
+				767777CB2B767099008C7E75 /* ru */,
+				767777CC2B76709A008C7E75 /* uk */,
+			);
+			name = Localizable.stringsdict;
 			sourceTree = "<group>";
 		};
 		76EEC3052B03D69200C2B11B /* Localizable.strings */ = {
@@ -715,9 +731,10 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 7LM9RN933U;
+				DEVELOPMENT_TEAM = R583G7JFCN;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "docHeap-Dictionaries/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Wordsground;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -729,14 +746,14 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.pavelgofman.docHeap-Dictionaries";
+				PRODUCT_BUNDLE_IDENTIFIER = com.pavelgofman.wordsground;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -747,9 +764,10 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 7LM9RN933U;
+				DEVELOPMENT_TEAM = R583G7JFCN;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "docHeap-Dictionaries/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Wordsground;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -761,14 +779,14 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.pavelgofman.docHeap-Dictionaries";
+				PRODUCT_BUNDLE_IDENTIFIER = com.pavelgofman.wordsground;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

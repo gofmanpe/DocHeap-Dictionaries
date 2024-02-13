@@ -29,13 +29,16 @@ class UserInfoViewController: UIViewController {
     @IBOutlet weak var okButton: UIButton!
     @IBOutlet weak var addInfoNameLabel: UILabel!
     @IBOutlet weak var likesNameLabel: UILabel!
-    @IBOutlet weak var sharedDicNameLabel: UILabel!
+    @IBOutlet weak var testsCompletedNameLabel: UILabel!
     @IBOutlet weak var likesLabel: UILabel!
-    @IBOutlet weak var sharedDicLabel: UILabel!
+    @IBOutlet weak var testsCompletedsLabel: UILabel!
+    @IBOutlet weak var rightAnswersLabel: UILabel!
+    @IBOutlet weak var mistakesLabel: UILabel!
+    @IBOutlet weak var rightAnswersNameLabel: UILabel!
+    @IBOutlet weak var mistakesNameLabel: UILabel!
     
     private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-    var networkUser = NetworkUser()
-    //private var networkUserData = NetworkUser()
+    var networkUserData : NetworkUserData?
     private let coreData = CoreDataManager()
     private let mainModel = MainModel()
     
@@ -44,32 +47,31 @@ class UserInfoViewController: UIViewController {
         popUpBackgroundSettings()
         elementsDesign()
         setupUserData()
-        
     }
     
-    func setupUserData(){
-       // networkUserData = coreData.loadNetworkUserByID(userID: userID, data: context)
-        userNameLabel.text = networkUser.nuName
-        regDateLabel.text = networkUser.nuRegisterDate
-        if !networkUser.nuShowEmail{
+    private func setupUserData(){
+        guard let ntUserData = networkUserData else {return}
+        userNameLabel.text = ntUserData.userName
+        regDateLabel.text = ntUserData.userRegisterDate
+        if !ntUserData.userShowEmail{
             userEmailLabel.isHidden = true
         } else {
             userEmailLabel.isHidden = false
-            userEmailLabel.text = networkUser.nuEmail
+            userEmailLabel.text = ntUserData.userEmail
         }
-        let avatarPath = "\(mainModel.loadUserData().userID)/\(networkUser.nuLocalAvatar ?? "")"
+        let avatarPath = "\(mainModel.loadUserData().userID)/\(ntUserData.userLocalAvatar ?? "")"
         userAvatar.image = UIImage(contentsOfFile:  mainModel.getDocumentsFolderPath().appendingPathComponent(avatarPath).path)
-        birthDateLabel.text = networkUser.nuBirthDate
-        countryLabel.text = networkUser.nuCountry
-        nativeLanguageLabel.text = networkUser.nuNativeLanguage
-        scoresLabel.text = String(networkUser.nuScores)
-        sharedDicLabel.text = String(networkUser.nuSharedDics)
-        likesLabel.text = String(networkUser.nuLikes)
-        
-        
+        birthDateLabel.text = ntUserData.userBirthDate
+        countryLabel.text = ntUserData.userCountry
+        nativeLanguageLabel.text = ntUserData.userNativeLanguage
+        scoresLabel.text = String(ntUserData.userScores)
+        testsCompletedsLabel.text = String(ntUserData.userTestsCompleted)
+        mistakesLabel.text = String(ntUserData.userMistakes)
+        rightAnswersLabel.text = String(ntUserData.userRightAnswers)
+        likesLabel.text = String(ntUserData.userLikes)
     }
 
-    func elementsDesign(){
+   private func elementsDesign(){
         mainView.layer.cornerRadius = 10
         userAvatar.layer.cornerRadius = userAvatar.frame.size.width/2
         userAvatar.layer.masksToBounds = false
@@ -85,14 +87,14 @@ class UserInfoViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func popUpBackgroundSettings(){
+    private func popUpBackgroundSettings(){
         self.view.backgroundColor = .clear
         background.backgroundColor = .black.withAlphaComponent(0.6)
         background.alpha = 0
         mainView.alpha = 0
     }
     
-    func appear(sender: ChatViewController) {
+    func appear(sender: UIViewController) {
         sender.present(self, animated: false) {
             self.show()
         }
@@ -105,7 +107,7 @@ class UserInfoViewController: UIViewController {
         }
     }
 
-    func hide() {
+    private func hide() {
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut) {
             self.background.alpha = 0
             self.mainView.alpha = 0

@@ -37,12 +37,14 @@
         <attribute name="nuID" optional="YES" attributeType="String"/>
         <attribute name="nuLikes" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="nuLocalAvatar" optional="YES" attributeType="String"/>
+        <attribute name="nuMistakes" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="nuName" optional="YES" attributeType="String"/>
         <attribute name="nuNativeLanguage" optional="YES" attributeType="String"/>
         <attribute name="nuRegisterDate" optional="YES" attributeType="String"/>
+        <attribute name="nuRightAnswers" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="nuScores" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="nuSharedDics" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="nuShowEmail" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="nuTestsCompleted" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
     </entity>
     <entity name="Statistic" representedClassName="Statistic" syncable="YES" codeGenerationType="class">
         <attribute name="statDate" optional="YES" attributeType="String"/>
@@ -63,12 +65,15 @@
         <attribute name="userEmail" optional="YES" attributeType="String"/>
         <attribute name="userID" optional="YES" attributeType="String"/>
         <attribute name="userInterfaceLanguage" optional="YES" attributeType="String"/>
+        <attribute name="userMistakes" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="userName" optional="YES" attributeType="String"/>
         <attribute name="userNativeLanguage" optional="YES" attributeType="String"/>
         <attribute name="userRegisterDate" optional="YES" attributeType="String"/>
+        <attribute name="userRightAnswers" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="userScores" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="userShowEmail" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="userSyncronized" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="userTestsCompleted" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="userType" optional="YES" attributeType="String"/>
     </entity>
     <entity name="Word" representedClassName=".Word" syncable="YES" codeGenerationType="class">

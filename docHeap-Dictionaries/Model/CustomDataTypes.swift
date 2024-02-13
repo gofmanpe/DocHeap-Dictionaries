@@ -115,6 +115,9 @@ struct UserData{
     let userType: String
     let userRegisterDate: String
     let userInterfaceLanguage: String
+    let userMistakes: Int
+    let userRightAnswers: Int
+    let userTestsCompleted: Int
 }
 
 struct NetworkUserData{
@@ -129,11 +132,13 @@ struct NetworkUserData{
     let userEmail:String
     let userScores:Int
     let userLocalAvatar:String?
-    let userSharedDics:Int
+    let userTestsCompleted:Int
+    let userMistakes: Int
+    let userRightAnswers: Int
     let userLikes:Int
 }
 
-struct ChatMessage{
+struct Comment{
     let msgID: String
     let msgBody: String
     let msgDateTime: String

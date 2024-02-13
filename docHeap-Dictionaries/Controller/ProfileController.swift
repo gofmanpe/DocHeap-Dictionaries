@@ -35,14 +35,14 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate & UIN
     @IBOutlet weak var birthDateLabel: UILabel!
     @IBOutlet weak var countryLabel: UILabel!
     @IBOutlet weak var nativeLangLabel: UILabel!
-    @IBOutlet weak var scoresLabel: UILabel!
+ //   @IBOutlet weak var scoresLabel: UILabel!
     @IBOutlet weak var editButton: UIButton!
     @IBOutlet weak var showEmailLabel: UILabel!
     @IBOutlet weak var emailSwitch: UISwitch!
     @IBOutlet weak var dateOfBirthNameLabel: UILabel!
     @IBOutlet weak var countryNameLabel: UILabel!
     @IBOutlet weak var nativeLanguageNameLabel: UILabel!
-    @IBOutlet weak var scoresNameLabel: UILabel!
+  //  @IBOutlet weak var scoresNameLabel: UILabel!
     @IBOutlet weak var profileLabel: UILabel!
     
 //MARK: - Localization
@@ -54,7 +54,7 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate & UIN
         dateOfBirthNameLabel.text = "profileVC_dateOfBirth_label".localized
         countryNameLabel.text = "profileVC_country_label".localized
         nativeLanguageNameLabel.text = "profileVC_nativeLanguage_label".localized
-        scoresNameLabel.text = "profileVC_scores_label".localized
+     //   scoresNameLabel.text = "profileVC_scores_label".localized
         showEmailLabel.text = "profileVC_showEmail_label".localized
         profileLabel.text = "profileVC_profile_label".localized
     }
@@ -97,36 +97,39 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate & UIN
     
 //MARK: - Controller functions
     func setupUserData(){
-        userData = coreDataManager.loadUserDataByID(userID: mainModel.loadUserData().userID, context: context).first
+        userData = coreDataManager.loadUserDataByID(userID: mainModel.loadUserData().userID, context: context)
         nameLabel.text = userData?.userName
         birthDateLabel.text = userData?.userBirthDate
         countryLabel.text = userData?.userCountry
         nativeLangLabel.text = userData?.userNativeLanguage
-        scoresLabel.text = String(userData?.userScores ?? 0)
+      //  scoresLabel.text = String(userData?.userScores ?? 0)
     }
 
     func elementsDesign(){
-        if userData?.userAvatarExtention != nil{
-            let avaExtention = userData?.userAvatarExtention ?? ""
+        guard let userData = userData else {
+            return
+        }
+        if !userData.userAvatarExtention.isEmpty{
+            let avaExtention = userData.userAvatarExtention
             avatarName = "userAvatar.\(avaExtention)"
             let avatarPath = "\(mainModel.loadUserData().userID)/\(avatarName)"
             userAvatar.image = UIImage(contentsOfFile:  mainModel.getDocumentsFolderPath().appendingPathComponent(avatarPath).path)
-            userAvatar.layer.cornerRadius = userAvatar.frame.size.width/2
-            userAvatar.layer.masksToBounds = false
-            userAvatar.clipsToBounds = true
         } else {
-            print("NO USER AVATAR\n")
+            userAvatar.image = UIImage(named: "noAvatar")
         }
-        emailLabel.text = userData?.userEmail
-        registerDateLabel.text = userData?.userRegisterDate
+        userAvatar.layer.cornerRadius = userAvatar.frame.size.width/2
+        userAvatar.layer.masksToBounds = false
+        userAvatar.clipsToBounds = true
+        emailLabel.text = userData.userEmail
+        registerDateLabel.text = userData.userRegisterDate
         setAvatarButton.layer.cornerRadius = 10
         logoutButton.layer.cornerRadius = 10
         windowView.clipsToBounds = true
         windowView.layer.cornerRadius = 10
         windowView.layer.borderWidth = 0.5
         windowView.layer.borderColor = UIColor.lightGray.cgColor
-        if let emailSwitchStatus = userData?.userShowEmail{
-            emailSwitch.isOn = emailSwitchStatus
+        if userData.userShowEmail{
+            emailSwitch.isOn = true
         } else {
             emailSwitch.isOn = false
         }
@@ -161,7 +164,7 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate & UIN
         if isImageSelected{
             avatarName = "userAvatar.\(imageExtention)"
             avatarURL = mainModel.getDocumentsFolderPath().appendingPathComponent("\(mainModel.loadUserData().userID)/\(avatarName)")
-            coreDataManager.updateUserData(userID: mainModel.loadUserData().userID, field: "userAvatarExtention", argument: imageExtention, context: context)
+            coreDataManager.updateUserFieldData(userID: mainModel.loadUserData().userID, field: "userAvatarExtention", argument: imageExtention, context: context)
            // userData?.userAvatarExtention = imageExtention
          //   coreDataManager.saveData(data: context)
             if let imageData = image.jpegData(compressionQuality: 0.8) {
@@ -185,7 +188,7 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate & UIN
             guard metadata != nil else { return }
             imageRef.downloadURL { url, error in
                 guard let downloadURL = url else { return }
-                self.coreDataManager.updateUserData(
+                self.coreDataManager.updateUserFieldData(
                     userID: self.mainModel.loadUserData().userID,
                     field: "userAvatarFirestorePath",
                     argument: downloadURL.absoluteString,
@@ -237,36 +240,36 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate & UIN
     @IBAction func emailSwitchToggled(_ sender: UISwitch) {
         switch (emailSwitch.isOn, mainModel.isInternetAvailable()){
         case (true,true):
-            coreDataManager.updateUserData(
+            coreDataManager.updateUserFieldData(
                 userID: mainModel.loadUserData().userID,
                 field: "userShowEmail",
                 argument: true,
                 context: context)
             firebase.updateUserEmailShowStatus(userID: userData?.userID ?? "", status: true)
         case (false,false):
-            coreDataManager.updateUserData(
+            coreDataManager.updateUserFieldData(
                 userID: mainModel.loadUserData().userID,
                 field: "userShowEmail",
                 argument: false,
                 context: context)
-            coreDataManager.updateUserData(
+            coreDataManager.updateUserFieldData(
                 userID: mainModel.loadUserData().userID,
                 field: "userSyncronized",
                 argument: false,
                 context: context)
         case(true,false):
-            coreDataManager.updateUserData(
+            coreDataManager.updateUserFieldData(
                 userID: mainModel.loadUserData().userID,
                 field: "userShowEmail",
                 argument: true,
                 context: context)
-            coreDataManager.updateUserData(
+            coreDataManager.updateUserFieldData(
                 userID: mainModel.loadUserData().userID,
                 field: "userSyncronized",
                 argument: false,
                 context: context)
         case(false,true):
-            coreDataManager.updateUserData(
+            coreDataManager.updateUserFieldData(
                 userID: mainModel.loadUserData().userID,
                 field: "userShowEmail",
                 argument: false,

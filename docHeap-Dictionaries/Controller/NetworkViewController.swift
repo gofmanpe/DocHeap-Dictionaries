@@ -99,7 +99,7 @@ class NetworkViewController: UIViewController, GetFilteredData, SetDownloadedMar
     private var dictionariesCounts = [DictionaryCounts]()
     private let mainModel = MainModel()
     private let coreData = CoreDataManager()
-    private var userDictionaries = [Dictionary]()
+    private var userDictionaries = [LocalDictionary]()
     private var dicOwnersData = [DicOwnerData]()
     private var networkUsersArray = [NetworkUserData]()
     private var defaults = Defaults()
@@ -151,7 +151,7 @@ class NetworkViewController: UIViewController, GetFilteredData, SetDownloadedMar
     }
 
 //MARK: - Controller functions
-    func isFilterSet(){
+   private func isFilterSet(){
         switch (selectedLearnFromDelegate.isEmpty,selectedTransFromDelegate.isEmpty){
         case (true,true):
             return
@@ -167,7 +167,7 @@ class NetworkViewController: UIViewController, GetFilteredData, SetDownloadedMar
         }
     }
     
-    func standartState(){
+   private func standartState(){
         sharedTable.isHidden = false
         noInetView.isHidden = true
         useFilterButton.layer.shadowColor = UIColor.black.cgColor
@@ -177,13 +177,13 @@ class NetworkViewController: UIViewController, GetFilteredData, SetDownloadedMar
         useFilterButton.layer.cornerRadius = 10
     }
     
-    func getDataFromFirestore(){
+    private func getDataFromFirestore(){
         let db = Firestore.firestore()
         db.collection("Dictionaries").whereField("dicShared", isEqualTo: true).getDocuments { (querySnapshot, error) in
             if let error = error {
                 print("Error getting documents: \(error)")
             } else { 
-                self.userDictionaries = self.coreData.loadUserDictionaries(userID: self.mainModel.loadUserData().userID, data: self.context)
+                self.userDictionaries = self.coreData.loadUserDictionaries(userID: self.mainModel.loadUserData().userID, context: self.context)
                 self.sharedDictionaries.removeAll()
                 self.originalArray.removeAll()
                 self.networkUsersArray.removeAll()
@@ -228,8 +228,11 @@ class NetworkViewController: UIViewController, GetFilteredData, SetDownloadedMar
                                             userEmail: nUserData.userEmail,
                                             userScores: nUserData.userScores,
                                             userLocalAvatar: fileName,
-                                            userSharedDics: nUserData.userSharedDics,
-                                            userLikes: nUserData.userLikes)
+                                            userTestsCompleted: nUserData.userTestsCompleted,
+                                            userMistakes: nUserData.userMistakes,
+                                            userRightAnswers: nUserData.userRightAnswers,
+                                            userLikes:nUserData.userLikes
+                                        )
                                         self.networkUsersArray.append(nuData)
                                     }
                                     self.dispatchGroup.leave()
@@ -251,15 +254,15 @@ class NetworkViewController: UIViewController, GetFilteredData, SetDownloadedMar
         }
     }
     
-  
-    func getWords(dicArray:[SharedDictionary]){
+    
+    private func getWords(dicArray:[SharedDictionary]){
         sharedWords.removeAll()
         for dic in dicArray{
             getWordsDataFromFirestore(dicID: dic.dicID)
         }
     }
     
-    func getWordsDataFromFirestore(dicID:String){
+    private func getWordsDataFromFirestore(dicID:String){
         let db = Firestore.firestore()
         db.collection("Words").whereField("wrdDicID", isEqualTo: dicID).getDocuments { (querySnapshot, error) in
             if let error = error {
@@ -313,7 +316,7 @@ class NetworkViewController: UIViewController, GetFilteredData, SetDownloadedMar
             }
         }
     
-    func popUpApear(){
+    private func popUpApear(){
                 let overLayerView = FilterSharedDicController()
                 overLayerView.selectedLearn = selectedLearnFromDelegate
                 overLayerView.selectedTrans = selectedTransFromDelegate
@@ -322,7 +325,7 @@ class NetworkViewController: UIViewController, GetFilteredData, SetDownloadedMar
                 overLayerView.appear(sender: self)
     }
     
-    func buttonScaleAnimation(targetButton:UIButton){
+   private func buttonScaleAnimation(targetButton:UIButton){
         UIView.animate(withDuration: 0.2) {
             targetButton.transform = CGAffineTransform(scaleX: 1.25, y: 1.25)
         } completion: { (bool) in

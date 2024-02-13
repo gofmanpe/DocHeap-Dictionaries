@@ -25,6 +25,7 @@ class StartController: UIViewController{
     @IBOutlet weak var avatarImageView: UIImageView!
     @IBOutlet weak var keepSignedLabel: UILabel!
     @IBOutlet weak var googleSignInButton: GIDSignInButton!
+    @IBOutlet weak var background: UIView!
     
 //MARK: - Localization
     func localizeElements(){
@@ -73,11 +74,18 @@ class StartController: UIViewController{
         loadCurrentUser()
         coreDataManager.loadCurrentUserData(userID: userID, data: context)
         elementsDesign()
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        background.addGestureRecognizer(tapGesture)
     }
     
    
     
 //MARK: - Controller functions
+    @objc func hideKeyboard() {
+        view.endEditing(true)
+    }
+    
     private func setupGoogleSignIn(){
         guard let clientID = FirebaseApp.app()?.options.clientID else { return }
         let config = GIDConfiguration(clientID: clientID)
@@ -141,7 +149,11 @@ class StartController: UIViewController{
                                         userSyncronized: data.userSyncronized,
                                         userType: data.userType,
                                         userRegisterDate: data.userRegisterDate,
-                                        userInterfaceLanguage: data.userInterfaceLanguage)
+                                        userInterfaceLanguage: data.userInterfaceLanguage,
+                                        userMistakes: data.userMistakes,
+                                        userRightAnswers: data.userRightAnswers,
+                                        userTestsCompleted: data.userTestsCompleted
+                                    )
                                         self.userID = userData.userID
                                         DispatchQueue.main.async {
                                             self.sync.loadDictionariesFromFirebase(userID: userData.userID, context: self.context)
@@ -181,7 +193,11 @@ class StartController: UIViewController{
                                     userSyncronized: true,
                                     userType: "",
                                     userRegisterDate: self.mainModel.convertDateToString(currentDate: Date(), time: false)!,
-                                    userInterfaceLanguage: self.mainModel.currentSystemLanguage())
+                                    userInterfaceLanguage: self.mainModel.currentSystemLanguage(),
+                                    userMistakes: 0,
+                                    userRightAnswers: 0,
+                                    userTestsCompleted: 0
+                                )
                                 self.coreDataManager.createLocalUser(userData: newUserData, context: self.context)
                                 self.mainModel.createFolderInDocuments(withName: userID)
                                 self.mainModel.createFolderInDocuments(withName: "\(userID)/Temp")
@@ -277,7 +293,11 @@ class StartController: UIViewController{
                                 userSyncronized: data.userSyncronized,
                                 userType: "",
                                 userRegisterDate: data.userRegisterDate,
-                                userInterfaceLanguage: data.userInterfaceLanguage)
+                                userInterfaceLanguage: data.userInterfaceLanguage,
+                                userMistakes: data.userMistakes,
+                                userRightAnswers: data.userRightAnswers,
+                                userTestsCompleted: data.userTestsCompleted
+                            )
                             DispatchQueue.main.async {
                                 self.sync.loadDictionariesFromFirebase(userID: userData.userID, context: self.context)
                             }

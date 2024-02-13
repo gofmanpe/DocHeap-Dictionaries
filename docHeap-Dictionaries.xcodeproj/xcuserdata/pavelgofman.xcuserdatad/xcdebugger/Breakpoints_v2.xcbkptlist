@@ -37,8 +37,8 @@
             filePath = "docHeap-Dictionaries/Model/Firebase.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "762"
-            endingLineNumber = "762"
+            startingLineNumber = "920"
+            endingLineNumber = "920"
             landmarkName = "listenDictionaryCommentsCount(dicID:completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -53,8 +53,8 @@
             filePath = "docHeap-Dictionaries/Controller/FindAnImageTestController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "99"
-            endingLineNumber = "99"
+            startingLineNumber = "111"
+            endingLineNumber = "111"
             landmarkName = "viewDidLoad()"
             landmarkType = "7">
          </BreakpointContent>
@@ -69,10 +69,10 @@
             filePath = "docHeap-Dictionaries/Controller/PopUp&apos;s/EditDictionaryViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "191"
-            endingLineNumber = "191"
-            landmarkName = "EditDictionaryViewController"
-            landmarkType = "3">
+            startingLineNumber = "237"
+            endingLineNumber = "237"
+            landmarkName = "checkForChanges()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -85,8 +85,8 @@
             filePath = "docHeap-Dictionaries/Controller/PopUp&apos;s/EditDictionaryViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "145"
-            endingLineNumber = "145"
+            startingLineNumber = "188"
+            endingLineNumber = "188"
             landmarkName = "checkForChanges()"
             landmarkType = "7">
          </BreakpointContent>
@@ -101,10 +101,72 @@
             filePath = "docHeap-Dictionaries/Controller/PopUp&apos;s/EditDictionaryViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "153"
-            endingLineNumber = "153"
+            startingLineNumber = "195"
+            endingLineNumber = "195"
             landmarkName = "checkForChanges()"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "0D15156F-AD86-4AB3-9CC4-263AD29212BA - cdb6a32d36f3e20f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "docHeap_Dictionaries.EditDictionaryViewController.checkForChanges() -&gt; Swift.Bool"
+                  moduleName = "docHeap-Dictionaries"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/pavelgofman/Documents/Project_copy/DocHeap/docHeap-Dictionaries/Controller/PopUp&apos;s/EditDictionaryViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "153"
+                  endingLineNumber = "153"
+                  offsetFromSymbolStart = "2656">
+               </Location>
+               <Location
+                  uuid = "0D15156F-AD86-4AB3-9CC4-263AD29212BA - cdb6a32d36f3e20f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "docHeap_Dictionaries.EditDictionaryViewController.checkForChanges() -&gt; Swift.Bool"
+                  moduleName = "docHeap-Dictionaries"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/pavelgofman/Documents/Project_copy/DocHeap/docHeap-Dictionaries/Controller/PopUp&apos;s/EditDictionaryViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "153"
+                  endingLineNumber = "153"
+                  offsetFromSymbolStart = "2684">
+               </Location>
+               <Location
+                  uuid = "0D15156F-AD86-4AB3-9CC4-263AD29212BA - cdb6a32d36f39d98"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "docHeap_Dictionaries.EditDictionaryViewController.checkForChanges() -&gt; Swift.Bool"
+                  moduleName = "docHeap-Dictionaries"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/pavelgofman/Documents/Project_copy/DocHeap/docHeap-Dictionaries/Controller/PopUp&apos;s/EditDictionaryViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "196"
+                  endingLineNumber = "196"
+                  offsetFromSymbolStart = "2668">
+               </Location>
+               <Location
+                  uuid = "0D15156F-AD86-4AB3-9CC4-263AD29212BA - cdb6a32d36f39df9"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "docHeap_Dictionaries.EditDictionaryViewController.checkForChanges() -&gt; Swift.Bool"
+                  moduleName = "docHeap-Dictionaries"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/pavelgofman/Documents/Project_copy/DocHeap/docHeap-Dictionaries/Controller/PopUp&apos;s/EditDictionaryViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "195"
+                  endingLineNumber = "195"
+                  offsetFromSymbolStart = "2684">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -117,10 +179,168 @@
             filePath = "docHeap-Dictionaries/Controller/PopUp&apos;s/EditDictionaryViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "174"
-            endingLineNumber = "174"
+            startingLineNumber = "219"
+            endingLineNumber = "219"
             landmarkName = "checkForChanges()"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "A4ACB16C-6756-4FCE-A10B-E5D4D8862EB8 - cdb6a32d36f3e093"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "docHeap_Dictionaries.EditDictionaryViewController.checkForChanges() -&gt; Swift.Bool"
+                  moduleName = "docHeap-Dictionaries"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/pavelgofman/Documents/Project_copy/DocHeap/docHeap-Dictionaries/Controller/PopUp&apos;s/EditDictionaryViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "173"
+                  endingLineNumber = "173"
+                  offsetFromSymbolStart = "1956">
+               </Location>
+               <Location
+                  uuid = "A4ACB16C-6756-4FCE-A10B-E5D4D8862EB8 - cdb6a32d36f3e0b2"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "docHeap_Dictionaries.EditDictionaryViewController.checkForChanges() -&gt; Swift.Bool"
+                  moduleName = "docHeap-Dictionaries"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/pavelgofman/Documents/Project_copy/DocHeap/docHeap-Dictionaries/Controller/PopUp&apos;s/EditDictionaryViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "174"
+                  endingLineNumber = "174"
+                  offsetFromSymbolStart = "1880">
+               </Location>
+               <Location
+                  uuid = "A4ACB16C-6756-4FCE-A10B-E5D4D8862EB8 - cdb6a32d36f39aa0"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "docHeap_Dictionaries.EditDictionaryViewController.checkForChanges() -&gt; Swift.Bool"
+                  moduleName = "docHeap-Dictionaries"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/pavelgofman/Documents/Project_copy/DocHeap/docHeap-Dictionaries/Controller/PopUp&apos;s/EditDictionaryViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "220"
+                  endingLineNumber = "220"
+                  offsetFromSymbolStart = "1880">
+               </Location>
+               <Location
+                  uuid = "A4ACB16C-6756-4FCE-A10B-E5D4D8862EB8 - cdb6a32d36f39a81"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "docHeap_Dictionaries.EditDictionaryViewController.checkForChanges() -&gt; Swift.Bool"
+                  moduleName = "docHeap-Dictionaries"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/pavelgofman/Documents/Project_copy/DocHeap/docHeap-Dictionaries/Controller/PopUp&apos;s/EditDictionaryViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "219"
+                  endingLineNumber = "219"
+                  offsetFromSymbolStart = "1896">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "417494DC-73F7-4552-A995-2D0ED84C38D4"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "docHeap-Dictionaries/Controller/BrowseSharedDicViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "67"
+            endingLineNumber = "67"
+            landmarkName = "viewDidLoad()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "2FD0EA78-E034-4F2A-953F-B8BC66F1976F"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "docHeap-Dictionaries/Controller/BrowseSharedDicViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "260"
+            endingLineNumber = "260"
+            landmarkName = "popUpApear(popUpName:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "6867BB07-F918-4E2A-9F81-16A6445C8B53"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "docHeap-Dictionaries/Controller/BrowseDictionaryController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "21"
+            endingLineNumber = "21"
+            landmarkName = "didUpdateView(sender:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F09238E5-E01F-4C29-A106-A4A71C2B7836"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "docHeap-Dictionaries/Controller/PopUp&apos;s/BrowseWordViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "186"
+            endingLineNumber = "186"
+            landmarkName = "standartState()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "F09238E5-E01F-4C29-A106-A4A71C2B7836 - 7fb68050c0e87e5c"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "docHeap_Dictionaries.BrowseWordViewController.standartState() -&gt; ()"
+                  moduleName = "docHeap-Dictionaries"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/pavelgofman/Documents/Project_copy/DocHeap/docHeap-Dictionaries/Controller/PopUp&apos;s/BrowseWordViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "186"
+                  endingLineNumber = "186"
+                  offsetFromSymbolStart = "1084">
+               </Location>
+               <Location
+                  uuid = "F09238E5-E01F-4C29-A106-A4A71C2B7836 - 7fb68050c0e87e5c"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "docHeap_Dictionaries.BrowseWordViewController.standartState() -&gt; ()"
+                  moduleName = "docHeap-Dictionaries"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/pavelgofman/Documents/Project_copy/DocHeap/docHeap-Dictionaries/Controller/PopUp&apos;s/BrowseWordViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "186"
+                  endingLineNumber = "186"
+                  offsetFromSymbolStart = "1228">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
