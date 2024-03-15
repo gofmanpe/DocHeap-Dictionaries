@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22225" systemVersion="23C71" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22225" systemVersion="23D60" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="DicMessage" representedClassName="DicMessage" syncable="YES" codeGenerationType="class">
         <attribute name="msgBody" optional="YES" attributeType="String"/>
         <attribute name="msgDateTime" optional="YES" attributeType="String"/>
@@ -64,6 +64,7 @@
         <attribute name="userCountry" optional="YES" attributeType="String"/>
         <attribute name="userEmail" optional="YES" attributeType="String"/>
         <attribute name="userID" optional="YES" attributeType="String"/>
+        <attribute name="userIdentityToken" optional="YES" attributeType="String"/>
         <attribute name="userInterfaceLanguage" optional="YES" attributeType="String"/>
         <attribute name="userMistakes" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="userName" optional="YES" attributeType="String"/>

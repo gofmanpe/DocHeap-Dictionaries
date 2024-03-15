@@ -18,6 +18,9 @@
 "startVC_switch_label" = "Сохранить вход";
 "startVC_register_Button" = "Регистрация";
 "startVC_signIn_Button" = "Войти";
+"startVC_or_label" = "ИЛИ";
+"startVC_googleSignIn_label" = "Вход с Google";
+
 //RegisterController
 "registerVC_email_placeholder" = "Ваш email";
 "registerVC_password_placeholder" = "Ваш пароль";
@@ -75,6 +78,12 @@
 "browseDictionaryVC_wordsInDictionary_label" = "Слов:";
 "browseDictionaryVC_createDate_label" = "Создан:";
 "browseDictionaryVC_dicOwner_label" = "Владелец:";
+//BrowseSharedDicController
+"browseSharedDicVC_words_in_dic_label" = "слов в словаре:";
+"browseSharedDicVC_likes_label" = "Лайки";
+"browseSharedDicVC_tests_label" = "Тесты";
+"browseSharedDicVC_scores_label" = "Очки";
+"browseSharedDicVC_download_button" = "СКАЧАТЬ";
 //AddWordPopUpViewController
 "addWordPopUp_header_label" = "Добавление пары слов";
 "addWordPopUp_enterBothWords_message" = "Вы должны сначала ввести оба слова";

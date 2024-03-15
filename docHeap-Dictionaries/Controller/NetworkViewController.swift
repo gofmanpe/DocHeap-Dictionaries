@@ -215,7 +215,7 @@ class NetworkViewController: UIViewController, GetFilteredData, SetDownloadedMar
                                     guard let nUserData = userData else {
                                         return
                                     }
-                                    self.alamo.downloadChatUserAvatar(url: nUserData.userAvatarFirestorePath, senderID: nUserData.userID, userID: "\(self.mainModel.loadUserData().userID)/Temp") { fileName in
+                                    if nUserData.userAvatarFirestorePath.isEmpty {
                                         let nuData = NetworkUserData(
                                             userID: nUserData.userID,
                                             userName: nUserData.userName,
@@ -227,13 +227,34 @@ class NetworkViewController: UIViewController, GetFilteredData, SetDownloadedMar
                                             userShowEmail: nUserData.userShowEmail,
                                             userEmail: nUserData.userEmail,
                                             userScores: nUserData.userScores,
-                                            userLocalAvatar: fileName,
+                                            userLocalAvatar: nil,
                                             userTestsCompleted: nUserData.userTestsCompleted,
                                             userMistakes: nUserData.userMistakes,
                                             userRightAnswers: nUserData.userRightAnswers,
                                             userLikes:nUserData.userLikes
                                         )
                                         self.networkUsersArray.append(nuData)
+                                    } else {
+                                        self.alamo.downloadChatUserAvatar(url: nUserData.userAvatarFirestorePath, senderID: nUserData.userID, userID: "\(self.mainModel.loadUserData().userID)/Temp") { fileName in
+                                            let nuData = NetworkUserData(
+                                                userID: nUserData.userID,
+                                                userName: nUserData.userName,
+                                                userCountry: nUserData.userCountry,
+                                                userNativeLanguage: nUserData.userNativeLanguage,
+                                                userBirthDate: nUserData.userBirthDate,
+                                                userRegisterDate: nUserData.userRegisterDate,
+                                                userAvatarFirestorePath: nUserData.userAvatarFirestorePath,
+                                                userShowEmail: nUserData.userShowEmail,
+                                                userEmail: nUserData.userEmail,
+                                                userScores: nUserData.userScores,
+                                                userLocalAvatar: fileName,
+                                                userTestsCompleted: nUserData.userTestsCompleted,
+                                                userMistakes: nUserData.userMistakes,
+                                                userRightAnswers: nUserData.userRightAnswers,
+                                                userLikes:nUserData.userLikes
+                                            )
+                                            self.networkUsersArray.append(nuData)
+                                        }
                                     }
                                     self.dispatchGroup.leave()
                                 }
@@ -333,6 +354,17 @@ class NetworkViewController: UIViewController, GetFilteredData, SetDownloadedMar
         }
     }
     
+    func getUserInitials(fullName: String) -> String {
+        let words = fullName.components(separatedBy: " ")
+        var initials = ""
+        for word in words {
+            if let firstLetter = word.first {
+                initials.append(firstLetter)
+            }
+        }
+        return initials.uppercased()
+    }
+    
 //MARK: - Actions
     @IBAction func useFilterButtonPressed(_ sender: UIButton) {
         buttonScaleAnimation(targetButton: useFilterButton)
@@ -374,12 +406,15 @@ extension NetworkViewController: UITableViewDelegate, UITableViewDataSource {
         cell.lLangImage.image = UIImage(named: "\(learnImage).png")
         let transImage = dictionary.dicTransLang
         cell.tLangImage.image = UIImage(named: "\(transImage).png")
-        let filePath = "\(mainModel.loadUserData().userID)/Temp/\(currentNetworkUser?.userLocalAvatar ?? "")"
-        let image = UIImage(contentsOfFile:  mainModel.getDocumentsFolderPath().appendingPathComponent(filePath).path)
-        cell.userAvatarImage.image = image
-//        if let url = URL(string: currentNetworkUser?.userAvatarFirestorePath ?? "") {
-//            cell.userAvatarImage.af.setImage(withURL: url)
-//        }
+        if currentNetworkUser?.userLocalAvatar != nil {
+            cell.userAvatarImage.isHidden = false
+            let filePath = "\(mainModel.loadUserData().userID)/Temp/\(currentNetworkUser?.userLocalAvatar ?? "")"
+            let image = UIImage(contentsOfFile:  mainModel.getDocumentsFolderPath().appendingPathComponent(filePath).path)
+            cell.userAvatarImage.image = image
+        } else {
+            cell.userAvatarImage.isHidden = true
+            cell.userInitials.text = getUserInitials(fullName: currentNetworkUser?.userName ?? "NoName")
+        }
         cell.selectionStyle = .none
         return cell
     }

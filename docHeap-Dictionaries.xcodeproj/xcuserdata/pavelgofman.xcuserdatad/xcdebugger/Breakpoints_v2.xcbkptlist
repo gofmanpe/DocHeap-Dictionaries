@@ -37,8 +37,8 @@
             filePath = "docHeap-Dictionaries/Model/Firebase.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "920"
-            endingLineNumber = "920"
+            startingLineNumber = "921"
+            endingLineNumber = "921"
             landmarkName = "listenDictionaryCommentsCount(dicID:completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -79,7 +79,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "D0FB73DF-7EBC-41EF-9C11-8EF842DD2DF1"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "docHeap-Dictionaries/Controller/PopUp&apos;s/EditDictionaryViewController.swift"
@@ -95,7 +95,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "0D15156F-AD86-4AB3-9CC4-263AD29212BA"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "docHeap-Dictionaries/Controller/PopUp&apos;s/EditDictionaryViewController.swift"
@@ -257,8 +257,8 @@
             filePath = "docHeap-Dictionaries/Controller/BrowseSharedDicViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "67"
-            endingLineNumber = "67"
+            startingLineNumber = "75"
+            endingLineNumber = "75"
             landmarkName = "viewDidLoad()"
             landmarkType = "7">
          </BreakpointContent>
@@ -273,10 +273,57 @@
             filePath = "docHeap-Dictionaries/Controller/BrowseSharedDicViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "260"
-            endingLineNumber = "260"
+            startingLineNumber = "290"
+            endingLineNumber = "290"
             landmarkName = "popUpApear(popUpName:)"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "2FD0EA78-E034-4F2A-953F-B8BC66F1976F - 76f52d6a86285e39"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "docHeap_Dictionaries.BrowseSharedDicViewController.popUpApear(popUpName: Swift.String) -&gt; ()"
+                  moduleName = "docHeap-Dictionaries"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/pavelgofman/Documents/Project_copy/DocHeap/docHeap-Dictionaries/Controller/BrowseSharedDicViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "269"
+                  endingLineNumber = "269"
+                  offsetFromSymbolStart = "1960">
+               </Location>
+               <Location
+                  uuid = "2FD0EA78-E034-4F2A-953F-B8BC66F1976F - 76f52d6a86285e5a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "docHeap_Dictionaries.BrowseSharedDicViewController.popUpApear(popUpName: Swift.String) -&gt; ()"
+                  moduleName = "docHeap-Dictionaries"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/pavelgofman/Documents/Project_copy/DocHeap/docHeap-Dictionaries/Controller/BrowseSharedDicViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "268"
+                  endingLineNumber = "268"
+                  offsetFromSymbolStart = "1956">
+               </Location>
+               <Location
+                  uuid = "2FD0EA78-E034-4F2A-953F-B8BC66F1976F - 76f52d6a86285d42"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "docHeap_Dictionaries.BrowseSharedDicViewController.popUpApear(popUpName: Swift.String) -&gt; ()"
+                  moduleName = "docHeap-Dictionaries"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/pavelgofman/Documents/Project_copy/DocHeap/docHeap-Dictionaries/Controller/BrowseSharedDicViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "292"
+                  endingLineNumber = "292"
+                  offsetFromSymbolStart = "1956">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -341,6 +388,22 @@
                   offsetFromSymbolStart = "1228">
                </Location>
             </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "29AB0F4F-1215-4F0B-8149-E353061EF083"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "docHeap-Dictionaries/Controller/NetworkViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "151"
+            endingLineNumber = "151"
+            landmarkName = "viewWillAppear(_:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

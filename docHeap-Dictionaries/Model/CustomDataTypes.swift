@@ -118,6 +118,7 @@ struct UserData{
     let userMistakes: Int
     let userRightAnswers: Int
     let userTestsCompleted: Int
+    let userIdentityToken: String
 }
 
 struct NetworkUserData{

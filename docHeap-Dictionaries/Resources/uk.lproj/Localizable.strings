@@ -10,6 +10,8 @@
 "startVC_switch_label" = "Зберегти вхід";
 "startVC_register_Button" = "Реєстрація";
 "startVC_signIn_Button" = "Війти";
+"startVC_or_label" = "АБО";
+"startVC_googleSignIn_label" = "Вхід з Google";
 //RegisterController
 "registerVC_email_placeholder" = "Ваш email";
 "registerVC_password_placeholder" = "Ваш пароль";
@@ -67,6 +69,12 @@
 "browseDictionaryVC_wordsInDictionary_label" = "Слів:";
 "browseDictionaryVC_createDate_label" = "Створено:";
 "browseDictionaryVC_dicOwner_label" = "Власник:";
+//BrowseSharedDicController
+"browseSharedDicVC_words_in_dic_label" = "слів у словнику:";
+"browseSharedDicVC_likes_label" = "Лайки";
+"browseSharedDicVC_tests_label" = "Тести";
+"browseSharedDicVC_scores_label" = "Очки";
+"browseSharedDicVC_download_button" = "ЗАВАНТАЖИТИ";
 //AddWordPopUpViewController
 "addWordPopUp_header_label" = "Додавання пари слів";
 "addWordPopUp_word_label" = "Слово:";

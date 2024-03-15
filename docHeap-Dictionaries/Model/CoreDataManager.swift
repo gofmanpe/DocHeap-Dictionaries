@@ -657,6 +657,7 @@ struct CoreDataManager{
         localUser.userMistakes = Int64(userData.userMistakes)
         localUser.userRightAnswers = Int64(userData.userRightAnswers)
         localUser.userTestsCompleted = Int64(userData.userTestsCompleted)
+        localUser.userIdentityToken = userData.userIdentityToken
         saveData(data: context)
     }
     
@@ -952,6 +953,22 @@ struct CoreDataManager{
         return result
     }
     
+    func loadAllUsers(context: NSManagedObjectContext) -> Bool {
+        let request: NSFetchRequest<Users> = Users.fetchRequest()
+        var isUsersExist = Bool()
+        do {
+            let usersArray = try context.fetch(request)
+            if usersArray.isEmpty{
+                isUsersExist = false
+            } else {
+                isUsersExist = true
+            }
+        } catch {
+            print ("Error loading users \(error)")
+        }
+        return isUsersExist
+    }
+    
     func loadUserDataByID(userID: String, context: NSManagedObjectContext)->UserData?{
         let request: NSFetchRequest<Users> = Users.fetchRequest()
         request.predicate = NSPredicate(format: "userID MATCHES %@", userID)
@@ -976,7 +993,43 @@ struct CoreDataManager{
                 userInterfaceLanguage: data?.userInterfaceLanguage ?? "",
                 userMistakes: Int(data?.userMistakes ?? 0),
                 userRightAnswers: Int(data?.userRightAnswers ?? 0),
-                userTestsCompleted: Int(data?.userTestsCompleted ?? 0)
+                userTestsCompleted: Int(data?.userTestsCompleted ?? 0), 
+                userIdentityToken: data?.userIdentityToken ?? ""
+            )
+           // return queryResult
+        } catch {
+            print ("Error fetching data \(error)")
+        }
+       
+        return queryResult
+    }
+    
+    func loadUserDataByToken(userToken: String, context: NSManagedObjectContext)->UserData?{
+        let request: NSFetchRequest<Users> = Users.fetchRequest()
+        request.predicate = NSPredicate(format: "userIdentityToken MATCHES %@", userToken)
+        var queryResult : UserData?
+        do {
+            let userArray = try context.fetch(request)
+            let data = userArray.first
+            queryResult = UserData(
+                userID: data?.userID ?? "",
+                userName: data?.userName ?? "",
+                userBirthDate: data?.userBirthDate ?? "",
+                userCountry: data?.userCountry ?? "",
+                userAvatarFirestorePath: data?.userAvatarFirestorePath ?? "",
+                userAvatarExtention: data?.userAvatarExtention ?? "",
+                userNativeLanguage: data?.userNativeLanguage ?? "",
+                userScores: Int(data?.userScores ?? 0),
+                userShowEmail: data?.userShowEmail ?? false,
+                userEmail: data?.userEmail ?? "",
+                userSyncronized: data?.userSyncronized ?? true,
+                userType: data?.userType ?? "",
+                userRegisterDate: data?.userRegisterDate ?? "",
+                userInterfaceLanguage: data?.userInterfaceLanguage ?? "",
+                userMistakes: Int(data?.userMistakes ?? 0),
+                userRightAnswers: Int(data?.userRightAnswers ?? 0),
+                userTestsCompleted: Int(data?.userTestsCompleted ?? 0),
+                userIdentityToken: data?.userIdentityToken ?? ""
             )
            // return queryResult
         } catch {

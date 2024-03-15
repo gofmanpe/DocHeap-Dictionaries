@@ -35,15 +35,15 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate & UIN
     @IBOutlet weak var birthDateLabel: UILabel!
     @IBOutlet weak var countryLabel: UILabel!
     @IBOutlet weak var nativeLangLabel: UILabel!
- //   @IBOutlet weak var scoresLabel: UILabel!
     @IBOutlet weak var editButton: UIButton!
     @IBOutlet weak var showEmailLabel: UILabel!
     @IBOutlet weak var emailSwitch: UISwitch!
     @IBOutlet weak var dateOfBirthNameLabel: UILabel!
     @IBOutlet weak var countryNameLabel: UILabel!
     @IBOutlet weak var nativeLanguageNameLabel: UILabel!
-  //  @IBOutlet weak var scoresNameLabel: UILabel!
     @IBOutlet weak var profileLabel: UILabel!
+    @IBOutlet weak var userInitials: UILabel!
+    @IBOutlet weak var avatarBgView: UIView!
     
 //MARK: - Localization
     func localizeElements(){
@@ -54,7 +54,6 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate & UIN
         dateOfBirthNameLabel.text = "profileVC_dateOfBirth_label".localized
         countryNameLabel.text = "profileVC_country_label".localized
         nativeLanguageNameLabel.text = "profileVC_nativeLanguage_label".localized
-     //   scoresNameLabel.text = "profileVC_scores_label".localized
         showEmailLabel.text = "profileVC_showEmail_label".localized
         profileLabel.text = "profileVC_profile_label".localized
     }
@@ -76,6 +75,7 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate & UIN
     private let sync = SyncModel()
     private var avatarFirestorePath = String()
     private var userData : UserData?
+    
 //MARK: - Lifecycle functions
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -88,7 +88,6 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate & UIN
             coreDataManager.setSyncronizedStatusForUser(userID: mainModel.loadUserData().userID, status: false, context: context)
             coreDataManager.saveData(data: context)
         }
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -97,46 +96,66 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate & UIN
     
 //MARK: - Controller functions
     func setupUserData(){
-        userData = coreDataManager.loadUserDataByID(userID: mainModel.loadUserData().userID, context: context)
-        nameLabel.text = userData?.userName
-        birthDateLabel.text = userData?.userBirthDate
-        countryLabel.text = userData?.userCountry
-        nativeLangLabel.text = userData?.userNativeLanguage
-      //  scoresLabel.text = String(userData?.userScores ?? 0)
-    }
-
-    func elementsDesign(){
-        guard let userData = userData else {
+        guard let userData = coreDataManager.loadUserDataByID(userID: mainModel.loadUserData().userID, context: context) else {
             return
         }
+        nameLabel.text = userData.userName
+        birthDateLabel.text = userData.userBirthDate
+        countryLabel.text = userData.userCountry
+        nativeLangLabel.text = userData.userNativeLanguage
+        userInitials.text = getUserInitials(fullName: userData.userName)
+        emailLabel.text = userData.userEmail
+        registerDateLabel.text = userData.userRegisterDate
         if !userData.userAvatarExtention.isEmpty{
             let avaExtention = userData.userAvatarExtention
             avatarName = "userAvatar.\(avaExtention)"
             let avatarPath = "\(mainModel.loadUserData().userID)/\(avatarName)"
             userAvatar.image = UIImage(contentsOfFile:  mainModel.getDocumentsFolderPath().appendingPathComponent(avatarPath).path)
+            userAvatar.isHidden = false
+            avatarBgView.isHidden = true
         } else {
-            userAvatar.image = UIImage(named: "noAvatar")
+            userAvatar.isHidden = true
+            avatarBgView.isHidden = false
         }
-        userAvatar.layer.cornerRadius = userAvatar.frame.size.width/2
-        userAvatar.layer.masksToBounds = false
-        userAvatar.clipsToBounds = true
-        emailLabel.text = userData.userEmail
-        registerDateLabel.text = userData.userRegisterDate
-        setAvatarButton.layer.cornerRadius = 10
-        logoutButton.layer.cornerRadius = 10
-        windowView.clipsToBounds = true
-        windowView.layer.cornerRadius = 10
-        windowView.layer.borderWidth = 0.5
-        windowView.layer.borderColor = UIColor.lightGray.cgColor
         if userData.userShowEmail{
             emailSwitch.isOn = true
         } else {
             emailSwitch.isOn = false
         }
+    }
+    
+    func getUserInitials(fullName: String) -> String {
+        let words = fullName.components(separatedBy: " ")
+        var initials = ""
+        for word in words {
+            if let firstLetter = word.first {
+                initials.append(firstLetter)
+            }
+        }
+        return initials.uppercased()
+    }
+    
+    func elementsDesign(){
+        avatarBgView.layer.cornerRadius = avatarBgView.frame.size.width/2
+        avatarBgView.layer.masksToBounds = false
+        avatarBgView.clipsToBounds = true
+        
+        userAvatar.layer.cornerRadius = userAvatar.frame.size.width/2
+        userAvatar.layer.masksToBounds = false
+        userAvatar.clipsToBounds = true
+        
+        windowView.clipsToBounds = true
+        windowView.layer.cornerRadius = 10
+        windowView.layer.borderWidth = 0.5
+        windowView.layer.borderColor = UIColor.lightGray.cgColor
+        
+        logoutButton.layer.cornerRadius = 10
         logoutButton.layer.shadowColor = UIColor.black.cgColor
         logoutButton.layer.shadowOpacity = 0.2
         logoutButton.layer.shadowOffset = .zero
         logoutButton.layer.shadowRadius = 2
+        
+        setAvatarButton.layer.cornerRadius = 10
         setAvatarButton.layer.shadowColor = UIColor.black.cgColor
         setAvatarButton.layer.shadowOpacity = 0.2
         setAvatarButton.layer.shadowOffset = .zero
@@ -165,8 +184,6 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate & UIN
             avatarName = "userAvatar.\(imageExtention)"
             avatarURL = mainModel.getDocumentsFolderPath().appendingPathComponent("\(mainModel.loadUserData().userID)/\(avatarName)")
             coreDataManager.updateUserFieldData(userID: mainModel.loadUserData().userID, field: "userAvatarExtention", argument: imageExtention, context: context)
-           // userData?.userAvatarExtention = imageExtention
-         //   coreDataManager.saveData(data: context)
             if let imageData = image.jpegData(compressionQuality: 0.8) {
                 do {
                     if let imageWithUrl = avatarURL{
@@ -193,8 +210,6 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate & UIN
                     field: "userAvatarFirestorePath",
                     argument: downloadURL.absoluteString,
                     context: self.context)
-             //   self.userData?.userAvatarFirestorePath = downloadURL.absoluteString
-             //   self.coreDataManager.saveData(data: self.context)
                 self.updateAvatarURLInFirestore(userID: self.mainModel.loadUserData().userID, avatarURL: downloadURL.absoluteString)
             }
         }
@@ -220,7 +235,6 @@ class ProfileController: UIViewController, UIImagePickerControllerDelegate & UIN
             overLayedView.appear(sender: self)
         default: break
         }
-           
     }
     
     func buttonScaleAnimation(targetButton:UIButton){

@@ -125,6 +125,8 @@ class RegisterController: UIViewController {
                            self.defaults.set(enteredEmail, forKey: "userEmail")
                            self.defaults.set(false, forKey: "keepSigned")
                            self.defaults.set(userID, forKey: "userID")
+                           self.defaults.set("auth", forKey: "accType")
+                           self.defaults.set(name, forKey: "userName")
                            if self.avatarSelected{
                                self.avatarName = "userAvatar.\(self.imageExtention)"
                                newUser.userAvatarExtention = self.imageExtention

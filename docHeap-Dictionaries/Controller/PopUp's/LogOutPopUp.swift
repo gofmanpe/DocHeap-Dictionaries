@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+import FirebaseAuth
 class LogOutPopUp: UIViewController {
 
     @IBOutlet weak var background: UIView!
@@ -74,6 +74,11 @@ class LogOutPopUp: UIViewController {
     
     func logout(){
         let accountType = mainModel.loadUserData().accType
+        do{
+            try Auth.auth().signOut()
+        } catch {
+            print("ERROR!\n")
+        }
         switch accountType{
         case "google":
             userDefaults.set("", forKey: "userID")
@@ -86,10 +91,17 @@ class LogOutPopUp: UIViewController {
             userDefaults.set("", forKey: "accType")
             userDefaults.set(false, forKey: "keepSigned")
             delegateLogOut?.performToStart()
+        case "apple":
+            userDefaults.set("", forKey: "userID")
+            userDefaults.set("", forKey: "accType")
+            userDefaults.set(false, forKey: "keepSigned")
+            delegateLogOut?.performToStart()
         default:
             return
         }
     }
+    
+ 
 
     @IBAction func cancelButtonPressed(_ sender: UIButton) {
         hide()

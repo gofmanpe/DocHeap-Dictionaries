@@ -101,13 +101,13 @@ struct TestModel{
             wordsWithImagesSet.insert(randomEl)
         }
         let convertedFromSetArray = Array(wordsWithImagesSet) // convert Set into Array
-        print("Converted array is: \(convertedFromSetArray)\n")
-        let mainWord = arrayOfWords[mainWordIndex].wrdWord!
+       // print("Converted array is: \(convertedFromSetArray)\n")
+        let mainWord = arrayOfWords[mainWordIndex].wrdTranslation!
         let mainWordImage = arrayOfWords[mainWordIndex].imageName!
         var fourImagesWordsArray = [String]()
         var fourImagesPathArray = [String]()
         for i in 0...3 {
-            fourImagesWordsArray.append(convertedFromSetArray[i]!.wrdWord!)
+            fourImagesWordsArray.append(convertedFromSetArray[i]!.wrdTranslation!)
             fourImagesPathArray.append(convertedFromSetArray[i]!.imageName!)
         }
         return (mainWord, mainWordImage, fourImagesWordsArray, fourImagesPathArray)

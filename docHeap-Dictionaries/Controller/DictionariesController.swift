@@ -48,8 +48,16 @@ class DictionariesController: UIViewController, UpdateView, CellButtonPressed{
     @IBOutlet weak var testsRunsNameLabel: UILabel!
     @IBOutlet weak var likesNameLabel: UILabel!
     @IBOutlet weak var likesLabel: UILabel!
+    @IBOutlet weak var avatarBgView: UIView!
+    @IBOutlet weak var userInitials: UILabel!
     
-    
+//MARK: - Localization
+    func localizeElements(){
+        myDictionariesLabel.text = "dictionariesVC_myDictionaries_label".localized
+        likesNameLabel.text = "dictionariesVC_likes_label".localized
+        scoresNameLabel.text = "dictionariesVC_scores_label".localized
+        testsRunsNameLabel.text = "dictionariesVC_testRuns_label".localized
+    }
     
 //MARK: - Constants and variables
     private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
@@ -64,11 +72,8 @@ class DictionariesController: UIViewController, UpdateView, CellButtonPressed{
     private var dicID = String()
     var userID = String()
     private var dictionariesArray = [LocalDictionary]()
-    private var userData : UserData?
-    
+   // private var userData : UserData?
     private var likesCount = Int()
-//    private var messagesCount = Int()
-//    private let dispatchGroup = DispatchGroup()
     
 //MARK: - Lifecycle functions
     override func viewDidLoad() {
@@ -103,33 +108,38 @@ class DictionariesController: UIViewController, UpdateView, CellButtonPressed{
 //MARK: - Controller functions
     func setupData(){
         dictionariesArray = coreData.loadUserDictionaries(userID: mainModel.loadUserData().userID, context: context)
-        userData = coreData.loadUserDataByID(userID: mainModel.loadUserData().userID, context: context)
+        guard let userData = coreData.loadUserDataByID(userID: mainModel.loadUserData().userID, context: context) else {
+            return
+        }
         let userTotalStat = coreData.getTotalStatisticForUser(userID: mainModel.loadUserData().userID, context: context).first
         scoresLabel.text = String(userTotalStat?.scores ?? 0)
         testsRunsLabel.text = String(userTotalStat?.testRuns ?? 0)
-        let userName = userData?.userName
-        let userEmail = userData?.userEmail
+       
+//        let userEmail = userData.userEmail
+        userInitials.text = getUserInitials(fullName: userData.userName)
         dictionariesTable.delegate = self
         dictionariesTable.dataSource = self
         dictionariesTable.reloadData()
-        if dictionariesArray.isEmpty{
-            noDicltionariesLabel.isHidden = false}
-        else {
-            dictionariesTable.reloadData()
-            noDicltionariesLabel.isHidden = true
-        }
-        if userName != nil {
-            userNameLabel.text = userName
-        } else {
-            userNameLabel.text = userEmail
-        }
-        let avatarExtention = userData?.userAvatarExtention ?? ""
+        userNameLabel.text = userData.userName
+//        if dictionariesArray.isEmpty{
+//            noDicltionariesLabel.isHidden = false}
+//        else {
+//            dictionariesTable.reloadData()
+//            noDicltionariesLabel.isHidden = true
+//        }
+//        if !userData.userName.isEmpty {
+//            userNameLabel.text = userData.userName
+//        } else {
+//            userNameLabel.text = userEmail
+//        }
+        let avatarExtention = userData.userAvatarExtention
         if !avatarExtention.isEmpty{
             avatarName = "userAvatar.\(avatarExtention)"
-            let avatarPath = "\(mainModel.loadUserData().userID)/\(avatarName)"
-            avatarImageView.image = UIImage(contentsOfFile:  mainModel.getDocumentsFolderPath().appendingPathComponent(avatarPath).path)
+            avatarImageView.image = UIImage(contentsOfFile:  mainModel.getDocumentsFolderPath().appendingPathComponent("\(mainModel.loadUserData().userID)/\(avatarName)").path)
+            avatarImageView.isHidden = false
         } else {
-            avatarImageView.image = UIImage(named: "noAvatar")
+            avatarImageView.isHidden = true
+            userInitials.isHidden = false
         }
         firebase.listenUserLikesCount(userID: mainModel.loadUserData().userID) { count, error in
             if let error = error {
@@ -144,43 +154,28 @@ class DictionariesController: UIViewController, UpdateView, CellButtonPressed{
             }
         }
     }
-//    func listenCounts(dicID:String){
-//        firebase.listenDictionaryLikesCount(dicID: dicID) { count, error in
-//            if let error = error{
-//                print("Error get dictionary likes count: \(error)\n")
-//            } else {
-//                guard let likesCount = count else {
-//                    return
-//                }
-//                self.likesCount = likesCount
-//            }
-//        }
-//        firebase.listenDictionaryCommentsCount(dicID: dicID) { count, error in
-//            if let error = error{
-//                print("Error get dictionary likes count: \(error)\n")
-//            } else {
-//                guard let messagesCount = count else {
-//                    return
-//                }
-//                self.messagesCount = messagesCount
-//            }
-//        }
-//    }
     
-    func localizeElements(){
-        myDictionariesLabel.text = "dictionariesVC_myDictionaries_label".localized
-        likesNameLabel.text = "dictionariesVC_likes_label".localized
-        scoresNameLabel.text = "dictionariesVC_scores_label".localized
-        testsRunsNameLabel.text = "dictionariesVC_testRuns_label".localized
+    func getUserInitials(fullName: String) -> String {
+        let words = fullName.components(separatedBy: " ")
+        var initials = ""
+        for word in words {
+            if let firstLetter = word.first {
+                initials.append(firstLetter)
+            }
+        }
+        return initials.uppercased()
     }
     
     func elementsDesign(){
+        avatarBgView.layer.cornerRadius = avatarBgView.frame.size.width/2
+        avatarBgView.layer.masksToBounds = false
+        avatarBgView.clipsToBounds = true
+        
         avatarImageView.layer.cornerRadius = avatarImageView.frame.size.width/2
         avatarImageView.layer.masksToBounds = false
         avatarImageView.clipsToBounds = true
         avatarImageView.layer.borderWidth = 0.5
         avatarImageView.layer.borderColor = UIColor.lightGray.cgColor
-//        profileButtonView.layer.cornerRadius = 45
         profileButtonView.layer.shadowColor = UIColor.black.cgColor
         profileButtonView.layer.shadowOpacity = 0.2
         profileButtonView.layer.shadowOffset = .zero
@@ -191,7 +186,6 @@ class DictionariesController: UIViewController, UpdateView, CellButtonPressed{
         newDictionaryButton.layer.shadowRadius = 2
         newDictionaryButton.layer.cornerRadius = 10
     }
-   
     
     func popUpApear(dictionaryIDFromCell:String, senderAction:String){
             switch senderAction {

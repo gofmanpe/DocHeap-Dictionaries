@@ -27,9 +27,18 @@ class BrowseSharedDicViewController: UIViewController {
     @IBOutlet weak var descriptionButton: UIButton!
     @IBOutlet weak var dictionaryView: UIView!
     @IBOutlet weak var userInfoView: UIView!
+    @IBOutlet weak var likesNameLabel: UILabel!
+    @IBOutlet weak var testsNameLabel: UILabel!
+    @IBOutlet weak var scoresNameLabel: UILabel!
+    @IBOutlet weak var avatarBgView: UIView!
+    @IBOutlet weak var userInitials: UILabel!
     
     func localizeElemants(){
-       
+        wordsCountNameLabel.text = "browseSharedDicVC_words_in_dic_label".localized
+        likesNameLabel.text = "browseSharedDicVC_likes_label".localized
+        testsNameLabel.text = "browseSharedDicVC_tests_label".localized
+        scoresNameLabel.text = "browseSharedDicVC_scores_label".localized
+        downloadButton.setTitle("browseSharedDicVC_download_button".localized, for: .normal)
     }
  
 //MARK: - Constants and variables
@@ -87,10 +96,21 @@ class BrowseSharedDicViewController: UIViewController {
         ownerLabel.text = ownerName
       //  guard let downloadedTimes = sharedDictionary?.dicDownloadedUsers else {return}
         downloadButton.layer.cornerRadius = 10
-        let filePath = "\(mainModel.loadUserData().userID)/Temp/\(networkUserData?.userLocalAvatar ?? "")"
-        let image = UIImage(contentsOfFile:  mainModel.getDocumentsFolderPath().appendingPathComponent(filePath).path)
         userAvatarImage.layer.cornerRadius = userAvatarImage.frame.size.width/2
-        userAvatarImage.image = image
+        avatarBgView.layer.cornerRadius = avatarBgView.frame.size.width/2
+        
+        if networkUserData?.userLocalAvatar != nil {
+            let filePath = "\(mainModel.loadUserData().userID)/Temp/\(networkUserData?.userLocalAvatar ?? "")"
+            let image = UIImage(contentsOfFile:  mainModel.getDocumentsFolderPath().appendingPathComponent(filePath).path)
+            userAvatarImage.image = image
+            userInitials.isHidden = true
+        } else {
+            userAvatarImage.isHidden = true
+            userInitials.text = getUserInitials(fullName: networkUserData?.userName ?? "NoName")
+        }
+        
+        
+       
         userScoresLabel.text = String(networkUserData?.userScores ?? 0)
         userTestsCompleted.text = String(networkUserData?.userTestsCompleted ?? 0)
         userLikesLabel.text = String(networkUserData?.userLikes ?? 0)
@@ -113,6 +133,17 @@ class BrowseSharedDicViewController: UIViewController {
         userInfoView.layer.shadowOpacity = 0.2
         userInfoView.layer.shadowOffset = .zero
         userInfoView.layer.shadowRadius = 2
+    }
+    
+    func getUserInitials(fullName: String) -> String {
+        let words = fullName.components(separatedBy: " ")
+        var initials = ""
+        for word in words {
+            if let firstLetter = word.first {
+                initials.append(firstLetter)
+            }
+        }
+        return initials.uppercased()
     }
     
     func createRODictionaryCoreData(){

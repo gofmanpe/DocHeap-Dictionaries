@@ -22,6 +22,9 @@ class SharedDictionaryCell: UITableViewCell {
     @IBOutlet weak var messagesLabel: UILabel!
     @IBOutlet weak var userAvatarImage: UIImageView!
     @IBOutlet weak var messagesStack: UIStackView!
+    @IBOutlet weak var avatarBgView: UIView!
+    @IBOutlet weak var userInitials: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         
@@ -31,6 +34,7 @@ class SharedDictionaryCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
         cellView.layer.cornerRadius = 15
         cellView.layer.shadowColor = UIColor.black.cgColor
+        avatarBgView.layer.cornerRadius = avatarBgView.frame.size.width/2
         cellView.layer.shadowOpacity = 0.2
         cellView.layer.shadowOffset = .zero
         cellView.layer.shadowRadius = 2

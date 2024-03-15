@@ -14,6 +14,8 @@
 "startVC_switch_label" = "Keep signed";
 "startVC_register_Button" = "Register";
 "startVC_signIn_Button" = "Sign In";
+"startVC_or_label" = "OR";
+"startVC_googleSignIn_label" = "Sign in with Google";
 //RegisterController
 "registerVC_email_placeholder" = "Your e-mail";
 "registerVC_password_placeholder" = "Your password";
@@ -27,7 +29,7 @@
 "dictionariesVC_wordsCount_label" = "Words:";
 "dictionariesVC_createDate_label" = "Created:";
 "dictionariesVC_myDictionaries_label" = "Dictionaries";
-"dictionariesVC_ownerName_label" = "Qwner:";
+"dictionariesVC_ownerName_label" = "Owner:";
 "dictionariesVC_dicCell_shared_label" = "SHARED";
 "dictionariesVC_dicCell_downloaded_label" = "DOWNLOADED";
 "dictionariesVC_likes_label" = "Likes";
@@ -71,6 +73,12 @@
 "browseDictionaryVC_wordsInDictionary_label" = "Words:";
 "browseDictionaryVC_createDate_label" = "Created:";
 "browseDictionaryVC_dicOwner_label" = "Owner:";
+//BrowseSharedDicController
+"browseSharedDicVC_words_in_dic_label" = "words in dictionary:";
+"browseSharedDicVC_likes_label" = "Likes";
+"browseSharedDicVC_tests_label" = "Tests";
+"browseSharedDicVC_scores_label" = "Scores";
+"browseSharedDicVC_download_button" = "DOWNLOAD";
 //AddWordPopUpViewController
 "addWordPopUp_header_label" = "Adding a word pair";
 "addWordPopUp_word_label" = "Word:";

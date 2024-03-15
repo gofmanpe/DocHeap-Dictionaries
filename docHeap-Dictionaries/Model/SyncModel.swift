@@ -18,13 +18,15 @@ struct SyncModel {
     
     
     func syncUserDataWithFirebase(userID:String, context:NSManagedObjectContext){
-        if let userData = coreData.loadUserDataByID(userID: userID, context: context){
+        guard let userData = coreData.loadUserDataByID(userID: userID, context: context) else {
+            return
+        }
             if !userData.userSyncronized{
                 firebase.updateUserDataFirebase(userData: userData)
             } else {
                 return
             }
-        }
+        
     }
    
     func syncUserLikesForSharedDictionaries(userID:String, context:NSManagedObjectContext){
@@ -169,6 +171,7 @@ struct SyncModel {
                             dicUserID: dictionaryData["dicUserID"] as! String,
                             dicWordsCount: dictionaryData["dicWordsCount"] as? Int ?? 0)
                          coreData.createDictionary(dictionary: dicForSave, context: context)
+                         self.mainModel.createFolderInDocuments(withName: "\(dicForSave.dicUserID)/\(dicID)")
                          self.loadWordsFromFirebase(dicID: dicID, context: context)
                     }
                      

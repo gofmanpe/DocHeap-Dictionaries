@@ -93,7 +93,8 @@ class ResultsPopUpController: UIViewController{
             userInterfaceLanguage: userData?.userInterfaceLanguage ?? "",
             userMistakes: errorsCount,
             userRightAnswers: rightAnswers,
-            userTestsCompleted: 1)
+            userTestsCompleted: 1, 
+            userIdentityToken: userData?.userIdentityToken ?? "")
         if mainModel.isInternetAvailable(){
             firebase.updateUserDataFirebase(userData: userResults)
             coreDataManager.updateUserDataAfterTest(userData: userResults, context: context)

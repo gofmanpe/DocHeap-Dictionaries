@@ -27,7 +27,7 @@ struct Firebase {
             "userName": userName,
             "userRegisterDate": date!,
             "userInterfaceLanguage": userInterfaceLanguage,
-            "accountType": accType,
+            "accountType": FieldValue.arrayUnion([accType]),
             "userCountry": "",
             "userBirthDate": "",
             "userNativeLanguage": "",
@@ -41,7 +41,7 @@ struct Firebase {
         if userAvatarFirestorePath != nil {
             data["userAvatarFirestorePath"] = userAvatarFirestorePath?.absoluteString
         } else {
-            data["userAvatarFirestorePath"] = defaults.emptyAvatarPath
+            data["userAvatarFirestorePath"] = ""
         }
         firebase.collection("Users").document(userID).setData(data) { (error) in
             if let err = error{
@@ -217,7 +217,8 @@ struct Firebase {
                     userInterfaceLanguage: userFBdata["userInterfaceLanguage"] as? String ?? "",
                     userMistakes: userFBdata["userMistakes"] as? Int ?? 0,
                     userRightAnswers: userFBdata["userRightAnswers"] as? Int ?? 0,
-                    userTestsCompleted: userFBdata["userTestsCompleted"] as? Int ?? 0
+                    userTestsCompleted: userFBdata["userTestsCompleted"] as? Int ?? 0, 
+                    userIdentityToken: ""
                 )
                 completion(result)
             }
@@ -776,7 +777,7 @@ struct Firebase {
                     if user.nuBirthDate != userBirthDate{
                         user.nuBirthDate = userBirthDate
                     }
-                    let userAvatarFirestorePath = userData["userAvatarFirestorePath"] as? String ?? "EMPTY_AVATAR"
+                    let userAvatarFirestorePath = userData["userAvatarFirestorePath"] as? String ?? ""
                     if user.nuLocalAvatar != userAvatarFirestorePath{
                         user.nuFirebaseAvatarPath = userAvatarFirestorePath
                         self.alamo.downloadChatUserAvatar(url: userAvatarFirestorePath, senderID: userID, userID: mainModel.loadUserData().userID) { avatarName in
@@ -836,7 +837,7 @@ struct Firebase {
                             userShowEmail: userShowEmail,
                             userEmail: userSharedEmail,
                             userScores: userScores,
-                            userLocalAvatar: nil,
+                            userLocalAvatar: "",
                             userTestsCompleted: userTestsCompleted,
                             userMistakes: userMistakes,
                             userRightAnswers: userRightAnswers,

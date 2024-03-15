@@ -36,6 +36,8 @@ class UserInfoViewController: UIViewController {
     @IBOutlet weak var mistakesLabel: UILabel!
     @IBOutlet weak var rightAnswersNameLabel: UILabel!
     @IBOutlet weak var mistakesNameLabel: UILabel!
+    @IBOutlet weak var avatarBgView: UIView!
+    @IBOutlet weak var userInitials: UILabel!
     
     private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     var networkUserData : NetworkUserData?
@@ -51,6 +53,7 @@ class UserInfoViewController: UIViewController {
     
     private func setupUserData(){
         guard let ntUserData = networkUserData else {return}
+        userInitials.text = getUserInitials(fullName: ntUserData.userName)
         userNameLabel.text = ntUserData.userName
         regDateLabel.text = ntUserData.userRegisterDate
         if !ntUserData.userShowEmail{
@@ -59,8 +62,14 @@ class UserInfoViewController: UIViewController {
             userEmailLabel.isHidden = false
             userEmailLabel.text = ntUserData.userEmail
         }
-        let avatarPath = "\(mainModel.loadUserData().userID)/\(ntUserData.userLocalAvatar ?? "")"
-        userAvatar.image = UIImage(contentsOfFile:  mainModel.getDocumentsFolderPath().appendingPathComponent(avatarPath).path)
+        if ntUserData.userLocalAvatar != nil {
+            let avatarPath = "\(mainModel.loadUserData().userID)/\(ntUserData.userLocalAvatar ?? "")"
+            userAvatar.image = UIImage(contentsOfFile:  mainModel.getDocumentsFolderPath().appendingPathComponent(avatarPath).path)
+            userAvatar.isHidden = false
+        } else {
+            userAvatar.isHidden = true
+        }
+        
         birthDateLabel.text = ntUserData.userBirthDate
         countryLabel.text = ntUserData.userCountry
         nativeLanguageLabel.text = ntUserData.userNativeLanguage
@@ -71,7 +80,22 @@ class UserInfoViewController: UIViewController {
         likesLabel.text = String(ntUserData.userLikes)
     }
 
-   private func elementsDesign(){
+    func getUserInitials(fullName: String) -> String {
+        let words = fullName.components(separatedBy: " ")
+        var initials = ""
+        for word in words {
+            if let firstLetter = word.first {
+                initials.append(firstLetter)
+            }
+        }
+        return initials.uppercased()
+    }
+    
+    private func elementsDesign(){
+        avatarBgView.layer.cornerRadius = avatarBgView.frame.size.width/2
+        avatarBgView.layer.masksToBounds = false
+        avatarBgView.clipsToBounds = true
+        
         mainView.layer.cornerRadius = 10
         userAvatar.layer.cornerRadius = userAvatar.frame.size.width/2
         userAvatar.layer.masksToBounds = false

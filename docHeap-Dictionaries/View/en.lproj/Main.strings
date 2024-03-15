@@ -219,7 +219,7 @@
 "KNY-yL-hDg.text" = "TL";
 
 /* Class = "UILabel"; text = "docHeap"; ObjectID = "Khq-mc-vm4"; */
-"Khq-mc-vm4.text" = "docHeap";
+"Khq-mc-vm4.text" = "wordsGround";
 
 /* Class = "UILabel"; text = "Round:"; ObjectID = "LR7-lc-M2S"; */
 "LR7-lc-M2S.text" = "Round:";
@@ -525,7 +525,7 @@
 "i1a-Iq-9wu.text" = "You have no any dictionaries yet";
 
 /* Class = "UILabel"; text = "docHeap"; ObjectID = "iAN-NM-I2x"; */
-"iAN-NM-I2x.text" = "docHeap";
+"iAN-NM-I2x.text" = "wordsGround";
 
 /* Class = "UILabel"; text = "My dictionaries"; ObjectID = "icX-XV-khD"; */
 "icX-XV-khD.text" = "My dictionaries";
