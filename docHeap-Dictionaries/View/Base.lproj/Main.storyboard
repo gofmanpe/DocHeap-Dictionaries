@@ -44,6 +44,7 @@
                                 <rect key="frame" x="10" y="131" width="355" height="671"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="separatorColor" red="0.20392156859999999" green="0.78039215689999997" blue="0.34901960780000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <sections/>
                             </tableView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bhI-m2-TnU">
                                 <rect key="frame" x="20.000000000000004" y="100" width="44.333333333333343" height="21"/>
@@ -2289,11 +2290,12 @@
                         <outlet property="googleSignInButton" destination="Gnv-o6-Wm0" id="TRh-rC-5Y8"/>
                         <outlet property="keepSignedLabel" destination="yRC-rR-6Bg" id="Ftc-YY-iEA"/>
                         <outlet property="keepSignedSwitch" destination="sh6-s7-M7y" id="hfW-uq-FAg"/>
+                        <outlet property="loginButton" destination="Hu8-pa-uJF" id="SWG-sk-YI7"/>
+                        <outlet property="loginLabel" destination="w32-z1-KuP" id="7G7-6j-LZy"/>
+                        <outlet property="loginView" destination="wqX-ee-ruo" id="GLR-nc-qae"/>
                         <outlet property="orLabel" destination="De3-YV-h0T" id="8Yc-L5-eaM"/>
                         <outlet property="passwordTextField" destination="Hse-SL-uoN" id="PRM-7v-WUM"/>
                         <outlet property="registerButton" destination="zMu-1h-MnM" id="od2-cg-I6N"/>
-                        <outlet property="signInButton" destination="Hu8-pa-uJF" id="SWG-sk-YI7"/>
-                        <outlet property="signInView" destination="wqX-ee-ruo" id="GLR-nc-qae"/>
                         <segue destination="5nL-0v-QpU" kind="show" identifier="goToRegister" id="BhZ-Be-sfx"/>
                         <segue destination="v0a-jY-YHs" kind="show" identifier="goFromStart" id="Yod-cR-SVX"/>
                     </connections>
@@ -5396,6 +5398,7 @@
                         <color key="badgeColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBarItem>
                     <toolbarItems/>
+                    <navigationItem key="navigationItem" id="8bS-6n-5Yr"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="HMu-ed-2NI">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="56"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -5412,6 +5415,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
+        <segue reference="fZF-vg-Uyg"/>
         <segue reference="BhZ-Be-sfx"/>
         <segue reference="jax-uW-dT6"/>
         <segue reference="Yod-cR-SVX"/>
@@ -5433,7 +5437,7 @@
         <image name="done" width="80.333335876464844" height="80.333335876464844"/>
         <image name="gLogo" width="25.333333969116211" height="33.666667938232422"/>
         <image name="gear" catalog="system" width="128" height="122"/>
-        <image name="globe" catalog="system" width="128" height="123"/>
+        <image name="globe" catalog="system" width="32" height="32"/>
         <image name="heart.fill" catalog="system" width="128" height="107"/>
         <image name="icloud.and.arrow.down" catalog="system" width="128" height="120"/>
         <image name="info.circle" catalog="system" width="128" height="123"/>

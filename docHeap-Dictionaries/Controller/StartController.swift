@@ -22,21 +22,23 @@ class StartController: UIViewController{
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var keepSignedSwitch: UISwitch!
     @IBOutlet weak var registerButton: UIButton!
-    @IBOutlet weak var signInButton: UIButton!
+    @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var buttonsView: UIStackView!
    // @IBOutlet weak var avatarImageView: UIImageView!
     @IBOutlet weak var keepSignedLabel: UILabel!
     @IBOutlet weak var googleSignInButton: UIButton!
     @IBOutlet weak var background: UIView!
-    @IBOutlet weak var signInView: UIView!
+    @IBOutlet weak var loginView: UIView!
     @IBOutlet weak var orLabel: UILabel!
+    @IBOutlet weak var loginLabel: UILabel!
     
 //MARK: - Localization
     func localizeElements(){
+        loginLabel.text = "startVC_login_label".localized
         emailTextField.placeholder = "startVC_email_placeholder".localized
         passwordTextField.placeholder = "startVC_password_placeholder".localized
         registerButton.setTitle("startVC_register_Button".localized, for: .normal)
-        signInButton.setTitle("startVC_signIn_Button".localized, for: .normal)
+        loginButton.setTitle("startVC_login_Button".localized, for: .normal)
         keepSignedLabel.text = "startVC_switch_label".localized
         orLabel.text = "startVC_or_label".localized
         googleSignInButton.setTitle("startVC_googleSignIn_label".localized, for: .normal)
@@ -68,7 +70,7 @@ class StartController: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         tokenCheck()
-        
+        userSignedCheck()
         print(mainModel.getDocumentsFolderPath())
         setupView()
         localizeElements()
@@ -88,7 +90,7 @@ class StartController: UIViewController{
         appleButton.cornerRadius = 5
         background.addSubview(appleButton)
         appleButton.addTarget(self, action: #selector(handleAppleIdRequest), for: .touchUpInside)
-        appleButton.topAnchor.constraint(equalTo: signInView.bottomAnchor, constant: 20).isActive = true
+        appleButton.topAnchor.constraint(equalTo: loginView.bottomAnchor, constant: 20).isActive = true
         appleButton.leadingAnchor.constraint(equalTo: background.leadingAnchor, constant: 60).isActive = true
         appleButton.trailingAnchor.constraint(equalTo: background.trailingAnchor, constant: -60).isActive = true
         appleButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
@@ -106,17 +108,6 @@ class StartController: UIViewController{
         if mainModel.loadUserData().signed{
             performSegue(withIdentifier: "goFromStart", sender: self)
         }
-//        else if !userEmail.isEmpty{
-//            
-//            emailTextField.text = userEmail
-//            if coreDataManager.usersArray.first?.userAvatarExtention != nil{
-//                if let ava = coreDataManager.usersArray.first?.userAvatarExtention{
-//                    avatarName = "userAvatar.\(ava)"
-//                }
-//                let avatarPath = "\(userID)/\(avatarName)"
-//                avatarImageView.image = UIImage(contentsOfFile:  mainModel.getDocumentsFolderPath().appendingPathComponent(avatarPath).path)
-//            }
-//        }
     }
     
     @objc func hideKeyboard() {

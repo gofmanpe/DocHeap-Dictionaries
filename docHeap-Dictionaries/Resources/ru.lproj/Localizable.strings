@@ -13,11 +13,12 @@
 "Statistic" = "Статистика";
 "Profile" = "Профиль";
 //StartController
+"startVC_login_label" = "Вход";
 "startVC_email_placeholder" = "Ваш email";
 "startVC_password_placeholder" = "Ваш пароль";
 "startVC_switch_label" = "Сохранить вход";
 "startVC_register_Button" = "Регистрация";
-"startVC_signIn_Button" = "Войти";
+"startVC_login_Button" = "Войти";
 "startVC_or_label" = "ИЛИ";
 "startVC_googleSignIn_label" = "Вход с Google";
 

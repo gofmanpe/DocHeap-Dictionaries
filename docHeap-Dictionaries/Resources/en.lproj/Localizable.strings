@@ -6,14 +6,13 @@
   
 */
 
-//TabBarController
-"Dictionaries"= "DDD";
 //StartController
+"startVC_login_label" = "Login";
 "startVC_email_placeholder" = "E-mail";
 "startVC_password_placeholder" = "Password";
 "startVC_switch_label" = "Keep signed";
 "startVC_register_Button" = "Register";
-"startVC_signIn_Button" = "Sign In";
+"startVC_login_Button" = "Login";
 "startVC_or_label" = "OR";
 "startVC_googleSignIn_label" = "Sign in with Google";
 //RegisterController

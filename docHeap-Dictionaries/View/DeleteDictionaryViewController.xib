@@ -224,8 +224,8 @@
                                         <constraint firstAttribute="width" constant="60" id="wIz-Z0-Mhs"/>
                                     </constraints>
                                 </imageView>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1d7-Mi-hVi">
-                                    <rect key="frame" x="80" y="31" width="263" height="18"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1d7-Mi-hVi">
+                                    <rect key="frame" x="80" y="10" width="263" height="60"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
@@ -234,12 +234,14 @@
                             <color key="backgroundColor" red="0.92156862745098034" green="0.92156862745098034" blue="0.92156862745098034" alpha="1" colorSpace="calibratedRGB"/>
                             <constraints>
                                 <constraint firstItem="bDi-2m-DaC" firstAttribute="top" secondItem="CUX-ql-5cp" secondAttribute="top" constant="10" id="FPw-Qf-rX7"/>
+                                <constraint firstAttribute="bottom" secondItem="1d7-Mi-hVi" secondAttribute="bottom" constant="10" id="J1D-jV-1NZ"/>
                                 <constraint firstAttribute="trailing" secondItem="1d7-Mi-hVi" secondAttribute="trailing" constant="10" id="Nka-eg-Tlu"/>
                                 <constraint firstItem="1d7-Mi-hVi" firstAttribute="centerY" secondItem="CUX-ql-5cp" secondAttribute="centerY" id="S2m-vb-Hge"/>
                                 <constraint firstAttribute="height" constant="80" id="Xkn-8e-Uw4"/>
                                 <constraint firstAttribute="bottom" secondItem="bDi-2m-DaC" secondAttribute="bottom" constant="10" id="nap-eQ-TpK"/>
                                 <constraint firstItem="1d7-Mi-hVi" firstAttribute="leading" secondItem="bDi-2m-DaC" secondAttribute="trailing" constant="10" id="vCf-bG-Tvz"/>
                                 <constraint firstItem="bDi-2m-DaC" firstAttribute="leading" secondItem="CUX-ql-5cp" secondAttribute="leading" constant="10" id="xuC-Qr-sLG"/>
+                                <constraint firstItem="1d7-Mi-hVi" firstAttribute="top" secondItem="CUX-ql-5cp" secondAttribute="top" constant="10" id="zP3-rf-43P"/>
                             </constraints>
                         </view>
                     </subviews>
@@ -282,7 +284,7 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemGray2Color">
-            <color red="0.68235294120000001" green="0.68235294120000001" blue="0.69803921570000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

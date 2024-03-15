@@ -5,11 +5,12 @@
   Created by Pavel Gofman on 14.11.23.
   
 */
+"startVC_login_label" = "Вхід";
 "startVC_email_placeholder" = "Ваш email";
 "startVC_password_placeholder" = "Ваш пароль";
 "startVC_switch_label" = "Зберегти вхід";
 "startVC_register_Button" = "Реєстрація";
-"startVC_signIn_Button" = "Війти";
+"startVC_login_Button" = "Війти";
 "startVC_or_label" = "АБО";
 "startVC_googleSignIn_label" = "Вхід з Google";
 //RegisterController
