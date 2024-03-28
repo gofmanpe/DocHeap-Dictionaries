@@ -250,7 +250,7 @@ class FalseOrTrueTestController: UIViewController, PerformToSegue, UpdateView {
     
     
     @IBAction func toResultsButtonPressed(_ sender: Any) {
-        let overLayerView = ResultsPopUpController()
+        let overLayerView = TestResultsPopUp()
         overLayerView.performToSegueDelegate = self
         overLayerView.didUpdateViewDelegate = self
         overLayerView.rightAnswers = scores

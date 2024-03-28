@@ -332,7 +332,7 @@ class ThreeWordsTestController: UIViewController, PerformToSegue, UpdateView{
     }
     
     func resultsPopUpApear(){
-        let overLayerView = ResultsPopUpController()
+        let overLayerView = TestResultsPopUp()
         overLayerView.performToSegueDelegate = self
         overLayerView.didUpdateViewDelegate = self
         overLayerView.rightAnswers = rightAnswers

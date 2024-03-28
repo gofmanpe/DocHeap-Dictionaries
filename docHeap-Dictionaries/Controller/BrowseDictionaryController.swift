@@ -97,14 +97,12 @@ class BrowseDictionaryController: UIViewController, UpdateView, UploadImageToFir
 //MARK: - Lifecycle functions
     override func viewDidLoad() {
         super.viewDidLoad()
-            setupData()
-            dictionaryData()
-            elementsDesign()
-            localizeElements()
-            wordsTable.dataSource = self
-            wordsTable.delegate = self
-            issetWordsInDictionary()
-            updateBubbleState()
+        setupData()
+        dictionaryData()
+        elementsDesign()
+        localizeElements()
+        issetWordsInDictionary()
+        updateBubbleState()
         if mainModel.isInternetAvailable(){
             sync.syncDictionariesCoreDataAndFirebase(userID: mainModel.loadUserData().userID, context: context)
             sync.syncWordsCoreDataAndFirebase(userID: mainModel.loadUserData().userID, context: context)
@@ -200,9 +198,8 @@ class BrowseDictionaryController: UIViewController, UpdateView, UploadImageToFir
     }
     
     func setupData(){
-        guard let dicID = selectedDictionary?.dicID else {
-            return}
-        
+        wordsTable.dataSource = self
+        wordsTable.delegate = self
     }
     
     func flipView(view:UIView) {
@@ -286,13 +283,13 @@ class BrowseDictionaryController: UIViewController, UpdateView, UploadImageToFir
     func popUpApear(sender:String){
         switch sender{
         case "addButton":
-            let overLayedView = AddWordPopUpViewController()
+            let overLayedView = AddWordsPairPopUp()
             overLayedView.tableReloadDelegate = self
             overLayedView.uploadImageDelegate = self
             overLayedView.dictionaryID = dicID
             overLayedView.appear(sender: self)
         case "wordPressed":
-            let overLayedView = BrowseWordViewController()
+            let overLayedView = BrowseWordsPairPopUp()
             overLayedView.wordID = clickedWordID
             overLayedView.imageName = imagePath
             overLayedView.dictionaryID = dicID
@@ -303,7 +300,7 @@ class BrowseDictionaryController: UIViewController, UpdateView, UploadImageToFir
             overLayedView.imageStatus = imageStatus
             overLayedView.appear(sender: self)
         case "descriptionButton":
-            let overLayedView = DescriptionPopUpController()
+            let overLayedView = DescriptionPopUp()
             overLayedView.dicDescription = selectedDictionary?.dicDescription ?? ""
             overLayedView.netUserName = mainModel.loadUserData().userName
             overLayedView.appear(sender: self)
@@ -401,7 +398,7 @@ class BrowseDictionaryController: UIViewController, UpdateView, UploadImageToFir
         performSegue(withIdentifier: "openChat", sender: self)
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-            let destinationVC = segue.destination as! ChatViewController
+            let destinationVC = segue.destination as! ChatController
                 destinationVC.dicID = dicID
     }
     

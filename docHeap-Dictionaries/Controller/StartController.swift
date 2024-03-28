@@ -269,7 +269,7 @@ class StartController: UIViewController{
     }
     
     func showErrorPopUp(text:String){
-        let overLayerView = LoginErrorViewController()
+        let overLayerView = LoginErrorPopUp()
         overLayerView.appearOverlayer(sender: self, text:text)
     }
     
@@ -536,7 +536,6 @@ private extension StartController {
 
 extension StartController: ASAuthorizationControllerDelegate {
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
-        // Here displays an error message for user
         print("Some error with apple sign in\n")
     }
     

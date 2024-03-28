@@ -33,7 +33,7 @@ class TestsController: UIViewController, PerformToSegue{
             destinationVC.numberOfRounds = numberOfRounds
             destinationVC.selectedTestIdentifier = selectedTestIdentifier
         case "findAPairTest":
-            let destinationVC = segue.destination as! FindAPairController
+            let destinationVC = segue.destination as! FindAPairTestController
             destinationVC.selectedDicID = selectedDicID
             destinationVC.selectedTestIdentifier = selectedTestIdentifier
         case "falseOrTrueTest":
@@ -108,7 +108,7 @@ class TestsController: UIViewController, PerformToSegue{
     }
 
     func popUpApear(){
-        let overLayerView = SelectDictionaryForTestController()
+        let overLayerView = SelectDictionaryForTestPopUp()
         overLayerView.performToSegueDelegate = self
         overLayerView.selectedTestIdentifier = selectedTestIdentifier
         overLayerView.appear(sender: self)

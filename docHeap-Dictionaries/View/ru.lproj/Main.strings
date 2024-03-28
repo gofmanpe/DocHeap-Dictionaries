@@ -354,7 +354,7 @@
 "VOn-xS-FsQ.text" = "Test name";
 
 /* Class = "UITabBarItem"; title = "Profile"; ObjectID = "WGA-Ed-ZVL"; */
-"WGA-Ed-ZVL.title" = "Профиль";
+"WGA-Ed-ZVL.title" = "Настройки";
 
 /* Class = "UILabel"; text = "Lisboa"; ObjectID = "Wb8-q3-ObL"; */
 "Wb8-q3-ObL.text" = "Lisboa";

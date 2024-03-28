@@ -39,15 +39,31 @@ struct CoreDataManager{
     }
     
     func createComment(comment:Comment, context: NSManagedObjectContext){
-        let newComment = DicMessage(context:context)
-        newComment.msgID = comment.msgID
-        newComment.msgBody = comment.msgBody
-        newComment.msgSenderID = comment.msgSenderID
-        newComment.msgDateTime = comment.msgDateTime
-        newComment.msgDicID = comment.msgDicID
-        newComment.msgSyncronized = true
-        newComment.msgOrdering = Int64(comment.msgOrdering)
-        saveData(data: context)
+            let newComment = DicMessage(context:context)
+            newComment.msgID = comment.msgID
+            newComment.msgBody = comment.msgBody
+            newComment.msgSenderID = comment.msgSenderID
+            newComment.msgDateTime = comment.msgDateTime
+            newComment.msgDicID = comment.msgDicID
+            newComment.msgSyncronized = true
+            newComment.msgOrdering = Int64(comment.msgOrdering)
+            saveData(data: context)
+    }
+    
+    func isCommentExist(commentID:String, context:NSManagedObjectContext)->Bool{
+        let request: NSFetchRequest<DicMessage> = DicMessage.fetchRequest()
+        request.predicate = NSPredicate(format: "msgID MATCHES %@", commentID)
+        var result = Bool()
+        do {
+            let message = try context.fetch(request)
+            if message.isEmpty{
+                result = false
+            } else {
+                result = true
+            }
+        }
+        catch { print ("Error fetching data \(error)") }
+        return result
     }
     
     func createWordsPair(wordsPair:WordsPair, context:NSManagedObjectContext){
@@ -286,6 +302,71 @@ struct CoreDataManager{
         catch { print ("Error fetching data \(error)") }
     }
     
+    func deleteAllUserStatisticCoreData(userID: String, context: NSManagedObjectContext){
+        let request: NSFetchRequest<Statistic> = Statistic.fetchRequest()
+        request.predicate = NSPredicate(format: "statUserID MATCHES %@", userID)
+        do {
+            let statistics = try context.fetch(request)
+            for stat in statistics {
+                context.delete(stat)
+            }
+            saveData(data: context)
+        }
+        catch { print ("Error fetching data \(error)") }
+    }
+    
+    func deleteAllUserDictionariesCoreData(userID: String, context: NSManagedObjectContext){
+        let request: NSFetchRequest<Dictionary> = Dictionary.fetchRequest()
+        request.predicate = NSPredicate(format: "dicUserID MATCHES %@", userID)
+        do {
+            let dictionaries = try context.fetch(request)
+            for dictionary in dictionaries {
+                context.delete(dictionary)
+            }
+            saveData(data: context)
+        }
+        catch { print ("Error fetching data \(error)") }
+    }
+    
+    func deleteAllUserWordsCoreData(userID:String, context:NSManagedObjectContext){
+        let request: NSFetchRequest<Word> = Word.fetchRequest()
+        request.predicate = NSPredicate(format: "wrdUserID MATCHES %@", userID)
+        do {
+            let wordsPairs = try context.fetch(request)
+            for pair in wordsPairs {
+                context.delete(pair)
+            }
+            saveData(data: context)
+        }
+        catch { print ("Error fetching data \(error)") }
+    }
+    
+    func deleteWordsByDicID(dicID:String, context:NSManagedObjectContext){
+        let request: NSFetchRequest<Word> = Word.fetchRequest()
+        request.predicate = NSPredicate(format: "wrdDicID MATCHES %@", dicID)
+        do {
+            let wordsPairs = try context.fetch(request)
+            for pair in wordsPairs {
+                context.delete(pair)
+            }
+            saveData(data: context)
+        }
+        catch { print ("Error fetching data \(error)") }
+    }
+    
+    func deleteUserCoreData(userID:String, context:NSManagedObjectContext){
+        let request: NSFetchRequest<Users> = Users.fetchRequest()
+            request.predicate = NSPredicate(format: "userID MATCHES %@", userID)
+        do {
+           let users = try context.fetch(request)
+            for user in users{
+                context.delete(user)
+            }
+            saveData(data: context)
+        }
+        catch { print ("Error fetching data \(error)") }
+    }
+    
     func loadAllWordsWithImages(data: NSManagedObjectContext, request: NSFetchRequest<Word> = Word.fetchRequest())->[Word]
      {
          var resultArray = [Word]()
@@ -338,6 +419,23 @@ struct CoreDataManager{
             print ("Error fetching data \(error)")
         }
         return requestedWords
+    }
+    
+    func getAllNotSharedDictionaries(userID:String, context: NSManagedObjectContext)->[String]{
+        let request: NSFetchRequest<Dictionary> = Dictionary.fetchRequest()
+        request.predicate = NSPredicate(format: "dicUserID MATCHES %@", userID)
+        var requestedDictionaries = [String]()
+        do {
+            let array = try context.fetch(request)
+            let filterNotShared = array.filter({$0.dicShared == false})
+            for dic in filterNotShared {
+                requestedDictionaries.append(dic.dicID ?? "")
+            }
+        }
+        catch {
+            print ("Error fetching data \(error)")
+        }
+        return requestedDictionaries
     }
     
     func getWordsForSharedDictionary(dicID: String, context: NSManagedObjectContext)->[Word]{
@@ -667,7 +765,7 @@ struct CoreDataManager{
         var userName = String()
         do {
             let userData = try context.fetch(request)
-            userName = userData.first?.nuName ?? "Anonimus"
+            userName = userData.first?.nuName ?? "dictionariesVC_deletedOwner_label".localized
         }
         catch {
             print ("Error fetching data \(error)")

@@ -21,14 +21,21 @@
 "registerVC_avatar_button" = "Додати аватар";
 "registerVC_back_button" = "Назад";
 "registerVC_register_button" = "Реєстрація";
+"registerVC_missEmail_message" = "Ви не ввели свою електронну адресу";
+"registerVC_badEmail_message" = "Ви зробили помилку під час введення електронної пошти";
+"registerVC_shortPassword_message" = "Пароль має містити 6 або більше символів";
+"registerVC_passwordsNoMatch_message" = "Пароль і підтвердження не збігаються";
+"registerVC_missName_message" = "Ви не ввели своє ім'я";
+"registerVC_missNameAndPassNoMatch_message" = "Ви не ввели своє ім'я та паролі не збігаються";
 //DictionariesController
 "dictionariesVC_attention_label" = "У вас поки що не створено словників.\nСтворіть новий, натиснувши кнопку '+', або завантажте будь-який у вкладці 'Мережа'";
 "dictionariesVC_wordsCount_label" = "Слів:";
 "dictionariesVC_createDate_label" = "Створено:";
 "dictionariesVC_myDictionaries_label" = "Cловники";
 "dictionariesVC_ownerName_label" = "Власник:";
-"dictionariesVC_dicCell_shared_label" = "ЗАГАЛЬНИЙ";
-"dictionariesVC_dicCell_downloaded_label" = "ЗАВАНТАЖЕНО";
+"dictionariesVC_deletedOwner_label" = "Віддалений акаунт";
+"dictionariesVC_dicCell_shared_label" = "СПІЛЬНИЙ";
+"dictionariesVC_dicCell_downloaded_label" = "ЗАВАНТАЖЕНИЙ";
 "dictionariesVC_likes_label" = "Лайки";
 "dictionariesVC_scores_label" = "Очки";
 "dictionariesVC_testRuns_label" = "Тести";
@@ -202,6 +209,7 @@
 "selectDictionaryVC_notEnoughImages_message" = " слів із картинками! Будь ласка, додайте зображення до слів або виберіть інший словник!";
 
 //ResultsPopUP
+"resultsPopUp_fixMistakes_button" = "Виправити помилки";
 "resultsPopUp_restart_button" = "Рестарт";
 "resultsPopUp_close_button" = "Закрити";
 "resultsPopUp_scoresName_label" = "ОЧКИ";
@@ -211,7 +219,7 @@
 "resultsPopUp_findAnImageTest_message" = "Вгадано %d зображень з %d помилок";
 
 // ThreeWordsTestVC
-"threeWordsTestVC_repetitionMode_label" = "Фіксація помилок";
+"threeWordsTestVC_repetitionMode_label" = "Виправлення помилок";
 "threeWordsTestVC_roundsName_label" = "Раунд:";
 "threeWordsTestVC_scoresName_label" = "Очки:";
 "threeWordsTestVC_instructionLabel_label" = "Виберіть правильний переклад";
@@ -263,15 +271,26 @@
 
 //ProfileVC
 "profileVC_logout_button" = "Вихід";
+"profileVC_aboutApp_button" = "  Про додаток";
+"profileVC_deleteAcc_button" = "Видалити акаунт";
 "profileVC_setAvatar_button" = "Змінити";
 "profileVC_registred_label" = "реєстрація:";
-"profileVC_addInfo_label" = "Дод. інфо";
+"profileVC_addInfo_label" = "Дод. інформація";
 "profileVC_dateOfBirth_label"= "Дата народження:";
 "profileVC_country_label"= "Країна:";
 "profileVC_nativeLanguage_label"= "Рідна мова:";
 "profileVC_scores_label"= "Очки:";
 "profileVC_showEmail_label"= "Показувати пошту користувача в загальнодоступному профілі";
-"profileVC_profile_label"= "Профіль";
+"profileVC_profile_label"= "Налаштування";
+
+//EditUserInfoPopUp
+"editUserInfoPopUp_header_label" = "Редагування даних користувача";
+"editUserInfoPopUp_dateOfBirth_label" = "Дата народження:";
+"editUserInfoPopUp_userName_label" = "Ім'я користувача:";
+"editUserInfoPopUp_country_label" = "Країна:";
+"editUserInfoPopUp_nativeLanguage_label" = "Рідна мова:";
+"editUserInfoPopUp_save_button" = "Зберегти";
+"editUserInfoPopUp_cancel_button" = "Скасувати";
 
 //StatisticVC
 "statisticVC_noStatistic_label" = "У вас ще немає статистики, оскільки ви ще не пройшли жодного тесту!";
@@ -309,3 +328,33 @@
 //BrowseSharedWordPairPopUp
 "browseSharedWordPopUp_header_label" = "Пара слів";
 "browseSharedWordPopUp_close_button" = "Закрити";
+
+//UserInfoPopUp
+"userInfoPopUp_deletedAccountMessage" = "Інформація про користувача недоступна, оскільки власник ініціював видалення облікового запису, але дозволив зберегти цей словник у загальному доступі.";
+"userInfoPopUp_deletedAccName_label" = "Н/Д";
+"userInfoPopUp_header_label" = "Інфо про мережного користувача";
+"userInfoPopUp_registred_label" = "Реєстрація:";
+"userInfoPopUp_additionalInfo_label" = "Дод. інформація";
+"userInfoPopUp_dateOfBirth_label" = "Дата народження:";
+"userInfoPopUp_country_label" = "Країна:";
+"userInfoPopUp_nativeLanguage_label" = "Рідна мова:";
+"userInfoPopUp_likes_label" = "Лайки:";
+"userInfoPopUp_testCompleted_label" = "Завершено тестів:";
+"userInfoPopUp_rightAnswers_label" = "Правильні відповіді:";
+"userInfoPopUp_mistakes_label" = "Помилки:";
+"userInfoPopUp_scores_label" = "Очки:";
+
+//DeleteAccountPopUp
+"deleteAccountPopUp_header_label" = "Видалення акаунту користувача";
+"deleteAccountPopUp_warningMessage_label" = "Якщо ви натиснете кнопку Видалити, ваш обліковий запис буде повністю видалено з додатку. Усі ваші дані, включаючи обліковий запис, словники та статистику, буде знищено! Продовжити?";
+"deleteAccountPopUp_switchComment_label" = "Не видаляти мої спільні словники";
+"deleteAccountPopUp_attention_label" = "УВАГА!!!";
+"deleteAccountPopUp_cancel_button" = "Скасувати";
+"deleteAccountPopUp_delete_button" = "Видалити";
+
+//AboutAppPopUp
+"aboutAppPopUp_header_label" = "Про додаток";
+"aboutAppPopUp_version_label" = "версія:";
+"aboutAppPopUp_publicationDate_label" = "дата публікації:";
+"aboutAppPopUp_aboutText_label" = "Вітаю! Дякую, що встановили мій додаток! Це стартовий, великий проект, який я обов'язково буду розвивати далі - у моїх планах створити повноцінну соціальну мережу для людей, які вивчають іноземні мови. Якщо у вас є пропозиції, думки, відгуки або побажання, ви можете написати їх на пошту wordsground@gmail.com. Більш повну інформацію про проект ви можете знайти на сайті www.wordsground.site";
+"aboutAppPopUp_author_label" = "З повагою, Павло Гофман";

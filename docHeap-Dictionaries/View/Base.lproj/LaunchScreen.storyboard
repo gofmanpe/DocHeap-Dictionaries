@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22684"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -23,33 +23,66 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eO9-8E-kXb">
                                         <rect key="frame" x="20" y="20" width="353" height="812"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="increase your lexicon!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lMc-Vh-i33">
-                                                <rect key="frame" x="53.666666666666671" y="443.66666666666669" width="245.66666666666663" height="30"/>
-                                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="25"/>
-                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="created by Pavel Gofman" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1v3-1A-mtz">
                                                 <rect key="frame" x="91.000000000000014" y="764" width="171.33333333333337" height="18"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="wordsGround" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="40" translatesAutoresizingMaskIntoConstraints="NO" id="zBh-kZ-3Jw">
-                                                <rect key="frame" x="5" y="378.66666666666669" width="343" height="55"/>
-                                                <fontDescription key="fontDescription" name="Verdana-Bold" family="Verdana" pointSize="45"/>
-                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ksK-uk-VL9">
+                                                <rect key="frame" x="0.0" y="452.66666666666674" width="353" height="311.33333333333326"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="glA-jD-wNP">
+                                                        <rect key="frame" x="135.33333333333334" y="143.99999999999994" width="82.666666666666657" height="23"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="v.1.0.0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gbn-Gv-dlX">
+                                                        <rect key="frame" x="155.33333333333334" y="283.33333333333331" width="42.333333333333343" height="18"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <constraints>
+                                                    <constraint firstItem="glA-jD-wNP" firstAttribute="centerY" secondItem="ksK-uk-VL9" secondAttribute="centerY" id="RSp-h1-Ipe"/>
+                                                    <constraint firstAttribute="bottom" secondItem="Gbn-Gv-dlX" secondAttribute="bottom" constant="10" id="Vdz-WC-LBo"/>
+                                                    <constraint firstItem="Gbn-Gv-dlX" firstAttribute="centerX" secondItem="ksK-uk-VL9" secondAttribute="centerX" id="rm9-9l-1uf"/>
+                                                    <constraint firstItem="glA-jD-wNP" firstAttribute="centerX" secondItem="ksK-uk-VL9" secondAttribute="centerX" id="uNC-hG-Fip"/>
+                                                </constraints>
+                                            </view>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="gVM-uP-PmP">
+                                                <rect key="frame" x="20" y="359.66666666666669" width="313" height="93"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="wordsGround" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="23" translatesAutoresizingMaskIntoConstraints="NO" id="zBh-kZ-3Jw">
+                                                        <rect key="frame" x="0.0" y="0.0" width="313" height="58"/>
+                                                        <fontDescription key="fontDescription" name="Verdana-Bold" family="Verdana" pointSize="45"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <nil key="highlightedColor"/>
+                                                        <color key="shadowColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <size key="shadowOffset" width="0.0" height="3"/>
+                                                    </label>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="increase your lexicon!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lMc-Vh-i33">
+                                                        <rect key="frame" x="33.666666666666671" y="63" width="245.66666666666663" height="30"/>
+                                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="25"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                            </stackView>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
-                                            <constraint firstAttribute="trailing" secondItem="zBh-kZ-3Jw" secondAttribute="trailing" constant="5" id="8zQ-pe-jqk"/>
-                                            <constraint firstItem="lMc-Vh-i33" firstAttribute="top" secondItem="zBh-kZ-3Jw" secondAttribute="bottom" constant="10" id="LVH-h8-eP6"/>
+                                            <constraint firstAttribute="trailing" secondItem="gVM-uP-PmP" secondAttribute="trailing" constant="20" id="2EL-HY-dep"/>
+                                            <constraint firstAttribute="trailing" secondItem="ksK-uk-VL9" secondAttribute="trailing" id="MOh-P8-WMq"/>
                                             <constraint firstItem="1v3-1A-mtz" firstAttribute="centerX" secondItem="eO9-8E-kXb" secondAttribute="centerX" id="XpZ-JM-FcA"/>
-                                            <constraint firstItem="zBh-kZ-3Jw" firstAttribute="leading" secondItem="eO9-8E-kXb" secondAttribute="leading" constant="5" id="f8X-NT-uof"/>
-                                            <constraint firstItem="zBh-kZ-3Jw" firstAttribute="centerY" secondItem="eO9-8E-kXb" secondAttribute="centerY" id="oFD-nf-5aW"/>
-                                            <constraint firstItem="lMc-Vh-i33" firstAttribute="centerX" secondItem="eO9-8E-kXb" secondAttribute="centerX" id="xa3-va-sGG"/>
+                                            <constraint firstItem="ksK-uk-VL9" firstAttribute="top" secondItem="gVM-uP-PmP" secondAttribute="bottom" id="Z2r-hy-NPp"/>
+                                            <constraint firstItem="gVM-uP-PmP" firstAttribute="centerY" secondItem="eO9-8E-kXb" secondAttribute="centerY" id="fxO-Ye-ttx"/>
+                                            <constraint firstItem="gVM-uP-PmP" firstAttribute="leading" secondItem="eO9-8E-kXb" secondAttribute="leading" constant="20" id="iQ0-7T-dPk"/>
+                                            <constraint firstItem="1v3-1A-mtz" firstAttribute="top" secondItem="ksK-uk-VL9" secondAttribute="bottom" id="lIv-nU-6N7"/>
+                                            <constraint firstItem="ksK-uk-VL9" firstAttribute="leading" secondItem="eO9-8E-kXb" secondAttribute="leading" id="puB-23-g28"/>
                                             <constraint firstAttribute="bottom" secondItem="1v3-1A-mtz" secondAttribute="bottom" constant="30" id="yKN-m8-fE4"/>
                                         </constraints>
                                     </view>

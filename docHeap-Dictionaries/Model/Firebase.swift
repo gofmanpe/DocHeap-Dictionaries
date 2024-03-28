@@ -250,34 +250,34 @@ struct Firebase {
         }
     }
     
-    func listenComments(dicID:String, context:NSManagedObjectContext,  completion: @escaping (Comment?, Error?) -> Void){
-        firebase.collection("Messages").whereField("msgDicID", isEqualTo: dicID).addSnapshotListener { (querySnapshot, error) in
-            if let error = error {
-                print("Error getting messages: \(error)\n")
-                completion(nil, error)
-            } else {
-                for document in querySnapshot!.documents {
-                    let commentData = document.data()
-                    let commentID = commentData["msgID"] as? String ?? ""
-                    let filteredComments = self.coreData.getMessagesByDicID(dicID: dicID, context: context).filter({$0.msgID == commentID})
-                    switch filteredComments.isEmpty{
-                    case false:
-                        continue
-                    case true:
-                        let newComment = Comment(
-                            msgID: commentID,
-                            msgBody: commentData["msgBody"] as? String ?? "",
-                            msgDateTime: commentData["msgDateTime"] as! String,
-                            msgDicID: commentData["msgDicID"] as! String,
-                            msgSenderID: commentData["msgSenderID"] as! String,
-                            msgOrdering: commentData["msgOrdering"] as! Int,
-                            msgSyncronized: true)
-                        completion(newComment, nil)
-                    }
-                }
-            }
-        }
-    }
+//    func listenComments(dicID:String, context:NSManagedObjectContext,  completion: @escaping (Comment?, Error?) -> Void){
+//        firebase.collection("Messages").whereField("msgDicID", isEqualTo: dicID).addSnapshotListener { (querySnapshot, error) in
+//            if let error = error {
+//                print("Error getting messages: \(error)\n")
+//                completion(nil, error)
+//            } else {
+//                for document in querySnapshot!.documents {
+//                    let commentData = document.data()
+//                    let commentID = commentData["msgID"] as? String ?? ""
+//                    let filteredComments = self.coreData.getMessagesByDicID(dicID: dicID, context: context).filter({$0.msgID == commentID})
+//                    switch filteredComments.isEmpty{
+//                    case false:
+//                        continue
+//                    case true:
+//                        let newComment = Comment(
+//                            msgID: commentID,
+//                            msgBody: commentData["msgBody"] as? String ?? "",
+//                            msgDateTime: commentData["msgDateTime"] as! String,
+//                            msgDicID: commentData["msgDicID"] as! String,
+//                            msgSenderID: commentData["msgSenderID"] as! String,
+//                            msgOrdering: commentData["msgOrdering"] as! Int,
+//                            msgSyncronized: true)
+//                        completion(newComment, nil)
+//                    }
+//                }
+//            }
+//        }
+//    }
     
     func listenForNewComment(dicID:String, context:NSManagedObjectContext,  completion: @escaping (Comment?, Error?) -> Void){
         firebase.collection("Messages").whereField("msgDicID", isEqualTo: dicID).addSnapshotListener { (querySnapshot, error) in
@@ -285,17 +285,15 @@ struct Firebase {
                 print("Error getting messages: \(error)\n")
                 completion(nil, error)
             } else {
-                
-                var newComment : Comment?
                 for document in querySnapshot!.documents {
                     let commentData = document.data()
                     let commentID = commentData["msgID"] as? String ?? ""
                     let isCommentExistInCoreData = coreData.getMessagesByDicID(dicID: dicID, context: context).filter({$0.msgID == commentID})
                     switch isCommentExistInCoreData.isEmpty{
                     case false:
-                        continue
+                        completion(nil, nil)
                     case true:
-                        newComment = Comment(
+                        let newComment = Comment(
                             msgID: commentID,
                             msgBody: commentData["msgBody"] as? String ?? "",
                             msgDateTime: commentData["msgDateTime"] as! String,
@@ -731,7 +729,10 @@ struct Firebase {
                 if let error = error {
                     print("Error getting user data: \(error)")
                 } else {
-                    guard let document = querySnapshot?.documents.first else {return}
+                    guard let document = querySnapshot?.documents.first else {
+                        print("User now found\n")
+                        return}
+                    
                     let userData = document.data()
                     let userName = userData["userName"] as? String
                     if user.nuName != userName{
@@ -1293,18 +1294,84 @@ struct Firebase {
         }
     }
     
-  
- func deleteWordsByDicIDFirebase(dicID: String, completion: @escaping (Error?) -> Void) {
-        let db = Firestore.firestore()
-        let wordsCollection = db.collection("Words")
-        wordsCollection.whereField("dicID", isEqualTo: dicID).getDocuments { (querySnapshot, error) in
+    func deleteAllUserStatisticFirebase(userID: String, completion: @escaping (Error?) -> Void) {
+        firebase.collection("Statistic").whereField("statUserID", isEqualTo: userID).getDocuments { (querySnapshot, error) in
             if let error = error {
                 completion(error)
             } else {
                 let documents = querySnapshot?.documents ?? []
                 for document in documents {
                     let documentID = document.documentID
-                    wordsCollection.document(documentID).delete { deleteError in
+                    firebase.collection("Statistic").document(documentID).delete { deleteError in
+                        if let deleteError = deleteError {
+                            completion(deleteError)
+                            return
+                        }
+                    }
+                }
+                completion(nil)
+            }
+        }
+    }
+    
+    func deleteAllUserDictionariesFirebase(userID: String, completion: @escaping (Error?) -> Void) {
+        firebase.collection("Dictionaries").whereField("dicUserID", isEqualTo: userID).getDocuments { (querySnapshot, error) in
+            if let error = error {
+                completion(error)
+            } else {
+                let documents = querySnapshot?.documents ?? []
+                for document in documents {
+                    let documentID = document.documentID
+                    firebase.collection("Dictionaries").document(documentID).delete { deleteError in
+                        if let deleteError = deleteError {
+                            completion(deleteError)
+                            return
+                        }
+                    }
+                }
+                completion(nil)
+            }
+        }
+    }
+    
+    func deleteAllUserWordsFirebase(userID: String, completion: @escaping (Error?) -> Void) {
+        firebase.collection("Words").whereField("wrdUserID", isEqualTo: userID).getDocuments { (querySnapshot, error) in
+            if let error = error {
+                completion(error)
+            } else {
+                let documents = querySnapshot?.documents ?? []
+                for document in documents {
+                    let documentID = document.documentID
+                    firebase.collection("Words").document(documentID).delete { deleteError in
+                        if let deleteError = deleteError {
+                            completion(deleteError)
+                            return
+                        }
+                    }
+                }
+                completion(nil)
+            }
+        }
+    }
+    
+    func deleteUserFirebase(userID: String, completion: @escaping (Error?) -> Void) {
+        firebase.collection("Users").document(userID).delete { error in
+            if let error = error {
+                print("FirebaseModel: Error deleting dictionary: \(error)")
+            }
+            completion(error)
+        }
+    }
+  
+    func deleteWordsByDicIDFirebase(dicID: String, completion: @escaping (Error?) -> Void) {
+        firebase.collection("Words").whereField("dicID", isEqualTo: dicID).getDocuments { (querySnapshot, error) in
+            if let error = error {
+                completion(error)
+            } else {
+                let documents = querySnapshot?.documents ?? []
+                for document in documents {
+                    let documentID = document.documentID
+                    firebase.collection("Words").document(documentID).delete { deleteError in
                         if let deleteError = deleteError {
                             completion(deleteError)
                             return

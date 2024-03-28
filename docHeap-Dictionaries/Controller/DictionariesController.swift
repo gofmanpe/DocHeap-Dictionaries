@@ -78,10 +78,13 @@ class DictionariesController: UIViewController, UpdateView, CellButtonPressed{
 //MARK: - Lifecycle functions
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupData()
-        dictionaryCheck()
-        elementsDesign()
-        localizeElements()
+       
+            setupData()
+            dictionaryCheck()
+            elementsDesign()
+            localizeElements()
+       
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -190,16 +193,16 @@ class DictionariesController: UIViewController, UpdateView, CellButtonPressed{
     func popUpApear(dictionaryIDFromCell:String, senderAction:String){
             switch senderAction {
             case "Create":
-                let overLayerView = CreatePopUpViewController()
+                let overLayerView = CreateDictionaryPopUp()
                 overLayerView.tableReloadDelegate = self
                 overLayerView.appear(sender: self)
             case "Edit":
-                let overLayerView = EditDictionaryViewController()
+                let overLayerView = EditDictionaryPopUp()
                 overLayerView.dicID = dictionaryIDFromCell
                 overLayerView.tableReloadDelegate = self
                 overLayerView.appear(sender: self)
             case "Delete":
-                let overLayerView = DeleteDictionaryViewController()
+                let overLayerView = DeleteDictionaryPopUp()
                 overLayerView.tableReloadDelegate = self
                 overLayerView.dicID = dictionaryIDFromCell
                 overLayerView.appear(sender: self)

@@ -354,6 +354,7 @@ struct SyncModel {
     }
     
     func syncDictionariesCoreDataAndFirebase(userID: String, context:NSManagedObjectContext){
+//TODO: - check, if local RO dictionary is apsent in Firebase, delete it in CoreData
        let allDictionaries = coreData.loadAllUserDictionaries(userID: userID, data: context)
         let allUserDictionaries = allDictionaries.filter({$0.dicReadOnly == false})
         let unsyncDictionaries = allUserDictionaries.filter({$0.dicSyncronized == false})

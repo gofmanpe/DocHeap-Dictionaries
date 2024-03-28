@@ -49,7 +49,7 @@ class LogOutPopUp: UIViewController {
         mainView.alpha = 0
     }
     
-    func appear(sender: ProfileController) {
+    func appear(sender: SettingsController) {
         sender.present(self, animated: false) {
             self.show()
         }

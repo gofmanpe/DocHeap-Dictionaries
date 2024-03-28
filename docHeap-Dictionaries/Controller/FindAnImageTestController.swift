@@ -144,6 +144,10 @@ class FindAnImageTestController: UIViewController , PerformToSegue, UpdateView {
     }
    
    private func standartState(){
+       let bgViewWidth = wordsBackgroundView.frame.width
+       let buttonHight = (bgViewWidth - 60)/2
+       print("Width = \(bgViewWidth)\n")
+       print("Height = \(buttonHight)\n")
         blockView.isHidden = true
         commentView.isHidden = true
         nextButton.isHidden = true
@@ -155,6 +159,9 @@ class FindAnImageTestController: UIViewController , PerformToSegue, UpdateView {
             button.clipsToBounds = true
             button.layer.cornerRadius = 10
             button.isEnabled = true
+            button.bounds.size.height = buttonHight
+            let btViewHeight = button.bounds.size.height
+            print("Height = \(btViewHeight)\n")
         }
         wordsBackgroundView.layer.shadowColor = UIColor.black.cgColor
         wordsBackgroundView.layer.shadowOpacity = 0.2
@@ -257,7 +264,7 @@ class FindAnImageTestController: UIViewController , PerformToSegue, UpdateView {
     }
     
    private func resultsPopUpApear(){
-        let overLayerView = ResultsPopUpController()
+        let overLayerView = TestResultsPopUp()
         overLayerView.performToSegueDelegate = self
         overLayerView.didUpdateViewDelegate = self
         overLayerView.rightAnswers = rightAnswers

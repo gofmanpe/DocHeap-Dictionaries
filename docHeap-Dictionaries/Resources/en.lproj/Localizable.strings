@@ -23,12 +23,19 @@
 "registerVC_avatar_button" = "Add avatar";
 "registerVC_back_button" = "Back";
 "registerVC_register_button" = "Register";
+"registerVC_missEmail_message" = "You have not entered your email";
+"registerVC_badEmail_message" = "You made a mistake when entering your email";
+"registerVC_shortPassword_message" = "The password must contain 6 or more characters";
+"registerVC_passwordsNoMatch_message" = "Password and confirmation do not match";
+"registerVC_missName_message" = "You have not entered your name";
+"registerVC_missNameAndPassNoMatch_message" = "You have not entered your name and the passwords do not match";
 //DictionariesController
 "dictionariesVC_attention_label" = "You have not created any dictionaries yet.\nCreate a new one by clicking on the '+' button, or download any one in the 'Network' tab";
 "dictionariesVC_wordsCount_label" = "Words:";
 "dictionariesVC_createDate_label" = "Created:";
 "dictionariesVC_myDictionaries_label" = "Dictionaries";
 "dictionariesVC_ownerName_label" = "Owner:";
+"dictionariesVC_deletedOwner_label" = "Deleted account";
 "dictionariesVC_dicCell_shared_label" = "SHARED";
 "dictionariesVC_dicCell_downloaded_label" = "DOWNLOADED";
 "dictionariesVC_likes_label" = "Likes";
@@ -205,13 +212,14 @@
 "selectDictionaryVC_notEnoughWords_message" = " words! Please add words into it or select other dictionary";
 "selectDictionaryVC_notEnoughImages_message" = " words with saved images! Please add images for words or select other dictionary";
 //ResultsPopUP
+"resultsPopUp_fixMistakes_button" = "Fix mistakes";
 "resultsPopUp_restart_button" = "Restart test";
 "resultsPopUp_close_button" = "Close";
 "resultsPopUp_scoresName_label" = "SCORES";
 "resultsPopUp_threeWordsTest_message" = "Finished %d rounds\nwith %d mistakes";
 "resultsPopUp_findAPairTest_message" = "Finished with %d mistakes";
 "resultsPopUp_falseOrTrueTest_message" = "Totaly %d right answers \n and %d mistakes";
-"resultsPopUp_findAnImageTest_message" = "Угадано %d картинок с %d ошибок";
+"resultsPopUp_findAnImageTest_message" = "Correctly finded %d images and %d mistakes";
 
 // ThreeWordsTestVC
 "threeWordsTestVC_repetitionMode_label" = "Error Fixation";
@@ -267,6 +275,8 @@
 
 //ProfileVC
 "profileVC_logout_button" = "User logout";
+"profileVC_deleteAcc_button" = "Delete account";
+"profileVC_aboutApp_button" = "  About app";
 "profileVC_setAvatar_button" = "Set avatar";
 "profileVC_registred_label" = "registered:";
 "profileVC_addInfo_label" = "Additional info";
@@ -275,7 +285,16 @@
 "profileVC_nativeLanguage_label"= "Native language:";
 "profileVC_scores_label"= "Scores:";
 "profileVC_showEmail_label"= "Show user email in public profile";
-"profileVC_profile_label"= "Profile";
+"profileVC_profile_label"= "Settings";
+
+//EditUserInfoPopUp
+"editUserInfoPopUp_header_label" = "Edit user information";
+"editUserInfoPopUp_dateOfBirth_label" = "Date of birth:";
+"editUserInfoPopUp_userName_label" = "User name:";
+"editUserInfoPopUp_country_label" = "Country:";
+"editUserInfoPopUp_nativeLanguage_label" = "Native language:";
+"editUserInfoPopUp_save_button" = "Save";
+"editUserInfoPopUp_cancel_button" = "Cancel";
 
 //StatisticVC
 "statisticVC_noStatistic_label" = "You don't have any statistics, because you haven't taken any tests yet!";
@@ -313,3 +332,33 @@
 //BrowseSharedWordPairPopUp
 "browseSharedWordPopUp_header_label" = "Words pair";
 "browseSharedWordPopUp_close_button" = "Close";
+
+//UserInfoPopUp
+"userInfoPopUp_deletedAccountMessage" = "User information is not available because the owner initiated the deletion of the account, but allowed the dictionary to remain publicly available.";
+"userInfoPopUp_deletedAccName_label" = "N/A";
+"userInfoPopUp_header_label" = "Network user info";
+"userInfoPopUp_registred_label" = "Registred:";
+"userInfoPopUp_additionalInfo_label" = "Additional info";
+"userInfoPopUp_dateOfBirth_label" = "Date of birth:";
+"userInfoPopUp_country_label" = "Country:";
+"userInfoPopUp_nativeLanguage_label" = "Native language:";
+"userInfoPopUp_likes_label" = "Likes:";
+"userInfoPopUp_testCompleted_label" = "Tests completed:";
+"userInfoPopUp_rightAnswers_label" = "Right answers:";
+"userInfoPopUp_mistakes_label" = "Mistakes:";
+"userInfoPopUp_scores_label" = "Scores:";
+
+//DeleteAccountPopUp
+"deleteAccountPopUp_header_label" = "Deleting a user account";
+"deleteAccountPopUp_warningMessage_label" = "If you click the Delete button, your account will be completely removed from the application. All your data, including your account, dictionaries and statistics, will be destroyed! Continue?";
+"deleteAccountPopUp_switchComment_label" = "Do not delete my shared dictionaries";
+"deleteAccountPopUp_attention_label" = "ATTENTION!!!";
+"deleteAccountPopUp_cancel_button" = "Cancel";
+"deleteAccountPopUp_delete_button" = "Delete";
+
+//AboutAppPopUp
+"aboutAppPopUp_header_label" = "About application";
+"aboutAppPopUp_version_label" = "version:";
+"aboutAppPopUp_publicationDate_label" = "publication date:";
+"aboutAppPopUp_aboutText_label" = "Hello! Thank you for installing my application! This is my starting big project, which I will definitely develop further, in my plans to create a full-fledged social network for people studying foreign languages. If you have any suggestions, thoughts, feedback or requests, you can send them to wordsground@gmail.com. More complete information about the project can be found on the application website www.wordsground.site";
+"aboutAppPopUp_author_label" = "Best regards, Pavel Gofman";

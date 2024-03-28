@@ -332,7 +332,7 @@ class FiveWordsTestController: UIViewController, PerformToSegue, UpdateView {
     }
     
     func resultsPopUpApear(){
-        let overLayerView = ResultsPopUpController()
+        let overLayerView = TestResultsPopUp()
         overLayerView.performToSegueDelegate = self
         overLayerView.didUpdateViewDelegate = self
         overLayerView.rightAnswers = rightAnswers
@@ -351,8 +351,8 @@ class FiveWordsTestController: UIViewController, PerformToSegue, UpdateView {
             self.warningView.alpha = 1
         } completion: { Bool in
             UIView.animate(withDuration: 0.75) {
-                              self.warningView.alpha = 0
-                            }
+                self.warningView.alpha = 0
+            }
         }
     }
     
