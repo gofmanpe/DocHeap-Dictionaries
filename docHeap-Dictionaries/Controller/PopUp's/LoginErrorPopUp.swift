@@ -28,7 +28,7 @@ class LoginErrorPopUp: UIViewController {
         elementsDesign()
     }
     
-    func elementsDesign(){
+    private func elementsDesign(){
         mainView.layer.cornerRadius = 10
         self.view.backgroundColor = .clear
         backgroundView.backgroundColor = .black.withAlphaComponent(0.6)
@@ -52,7 +52,7 @@ class LoginErrorPopUp: UIViewController {
         }
     }
 
-    func hide() {
+    private func hide() {
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut) {
             self.backgroundView.alpha = 0
             self.mainView.alpha = 0

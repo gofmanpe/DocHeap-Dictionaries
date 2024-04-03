@@ -25,11 +25,10 @@ class SelectDictionaryForTestPopUp: UIViewController {
     @IBOutlet weak var numberOfRoundsLabel: UILabel!
     @IBOutlet weak var warningImage: UIImageView!
     @IBOutlet weak var stepper: UIStepper!
-  //  @IBOutlet weak var roundsStack: UIStackView!
     @IBOutlet weak var roundsNumberView: UIView!
     
     
-    func localizeElements(){
+    private func localizeElements(){
         headerLabel.text = "selectDictionaryVC_header_label".localized
         selectDictionaryLabel.text = "selectDictionaryVC_selectDictionary_label".localized
         dictionaryButton.setTitle("selectDictionaryVC_tapToSelect_button".localized, for: .normal)
@@ -65,7 +64,7 @@ class SelectDictionaryForTestPopUp: UIViewController {
         elementsDesign()
         
     }
-    func requiredWordsCount(row:Int, test:String){
+    private func requiredWordsCount(row:Int, test:String){
         switch test {
         case "fiveWordsTest":
             if coreDataManager.dictionariesArray[row].dicWordsCount < 5 {
@@ -118,10 +117,9 @@ class SelectDictionaryForTestPopUp: UIViewController {
         default:
             return
         }
-        
     }
     
-    func numberOfRounds(identifier:String, row:Int)->Int{
+    private func numberOfRounds(identifier:String, row:Int)->Int{
         let wordsCount = coreDataManager.dictionariesArray[row].dicWordsCount
         let wordsWithImages = coreDataManager.dictionariesArray[row].dicImagesCount
         switch identifier {
@@ -175,7 +173,7 @@ class SelectDictionaryForTestPopUp: UIViewController {
     
     
     
-    func warningViewAppearAnimate(_ type:String, _ text:String){
+    private func warningViewAppearAnimate(_ type:String, _ text:String){
         switch type{
         case "green":
             warningImage.image = UIImage(named: "done")
@@ -212,7 +210,7 @@ class SelectDictionaryForTestPopUp: UIViewController {
         }
     }
     
-    func hide() {
+    private func hide() {
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut) {
             self.background.alpha = 0
             self.mainView.alpha = 0
@@ -221,7 +219,7 @@ class SelectDictionaryForTestPopUp: UIViewController {
             self.removeFromParent()
         }
     }
-    func elementsDesign(){
+    private func elementsDesign(){
         background.backgroundColor = .black.withAlphaComponent(0.6)
         background.alpha = 0
         mainView.alpha = 0
@@ -248,7 +246,7 @@ class SelectDictionaryForTestPopUp: UIViewController {
         numberOfRoundsLabel.layer.cornerRadius = 10
     }
     
-    func standartState(){
+    private func standartState(){
         if selectedTestIdentifier == "falseOrTrueTest" {
             stepper.minimumValue = 4
         } else {

@@ -13,6 +13,8 @@
 "startVC_login_Button" = "Війти";
 "startVC_or_label" = "АБО";
 "startVC_googleSignIn_label" = "Вхід з Google";
+"startVC_wrongEmailOrPassword_message" = "Неправильний пароль або адреса електронної пошти";
+"startVC_noInternetConnection_message" = "Немає підключення до Інтернету";
 //RegisterController
 "registerVC_email_placeholder" = "Ваш email";
 "registerVC_password_placeholder" = "Ваш пароль";
@@ -48,12 +50,15 @@
 "createDictionaryPopUpVC_langToLang_label" = "На";
 "createDictionaryPopUpVC_cancel_button" = "Скасувати";
 "createDictionaryPopUpVC_create_button" = "Створити";
-"createDictionaryPopUpVC_dictionary_warning" = "Ви не ввели назву словника!";
+"createDictionaryPopUpVC_dictionary_warning" = "Будь ласка введіть назву словника!";
 "createDictionaryPopUpVC_dictionaryNameOrOneLang_warning" = "Ви не ввели назву словника або не вибрали одну з мов";
-"createDictionaryPopUpVC_sameLanguages_warning" = "Ви вибрали однакові мови!";
-"createDictionaryPopUpVC_noLanguages_warning" = "Ви не вибрали жодної мови!";
+"createDictionaryPopUpVC_sameLanguages_warning" = "Ви не можете вибрати однакові мови!";
+"createDictionaryPopUpVC_noLanguages_warning" = "Не вибрано жодної мови!";
+"createDictionaryPopUpVC_selectLearning_message" = "Будь ласка, оберіть мову, яку ви вивчаєте";
+"createDictionaryPopUpVC_selectTranslate_message" = "Будь ласка, виберіть мову для перекладу";
 "createDictionaryPopUpVC_description_placeholder" = "Торкніться, щоб ввести опис";
 "createDictionaryPopUpVC_description_label" = "Введіть опис або коментар";
+"createDictionaryPopUpVC_usePicker_message" = "Для вибору мови прокрутіть пікер догори або донизу. Результат відобразиться на кнопці";
 //EditDictionaryViewController
 "editDictionaryVC_changeName_label" = "Змінити назву словника";
 "editDictionaryVC_changeDescription_label" = "Змінити опис";
@@ -123,8 +128,8 @@
 "browseWordPopUpVC_imageCleared_message" = "Зображення успішно видалено";
 "browseWordPopUpVC_wordExist_message" = "Це слово вже існує у словнику";
 //Defaults
-"defaults_langArray_1" = "🇩🇪 Німецька";
-"defaults_langArray_2" = "🇬🇧 Англійська";
+"defaults_langArray_1" = "🇬🇧 Англійська";
+"defaults_langArray_2" = "🇩🇪 Німецька";
 "defaults_langArray_3" = "🇪🇸 Іспанська";
 "defaults_langArray_4" = "🇫🇮 Фінська";
 "defaults_langArray_5" = "🇫🇷 Французька";

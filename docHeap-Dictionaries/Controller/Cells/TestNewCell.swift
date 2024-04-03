@@ -15,7 +15,6 @@ class TestNewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -25,7 +24,6 @@ class TestNewCell: UITableViewCell {
         testCellView.layer.shadowOpacity = 0.2
         testCellView.layer.shadowOffset = .zero
         testCellView.layer.shadowRadius = 2
-        // Configure the view for the selected state
     }
     
 }

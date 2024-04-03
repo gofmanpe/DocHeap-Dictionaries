@@ -53,14 +53,12 @@ struct TestModel{
         switch numberOfWords{
         case 3:
             let threeButtonsTranstlationsArray = convertedFromSetArray.map({$0?.wrdTranslation ?? "noValue"})
-            
             for i in 0...2 {
                 threeButtonsVolumesDictionary[i] = convertedFromSetArray[i]!.wrdTranslation
             }
             return (mainWord, mainWordTranslation, threeButtonsTranstlationsArray, threeButtonsVolumesDictionary)
         case 5:
             let fiveButtonsTranstlationsArray = convertedFromSetArray.map({$0?.wrdTranslation ?? "noValue"})
-            
             for i in 0...4 {
                 fiveButtonsVolumesDictionary[i] = convertedFromSetArray[i]!.wrdTranslation
             }

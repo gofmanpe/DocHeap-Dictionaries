@@ -24,7 +24,6 @@ class StartController: UIViewController{
     @IBOutlet weak var registerButton: UIButton!
     @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var buttonsView: UIStackView!
-   // @IBOutlet weak var avatarImageView: UIImageView!
     @IBOutlet weak var keepSignedLabel: UILabel!
     @IBOutlet weak var googleSignInButton: UIButton!
     @IBOutlet weak var background: UIView!
@@ -71,7 +70,7 @@ class StartController: UIViewController{
         super.viewDidLoad()
         tokenCheck()
         userSignedCheck()
-        print(mainModel.getDocumentsFolderPath())
+       // print(mainModel.getDocumentsFolderPath())
         setupView()
         localizeElements()
         loadCurrentUser()
@@ -148,103 +147,6 @@ class StartController: UIViewController{
                     let userEmail = email ?? "No_user_email"
                     let userPhoto = photoURL
                     userCheckAndCreate(userName: userName, userEmail: userEmail, userPhoto: userPhoto, accType: "google", userToken: nil)
-//                    if coreDataManager.isUserExistInCoreData(userEmail: userEmail, context: context){ // User was found in CoreData by email
-//                        userID = coreDataManager.loadUserData(userEmail: userEmail, data: context).first?.userID ?? "noUserID"
-//                        self.userName = coreDataManager.loadUserData(userEmail: userEmail, data: context).first?.userName ?? "noUserName"
-////TODO: - For sync from different devices, if dictionary and/or word was created/modified/deleted from different device on same accaunt
-//                        userDefaults.set(userID, forKey: "userID")
-//                        userDefaults.set(userEmail, forKey: "userEmail")
-//                        userDefaults.set(true, forKey: "keepSigned")
-//                        userDefaults.set("google", forKey: "accType")
-//                        userDefaults.set(self.userName, forKey: "userName")
-////TODO: - Here need to sync user with Firebase for checking changes
-//                        goToApp()
-//                    } else { // No user found in CoreData
-//                        firebase.checkUserExistsInFirebase(userEmail: userEmail) { userExist in
-//                            if userExist{ // User exist in Firebase
-//                                self.firebase.getUserDataByEmail(userEmail: userEmail) { result in
-//                                    guard let data = result else {return}
-//                                    let userData = UserData(
-//                                        userID: data.userID,
-//                                        userName: data.userName,
-//                                        userBirthDate: data.userBirthDate,
-//                                        userCountry: data.userCountry,
-//                                        userAvatarFirestorePath: data.userAvatarFirestorePath,
-//                                        userAvatarExtention: data.userAvatarExtention,
-//                                        userNativeLanguage: data.userNativeLanguage,
-//                                        userScores: data.userScores,
-//                                        userShowEmail: data.userShowEmail,
-//                                        userEmail: data.userEmail,
-//                                        userSyncronized: data.userSyncronized,
-//                                        userType: data.userType,
-//                                        userRegisterDate: data.userRegisterDate,
-//                                        userInterfaceLanguage: data.userInterfaceLanguage,
-//                                        userMistakes: data.userMistakes,
-//                                        userRightAnswers: data.userRightAnswers,
-//                                        userTestsCompleted: data.userTestsCompleted
-//                                    )
-//                                        self.userID = userData.userID
-//                                        DispatchQueue.main.async {
-//                                            self.sync.loadDictionariesFromFirebase(userID: userData.userID, context: self.context)
-//                                            self.sync.loadStatisticFromFirebase(userID: userData.userID, context: self.context)
-//                                        }
-//                                        self.coreDataManager.createLocalUser(userData: userData, context: self.context)
-//                                    if !self.mainModel.isUserFolderExist(folderName: userData.userID) { // User folder dont exist
-//                                        self.mainModel.createFolderInDocuments(withName: userData.userID)
-//                                        self.mainModel.createFolderInDocuments(withName: "\(userData.userID)/Temp")
-//                                        }
-//                                        self.userDefaults.set(userData.userID, forKey: "userID")
-//                                        self.userDefaults.set(email, forKey: "userEmail")
-//                                        self.userDefaults.set(true, forKey: "keepSigned")
-//                                        self.userDefaults.set("google", forKey: "accType")
-//                                        self.userDefaults.set(userName, forKey: "userName")
-//                                    if !userData.userAvatarFirestorePath.isEmpty {
-//                                        self.alamo.downloadAndSaveAvatar(from: userData.userAvatarFirestorePath, forUser: userData.userID) {
-//                                            self.goToApp()
-//                                        }
-//                                    }
-//                                }
-//                            } else { // User dont exist in Firebase
-//                                let userID = self.mainModel.uniqueIDgenerator(prefix: "usr")
-//                                self.userID = userID
-//                                self.firebase.createUser(userID: userID, userEmail: userEmail, userName: userName, userInterfaceLanguage: self.mainModel.currentSystemLanguage(), userAvatarFirestorePath: userPhoto, accType: "google")
-//                                let newUserData = UserData(
-//                                    userID: userID,
-//                                    userName: userName,
-//                                    userBirthDate: "",
-//                                    userCountry: "",
-//                                    userAvatarFirestorePath: userPhoto!.absoluteString,
-//                                    userAvatarExtention: "jpg",
-//                                    userNativeLanguage: "",
-//                                    userScores: 0,
-//                                    userShowEmail: false,
-//                                    userEmail: userEmail,
-//                                    userSyncronized: true,
-//                                    userType: "",
-//                                    userRegisterDate: self.mainModel.convertDateToString(currentDate: Date(), time: false)!,
-//                                    userInterfaceLanguage: self.mainModel.currentSystemLanguage(),
-//                                    userMistakes: 0,
-//                                    userRightAnswers: 0,
-//                                    userTestsCompleted: 0
-//                                )
-//                                self.coreDataManager.createLocalUser(userData: newUserData, context: self.context)
-//                                self.mainModel.createFolderInDocuments(withName: userID)
-//                                self.mainModel.createFolderInDocuments(withName: "\(userID)/Temp")
-//                                if let userPhoto = userPhoto{
-//                                    self.alamo.downloadAndSaveAvatar(from: userPhoto.absoluteString, forUser: userID) {
-//                                        let localImagePath = self.mainModel.getDocumentsFolderPath().appendingPathComponent("\(userID)/userAvatar.jpg")
-//                                        self.firebase.uploadAvatarToFirestore(userID: userID, avatarPath: localImagePath)
-//                                    }
-//                                }
-//                                self.userDefaults.set(userID, forKey: "userID")
-//                                self.userDefaults.set(email, forKey: "userEmail")
-//                                self.userDefaults.set(true, forKey: "keepSigned")
-//                                self.userDefaults.set("google", forKey: "accType")
-//                                self.userDefaults.set(userName, forKey: "userName")
-//                                self.goToApp()
-//                            }
-//                        }
-//                    }
                 }
             }
         }
@@ -256,9 +158,6 @@ class StartController: UIViewController{
     
     func elementsDesign(){
         buttonsView.layer.cornerRadius = 5
-//        avatarImageView.layer.cornerRadius = avatarImageView.frame.size.width/2
-//        avatarImageView.layer.masksToBounds = false
-//        avatarImageView.clipsToBounds = true
         googleSignInButton.layer.cornerRadius = 5
     }
     
@@ -284,7 +183,6 @@ class StartController: UIViewController{
             guard let userID = coreDataManager.loadUserData(userEmail: userEmail, data: context).first?.userID else {
                 return
             }
-            //self.userName = coreDataManager.loadUserData(userEmail: userEmail, data: context).first?.userName ?? "noUserName"
             //TODO: - For sync from different devices, if dictionary and/or word was created/modified/deleted from different device on same accaunt
             userDefaults.set(userID, forKey: "userID")
             userDefaults.set(userEmail, forKey: "userEmail")
@@ -318,7 +216,6 @@ class StartController: UIViewController{
                             userTestsCompleted: data.userTestsCompleted, 
                             userIdentityToken: userToken ?? ""
                         )
-                        //self.userID = userData.userID
                         DispatchQueue.main.async {
                             self.sync.loadDictionariesFromFirebase(userID: userData.userID, context: self.context)
                             self.sync.loadStatisticFromFirebase(userID: userData.userID, context: self.context)
@@ -341,7 +238,6 @@ class StartController: UIViewController{
                     }
                 } else { // User doesnt exist in Firebase
                     let userID = self.mainModel.uniqueIDgenerator(prefix: "usr")
-                    //self.userID = userID
                     self.firebase.createUser(userID: userID,
                                              userEmail: userEmail,
                                              userName: userName,
@@ -402,9 +298,9 @@ class StartController: UIViewController{
                     if let errorRequest = err.userInfo["FIRAuthErrorUserInfoNameKey"] as? String{
                         switch errorRequest{
                         case "ERROR_WRONG_PASSWORD":
-                            self.showErrorPopUp(text:"Wrong password or email")
+                            self.showErrorPopUp(text: "startVC_wrongEmailOrPassword_message".localized)
                         case "ERROR_NETWORK_REQUEST_FAILED":
-                            self.showErrorPopUp(text:"No internet connection")
+                            self.showErrorPopUp(text: "startVC_noInternetConnection_message".localized)
                         default:
                             break
                         }
@@ -498,7 +394,6 @@ private extension StartController {
         let charset: Array<Character> = Array("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-._")
         var result = ""
         var remainLength = length
-        
         while remainLength > 0 {
             let randoms: [UInt8] = (0 ..< 16).map { _ in
                 var random: UInt8 = 0
@@ -508,12 +403,10 @@ private extension StartController {
                 }
                 return random
             }
-            
             randoms.forEach {random in
                 if remainLength == 0 {
                     return
                 }
-                
                 if random < charset.count {
                     result.append(charset[Int(random)])
                     remainLength -= 1
@@ -577,7 +470,6 @@ extension StartController: ASAuthorizationControllerDelegate {
                     self.userCheckAndCreate(userName: userName, userEmail: email, userPhoto: nil, accType: "apple", userToken: tokenString)
                 }
             }
-            
         } else {
             let oAuthCredential = OAuthProvider.credential(withProviderID: "apple.com", idToken: userToken!, rawNonce: "")
             Auth.auth().signIn(with: oAuthCredential) { result, error in

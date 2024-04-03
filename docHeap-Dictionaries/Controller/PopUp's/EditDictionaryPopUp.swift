@@ -45,7 +45,7 @@ class EditDictionaryPopUp: UIViewController {
     var oldDescription = String()
     var newDescription = String()
     var dicID = String()
-    var coreDataManager = CoreDataManager()
+    private var coreDataManager = CoreDataManager()
     var dictionariesArray = [Dictionary]()
     private let defaults = Defaults()
     private let mainModel = MainModel()
@@ -112,7 +112,6 @@ class EditDictionaryPopUp: UIViewController {
         }
     
     private func standartState(){
-        //allowCommentsStackView.isHidden = true
         oldName = coreDataManager.parentDictionaryData.first?.dicName ?? ""
         oldDescription = coreDataManager.parentDictionaryData.first?.dicDescription ?? ""
         dictionaryNameTextField.text = oldName
@@ -122,7 +121,6 @@ class EditDictionaryPopUp: UIViewController {
         allowedCommentsStatus = coreDataManager.parentDictionaryData.first!.dicCommentsOn
         newAllowedCommentsStatus = allowedCommentsStatus
         sharedSwitch.isOn = systemSharedStatus
-        //allowCommentsStackView.isHidden = !systemSharedStatus
         if systemSharedStatus{
             commentsSwitch.isEnabled = true
         } else {
@@ -210,7 +208,6 @@ class EditDictionaryPopUp: UIViewController {
                     commentsSwitch.isOn = false
                     commentsSwitch.isEnabled = false
                 }
-                
             case (false,false):
                 checkOK = true
             }
@@ -222,57 +219,14 @@ class EditDictionaryPopUp: UIViewController {
                 checkOK = false
                 sharedSwitch.isOn = systemSharedStatus
                 newSharedStatus = systemSharedStatus
-//                UIStackView.animate(withDuration: 0.3) {
-//                    self.allowCommentsStackView.isHidden = true
-//                    self.view.layoutIfNeeded()
-//                }
                 commentsSwitch.isOn = false
                 commentsSwitch.isEnabled = false
-                // sharedStatusChanged = false
             } else {
                 checkOK = true
             }
         }
         return checkOK
     }
-    
-//    private func commentsAllowedStatus()->Bool{
-//        var commentsAllowed: Bool
-//        switch (sharedSwitch.isOn,commentsSwitch.isOn){
-//        case (true,true):
-//            commentsAllowed = true
-//        case (true,false),(false,true),(false,false):
-//            commentsAllowed = false
-//        }
-//        return commentsAllowed
-//    }
-    
-//    private func saveCommentsAllowedOnly(commentsAllowed:Bool){
-//        if commentsAllowed{
-//            coreDataManager.parentDictionaryData.first?.dicCommentsOn = true
-//        } else {
-//            coreDataManager.parentDictionaryData.first?.dicCommentsOn = false
-//        }
-//        coreDataManager.saveData(data: context)
-//        tableReloadDelegate?.didUpdateView(sender: "")
-//        warningViewAppearAnimate(type: "green", text: defaults.editDoneMessage)
-//        saveButton.isEnabled = false
-//        cancelButton.isEnabled = false
-//        if mainModel.isInternetAvailable(){
-//            fireDB.updateDictionaryInFirebase(dicID: dicID, dicName: newName, dicDescription: newDescription, dicShared: sharedStatus)
-//            coreDataManager.parentDictionaryData.first?.dicSyncronized = true
-//        } else {
-//            coreDataManager.parentDictionaryData.first?.dicSyncronized = false
-//        }
-//        coreDataManager.saveData(data: context)
-//        UIView.animate(withDuration: 0.2) {
-//            self.mainWindowView.alpha = 0
-//        } completion: { Bool in }
-//        
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-//            self.hide()
-//        }
-//    }
     
     private func saveChangedData(sharedStatus:Bool, commentsAllowed:Bool){
         hideKeyboard()
@@ -316,7 +270,7 @@ class EditDictionaryPopUp: UIViewController {
         }
     }
     
-    func warningViewAppearAnimate(type:String, text:String){
+    private func warningViewAppearAnimate(type:String, text:String){
         warningView.isHidden = false
         warningView.alpha = 0
         switch type{

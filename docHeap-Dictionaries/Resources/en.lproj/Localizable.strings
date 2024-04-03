@@ -15,6 +15,8 @@
 "startVC_login_Button" = "Login";
 "startVC_or_label" = "OR";
 "startVC_googleSignIn_label" = "Sign in with Google";
+"startVC_wrongEmailOrPassword_message" = "Wrong password or email";
+"startVC_noInternetConnection_message" = "No Internet connection";
 //RegisterController
 "registerVC_email_placeholder" = "Your e-mail";
 "registerVC_password_placeholder" = "Your password";
@@ -50,12 +52,15 @@
 "createDictionaryPopUpVC_langToLang_label" = "To";
 "createDictionaryPopUpVC_cancel_button" = "Cancel";
 "createDictionaryPopUpVC_create_button" = "Create";
-"createDictionaryPopUpVC_dictionary_warning" = "You have not entered a dictionary name!";
+"createDictionaryPopUpVC_dictionary_warning" = "Please, enter a dictionary name!";
 "createDictionaryPopUpVC_dictionaryNameOrOneLang_warning" = "You did not enter the name of the dictionary or did not select one of the languages";
-"createDictionaryPopUpVC_sameLanguages_warning" = "You have selected the same languages!";
-"createDictionaryPopUpVC_noLanguages_warning" = "You have not selected any languages!";
+"createDictionaryPopUpVC_sameLanguages_warning" = "You can't select the same languages!";
+"createDictionaryPopUpVC_noLanguages_warning" = "No any language selected!";
+"createDictionaryPopUpVC_selectLearning_message" = "Please, elect the language you are learning";
+"createDictionaryPopUpVC_selectTranslate_message" = "Please, select the language to be translated";
 "createDictionaryPopUpVC_description_placeholder" = "Tap to enter a description";
 "createDictionaryPopUpVC_description_label" = "Enter a description or comment";
+"createDictionaryPopUpVC_usePicker_message" = "To select a language, scroll the picker up or down. The result is displayed on the button";
 //EditDictionaryViewController
 "editDictionaryVC_changeName_label" = "Change dictionary name";
 "editDictionaryVC_changeDescription_label" = "Change description";
@@ -125,8 +130,8 @@
 "browseWordPopUpVC_imageCleared_message" = "The image was successfully removed";
 "browseWordPopUpVC_wordExist_message" = "This word already exists in the dictionary";
 //Defaults
-"defaults_langArray_1" = "🇩🇪 German";
-"defaults_langArray_2" = "🇬🇧 English";
+"defaults_langArray_1" = "🇬🇧 English";
+"defaults_langArray_2" = "🇩🇪 German";
 "defaults_langArray_3" = "🇪🇸 Spanish";
 "defaults_langArray_4" = "🇫🇮 Finnish";
 "defaults_langArray_5" = "🇫🇷 French";

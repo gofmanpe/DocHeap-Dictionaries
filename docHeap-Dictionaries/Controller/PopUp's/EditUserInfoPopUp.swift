@@ -26,7 +26,7 @@ class EditUserInfoPopUp: UIViewController {
     @IBOutlet weak var warningLabel: UILabel!
     @IBOutlet weak var warningImage: UIImageView!
     
-    func localizeElements(){
+    private func localizeElements(){
         headerLabel.text = "editUserInfoPopUp_header_label".localized
         userNameLabel.text = "editUserInfoPopUp_userName_label".localized
         dateOfBirthLabel.text = "editUserInfoPopUp_dateOfBirth_label".localized
@@ -115,7 +115,7 @@ class EditUserInfoPopUp: UIViewController {
         mainView.frame.origin.y = currentFramePosY
     }
    
-    func dataSetup(){
+    private func dataSetup(){
         userData = coreData.loadUserDataByID(userID: mainModel.loadUserData().userID, context: context)
         userNameTextField.text = userData?.userName
         dateOfBirthTextField.text = userData?.userBirthDate
@@ -125,7 +125,7 @@ class EditUserInfoPopUp: UIViewController {
         
     }
     
-    func checkForChanges()->Bool{
+    private func checkForChanges()->Bool{
         newUserName = userNameTextField.text ?? ""
         newBirthDate = dateOfBirthTextField.text ?? ""
         newCountry = countryTextField.text ?? ""
@@ -138,13 +138,13 @@ class EditUserInfoPopUp: UIViewController {
         }
     }
     
-    func elementsDesign(){
+    private func elementsDesign(){
         mainView.layer.cornerRadius = 10
         warningView.layer.cornerRadius = 10
         warningView.isHidden = true
     }
     
-    func popUpBackgroundSettings(){
+    private func popUpBackgroundSettings(){
         self.view.backgroundColor = .clear
         background.backgroundColor = .black.withAlphaComponent(0.6)
         background.alpha = 0
@@ -164,7 +164,7 @@ class EditUserInfoPopUp: UIViewController {
         }
     }
 
-    func hide() {
+    private func hide() {
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut) {
             self.background.alpha = 0
             self.mainView.alpha = 0
@@ -174,7 +174,7 @@ class EditUserInfoPopUp: UIViewController {
         }
     }
     
-    func warningViewAppearAnimate(_ text:String, problem:Bool){
+    private func warningViewAppearAnimate(_ text:String, problem:Bool){
         warningLabel.text = text
         warningView.isHidden = false
         warningView.alpha = 0
@@ -287,7 +287,6 @@ extension EditUserInfoPopUp: UIPickerViewDelegate, UIPickerViewDataSource, UITex
      }
 
      func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-         // Обработка выбора значения в pickerView
          switch component {
          case 0:
              selectedDay = days[row]
@@ -304,19 +303,15 @@ extension EditUserInfoPopUp: UIPickerViewDelegate, UIPickerViewDataSource, UITex
     
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        // Вызывается, когда пользователь начинает редактирование текстового поля
         updateTextField()
     }
-
-    // Добавьте метод обновления значения текстового поля
+    
     func updateTextField() {
         guard let selectedDay = selectedDay,
               let selectedMonth = selectedMonth,
               let selectedYear = selectedYear else {
             return
         }
-
-        // Форматирование и установка значения текстового поля
         var displayedDay = String()
         if selectedDay < 10 {
             displayedDay = "0\(selectedDay)"

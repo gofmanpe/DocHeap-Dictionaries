@@ -18,23 +18,21 @@ class CreateDictionaryPopUp: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var translateButton: UIButton!
     @IBOutlet weak var cancelButton: UIButton!
     @IBOutlet weak var dictionaryNameTextField: UITextField!
-    //@IBOutlet weak var descriptionTextField: UITextField!
     @IBOutlet weak var descriptionLabel: UILabel!
     @IBOutlet weak var createButton: UIButton!
     @IBOutlet weak var pickerView: UIPickerView!
     @IBOutlet weak var warningView: UIView!
     @IBOutlet weak var warningLabel: UILabel!
+    @IBOutlet weak var warningImage: UIImageView!
     @IBOutlet weak var headerLabel: UILabel!
     @IBOutlet weak var enterNameLabel: UILabel!
     @IBOutlet weak var chooseLangLabel: UILabel!
     @IBOutlet weak var descriptionTextView: UITextView!
     
-    func localizeElements(){
+    private func localizeElements(){
         descriptionLabel.text = "createDictionaryPopUpVC_description_label".localized
-        //descriptionTextField.placeholder = "createDictionaryPopUpVC_description_placeholder".localized
         headerLabel.text = "createDictionaryPopUpVC_header_label".localized
         enterNameLabel.text = "createDictionaryPopUpVC_enterName_label".localized
-       // dictionaryNameTextField.placeholder = "createDictionaryPopUpVC_dictionaryName_placeholder".localized
         chooseLangLabel.text = "createDictionaryPopUpVC_chooseLanguages_label".localized
         learningButton.setTitle("createDictionaryPopUpVC_langSelect_Button".localized, for: .normal)
         translateButton.setTitle("createDictionaryPopUpVC_langSelect_Button".localized, for: .normal)
@@ -118,7 +116,7 @@ class CreateDictionaryPopUp: UIViewController, UITextFieldDelegate {
         }
     }
     
-    func hide() {
+    private func hide() {
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut) {
             self.background.alpha = 0
             self.mainView.alpha = 0
@@ -128,7 +126,7 @@ class CreateDictionaryPopUp: UIViewController, UITextFieldDelegate {
         }
     }
     
-    func elementsDesign(){
+    private  func elementsDesign(){
         mainView.clipsToBounds = true
         mainView.layer.cornerRadius = 10
         headerView.clipsToBounds = true
@@ -160,13 +158,13 @@ class CreateDictionaryPopUp: UIViewController, UITextFieldDelegate {
     }
     
     internal func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-           let maxLength = 30
-           let currentLength = textField.text?.count ?? 0
-           let newLength = currentLength + string.count - range.length
-           return newLength <= maxLength
-       }
+        let maxLength = 30
+        let currentLength = textField.text?.count ?? 0
+        let newLength = currentLength + string.count - range.length
+        return newLength <= maxLength
+    }
     
-    func standartState(){
+    private func standartState(){
         warningView.isHidden = true
         pickerView.delegate = self
         pickerView.dataSource = self
@@ -175,29 +173,9 @@ class CreateDictionaryPopUp: UIViewController, UITextFieldDelegate {
         translateButton.setTitleColor(.white, for: .normal)
         learningButton.backgroundColor = UIColor(red: 0.00, green: 0.68, blue: 1.00, alpha: 1.00)
         learningButton.setTitleColor(.white, for: .normal)
-//        descriptionTextView.delegate = self
-//        descriptionTextView.text = "createDictionaryPopUpVC_description_placeholder".localized
-//        descriptionTextView.textColor = UIColor.lightGray
     }
     
-//    func textViewDidBeginEditing(_ textView: UITextView) {
-//           // Очищаем placeholder, если начинаем вводить текст
-//           if textView.textColor == UIColor.lightGray {
-//               textView.text = nil
-//               textView.textColor = UIColor.black
-//           }
-//       }
-//
-//       // Реализуем метод делегата, который будет вызываться при окончании редактирования
-//       func textViewDidEndEditing(_ textView: UITextView) {
-//           // Восстанавливаем placeholder, если текст не был введен
-//           if textView.text.isEmpty {
-//               textView.text = "Введите текст..."
-//               textView.textColor = UIColor.lightGray
-//           }
-//       }
-    
-    func activeButton(button:Int){
+    private func activeButton(button:Int){
         switch button {
         case 1:
             learningButton.backgroundColor = .white
@@ -213,44 +191,52 @@ class CreateDictionaryPopUp: UIViewController, UITextFieldDelegate {
             return
         }
     }
-
     
-    func checkRulesForSelectedLanguages(learningLanguage:String,translateLanguage:String,dicName:String) -> Bool{
+    private func checkRulesForSelectedLanguages(learningLanguage:String,translateLanguage:String,dicName:String) -> Bool{
         switch (learningLanguage.isEmpty, translateLanguage.isEmpty, dicName.isEmpty) {
         case (true, true, true): // Nothing selected
-            warningViewAppearAnimate("createDictionaryPopUpVC_dictionary_warning".localized)
+            warningViewAppearAnimate(text: "createDictionaryPopUpVC_dictionary_warning".localized, color: "red")
             return false
         case (true, false, true), (false, true, true), (true, false, false), (false, true, false) : //One empty
-            warningViewAppearAnimate("createDictionaryPopUpVC_dictionaryNameOrOneLang_warning".localized)
+            warningViewAppearAnimate(text: "createDictionaryPopUpVC_dictionaryNameOrOneLang_warning".localized, color: "red")
             return false
         case (false, false, true) where learningLanguage == translateLanguage: // Same languages
-            warningViewAppearAnimate("createDictionaryPopUpVC_sameLanguages_warning".localized)
+            warningViewAppearAnimate(text: "createDictionaryPopUpVC_sameLanguages_warning".localized, color: "red")
             return false
         case (false, false, false): // All selected
             if learningLanguage == translateLanguage{
-                warningViewAppearAnimate("createDictionaryPopUpVC_sameLanguages_warning".localized)
+                warningViewAppearAnimate(text: "createDictionaryPopUpVC_sameLanguages_warning".localized, color: "red")
                 return false
             } else {
                 return true
             }
         case (false, false, true): // Name dont entered
-            warningViewAppearAnimate("createDictionaryPopUpVC_dictionary_warning".localized)
+            warningViewAppearAnimate(text: "createDictionaryPopUpVC_dictionary_warning".localized, color: "red")
             return false
         case (true, true, false): // langueges not selected
-            warningViewAppearAnimate("createDictionaryPopUpVC_noLanguages_warning".localized)
+            warningViewAppearAnimate(text: "createDictionaryPopUpVC_noLanguages_warning".localized, color: "red")
             return false
         }
     }
     
-    func warningViewAppearAnimate(_ text:String){
+    private func warningViewAppearAnimate(text:String, color:String){
+        switch color{
+        case "red":
+            warningImage.image = UIImage(named: "stop")
+        case "yellow":
+            warningImage.image = UIImage(named: "attention")
+        case "green":
+            warningImage.image = UIImage(named: "done")
+        default:
+            break
+        }
         warningLabel.text = text
         warningView.isHidden = false
         warningView.alpha = 0
         UIView.animate(withDuration: 0.5) {
-            
             self.warningView.alpha = 1
         } completion: { Bool in
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
                 self.warningView.isHidden = true
             }
         }
@@ -264,7 +250,7 @@ class CreateDictionaryPopUp: UIViewController, UITextFieldDelegate {
     @IBAction func learningButtonPressed(_ sender: UIButton) {
         hideKeyboard()
         pressedButton = 1
-        warningView.isHidden = true
+        warningViewAppearAnimate(text: "createDictionaryPopUpVC_usePicker_message".localized, color: "yellow")
         if pickerView.isHidden{
             pickerView.isHidden = false
             activeButton(button: 1)
@@ -276,7 +262,7 @@ class CreateDictionaryPopUp: UIViewController, UITextFieldDelegate {
     @IBAction func translateButtonPressed(_ sender: UIButton) {
         hideKeyboard()
         pressedButton = 2
-        warningView.isHidden = true
+        warningViewAppearAnimate(text: "createDictionaryPopUpVC_usePicker_message".localized, color: "yellow")
         if pickerView.isHidden{
             pickerView.isHidden = false
             activeButton(button: 2)
@@ -318,7 +304,7 @@ class CreateDictionaryPopUp: UIViewController, UITextFieldDelegate {
                     dicWordsCount: 0,
                     dicID: dicID,
                     dicImagesCount: 0,
-                    dicAddDate: mainModel.convertDateToString(currentDate: Date(), time: false), 
+                    dicAddDate: mainModel.convertDateToString(currentDate: Date(), time: false),
                     dicShared: false
                 )
                 coreData.setSyncronizedStatusForDictionary(data: context, dicID: dicID, sync: true)
@@ -348,21 +334,48 @@ extension CreateDictionaryPopUp: UIPickerViewDataSource, UIPickerViewDelegate{
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-            switch pressedButton {
-            case 1:
+        switch pressedButton {
+        case 1:
+            selectedLearning = defaults.languagesKeysArray[row]
+            if !selectedLearning.isEmpty{
                 learningButton.setTitle(defaults.languagesVolumesArray[row], for: .normal)
-                selectedLearning = defaults.languagesKeysArray[row]
-            case 2:
-                translateButton.setTitle(defaults.languagesVolumesArray[row], for: .normal)
-                selectedTranslate = defaults.languagesKeysArray[row]
-            default:
-                return
+            } else {
+                learningButton.setTitle("createDictionaryPopUpVC_langSelect_Button".localized, for: .normal)
             }
+            createButton.isEnabled = true
+        case 2:
+            selectedTranslate = defaults.languagesKeysArray[row]
+            if !selectedTranslate.isEmpty{
+                translateButton.setTitle(defaults.languagesVolumesArray[row], for: .normal)
+            } else {
+                translateButton.setTitle("createDictionaryPopUpVC_langSelect_Button".localized, for: .normal)
+            }
+            createButton.isEnabled = true
+        default:
+            return
+        }
+        if selectedLearning == selectedTranslate {
+            createButton.isEnabled = false
+            warningViewAppearAnimate(text: "createDictionaryPopUpVC_sameLanguages_warning".localized, color: "red")
+        }
+        switch (selectedLearning.isEmpty,selectedTranslate.isEmpty){
+        case (true,true):
+            createButton.isEnabled = false
+            warningViewAppearAnimate(text: "createDictionaryPopUpVC_noLanguages_warning".localized, color: "red")
+        case (false,true):
+            createButton.isEnabled = false
+            warningViewAppearAnimate(text: "createDictionaryPopUpVC_selectTranslate_message".localized, color: "yellow")
+        case (true,false):
+            createButton.isEnabled = false
+            warningViewAppearAnimate(text: "createDictionaryPopUpVC_selectLearning_message".localized, color: "yellow")
+        case (false,false):
+            break
+        }
     }
     
     func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
-           return 40.0
-       }
+        return 30.0
+    }
     
 }
 

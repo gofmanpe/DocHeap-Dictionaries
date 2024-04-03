@@ -41,7 +41,6 @@ class SharedDictionaryCell: UITableViewCell {
         lLangImage.layer.cornerRadius = 5
         tLangImage.layer.cornerRadius = 5
         userAvatarImage.layer.cornerRadius = userAvatarImage.frame.size.width/2
-        
     }
     
 

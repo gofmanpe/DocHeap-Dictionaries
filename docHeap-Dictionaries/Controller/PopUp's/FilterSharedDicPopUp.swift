@@ -57,7 +57,7 @@ class FilterSharedDicPopUp: UIViewController {
         isFilterApplied()
     }
     
-    func isFilterApplied(){
+    private func isFilterApplied(){
         let learnLangValue = defaults.langArray.filter({$0.lang == selectedLearn})
         let transLangValue = defaults.langArray.filter({$0.lang == selectedTrans})
         switch (selectedLearn.isEmpty, selectedTrans.isEmpty){
@@ -73,7 +73,7 @@ class FilterSharedDicPopUp: UIViewController {
         }
     }
     
-    func standartState(){
+    private func standartState(){
         mainView.layer.cornerRadius = 10
         learnLangButton.layer.cornerRadius = 10
         transLangButton.layer.cornerRadius = 10
@@ -93,7 +93,7 @@ class FilterSharedDicPopUp: UIViewController {
             }
     }
     
-    func popUpBackgroundSettings(){
+    private func popUpBackgroundSettings(){
         self.view.backgroundColor = .clear
         background.backgroundColor = .black.withAlphaComponent(0.6)
         background.alpha = 0
@@ -113,7 +113,7 @@ class FilterSharedDicPopUp: UIViewController {
         }
     }
 
-    func hide() {
+    private func hide() {
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut) {
             self.background.alpha = 0
             self.mainView.alpha = 0
@@ -123,7 +123,7 @@ class FilterSharedDicPopUp: UIViewController {
         }
     }
     
-    func checkDifference()->Bool{
+    private func checkDifference()->Bool{
         switch (selectedLearning.isEmpty, selectedTranslate.isEmpty){
         case (true,true):
             warningView.isHidden = false
@@ -139,7 +139,7 @@ class FilterSharedDicPopUp: UIViewController {
         }
     }
     
-    func buttonScaleAnimation(targetButton:UIButton){
+    private func buttonScaleAnimation(targetButton:UIButton){
         UIView.animate(withDuration: 0.2) {
             targetButton.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
         } completion: { (bool) in

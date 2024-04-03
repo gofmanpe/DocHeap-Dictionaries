@@ -59,7 +59,7 @@ class ChangeLanguagePopUp: UIViewController {
         }
     }
     
-    func hide() {
+    private func hide() {
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut) {
             self.exitMessageView.alpha = 0
             self.background.alpha = 0
@@ -70,7 +70,7 @@ class ChangeLanguagePopUp: UIViewController {
         }
     }
     
-    func popUpBackgroundSettings(){
+    private func popUpBackgroundSettings(){
         self.view.backgroundColor = .clear
         background.backgroundColor = .black.withAlphaComponent(0.6)
         background.alpha = 0
@@ -98,7 +98,7 @@ class ChangeLanguagePopUp: UIViewController {
        // okButton.isHidden = true
     }
     
-    func elementsDesign(){
+    private func elementsDesign(){
         languagesPicker.layer.cornerRadius = 10
         exitMessageView.layer.cornerRadius = 10
         exitMessageView.alpha = 0.8
@@ -106,7 +106,7 @@ class ChangeLanguagePopUp: UIViewController {
         
     }
     
-    func changeLanguage(to languageCode: String) {
+    private func changeLanguage(to languageCode: String) {
             UserDefaults.standard.set([languageCode], forKey: "AppleLanguages")
             UserDefaults.standard.synchronize()
         }
@@ -127,13 +127,6 @@ class ChangeLanguagePopUp: UIViewController {
         languagesPicker.isHidden = true
         mainView.isHidden = true
         exitMessageView.isHidden = false
-//        headerLabel.isHidden = true
-//        currentLanguageLabel.isHidden = true
-//        languageLabel.isHidden = true
-//        cancelButton.isHidden = true
-//        selectButton.isHidden = true
-//        saveButton.isHidden = true
-//        okButton.isHidden = false
         attentionLabel.text = "changeLanguagePopUp_beforeExit_label".localized
         
     }

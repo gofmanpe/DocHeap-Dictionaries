@@ -16,7 +16,7 @@ class LogOutPopUp: UIViewController {
     @IBOutlet weak var cancelButton: UIButton!
     @IBOutlet weak var logoutButton: UIButton!
     
-    func localizeElements(){
+    private func localizeElements(){
         header.text = "logoutPopUp_header_label".localized
         dialogLabel.text = "logoutPopUp_dialog_label".localized
         cancelButton.setTitle("logoutPopUp_cancel_button".localized, for: .normal)
@@ -42,7 +42,7 @@ class LogOutPopUp: UIViewController {
         mainView.layer.cornerRadius = 10
     }
     
-    func popUpBackgroundSettings(){
+    private  func popUpBackgroundSettings(){
         self.view.backgroundColor = .clear
         background.backgroundColor = .black.withAlphaComponent(0.6)
         background.alpha = 0
@@ -72,7 +72,7 @@ class LogOutPopUp: UIViewController {
         }
     }
     
-    func logout(){
+    private func logout(){
         let accountType = mainModel.loadUserData().accType
         do{
             try Auth.auth().signOut()
@@ -100,8 +100,6 @@ class LogOutPopUp: UIViewController {
             return
         }
     }
-    
- 
 
     @IBAction func cancelButtonPressed(_ sender: UIButton) {
         hide()

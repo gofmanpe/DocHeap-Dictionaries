@@ -18,15 +18,14 @@ class FalseOrTrueTestController: UIViewController, PerformToSegue, UpdateView {
         falseOrTrueTestStart()
     }
     
-    
     func performToSegue(identifier: String, dicID: String, roundsNumber:Int) {
         numberOfRounds = roundsNumber
         performSegue(withIdentifier: identifier, sender: self)
     }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         _ = segue.destination as! TestsController
     }
-    
 
     @IBOutlet weak var testNameLabel: UILabel!
     @IBOutlet weak var dictionaryNameLabel: UILabel!
@@ -58,7 +57,7 @@ class FalseOrTrueTestController: UIViewController, PerformToSegue, UpdateView {
     @IBOutlet weak var progressLabel: UILabel!
     @IBOutlet weak var progressBar: UIProgressView!
     
-    func localizeElements(){
+    private func localizeElements(){
         roundNameLabel.text = "trueOrFalseTestVC_roundName_label".localized
         scoresNameLabel.text = "trueOrFalseTestVC_scoresName_label".localized
         instructionLabel.text = "trueOrFalseTestVC_instruction_label".localized
@@ -100,7 +99,7 @@ class FalseOrTrueTestController: UIViewController, PerformToSegue, UpdateView {
         falseOrTrueTestStart()
     }
     
-    func standartState(){
+    private func standartState(){
         resultLabel.text = " "
         blockView.isHidden = true
         commentView.isHidden = true
@@ -198,7 +197,7 @@ class FalseOrTrueTestController: UIViewController, PerformToSegue, UpdateView {
         }
     }
     
-    func reloadTestData(){
+    private func reloadTestData(){
         scoresLabel.text = String(0)
         progressLabel.text = defaults.labelTestProgressText
         roundsNumber = 0
@@ -247,7 +246,6 @@ class FalseOrTrueTestController: UIViewController, PerformToSegue, UpdateView {
         default: break
         }
     }
-    
     
     @IBAction func toResultsButtonPressed(_ sender: Any) {
         let overLayerView = TestResultsPopUp()

@@ -14,7 +14,6 @@ class TestCell: UITableViewCell {
     @IBOutlet weak var testDescription: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -25,7 +24,6 @@ class TestCell: UITableViewCell {
         testView.layer.shadowOffset = .zero
         testView.layer.shadowRadius = 2
         testDescription.contentMode = .top
-        // Configure the view for the selected state
     }
 
 }

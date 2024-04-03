@@ -33,7 +33,7 @@ class BrowseSharedDicController: UIViewController {
     @IBOutlet weak var avatarBgView: UIView!
     @IBOutlet weak var userInitials: UILabel!
     
-    func localizeElemants(){
+    private func localizeElemants(){
         wordsCountNameLabel.text = "browseSharedDicVC_words_in_dic_label".localized
         likesNameLabel.text = "browseSharedDicVC_likes_label".localized
         testsNameLabel.text = "browseSharedDicVC_tests_label".localized
@@ -59,13 +59,11 @@ class BrowseSharedDicController: UIViewController {
     private let firebase = Firebase()
     private var dicWasDownloaded = Bool()
     private let dispatchGroup = DispatchGroup()
-  //  private var userTotalStat : TotalStatistic?
 
 //MARK: - Lifecycle functions
     override func viewDidLoad() {
         super.viewDidLoad()
         localizeElemants()
-        setupData()
         elementsSetup()
         sharedWordsTable.delegate = self
         sharedWordsTable.dataSource = self
@@ -77,16 +75,11 @@ class BrowseSharedDicController: UIViewController {
 
 //MARK: - Controller functions
     
-    private func setupData(){
-       // userTotalStat = coreData.getTotalStatisticForUser(userID: networkUserData!.userID, context: context).first
-        
-    }
-    
     @objc func handleTap(_ gesture: UITapGestureRecognizer) {
             popUpApear(popUpName: "BrowseUserInfoPopUp")
         }
     
-    func elementsSetup(){
+    private func elementsSetup(){
         learnLangImage.image = UIImage(named: sharedDictionary?.dicLearnLang ?? "")
         transLangImage.image = UIImage(named: sharedDictionary?.dicTransLang ?? "")
         learnLangLabel.text = sharedDictionary?.dicLearnLang ?? ""
@@ -100,12 +93,9 @@ class BrowseSharedDicController: UIViewController {
             ownerLabel.text = "dictionariesVC_deletedOwner_label".localized
             userInitials.text = "userInfoPopUp_deletedAccName_label".localized
         }
-        
-      //  guard let downloadedTimes = sharedDictionary?.dicDownloadedUsers else {return}
         downloadButton.layer.cornerRadius = 10
         userAvatarImage.layer.cornerRadius = userAvatarImage.frame.size.width/2
         avatarBgView.layer.cornerRadius = avatarBgView.frame.size.width/2
-        
         if networkUserData?.userLocalAvatar != nil {
             let filePath = "\(mainModel.loadUserData().userID)/Temp/\(networkUserData?.userLocalAvatar ?? "")"
             let image = UIImage(contentsOfFile:  mainModel.getDocumentsFolderPath().appendingPathComponent(filePath).path)
@@ -113,7 +103,6 @@ class BrowseSharedDicController: UIViewController {
             userInitials.isHidden = true
         } else {
             userAvatarImage.isHidden = true
-           // userInitials.text = getUserInitials(fullName: networkUserData?.userName ?? "N/A")
         }
         userScoresLabel.text = String(networkUserData?.userScores ?? 0)
         userTestsCompleted.text = String(networkUserData?.userTestsCompleted ?? 0)
@@ -139,7 +128,7 @@ class BrowseSharedDicController: UIViewController {
         userInfoView.layer.shadowRadius = 2
     }
     
-    func getUserInitials(fullName: String) -> String {
+    private func getUserInitials(fullName: String) -> String {
         let words = fullName.components(separatedBy: " ")
         var initials = ""
         for word in words {
@@ -150,13 +139,13 @@ class BrowseSharedDicController: UIViewController {
         return initials.uppercased()
     }
     
-    func createRODictionaryCoreData(){
+    private func createRODictionaryCoreData(){
         guard let sd = sharedDictionary else {return}
         guard let dicLike = sharedDictionary?.dicLikes.filter({$0 == mainModel.loadUserData().userID}).isEmpty else {
             return
         }
         let newDictionaryData = LocalDictionary(
-            dicID: dicID, 
+            dicID: dicID,
             dicCommentsOn: sd.dicCommentsOn,
             dicDeleted: false,
             dicDescription: sd.dicDescription,
@@ -185,13 +174,13 @@ class BrowseSharedDicController: UIViewController {
                 wrdImageFirestorePath: word.wrdImageFirestorePath,
                 wrdImageName: word.wrdImageName,
                 wrdReadOnly: true,
-                wrdParentDictionary: parentDictionary, 
+                wrdParentDictionary: parentDictionary,
                 wrdAddDate: mainModel.convertDateToString(currentDate: Date(), time: false)!)
             coreData.createWordsPair(wordsPair: newWorsPair, context: context)
         }
     }
     
-    func buttonScaleAnimation(targetButton:UIButton){
+    private func buttonScaleAnimation(targetButton:UIButton){
         UIView.animate(withDuration: 0.2) {
             targetButton.transform = CGAffineTransform(scaleX: 1.25, y: 1.25)
         } completion: { (bool) in
@@ -199,7 +188,7 @@ class BrowseSharedDicController: UIViewController {
         }
     }
     
-    func createSharedDictionaryOwnerData(){
+    private func createSharedDictionaryOwnerData(){
         if coreData.isNetworkUserExist(userID: ownerID, data: context){
             return
         } else {
@@ -221,7 +210,7 @@ class BrowseSharedDicController: UIViewController {
         }
     }
     
-    func createDownloadedDictionaryUsers(){
+    private func createDownloadedDictionaryUsers(){
         guard let usersIDsArray = sharedDictionary?.dicDownloadedUsers else {
             return }
         let excludeCurrentUserArray = usersIDsArray.filter({$0 != mainModel.loadUserData().userID})
@@ -237,14 +226,13 @@ class BrowseSharedDicController: UIViewController {
                                 self.coreData.updateNetworkUserLocalAvatarName(userID: userID, avatarName: avatarName, context: self.context)
                             }
                         }
-                        
                     }
                 }
             }
         }
     }
     
-    func createMessagesForDictionary(){
+    private func createMessagesForDictionary(){
         firebase.loadMessagesForDictionary(dicID: dicID, context: context) { messagesArray, error in
             if let error = error{
                 print("Error to get messages: \(error)")
@@ -263,7 +251,7 @@ class BrowseSharedDicController: UIViewController {
         }
     }
     
-    func popUpApear(popUpName:String){
+    private func popUpApear(popUpName:String){
         switch popUpName{
         case "DescriptionPopUp":
             let overLayerView = DescriptionPopUp()
@@ -280,29 +268,12 @@ class BrowseSharedDicController: UIViewController {
             let overLayerView = UserInfoPopUp()
             overLayerView.networkUserData = networkUserData
             overLayerView.appear(sender: self)
-           // let networkUser = coreData.loadNetworkUserByID(userID: networkUserData!.userID, data: context)<>
-//            firebase.getNetworkUserDataByID(userID: networkUserData!.userID) { networkUserData, error in
-//                if let error = error {
-//                    print("Error getting network user data: \(error)\n")
-//                } else {
-//                    overLayerView.networkUserData = networkUserData
-//                    overLayerView.appear(sender: self)
-//                }
-//            }
-           // let userTotalStat = coreData.getTotalStatisticForUser(userID: networkUserData!.userID, context: context).first
-           // overLayerView.networkUserStat = userTotalStat
-           // overLayerView.networkUser = networkUser
-            
         default: break
         }
-    
-        
     }
-   
 
 //MARK: - Actions
     @IBAction func downloadButtonPressed(_ sender: UIButton) {
-        //downloadButton.isEnabled = false
         switch dicWasDownloaded{
         case true:
             return
@@ -326,8 +297,6 @@ class BrowseSharedDicController: UIViewController {
         buttonScaleAnimation(targetButton: descriptionButton)
         popUpApear(popUpName: "DescriptionPopUp")
     }
-    
-    
 }
 
 //MARK: - Words table Delegate and DataSource

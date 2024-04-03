@@ -112,7 +112,7 @@ class UserInfoPopUp: UIViewController {
         }
     }
 
-    func getUserInitials(fullName: String) -> String {
+    private func getUserInitials(fullName: String) -> String {
         let words = fullName.components(separatedBy: " ")
         var initials = ""
         for word in words {

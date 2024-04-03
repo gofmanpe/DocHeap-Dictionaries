@@ -38,8 +38,4 @@ protocol LogOutUser{
     func performToStart()
 }
 
-//protocol DeleteUserAccountAndLogOut{
-//    func deleteUserAccount()
-//}
-
 

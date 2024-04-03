@@ -90,22 +90,10 @@ struct Defaults{
     let noDicionaryNameMessage = "editDictionaryVC_dictionaryNameIsEmpty_message".localized
     
     //MARK: - Create dictionary pop-up controller
-//    let language_1 = "defaults_langArray_1".localized
-//    let language_2 = "defaults_langArray_2".localized
-//    let language_3 = "defaults_langArray_3".localized
-//    let language_4 = "defaults_langArray_4".localized
-//    let language_5 = "defaults_langArray_5".localized
-//    let language_6 = "defaults_langArray_6".localized
-//    let language_7 = "defaults_langArray_7".localized
-//    let language_8 = "defaults_langArray_8".localized
-//    let language_9 = "defaults_langArray_9".localized
-//    let language_10 = "defaults_langArray_10".localized
-//    let language_11 = "defaults_langArray_11".localized
-//    let language_12 = "defaults_langArray_12".localized
-//    let language_13 = "defaults_langArray_13".localized
-    let languagesKeysArray = ["DE", "EN", "ES", "FI", "FR", "IT", "LT", "LV", "PL", "PT", "RU", "SL", "UA"]
+    let languagesKeysArray = ["", "EN", "DE", "ES", "FI", "FR", "IT", "LT", "LV", "PL", "PT", "RU", "SL", "UA"]
     
     let languagesVolumesArray = [
+        "",
         "defaults_langArray_1".localized,
         "defaults_langArray_2".localized,
         "defaults_langArray_3".localized,
@@ -121,19 +109,19 @@ struct Defaults{
         "defaults_langArray_13".localized,
         ]
     let langArray = [
-    LanguagesArray(lang: "DE", langValue: "defaults_langArray_1".localized),
-    LanguagesArray(lang: "EN", langValue: "defaults_langArray_2".localized),
-    LanguagesArray(lang: "ES", langValue: "defaults_langArray_3".localized),
-    LanguagesArray(lang: "FI", langValue: "defaults_langArray_4".localized),
-    LanguagesArray(lang: "FR", langValue: "defaults_langArray_5".localized),
-    LanguagesArray(lang: "IT", langValue: "defaults_langArray_6".localized),
-    LanguagesArray(lang: "LT", langValue: "defaults_langArray_7".localized),
-    LanguagesArray(lang: "LV", langValue: "defaults_langArray_8".localized),
-    LanguagesArray(lang: "PL", langValue: "defaults_langArray_9".localized),
-    LanguagesArray(lang: "PT", langValue: "defaults_langArray_10".localized),
-    LanguagesArray(lang: "RU", langValue: "defaults_langArray_11".localized),
-    LanguagesArray(lang: "SL", langValue: "defaults_langArray_12".localized),
-    LanguagesArray(lang: "UA", langValue: "defaults_langArray_13".localized)
+        LanguagesArray(lang: "EN", langValue: "defaults_langArray_2".localized),
+        LanguagesArray(lang: "DE", langValue: "defaults_langArray_1".localized),
+        LanguagesArray(lang: "ES", langValue: "defaults_langArray_3".localized),
+        LanguagesArray(lang: "FI", langValue: "defaults_langArray_4".localized),
+        LanguagesArray(lang: "FR", langValue: "defaults_langArray_5".localized),
+        LanguagesArray(lang: "IT", langValue: "defaults_langArray_6".localized),
+        LanguagesArray(lang: "LT", langValue: "defaults_langArray_7".localized),
+        LanguagesArray(lang: "LV", langValue: "defaults_langArray_8".localized),
+        LanguagesArray(lang: "PL", langValue: "defaults_langArray_9".localized),
+        LanguagesArray(lang: "PT", langValue: "defaults_langArray_10".localized),
+        LanguagesArray(lang: "RU", langValue: "defaults_langArray_11".localized),
+        LanguagesArray(lang: "SL", langValue: "defaults_langArray_12".localized),
+        LanguagesArray(lang: "UA", langValue: "defaults_langArray_13".localized)
     ]
     
     let warningDictionaryName = "createDictionaryPopUpVC_dictionary_warning".localized

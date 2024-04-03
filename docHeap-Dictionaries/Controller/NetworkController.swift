@@ -82,7 +82,7 @@ class NetworkController: UIViewController, GetFilteredData, SetDownloadedMarkToD
     @IBOutlet weak var transFilterImage: UIImageView!
     @IBOutlet weak var sharedDictionariesLabel: UILabel!
     
-    func localizeElemants(){
+    private func localizeElemants(){
         sharedDictionariesLabel.text = "networkVC_sharedDictioanries_label".localized
         currentFilterLabel.text = "networkVC_currentFilter_label".localized
         useFilterButton.setTitle("networkVC_filter_button".localized, for: .normal)
@@ -125,7 +125,6 @@ class NetworkController: UIViewController, GetFilteredData, SetDownloadedMarkToD
             noInetView.isHidden = false
             sharedTable.isHidden = true
         }
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -275,40 +274,17 @@ class NetworkController: UIViewController, GetFilteredData, SetDownloadedMarkToD
         }
     }
     
-    
     private func getWords(dicArray:[SharedDictionary]){
         sharedWords.removeAll()
         for dic in dicArray{
-            getWordsDataFromFirestore(dicID: dic.dicID)
-        }
-    }
-    
-    private func getWordsDataFromFirestore(dicID:String){
-        let db = Firestore.firestore()
-        db.collection("Words").whereField("wrdDicID", isEqualTo: dicID).getDocuments { (querySnapshot, error) in
-            if let error = error {
-                print("Error getting documents: \(error)")
-            } else {
-                for document in querySnapshot!.documents {
-                    let wordData = document.data()
-                    if let wrdWord = wordData["wrdWord"] as? String,
-                       let wrdTranslation = wordData["wrdTranslation"] as? String,
-                       let wrdID = wordData["wrdID"] as? String,
-                       let wrdOwnerID = wordData["wrdUserID"] as? String,
-                       let wrdImageName = wordData["wrdImageName"] as? String,
-                       let wrdImageFirestorePath = wordData["wrdImageFirestorePath"] as? String,
-                       let wrdDicID = wordData["wrdDicID"] as? String
-                    {
-                        let word = SharedWord(
-                            wrdWord: wrdWord,
-                            wrdTranslation: wrdTranslation,
-                            wrdDicID: wrdDicID,
-                            wrdOwnerID: wrdOwnerID,
-                            wrdID: wrdID,
-                            wrdImageFirestorePath: wrdImageFirestorePath,
-                            wrdImageName: wrdImageName)
-                        self.sharedWords.append(word)
+            firebase.getWordsDataFromFirestore(dicID: dic.dicID) { wordsArray, error in
+                if let error = error{
+                    print("Some error: \(error)\n")
+                } else {
+                    guard let array = wordsArray else {
+                        return
                     }
+                    self.sharedWords += array
                 }
             }
         }
@@ -354,7 +330,7 @@ class NetworkController: UIViewController, GetFilteredData, SetDownloadedMarkToD
         }
     }
     
-    func getUserInitials(fullName: String) -> String {
+    private func getUserInitials(fullName: String) -> String {
         let words = fullName.components(separatedBy: " ")
         var initials = ""
         for word in words {
@@ -395,7 +371,6 @@ extension NetworkController: UITableViewDelegate, UITableViewDataSource {
         }
         let currentCounts = dictionariesCounts.filter({$0.dicID == dictionary.dicID})
         let dicLikes = dictionary.dicLikes.count
-        let downloads = currentCounts.first?.downloadsCount
         let messages = currentCounts.first?.messagesCount
         cell.likesLabel.text = String(dicLikes)
         cell.downloadsLabel.text = String(dictionary.dicDownloadedUsers.count)
@@ -422,7 +397,6 @@ extension NetworkController: UITableViewDelegate, UITableViewDataSource {
             } else {
                 cell.userInitials.text = "userInfoPopUp_deletedAccName_label".localized
             }
-           
         }
         cell.selectionStyle = .none
         return cell
@@ -433,24 +407,23 @@ extension NetworkController: UITableViewDelegate, UITableViewDataSource {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-            let destinationVC = segue.destination as! BrowseSharedDicController
-            if let indexPath = sharedTable.indexPathForSelectedRow{
-                let dicID = sharedDictionaries[indexPath.row].dicID
-                let currentNetworkUser = networkUsersArray.filter({$0.userID == sharedDictionaries[indexPath.row].dicUserID}).first
-                destinationVC.dicID = dicID
-               // let ownerName = currentNetworkUser?.userName ?? "Anon"
-                destinationVC.ownerName = ownerName
-                destinationVC.sharedDictionary = sharedDictionaries[indexPath.row]
-                let filteredByDicWords = sharedWords.filter({$0.wrdDicID == dicID})
-                let currentCounts = dictionariesCounts.filter({$0.dicID == dicID})
-                destinationVC.messagesCount = currentCounts.first?.messagesCount ?? "0"
-                destinationVC.sharedWordsArray = filteredByDicWords
-                let dicOwnerData = dicOwnersData.filter({$0.ownerID == sharedDictionaries[indexPath.row].dicUserID})
-                destinationVC.dicOwnerData = dicOwnerData.first
-                destinationVC.networkUserData = currentNetworkUser
-                destinationVC.ownerID = sharedDictionaries[indexPath.row].dicUserID
-                destinationVC.setDownloadedDelegate = self
-            }
+        let destinationVC = segue.destination as! BrowseSharedDicController
+        if let indexPath = sharedTable.indexPathForSelectedRow{
+            let dicID = sharedDictionaries[indexPath.row].dicID
+            let currentNetworkUser = networkUsersArray.filter({$0.userID == sharedDictionaries[indexPath.row].dicUserID}).first
+            destinationVC.dicID = dicID
+            destinationVC.ownerName = ownerName
+            destinationVC.sharedDictionary = sharedDictionaries[indexPath.row]
+            let filteredByDicWords = sharedWords.filter({$0.wrdDicID == dicID})
+            let currentCounts = dictionariesCounts.filter({$0.dicID == dicID})
+            destinationVC.messagesCount = currentCounts.first?.messagesCount ?? "0"
+            destinationVC.sharedWordsArray = filteredByDicWords
+            let dicOwnerData = dicOwnersData.filter({$0.ownerID == sharedDictionaries[indexPath.row].dicUserID})
+            destinationVC.dicOwnerData = dicOwnerData.first
+            destinationVC.networkUserData = currentNetworkUser
+            destinationVC.ownerID = sharedDictionaries[indexPath.row].dicUserID
+            destinationVC.setDownloadedDelegate = self
+        }
     }
 }
 

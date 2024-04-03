@@ -24,7 +24,7 @@ class ChatController: UIViewController, UITextViewDelegate{
     var networkUsers = [NetworkUserData]()
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     private let mainModel = MainModel()
-    private let firebase = Firebase()
+    private var firebase = Firebase()
     private let coreData = CoreDataManager()
     private var coreDataComments = [Comment]()
     private var userData : UserData?
@@ -52,13 +52,13 @@ class ChatController: UIViewController, UITextViewDelegate{
             sync.syncNetworkUsersDataWithFirebase(context: context)
         }
         messageTextView.layer.cornerRadius = 10
-        getCommentsForDictionary()
         keyboardBehavorSettings()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tabBarController?.tabBar.isHidden = true
+        getCommentsForDictionary()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -70,6 +70,7 @@ class ChatController: UIViewController, UITextViewDelegate{
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         tabBarController?.tabBar.isHidden = false
+        firebase.removeListner(dicID: dicID)
     }
 
 //MARK: - Controller functions
@@ -138,7 +139,6 @@ class ChatController: UIViewController, UITextViewDelegate{
             if let error = error {
                 print("Error to get new comment: \(error)\n")
             } else {
-                self.chatTable.register(UINib(nibName: "ChatUserCell", bundle: nil), forCellReuseIdentifier: "chatUserCell")
                 if let newComment = comment {
                     if !self.coreData.isNetworkUserExist(userID: newComment.msgSenderID, data: self.context){
                         self.firebase.getNetworkUserDataByID(userID: newComment.msgSenderID) { networkUser, error in
@@ -158,8 +158,6 @@ class ChatController: UIViewController, UITextViewDelegate{
                     self.coreData.createComment(comment: newComment, context: self.context)
                     self.coreDataComments.append(newComment)
                     self.coreDataComments = self.coreDataComments.sorted{$0.msgOrdering < $1.msgOrdering}
-                   // self.coreDataComments = self.coreData.getMessagesByDicID(dicID: self.dicID, context: self.context).sorted{$0.msgOrdering < $1.msgOrdering}
-                    print("Comment added, count is \(self.coreDataComments.count)\n")
                     self.chatTable.reloadData()
                     DispatchQueue.main.async {
                         self.chatTable.reloadData()
@@ -174,12 +172,12 @@ class ChatController: UIViewController, UITextViewDelegate{
     }
     
     private func popUpApear(user:NetworkUserData){
-            let overLayerView = UserInfoPopUp()
-            overLayerView.networkUserData = user
-            overLayerView.appear(sender: self)
+        let overLayerView = UserInfoPopUp()
+        overLayerView.networkUserData = user
+        overLayerView.appear(sender: self)
     }
     
-   private  func buttonScaleAnimation(targetButton:UIButton, scale:Bool){
+    private  func buttonScaleAnimation(targetButton:UIButton, scale:Bool){
         switch scale{
         case true:
             UIView.animate(withDuration: 0.3) {
@@ -236,8 +234,7 @@ class ChatController: UIViewController, UITextViewDelegate{
     private func shouldSendMessage(_ message: String) -> Bool {
         return !message.isEmpty
     }
- 
-   
+    
 //MARK: - Actions
     @IBAction func sendButtonPressed(_ sender: UIButton) {
         guard let originalText = messageTextView.text  else {
@@ -266,7 +263,6 @@ extension ChatController: UITableViewDelegate, UITableViewDataSource, UIGestureR
             userCell.netUserBackgroundView.isHidden = true
             userCell.currentUserMessageBody.text = message.msgBody
             userCell.currentUserDateTime.text = message.msgDateTime
-           // print("\(message.msgBody)\n")
             currentUserCell = String()
             currentUserCell = "local"
         } else {

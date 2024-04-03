@@ -21,19 +21,18 @@ class DeleteDictionaryPopUp: UIViewController {
     @IBOutlet weak var commentLabel: UILabel!
     @IBOutlet weak var cancelButton: UIButton!
     @IBOutlet weak var learningLanguageLabel: UILabel!
-    
     @IBOutlet weak var headerLabel: UILabel!
     @IBOutlet weak var translateLanguageLabel: UILabel!
     @IBOutlet weak var dialogLabel: UILabel!
     
-    func localizeElements(){
+    private func localizeElements(){
         headerLabel.text = "deleteDictionaryVC_header_label".localized
         dialogLabel.text = "deleteDictionaryVC_dialog_label".localized
         cancelButton.setTitle("deleteDictionaryVC_cancel_button".localized, for: .normal)
         deleteButton.setTitle("deleteDictionaryVC_delete_button".localized, for: .normal)
     }
     
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     var tableReloadDelegate: UpdateView?
     var dicID = String()
     private var coreDataManager = CoreDataManager()
@@ -59,17 +58,16 @@ class DeleteDictionaryPopUp: UIViewController {
         localizeElements()
         setupData()
         coreDataManager.loadParentDictionaryData(dicID: dicID, userID: mainModel.loadUserData().userID, data: context)
-            popUpBackgroundSettings()
-            elementsDesign()
-      
+        popUpBackgroundSettings()
+        elementsDesign()
+        
     }
     
-    func setupData(){
+    private func setupData(){
         parentDictionary = coreDataManager.getParentDictionaryData(dicID: dicID, userID: mainModel.loadUserData().userID, context: context)
     }
     
-    
-    func elementsDesign(){
+    private func elementsDesign(){
         let dicName = parentDictionary.dicName ?? "NO_DICTIONARY"
         dictionaryNameLabel.text = dicName
         if let lrnName = parentDictionary.dicLearningLanguage{
@@ -94,7 +92,7 @@ class DeleteDictionaryPopUp: UIViewController {
         translateImage.layer.cornerRadius = 5
     }
     
-    func popUpBackgroundSettings(){
+    private func popUpBackgroundSettings(){
         self.view.backgroundColor = .clear
         backgroundView.backgroundColor = .black.withAlphaComponent(0.6)
         backgroundView.alpha = 0
@@ -114,7 +112,7 @@ class DeleteDictionaryPopUp: UIViewController {
         }
     }
 
-    func hide() {
+    private func hide() {
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut) {
             self.backgroundView.alpha = 0
             self.mainWindowView.alpha = 0
@@ -124,24 +122,23 @@ class DeleteDictionaryPopUp: UIViewController {
         }
     }
     
-    func commentViewAppearAnimate(_ text:String){
+    private func commentViewAppearAnimate(_ text:String){
         commentLabel.text = text
         commentView.isHidden = false
         commentView.alpha = 0
         UIView.animate(withDuration: 0.5) {
-            
             self.commentView.alpha = 1
         } completion: { Bool in
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                 self.commentView.isHidden = true
             }
-            
         }
     }
     
     @IBAction func cancelButtonPressed(_ sender: UIButton) {
         hide()
     }
+    
     @IBAction func deleteButtonPressed(_ sender: UIButton) {
         mainModel.deleteFolderInDocuments(folderName: "\(mainModel.loadUserData().userID)/\(dicID)")
         let dictionaryWords = coreDataManager.loadWordsByDictionryID(dicID: dicID, data: context)
@@ -157,7 +154,6 @@ class DeleteDictionaryPopUp: UIViewController {
                 coreDataManager.setSyncronizedStatusForWordsInDictionary(data: context, dicID: dicID, sync: false)
                 coreDataManager.deleteMessagesFromCoreData(dicID: dicID, context: context)
             }
-            
             coreDataManager.saveData(data: context)
         } else {
             if mainModel.isInternetAvailable(){
@@ -203,6 +199,4 @@ class DeleteDictionaryPopUp: UIViewController {
         }
     }
     
- 
-
 }

@@ -14,7 +14,6 @@ class BrowseWordsPairPopUp: UIViewController {
     @IBOutlet weak var mainView: UIView!
    
     @IBOutlet weak var headerLabel: UILabel!
-  //  @IBOutlet weak var wordWindow: UIView!
     
     @IBOutlet weak var dialogLabel: UILabel!
     @IBOutlet weak var wordImage: UIImageView!
@@ -64,7 +63,7 @@ class BrowseWordsPairPopUp: UIViewController {
     @IBOutlet weak var warningLabel: UILabel!
     @IBOutlet weak var warningImage: UIImageView!
     
-    func localizeElements(){
+    private func localizeElements(){
         dialogLabel.text = "browseWordPopUpVC_dialog_label_info".localized
         deleteButton.setTitle("browseWordPopUpVC_delete_button".localized, for: .normal)
         cancelButoon.setTitle("browseWordPopUpVC_cancel_button".localized, for: .normal)
@@ -81,40 +80,33 @@ class BrowseWordsPairPopUp: UIViewController {
         changeImageButtonEditView.setTitle("browseWordPopUpVC_imageSet_button".localized, for: .normal)
     }
     
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-  // var word = String()
-  //  var translation = String()
+    private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     var imageName = String()
     var relativeImagePath = String()
- //   var tested = Int()
     var dictionaryID = String()
- //   var rightAnswers = Int()
- //   var wrongAnswers = Int()
-    //var addDate = String()
-    var learningImageText = String()
-    var learningLabelText = String()
-    var translateImageText = String()
-    var translateLabelText = String()
+    private var learningImageText = String()
+    private var learningLabelText = String()
+    private var translateImageText = String()
+    private var translateLabelText = String()
     var selectedImage = UIImage()
-    var imageIsSet = false
-    var imageCleared = false
-    var newImageName = String()
-    var tmpImageName = String()
-    var imageExtention = String()
-    var imageUrl: URL?
+    private var imageIsSet = false
+    private var imageCleared = false
+    private var newImageName = String()
+    private var tmpImageName = String()
+    private var imageExtention = String()
+    private var imageUrl: URL?
     var imageStatus = Bool()
     private var oneWordArray = Word()
     var wordID = String()
-    
     var dicROstatus = Bool()
     var dicID = String()
     private var currentUserEmail = String()
     
-    var editedWord = String()
-    var editedTranslation = String()
+    private var editedWord = String()
+    private var editedTranslation = String()
     
     var tableReloadDelegate: UpdateView?
-    var coreDataManager = CoreDataManager()
+    private var coreDataManager = CoreDataManager()
     private let mainModel = MainModel()
     private let fireDB = Firebase()
     
@@ -138,8 +130,8 @@ class BrowseWordsPairPopUp: UIViewController {
         super.viewDidLoad()
        
         localizeElements()
-        /*!!!*/ coreDataManager.loadParentDictionaryData(dicID: dictionaryID, userID: mainModel.loadUserData().userID, data: context)
-        /*!!!*/ coreDataManager.loadWordsForSelectedDictionary(dicID: coreDataManager.parentDictionaryData.first?.dicID ?? "", userID: mainModel.loadUserData().userID, context: context)
+        coreDataManager.loadParentDictionaryData(dicID: dictionaryID, userID: mainModel.loadUserData().userID, data: context)
+        coreDataManager.loadWordsForSelectedDictionary(dicID: coreDataManager.parentDictionaryData.first?.dicID ?? "", userID: mainModel.loadUserData().userID, context: context)
         popUpBackgroundSettings()
         standartState()
         elementsDesign()
@@ -182,7 +174,6 @@ class BrowseWordsPairPopUp: UIViewController {
         currentUserEmail = mainModel.loadUserData().email
         dicID = (coreDataManager.parentDictionaryData.first?.dicID)!
         oneWordArray = coreDataManager.loadWordDataByID(wrdID: wordID, userID: mainModel.loadUserData().userID, data: context).first!
-        
     }
     
     func flipViewAnimation(view:UIView,direction:String) {
@@ -315,27 +306,6 @@ class BrowseWordsPairPopUp: UIViewController {
         }
     }
     
-//    func setWordsCountInParentDictionary(increment:Bool, isSetImage:Bool){
-//        switch increment {
-//        case true:
-//            coreDataManager.loadParentDictionaryData(dicID: dictionaryID, data: context)
-//            coreDataManager.parentDictionaryData.first!.dicWordsCount += 1
-//            if isSetImage{
-//                coreDataManager.parentDictionaryData.first!.dicImagesCount += 1
-//            }
-//            coreDataManager.saveData(data: context)
-//           // coreDataManager.loadParentDictionaryData(dicID: dictionaryID, data: context)
-//        case false:
-//            coreDataManager.loadParentDictionaryData(dicID: dictionaryID, data: context)
-//            coreDataManager.parentDictionaryData.first!.dicWordsCount -= 1
-//            if isSetImage{
-//                coreDataManager.parentDictionaryData.first!.dicImagesCount -= 1
-//            }
-//            coreDataManager.saveData(data: context)
-//          //  coreDataManager.loadParentDictionaryData(dicID: dictionaryID, data: context)
-//        }
-//    }
-    
     func popUpBackgroundSettings(){
         self.view.backgroundColor = .clear
         backgroundView.backgroundColor = .black.withAlphaComponent(0.6)
@@ -439,7 +409,7 @@ class BrowseWordsPairPopUp: UIViewController {
                     fireDB.updateImagesCountFirebase(dicID: oneWordArray.wrdID ?? "", increment: false)
                     mainModel.deleteFileInFolder(folderName: "\(oneWordArray.wrdUserID ?? "")/\(oneWordArray.wrdDicID ?? "")/", fileName: oneWordArray.imageName ?? "")
                     oneWordArray.wrdImageIsSet = false
-                   
+                    
                     oneWordArray.wrdImageFirestorePath = String()
                     imageName = String()
                     imageStatus = false
@@ -464,25 +434,25 @@ class BrowseWordsPairPopUp: UIViewController {
         }
     }
     
-        func checkForDoubles()->Bool{
-            var foundDoubles = 0
-            let wordsArray = coreDataManager.wordsArray
-            for i in 0..<wordsArray.count{
-                if wordsArray[i].wrdWord == editedWord {
-                    if imageCleared || imageIsSet || oneWordArray.wrdTranslation != editedTranslation{
-                        foundDoubles -= 1
-                    } else{
-                        warningViewAppearAnimate("red", "browseWordPopUpVC_wordExist_message".localized)
-                        foundDoubles += 1
-                    }
+    func checkForDoubles()->Bool{
+        var foundDoubles = 0
+        let wordsArray = coreDataManager.wordsArray
+        for i in 0..<wordsArray.count{
+            if wordsArray[i].wrdWord == editedWord {
+                if imageCleared || imageIsSet || oneWordArray.wrdTranslation != editedTranslation{
+                    foundDoubles -= 1
+                } else{
+                    warningViewAppearAnimate("red", "browseWordPopUpVC_wordExist_message".localized)
+                    foundDoubles += 1
                 }
-           }
-            if foundDoubles > 0 {
-                return false
-            } else {
-                return true
             }
         }
+        if foundDoubles > 0 {
+            return false
+        } else {
+            return true
+        }
+    }
 
     
     @IBAction func cancelButtonPressed(_ sender: UIButton) {
@@ -501,13 +471,12 @@ class BrowseWordsPairPopUp: UIViewController {
     }
     
     @IBAction func changeImageButtonPressed(_ sender: UIButton) {
-            imageIsSet = false
-          //  tmpImageName = wordTextFieldEditView.text!
-            let imagePicker = UIImagePickerController()
-            imagePicker.delegate = self
-            imagePicker.sourceType = .photoLibrary
-            imagePicker.allowsEditing = true
-            present(imagePicker, animated: true, completion: nil)
+        imageIsSet = false
+        let imagePicker = UIImagePickerController()
+        imagePicker.delegate = self
+        imagePicker.sourceType = .photoLibrary
+        imagePicker.allowsEditing = true
+        present(imagePicker, animated: true, completion: nil)
     }
     
     @IBAction func clearImageButtonPressed(_ sender: UIButton) {
@@ -515,18 +484,16 @@ class BrowseWordsPairPopUp: UIViewController {
             imageEditView.image = UIImage(named: "noimage")
             imageCleared = true
             warningViewAppearAnimate("green", "browseWordPopUpVC_imageCleared_message".localized)
-            } else {
-                warningViewAppearAnimate("yellow", "browseWordPopUpVC_noImagetoClear_message".localized)
-                
+        } else {
+            warningViewAppearAnimate("yellow", "browseWordPopUpVC_noImagetoClear_message".localized)
+            
         }
     }
     
     
     @IBAction func confirmDeletingPressed(_ sender: UIButton) {
         hideKeyboard()
-//        var wordForDeleting = coreDataManager.wordsArray.filter({$0.wrdWord == word})
         let wrdDicID = oneWordArray.wrdDicID!
-//        let wrdID = wordForDeleting.first?.wrdID ?? ""
         if oneWordArray.wrdImageIsSet == true {
             coreDataManager.setCountsInParentDictionary(increment: false, isSetImage: true, dicID: wrdDicID, context: context)
             coreDataManager.setImagesCountForDictionary(dicID: wrdDicID, increment: false, context: context)
@@ -543,8 +510,6 @@ class BrowseWordsPairPopUp: UIViewController {
            
             coreDataManager.deleteWordFromCoreData(wrdID: oneWordArray.wrdID ?? "", context: context)
             context.delete(oneWordArray)
-           // coreDataManager.setWasSynchronizedStatusForWord(data: context, dictionaryCatalog: dictionaryCatalog, word: oneWordArray.wrdWord ?? "", sync: true)
-           // coreDataManager.setWasDeletedStatus(data: context, dictionaryCatalog: dictionaryCatalog, word: oneWordArray.wrdWord ?? "")
         } else {
             let wrdID = oneWordArray.wrdID!
             let dicID = oneWordArray.wrdDicID!
@@ -553,8 +518,6 @@ class BrowseWordsPairPopUp: UIViewController {
             coreDataManager.setSyncronizedStatusForDictionary(data: context, dicID: dicID, sync: false)
             coreDataManager.saveData(data: context)
         }
-//        context.delete(wordForDeleting.first!)
-        
         tableReloadDelegate?.didUpdateView(sender: "")
         if oneWordArray.imageName != nil {
             mainModel.deleteFileInFolder(folderName: "\(oneWordArray.wrdUserID ?? "")/\(oneWordArray.wrdDicID ?? "")", fileName: oneWordArray.imageName ?? "")
@@ -568,14 +531,9 @@ class BrowseWordsPairPopUp: UIViewController {
     }
     
     func saveImageToAppDirectory(image: UIImage, isImageSelected: Bool, temp:Bool) {
-//        if imageExtention.contains(".") {
-//            imageExtention = imageExtention.replacingOccurrences(of: ".", with: "")
-//        }
         switch temp{
         case false:
             if isImageSelected{
-               // let translitImageName = mainModel.spacesToUnderscores(value: editedWord.transliterate())
-               // let preparedFileName = translitImageName.transliterate().replaceSpacesWithUnderscores().removeSpacesAndSpecialChars()
                 newImageName = "\(mainModel.uniqueIDgenerator(prefix: "img")).\(imageExtention)"
                 imageUrl = mainModel.getDocumentsFolderPath().appendingPathComponent("\(oneWordArray.wrdUserID ?? "")/\(oneWordArray.wrdDicID ?? "")/\(newImageName)")
                 if let imageData = image.jpegData(compressionQuality: 0.8) {
@@ -610,72 +568,35 @@ class BrowseWordsPairPopUp: UIViewController {
         editedWord = wordTextFieldEditView.text!
         editedTranslation = translationTextFiedEditView.text!
         if editedTranslation.isEmpty && editedWord.isEmpty{
-            //showWarning(text: defaults.enterBoothWords)
             return false
         } else if editedTranslation.isEmpty{
-           // showWarning(text: defaults.enterTranslation)
             return false
         } else if editedWord.isEmpty{
-          //  showWarning(text: defaults.enterWord)
             return false
         } else {
             return true
         }
     }
-//    func changesChecking()->Bool{
-//        editedWord = wordTextFieldEditView.text!
-//        editedTranslation = translationTextFiedEditView.text!
-//        if editedWord != word && !editedTranslation.isEmpty{
-//            return true
-//        } else if editedWord.isEmpty || editedTranslation.isEmpty{
-//            return false
-//        } else if editedTranslation != translation && !editedWord.isEmpty{
-//            return true
-//        } else if editedWord != word && editedTranslation != translation {
-//            return true
-//        } else if imageIsSet{
-//            return true
-//        } else if imageIsSet && editedWord != word{
-//            return true
-//        } else if imageIsSet && editedTranslation != translation{
-//            return true
-//        } else if imageIsSet && editedWord != word && editedTranslation != translation{
-//            return true
-//        } else if imageCleared{
-//            return true
-//        } else if imageCleared && editedWord != word{
-//            return true
-//        } else if imageCleared && editedTranslation != translation{
-//            return true
-//        } else if imageCleared && editedWord != word && editedTranslation != translation{
-//            return true
-//        }
-//        else {
-//            return false
-//        }
-//    }
+    
 }
 extension BrowseWordsPairPopUp: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-            if let imageFromGallery = info[UIImagePickerController.InfoKey(rawValue: "UIImagePickerControllerEditedImage")] as? UIImage {
-                selectedImage = imageFromGallery
-                if let imageUrl = info[.imageURL] as? URL {
-                        imageExtention = imageUrl.pathExtension
-                        }
-                saveImageToAppDirectory(image: selectedImage, isImageSelected: false, temp: true)
-                let path = mainModel.relativeImagePath(dicID: oneWordArray.wrdDicID ?? "", imageName: "tempImage.\(imageExtention)")
-                
-                imageEditView.image = UIImage(contentsOfFile: path)
-                imageIsSet = true
-            } else {
-                print("No IMAGE!")
+        if let imageFromGallery = info[UIImagePickerController.InfoKey(rawValue: "UIImagePickerControllerEditedImage")] as? UIImage {
+            selectedImage = imageFromGallery
+            if let imageUrl = info[.imageURL] as? URL {
+                imageExtention = imageUrl.pathExtension
             }
-              picker.dismiss(animated: true, completion: nil)
+            saveImageToAppDirectory(image: selectedImage, isImageSelected: false, temp: true)
+            let path = mainModel.relativeImagePath(dicID: oneWordArray.wrdDicID ?? "", imageName: "tempImage.\(imageExtention)")
             
+            imageEditView.image = UIImage(contentsOfFile: path)
+            imageIsSet = true
+        } else {
+            print("No IMAGE!")
         }
-    
+        picker.dismiss(animated: true, completion: nil)
+    }
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        
         picker.dismiss(animated: true, completion: nil)
     }
 }

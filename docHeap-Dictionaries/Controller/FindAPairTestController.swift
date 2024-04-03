@@ -12,15 +12,12 @@ class FindAPairTestController: UIViewController, PerformToSegue, UpdateView {
   
 //MARK: - Delegate functions
     func didUpdateView(sender: String) {
-       // coreDataManager.loadTestData(testIdentifier: selectedTestIdentifier, data: context)
         coreDataManager.loadParentDictionaryData(dicID: selectedDicID, userID: mainModel.loadUserData().userID, data: context)
         coreDataManager.loadWordsForSelectedDictionary(dicID: coreDataManager.parentDictionaryData.first?.dicID ?? "", userID: mainModel.loadUserData().userID, context: context)
         mainModel.wordsStatusClearing(array: coreDataManager.wordsArray, statusToClear: 0, data: context)
         restartTest()
         standartState()
         designUI()
-        //startTest()
-        //mainModel.findAPairEngine(arrayOfWords: coreDataManager.wordsArray)
     }
     
     func performToSegue(identifier: String, dicID: String, roundsNumber:Int) {
@@ -73,7 +70,7 @@ class FindAPairTestController: UIViewController, PerformToSegue, UpdateView {
     @IBOutlet weak var sixthTranslateButton: UIButton!
     @IBOutlet weak var seventhTranslateButton: UIButton!
    
-    func localizeElemants(){
+    private func localizeElemants(){
         mistakesNameLabel.text = "findApairTestVC_mistakesName_label".localized
         scoresNameLabel.text = "findApairTestVC_scoresName_label".localized
         instructionLabel.text = "findApairTestVC_instructionLabel_label".localized
@@ -462,8 +459,7 @@ class FindAPairTestController: UIViewController, PerformToSegue, UpdateView {
             blockView.isHidden = true
             commentView.isHidden = true
             
-        } else
-        {
+        } else {
             if sevenWordsArray[pressedWordButtonId].wrdStatus == 1 {
                 sevenUIButtonsWordsArray[pressedWordButtonId].isEnabled = false
                 sevenUIButtonsTranslationsArray[pressedTranslationButtonId].isEnabled = false

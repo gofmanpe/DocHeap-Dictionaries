@@ -1,3 +1,4 @@
+
 /* Class = "UILabel"; text = "created by Pavel Gofman"; ObjectID = "1v3-1A-mtz"; */
 "1v3-1A-mtz.text" = "created by Pavel Gofman";
 
@@ -5,11 +6,10 @@
 "Gbn-Gv-dlX.text" = "v.1.0.0";
 
 /* Class = "UILabel"; text = "Loading..."; ObjectID = "glA-jD-wNP"; */
-"glA-jD-wNP.text" = "Завантаження...";
+"glA-jD-wNP.text" = "Loading...";
 
 /* Class = "UILabel"; text = "increase your lexicon!"; ObjectID = "lMc-Vh-i33"; */
 "lMc-Vh-i33.text" = "increase your lexicon!";
 
 /* Class = "UILabel"; text = "wordsGround"; ObjectID = "zBh-kZ-3Jw"; */
 "zBh-kZ-3Jw.text" = "wordsGround";
-

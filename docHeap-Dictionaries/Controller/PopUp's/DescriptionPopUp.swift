@@ -35,7 +35,7 @@ class DescriptionPopUp: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func popUpBackgroundSettings(){
+    private func popUpBackgroundSettings(){
         self.view.backgroundColor = .clear
         background.backgroundColor = .black.withAlphaComponent(0.6)
         background.alpha = 0
@@ -55,7 +55,7 @@ class DescriptionPopUp: UIViewController {
         }
     }
 
-    func hide() {
+    private func hide() {
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut) {
             self.background.alpha = 0
             self.descriptionView.alpha = 0

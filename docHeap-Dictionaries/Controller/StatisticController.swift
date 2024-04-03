@@ -24,7 +24,7 @@ class StatisticController: UIViewController {
     @IBOutlet weak var scoresLabel: UILabel!
     @IBOutlet weak var statisticLabel: UILabel!
     
-    func localizeElements(){
+    private func localizeElements(){
         totalyLabel.text = "statisticVC_totaly_label".localized
         startsLabel.text = "statisticVC_starts_label".localized
         rightLabel.text = "statisticVC_right_label".localized
@@ -104,8 +104,7 @@ class StatisticController: UIViewController {
             totalMistakes = String(allStatistic.reduce(0) {$0 + $1.statMistekes})
             totalScores = String(allStatistic.reduce(0) {$0 + $1.statScores})
         }
-        }
-       
+    }
 
 }
 

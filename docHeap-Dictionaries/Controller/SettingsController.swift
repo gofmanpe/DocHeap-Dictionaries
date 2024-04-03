@@ -48,7 +48,7 @@ class SettingsController: UIViewController, UIImagePickerControllerDelegate & UI
     @IBOutlet weak var deleteAccButton: UIButton!
     
 //MARK: - Localization
-    func localizeElements(){
+    private func localizeElements(){
         logoutButton.setTitle("profileVC_logout_button".localized, for: .normal)
         setAvatarButton.setTitle("profileVC_setAvatar_button".localized, for: .normal)
         registredLabel.text = "profileVC_registred_label".localized
@@ -99,7 +99,7 @@ class SettingsController: UIViewController, UIImagePickerControllerDelegate & UI
     }
     
 //MARK: - Controller functions
-    func setupUserData(){
+    private func setupUserData(){
         guard let userData = coreDataManager.loadUserDataByID(userID: mainModel.loadUserData().userID, context: context) else {
             return
         }
@@ -117,11 +117,9 @@ class SettingsController: UIViewController, UIImagePickerControllerDelegate & UI
             let avatarPath = "\(mainModel.loadUserData().userID)/\(avatarName)"
             userAvatar.image = UIImage(contentsOfFile:  mainModel.getDocumentsFolderPath().appendingPathComponent(avatarPath).path)
             userAvatar.isHidden = false
-           // avatarBgView.isHidden = true
         } else {
             userAvatar.isHidden = true
             userInitials.text = getUserInitials(fullName: userData.userName)
-           // avatarBgView.isHidden = false
         }
         if userData.userShowEmail{
             emailSwitch.isOn = true
@@ -130,7 +128,7 @@ class SettingsController: UIViewController, UIImagePickerControllerDelegate & UI
         }
     }
     
-    func getUserInitials(fullName: String) -> String {
+    private func getUserInitials(fullName: String) -> String {
         let words = fullName.components(separatedBy: " ")
         var initials = ""
         for word in words {
@@ -141,7 +139,7 @@ class SettingsController: UIViewController, UIImagePickerControllerDelegate & UI
         return initials.uppercased()
     }
     
-    func elementsDesign(){
+    private func elementsDesign(){
         avatarBgView.layer.cornerRadius = avatarBgView.frame.size.width/2
         avatarBgView.layer.masksToBounds = false
         avatarBgView.clipsToBounds = true
@@ -200,7 +198,7 @@ class SettingsController: UIViewController, UIImagePickerControllerDelegate & UI
               picker.dismiss(animated: true, completion: nil)
         }
     
-    func saveImageToAppDirectory(image: UIImage, isImageSelected: Bool) {
+    private func saveImageToAppDirectory(image: UIImage, isImageSelected: Bool) {
         if isImageSelected{
             avatarName = "userAvatar.\(imageExtention)"
             avatarURL = mainModel.getDocumentsFolderPath().appendingPathComponent("\(mainModel.loadUserData().userID)/\(avatarName)")
@@ -218,7 +216,7 @@ class SettingsController: UIViewController, UIImagePickerControllerDelegate & UI
         }
     }
     
-    func uploadAvatarToStorage() {
+    private func uploadAvatarToStorage() {
         let storage = Storage.storage()
         let imageRef = storage.reference().child(mainModel.loadUserData().userID).child("userAvatar.\(imageExtention)")
         let localImageURL = avatarURL!
@@ -236,7 +234,7 @@ class SettingsController: UIViewController, UIImagePickerControllerDelegate & UI
         }
     }
 
-    func updateAvatarURLInFirestore(userID: String, avatarURL: String) {
+    private func updateAvatarURLInFirestore(userID: String, avatarURL: String) {
         self.fireDB.collection("Users").document(userID).updateData(["userAvatarFirestorePath": avatarURL]) { error in
             if let error = error {
                 print("Error updating avatar URL in Firestore: \(error)")
@@ -244,7 +242,7 @@ class SettingsController: UIViewController, UIImagePickerControllerDelegate & UI
         }
     }
     
-    func popUpApear(sender:String){
+    private func popUpApear(sender:String){
         switch sender{
         case "edit":
             let overLayedView = EditUserInfoPopUp()
@@ -265,7 +263,7 @@ class SettingsController: UIViewController, UIImagePickerControllerDelegate & UI
         }
     }
     
-    func buttonScaleAnimation(targetButton:UIButton){
+    private func buttonScaleAnimation(targetButton:UIButton){
         UIView.animate(withDuration: 0.2) {
             targetButton.transform = CGAffineTransform(scaleX: 1.15, y: 1.15)
         } completion: { (bool) in
@@ -344,7 +342,5 @@ class SettingsController: UIViewController, UIImagePickerControllerDelegate & UI
         buttonScaleAnimation(targetButton: deleteAccButton)
         popUpApear(sender: "deleteAcc")
     }
-    
-    
 
 }

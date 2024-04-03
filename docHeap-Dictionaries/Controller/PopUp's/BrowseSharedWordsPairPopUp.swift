@@ -61,7 +61,6 @@ class BrowseSharedWordsPairPopUp: UIViewController {
         transLangImage.image = UIImage(named: dicTransLang)
         learningLangLabel.text = dicLearnLang
         transLangLabel.text = dicTransLang
-       
     }
     
     private func setImageForWordsPair(){
@@ -80,7 +79,7 @@ class BrowseSharedWordsPairPopUp: UIViewController {
         }
     }
     
-    func popUpBackgroundSettings(){
+    private func popUpBackgroundSettings(){
         self.view.backgroundColor = .clear
         background.backgroundColor = .black.withAlphaComponent(0.6)
         background.alpha = 0
@@ -100,7 +99,7 @@ class BrowseSharedWordsPairPopUp: UIViewController {
         }
     }
 
-    func hide() {
+    private func hide() {
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut) {
             self.background.alpha = 0
             self.mainView.alpha = 0

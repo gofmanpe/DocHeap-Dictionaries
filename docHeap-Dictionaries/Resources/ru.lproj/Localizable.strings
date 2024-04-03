@@ -21,6 +21,8 @@
 "startVC_login_Button" = "Войти";
 "startVC_or_label" = "ИЛИ";
 "startVC_googleSignIn_label" = "Вход с Google";
+"startVC_wrongEmailOrPassword_message" = "Неправильный пароль или адрес электронной почты";
+"startVC_noInternetConnection_message" = "Нет подключения к Интернету";
 
 //RegisterController
 "registerVC_email_placeholder" = "Ваш email";
@@ -57,12 +59,15 @@
 "createDictionaryPopUpVC_langToLang_label" = "На";
 "createDictionaryPopUpVC_cancel_button" = "Отмена";
 "createDictionaryPopUpVC_create_button" = "Создать";
-"createDictionaryPopUpVC_dictionary_warning" = "Вы не ввели название словаря!";
-"createDictionaryPopUpVC_dictionaryNameOrOneLang_warning" = "Вы не ввели название словаря или не выбрали один из языков";
-"createDictionaryPopUpVC_sameLanguages_warning" = "Вы выбрали одинаковые языки!";
-"createDictionaryPopUpVC_noLanguages_warning" = "Вы не выбрали ни одного языка!";
+"createDictionaryPopUpVC_dictionary_warning" = "Пожалуйста, введите название словаря!";
+"createDictionaryPopUpVC_dictionaryNameOrOneLang_warning" = "Вы не ввели название словаря или не выбрали один из языков!";
+"createDictionaryPopUpVC_sameLanguages_warning" = "Вы не можете выбрать одинаковые языки!";
+"createDictionaryPopUpVC_noLanguages_warning" = "Ни один язык не выбран!";
+"createDictionaryPopUpVC_selectLearning_message" = "Пожалуйста, выберите язык, который вы изучаете";
+"createDictionaryPopUpVC_selectTranslate_message" = "Пожалуйста, выберите язык для перевода";
 "createDictionaryPopUpVC_description_placeholder" = "Нажмите для ввода описания";
 "createDictionaryPopUpVC_description_label" = "Введите описание или комментарий";
+"createDictionaryPopUpVC_usePicker_message" = "Для выбора языка прокрутите пикер вверх или вниз. Результат отобразится на кнопке";
 //EditDictionaryPopUpViewController
 "editDictionaryVC_changeName_label" = "Изменить название словаря";
 "editDictionaryVC_changeDescription_label" = "Изменить описание";
@@ -132,8 +137,8 @@
 "browseWordPopUpVC_imageCleared_message" = "Изображение успешно удалено";
 "browseWordPopUpVC_wordExist_message" = "Это слово уже существует в словаре";
 //Defaults
-"defaults_langArray_1" = "🇩🇪 Немецкий";
-"defaults_langArray_2" = "🇬🇧 Английский";
+"defaults_langArray_1" = "🇬🇧 Английский";
+"defaults_langArray_2" = "🇩🇪 Немецкий";
 "defaults_langArray_3" = "🇪🇸 Испанский";
 "defaults_langArray_4" = "🇫🇮 Финский";
 "defaults_langArray_5" = "🇫🇷 Французский";

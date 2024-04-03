@@ -17,21 +17,18 @@ class AddWordsPairPopUp: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var wordTextField: UITextField!
     @IBOutlet weak var mainView: UIView!
     @IBOutlet weak var secretButton: UIButton!
-    // @IBOutlet weak var headerView: UIView!
     @IBOutlet weak var saveButton: UIButton!
     @IBOutlet weak var cancelButton: UIButton!
     @IBOutlet weak var setImageButton: UIButton!
     @IBOutlet weak var learningLngImage: UIImageView!
     @IBOutlet weak var translationLngImage: UIImageView!
     @IBOutlet weak var selectedImageStatus: UILabel!
-   // @IBOutlet weak var parseWordButton: UIButton!
-   // @IBOutlet weak var parseTranslationButton: UIButton!
     @IBOutlet weak var headerLabel: UILabel!
     @IBOutlet weak var wordLabel: UILabel!
     @IBOutlet weak var translationLabel: UILabel!
     @IBOutlet weak var imageSelectedLabel: UILabel!
     
-    func localizeElements(){
+    private func localizeElements(){
         headerLabel.text = "addWordPopUp_header_label".localized
         wordLabel.text = "addWordPopUp_word_label".localized
         wordTextField.placeholder = "addWordPopUp_wordTextField_placeholder".localized
@@ -119,13 +116,13 @@ class AddWordsPairPopUp: UIViewController, UITextFieldDelegate {
         mainView.frame.origin.y = currentFramePosY
     }
     
-    func loadUserDefaults(){
+    private func loadUserDefaults(){
         if let user = userDefaults.object(forKey: "userEmail") as? String{
             currentUser = user
         }
     }
     
-    func standartState(){
+    private  func standartState(){
         warningView.isHidden = true
         learningLaguage = coreData.parentDictionaryData.first!.dicLearningLanguage!
         translationLanguage = coreData.parentDictionaryData.first!.dicTranslateLanguage!
@@ -137,7 +134,7 @@ class AddWordsPairPopUp: UIViewController, UITextFieldDelegate {
         wordTextField.delegate = self
     }
     
-    func elementsDesign(){
+    private func elementsDesign(){
         mainView.clipsToBounds = true
         mainView.layer.cornerRadius = 10
         headerLabel.clipsToBounds = true
@@ -157,7 +154,7 @@ class AddWordsPairPopUp: UIViewController, UITextFieldDelegate {
         setImageButton.layer.cornerRadius = 10
     }
     
-    func popUpBackgroundSettings(){
+    private func popUpBackgroundSettings(){
         self.view.backgroundColor = .clear
         backgroundView.backgroundColor = .black.withAlphaComponent(0.6)
         backgroundView.alpha = 0
@@ -212,7 +209,7 @@ class AddWordsPairPopUp: UIViewController, UITextFieldDelegate {
            return newLength <= maxLength
        }
    
-    func saveImageToAppDirectory(image: UIImage, isImageSelected: Bool) {
+    private func saveImageToAppDirectory(image: UIImage, isImageSelected: Bool) {
         if isImageSelected{
             imageName = "\(mainModel.uniqueIDgenerator(prefix: "img")).\(imageExtention)"
             imageUrl = mainModel.getDocumentsFolderPath().appendingPathComponent("\(mainModel.loadUserData().userID)/\(dictionaryID)/\(imageName)")
@@ -231,7 +228,7 @@ class AddWordsPairPopUp: UIViewController, UITextFieldDelegate {
         }
     }
     
-    func enteredChecking()->Bool{
+    private func enteredChecking()->Bool{
         enteredWord = wordTextField.text!
         enteredTranslation = translationTextField.text!
         if enteredTranslation.isEmpty && enteredWord.isEmpty{
@@ -248,7 +245,7 @@ class AddWordsPairPopUp: UIViewController, UITextFieldDelegate {
         }
     }
     
-    func checkForDoubles()->Bool{
+    private  func checkForDoubles()->Bool{
         var foundDoubles = 0
         var isCheked = false
         let wordsArray = coreData.wordsArray
@@ -266,12 +263,12 @@ class AddWordsPairPopUp: UIViewController, UITextFieldDelegate {
         return isCheked
     }
     
-    func showWarning(text:String){
+    private func showWarning(text:String){
         warningLabel.text = text
         warningViewAppearAnimate()
     }
     
-    func warningViewAppearAnimate(){
+    private func warningViewAppearAnimate(){
         warningView.isHidden = false
         warningView.alpha = 0
         UIView.animate(withDuration: 0.5) {
@@ -303,7 +300,7 @@ class AddWordsPairPopUp: UIViewController, UITextFieldDelegate {
         }
     }
 
-    func hide() {
+    private func hide() {
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut) {
             self.backgroundView.alpha = 0
             self.mainView.alpha = 0
@@ -313,127 +310,114 @@ class AddWordsPairPopUp: UIViewController, UITextFieldDelegate {
         }
     }
     
-    @IBAction func secretButtonPresed(_ sender: UIButton) {
-        struct SecretWordsPair {
-            let word: String
-            let translation: String
-        }
-
-        let englishWords: [String] = [
-            "However",
-            "Therefore",
-            "Furthermore",
-            "Nevertheless",
-            "Moreover",
-            "Consequently",
-            "Significant",
-            "Considerable",
-            "Particularly",
-            "Substantial",
-            "According",
-            "Regarding",
-            "Occasionally",
-            "Frequently",
-            "Generally",
-            "Usually",
-            "Typically",
-            "Possibly",
-            "Obviously",
-            "Apparently",
-            "Undoubtedly",
-            "Likewise",
-            "Alternatively",
-            "Approximately",
-            "Previously",
-            "Eventually",
-            "Specifically",
-            "Considerably",
-            "Practically",
-            "Currently",
-            "Impressively",
-            "Subsequently",
-            "Initially",
-            "Comparatively",
-            "Remarkably",
-            "Accordingly",
-            "Importantly"
-        ]
-
-        let germanTranslations: [String] = [
-            "Jedoch",
-            "Daher",
-            "Darüber hinaus",
-            "Dennoch",
-            "Außerdem",
-            "Folglich",
-            "Bedeutend",
-            "Beträchtlich",
-            "Insbesondere",
-            "Substanziell",
-            "Gemäß",
-            "Hinsichtlich",
-            "Gelegentlich",
-            "Häufig",
-            "Im Allgemeinen",
-            "Gewöhnlich",
-            "Typischerweise",
-            "Möglicherweise",
-            "Offensichtlich",
-            "Anscheinend",
-            "Zweifellos",
-            "Ebenso",
-            "Alternativ",
-            "Ungefähr",
-            "Vorher",
-            "Schließlich",
-            "Speziell",
-            "Erheblich",
-            "Praktisch",
-            "Derzeit",
-            "Beeindruckend",
-            "In der Folge",
-            "Anfänglich",
-            "Vergleichsweise",
-            "Bemerkenswert",
-            "Dementsprechend",
-            "Wichtig"
-        ]
-
-        var wordPairs = [SecretWordsPair]()
-        for (index, englishWord) in englishWords.enumerated() {
-            let translation = germanTranslations[index]
-            let pair = SecretWordsPair(word: englishWord, translation: translation)
-            wordPairs.append(pair)
-        }
-
-     
-        
-        for pair in wordPairs{
-            let wrdID = mainModel.uniqueIDgenerator(prefix: "wrd")
-            let wordsPair = WordsPair(
-                wrdWord: pair.word,
-                wrdTranslation: pair.translation,
-                wrdDicID: dictionaryID,
-                wrdUserID: mainModel.loadUserData().userID,
-                wrdID: wrdID,
-                wrdImageFirestorePath: "",
-                wrdImageName: imageName,
-                wrdReadOnly: false,
-                wrdParentDictionary: coreData.getParentDictionaryData(dicID: dictionaryID, userID: mainModel.loadUserData().userID, context: context),
-                wrdAddDate: mainModel.convertDateToString(currentDate: Date(), time: false)!)
-            firebase.createWordsPair(wordsPair: wordsPair)
-            firebase.updateWordsCountFirebase(dicID: dictionaryID, increment: true)
-            
-        }
-        print("Secret words array count is: \(wordPairs.count)\n")
-        // Печать пар слов
-//        for pair in wordPairs {
-//            print("\(pair.word) - \(pair.translation)")
+//    @IBAction func secretButtonPresed(_ sender: UIButton) {
+//        struct SecretWordsPair {
+//            let word: String
+//            let translation: String
 //        }
-
-        
-        
-    }
+//        let englishWords: [String] = [
+//            "However",
+//            "Therefore",
+//            "Furthermore",
+//            "Nevertheless",
+//            "Moreover",
+//            "Consequently",
+//            "Significant",
+//            "Considerable",
+//            "Particularly",
+//            "Substantial",
+//            "According",
+//            "Regarding",
+//            "Occasionally",
+//            "Frequently",
+//            "Generally",
+//            "Usually",
+//            "Typically",
+//            "Possibly",
+//            "Obviously",
+//            "Apparently",
+//            "Undoubtedly",
+//            "Likewise",
+//            "Alternatively",
+//            "Approximately",
+//            "Previously",
+//            "Eventually",
+//            "Specifically",
+//            "Considerably",
+//            "Practically",
+//            "Currently",
+//            "Impressively",
+//            "Subsequently",
+//            "Initially",
+//            "Comparatively",
+//            "Remarkably",
+//            "Accordingly",
+//            "Importantly"
+//        ]
+//        let germanTranslations: [String] = [
+//            "Jedoch",
+//            "Daher",
+//            "Darüber hinaus",
+//            "Dennoch",
+//            "Außerdem",
+//            "Folglich",
+//            "Bedeutend",
+//            "Beträchtlich",
+//            "Insbesondere",
+//            "Substanziell",
+//            "Gemäß",
+//            "Hinsichtlich",
+//            "Gelegentlich",
+//            "Häufig",
+//            "Im Allgemeinen",
+//            "Gewöhnlich",
+//            "Typischerweise",
+//            "Möglicherweise",
+//            "Offensichtlich",
+//            "Anscheinend",
+//            "Zweifellos",
+//            "Ebenso",
+//            "Alternativ",
+//            "Ungefähr",
+//            "Vorher",
+//            "Schließlich",
+//            "Speziell",
+//            "Erheblich",
+//            "Praktisch",
+//            "Derzeit",
+//            "Beeindruckend",
+//            "In der Folge",
+//            "Anfänglich",
+//            "Vergleichsweise",
+//            "Bemerkenswert",
+//            "Dementsprechend",
+//            "Wichtig"
+//        ]
+//        var wordPairs = [SecretWordsPair]()
+//        for (index, englishWord) in englishWords.enumerated() {
+//            let translation = germanTranslations[index]
+//            let pair = SecretWordsPair(word: englishWord, translation: translation)
+//            wordPairs.append(pair)
+//        }
+//        for pair in wordPairs{
+//            let wrdID = mainModel.uniqueIDgenerator(prefix: "wrd")
+//            let wordsPair = WordsPair(
+//                wrdWord: pair.word,
+//                wrdTranslation: pair.translation,
+//                wrdDicID: dictionaryID,
+//                wrdUserID: mainModel.loadUserData().userID,
+//                wrdID: wrdID,
+//                wrdImageFirestorePath: "",
+//                wrdImageName: imageName,
+//                wrdReadOnly: false,
+//                wrdParentDictionary: coreData.getParentDictionaryData(dicID: dictionaryID, userID: mainModel.loadUserData().userID, context: context),
+//                wrdAddDate: mainModel.convertDateToString(currentDate: Date(), time: false)!)
+//            firebase.createWordsPair(wordsPair: wordsPair)
+//            firebase.updateWordsCountFirebase(dicID: dictionaryID, increment: true)
+//            
+//        }
+//        print("Secret words array count is: \(wordPairs.count)\n")
+//    }
     
     
 }

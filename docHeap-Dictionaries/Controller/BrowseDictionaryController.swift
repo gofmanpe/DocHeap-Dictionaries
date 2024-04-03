@@ -392,11 +392,11 @@ class BrowseDictionaryController: UIViewController, UpdateView, UploadImageToFir
         popUpApear(sender: "descriptionButton")
     }
     
-    
     @IBAction func chatButtonPressed(_ sender: UIButton) {
         buttonScaleAnimation(targetButton: chatButton)
         performSegue(withIdentifier: "openChat", sender: self)
     }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
             let destinationVC = segue.destination as! ChatController
                 destinationVC.dicID = dicID

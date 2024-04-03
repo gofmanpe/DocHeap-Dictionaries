@@ -17,6 +17,7 @@ struct Firebase {
     private let coreData = CoreDataManager()
     private let alamo = Alamo()
     private let defaults = Defaults()
+    private var listners = [String : ListenerRegistration]()
     
 //MARK: - Create functions
     func createUser(userID:String, userEmail: String, userName: String, userInterfaceLanguage:String, userAvatarFirestorePath:URL?, accType:String) {
@@ -187,7 +188,6 @@ struct Firebase {
             }
         }
     }
- 
     
 //MARK: - Read functions
     func getUserDataByEmail(userEmail: String, completion: @escaping (UserData?) -> Void) {
@@ -225,12 +225,35 @@ struct Firebase {
         }
     }
     
-    func getAllSharedDictionaries(completion: @escaping ([SharedDictionary]?, Error?) -> Void){
-        firebase.collection("Dictionaries").whereField("dicShared", isEqualTo: true).getDocuments { (querySnapshot, error) in
+    func getWordsDataFromFirestore(dicID:String,  completion: @escaping ([SharedWord]?, Error?) -> Void){
+        firebase.collection("Words").whereField("wrdDicID", isEqualTo: dicID).getDocuments { (querySnapshot, error) in
             if let error = error {
-                print("Error to get shared dictionaries: \(error)\n")
+                print("Error getting documents: \(error)")
+                completion(nil,error)
             } else {
-                
+                var sharedWords = [SharedWord]()
+                for document in querySnapshot!.documents {
+                    let wordData = document.data()
+                    if let wrdWord = wordData["wrdWord"] as? String,
+                       let wrdTranslation = wordData["wrdTranslation"] as? String,
+                       let wrdID = wordData["wrdID"] as? String,
+                       let wrdOwnerID = wordData["wrdUserID"] as? String,
+                       let wrdImageName = wordData["wrdImageName"] as? String,
+                       let wrdImageFirestorePath = wordData["wrdImageFirestorePath"] as? String,
+                       let wrdDicID = wordData["wrdDicID"] as? String
+                    {
+                        let word = SharedWord(
+                            wrdWord: wrdWord,
+                            wrdTranslation: wrdTranslation,
+                            wrdDicID: wrdDicID,
+                            wrdOwnerID: wrdOwnerID,
+                            wrdID: wrdID,
+                            wrdImageFirestorePath: wrdImageFirestorePath,
+                            wrdImageName: wrdImageName)
+                        sharedWords.append(word)
+                    }
+                }
+                completion(sharedWords,nil)
             }
         }
     }
@@ -250,37 +273,9 @@ struct Firebase {
         }
     }
     
-//    func listenComments(dicID:String, context:NSManagedObjectContext,  completion: @escaping (Comment?, Error?) -> Void){
-//        firebase.collection("Messages").whereField("msgDicID", isEqualTo: dicID).addSnapshotListener { (querySnapshot, error) in
-//            if let error = error {
-//                print("Error getting messages: \(error)\n")
-//                completion(nil, error)
-//            } else {
-//                for document in querySnapshot!.documents {
-//                    let commentData = document.data()
-//                    let commentID = commentData["msgID"] as? String ?? ""
-//                    let filteredComments = self.coreData.getMessagesByDicID(dicID: dicID, context: context).filter({$0.msgID == commentID})
-//                    switch filteredComments.isEmpty{
-//                    case false:
-//                        continue
-//                    case true:
-//                        let newComment = Comment(
-//                            msgID: commentID,
-//                            msgBody: commentData["msgBody"] as? String ?? "",
-//                            msgDateTime: commentData["msgDateTime"] as! String,
-//                            msgDicID: commentData["msgDicID"] as! String,
-//                            msgSenderID: commentData["msgSenderID"] as! String,
-//                            msgOrdering: commentData["msgOrdering"] as! Int,
-//                            msgSyncronized: true)
-//                        completion(newComment, nil)
-//                    }
-//                }
-//            }
-//        }
-//    }
-    
-    func listenForNewComment(dicID:String, context:NSManagedObjectContext,  completion: @escaping (Comment?, Error?) -> Void){
-        firebase.collection("Messages").whereField("msgDicID", isEqualTo: dicID).addSnapshotListener { (querySnapshot, error) in
+    mutating func listenForNewComment(dicID:String, context:NSManagedObjectContext,  completion: @escaping (Comment?, Error?) -> Void){
+        let listner =
+        firebase.collection("Messages").whereField("msgDicID", isEqualTo: dicID).addSnapshotListener { [coreData] (querySnapshot, error) in
             if let error = error {
                 print("Error getting messages: \(error)\n")
                 completion(nil, error)
@@ -305,6 +300,14 @@ struct Firebase {
                     }
                 }
             }
+        }
+        listners[dicID] = listner
+    }
+    
+    mutating func removeListner(dicID:String){
+        if let listner = listners[dicID] {
+            listner.remove()
+            listners[dicID] = nil
         }
     }
     
@@ -662,62 +665,62 @@ struct Firebase {
             .whereField("msgDicID", isEqualTo: dicID)
             .whereField("msgSenderID", isNotEqualTo: mainModel.loadUserData().userID)
             .getDocuments { (querySnapshot, error) in
-            if let error = error {
-                     print("Error getting messages: \(error)")
-                  } else {
-                      var messagesUsersSet = Set<String>()
-                      for document in querySnapshot!.documents {
-                          let messageData = document.data()
-                          let msgSenderID = messageData["msgSenderID"] as! String
-                          messagesUsersSet.insert(msgSenderID)
-                      }
-                      let usersArray = Array(messagesUsersSet)
-                      for user in usersArray{
-                          firebase.collection("Users").whereField("userID", isEqualTo: user).getDocuments{ (querySnapshot, error) in
-                              if let error = error {
-                                       print("Error getting users: \(error)")
-                              } else {
-                                  for document in querySnapshot!.documents {
-                                      let userData = document.data()
-                                      let userID = userData["userID"] as? String ?? "NO_ID"
-                                      if coreData.isNetworkUserExist(userID: userID, data: context){
-                                          continue
-                                      } else {
-                                          if let userName = userData["userName"] as? String,
-                                             let userAvatarFirestorePath = userData["userAvatarFirestorePath"] as? String,
-                                             let userBirthDate = userData["userBirthDate"] as? String,
-                                             let userNativeLanguage = userData["userNativeLanguage"] as? String,
-                                             let userCountry = userData["userCountry"] as? String,
-                                             let userRegisterDate = userData["userRegisterDate"] as? String,
-                                             let userShowEmail = userData["userShowEmail"] as? Bool,
-                                             let userEmail = userData["userEmail"] as? String
-                                          {
-                                              let newNetworkUser = NetworkUser(context:context)
-                                              newNetworkUser.nuID = userID
-                                              newNetworkUser.nuName = userName
-                                              newNetworkUser.nuFirebaseAvatarPath = userAvatarFirestorePath
-                                              newNetworkUser.nuBirthDate = userBirthDate
-                                              newNetworkUser.nuNativeLanguage = userNativeLanguage
-                                              newNetworkUser.nuCountry = userCountry
-                                              newNetworkUser.nuRegisterDate = userRegisterDate
-                                              newNetworkUser.nuShowEmail = userShowEmail
-                                              if userShowEmail{
-                                                  newNetworkUser.nuEmail = userEmail
-                                              }
-                                              self.coreData.saveData(data: context)
-                                              alamo.downloadChatUserAvatar(url: userAvatarFirestorePath, senderID: userID, userID: mainModel.loadUserData().userID) { avatarName in
-                                                  newNetworkUser.nuLocalAvatar = avatarName
-                                                  self.coreData.saveData(data: context)
-                                              }
-                                              print("User \(userName) succesfully created!\n")
-                                          }
-                                      }
-                                  }
-                              }
-                          }
-                      }
-                  }
-        }
+                if let error = error {
+                    print("Error getting messages: \(error)")
+                } else {
+                    var messagesUsersSet = Set<String>()
+                    for document in querySnapshot!.documents {
+                        let messageData = document.data()
+                        let msgSenderID = messageData["msgSenderID"] as! String
+                        messagesUsersSet.insert(msgSenderID)
+                    }
+                    let usersArray = Array(messagesUsersSet)
+                    for user in usersArray{
+                        firebase.collection("Users").whereField("userID", isEqualTo: user).getDocuments{ (querySnapshot, error) in
+                            if let error = error {
+                                print("Error getting users: \(error)")
+                            } else {
+                                for document in querySnapshot!.documents {
+                                    let userData = document.data()
+                                    let userID = userData["userID"] as? String ?? "NO_ID"
+                                    if coreData.isNetworkUserExist(userID: userID, data: context){
+                                        continue
+                                    } else {
+                                        if let userName = userData["userName"] as? String,
+                                           let userAvatarFirestorePath = userData["userAvatarFirestorePath"] as? String,
+                                           let userBirthDate = userData["userBirthDate"] as? String,
+                                           let userNativeLanguage = userData["userNativeLanguage"] as? String,
+                                           let userCountry = userData["userCountry"] as? String,
+                                           let userRegisterDate = userData["userRegisterDate"] as? String,
+                                           let userShowEmail = userData["userShowEmail"] as? Bool,
+                                           let userEmail = userData["userEmail"] as? String
+                                        {
+                                            let newNetworkUser = NetworkUser(context:context)
+                                            newNetworkUser.nuID = userID
+                                            newNetworkUser.nuName = userName
+                                            newNetworkUser.nuFirebaseAvatarPath = userAvatarFirestorePath
+                                            newNetworkUser.nuBirthDate = userBirthDate
+                                            newNetworkUser.nuNativeLanguage = userNativeLanguage
+                                            newNetworkUser.nuCountry = userCountry
+                                            newNetworkUser.nuRegisterDate = userRegisterDate
+                                            newNetworkUser.nuShowEmail = userShowEmail
+                                            if userShowEmail{
+                                                newNetworkUser.nuEmail = userEmail
+                                            }
+                                            self.coreData.saveData(data: context)
+                                            alamo.downloadChatUserAvatar(url: userAvatarFirestorePath, senderID: userID, userID: mainModel.loadUserData().userID) { avatarName in
+                                                newNetworkUser.nuLocalAvatar = avatarName
+                                                self.coreData.saveData(data: context)
+                                            }
+                                            print("User \(userName) succesfully created!\n")
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
     }
     
     func updateNetworkUsersDataInCoreData(context:NSManagedObjectContext){
@@ -912,12 +915,6 @@ struct Firebase {
                 print("Error getting messages: \(error!)")
                 completion(nil, error)
             } else {
-                guard let document = querySnapshot?.documents.first else {
-                    completion(nil,error)
-                    return
-                }
-              //  let messagesData = document.data()
-                
                 let messagesCount = querySnapshot?.documents.count ?? 0
                 completion(messagesCount,nil)
             }
@@ -932,75 +929,48 @@ struct Firebase {
             } else {
                 let messagesCount = String(querySnapshot?.documents.count ?? 0)
                 completion(messagesCount)
-                  }
+            }
         }
     }
-    
-//    func getDictionaryShortData1(completion: @escaping ([SharedDictionaryShortData]?) -> Void) {
-//        fireDB.collection("Dictionaries").whereField("dicShared", isEqualTo: true).getDocuments { (querySnapshot, error) in
-//            if error != nil {
-//                completion(nil)
-//            } else {
-//                guard let document = querySnapshot?.documents.first else {
-//                    completion(nil)
-//                    return
-//                }
-//                let dictionaryData = document.data()
-//                 let dictionaryName = dictionaryData["dicName"] as! String
-//                 let dicID = dictionaryData["dicID"] as! String
-//                 let dicLikes = dictionaryData["dicLikes"] as? [String] ?? [String]()
-//                 let dicArray = [SharedDictionaryShortData(dicID: dicID, dicName: dictionaryName, dicLikes: dicLikes)]
-//                completion(dicArray)
-//            }
-//        }
-//    }
     
     func getAllWordForSharedDictionary(dicID:String, completion: @escaping ([String: Any]?, Error?) -> Void) {
         firebase.collection("Words").whereField("wrdDicID", isEqualTo: dicID).getDocuments { (querySnapshot, error) in
             if let error = error {
-                      completion(nil, error)
-                  } else {
-                      var allWords: [String: Any] = [:]
-
-                      for document in querySnapshot!.documents {
-                          let wordData = document.data()
-                          let wordID = document.documentID
-                          allWords[wordID] = wordData
-                      }
-                      completion(allWords, nil)
-                  }
+                completion(nil, error)
+            } else {
+                var allWords: [String: Any] = [:]
+                
+                for document in querySnapshot!.documents {
+                    let wordData = document.data()
+                    let wordID = document.documentID
+                    allWords[wordID] = wordData
+                }
+                completion(allWords, nil)
+            }
         }
     }
     
     func checkIsWordExistsInDictionary(wrdID:String, completion: @escaping (Bool, Error?) -> Void) {
-        
         let wordReference = firebase.collection("Words").document(wrdID)
-        
         wordReference.getDocument { (document, error) in
             if let error = error {
-               
                 completion(false, error)
             } else if let document = document, document.exists {
                 completion(true, nil)
             } else {
-               
                 completion(false, nil)
             }
         }
     }
     
     func checkIsExistsDictionary(dicID:String, completion: @escaping (Bool, Error?) -> Void) {
-        
         let wordReference = firebase.collection("Dictionaries").document(dicID)
-        
         wordReference.getDocument { (document, error) in
             if let error = error {
-               
                 completion(false, error)
             } else if let document = document, document.exists {
                 completion(true, nil)
             } else {
-               
                 completion(false, nil)
             }
         }
@@ -1053,46 +1023,38 @@ struct Firebase {
                 "userShowEmail": status
             ]
         ){ error in
-                if let error = error {
-                    print("FirebaseModel: Error updating user data in Firestore: \(error)\n")
-                }
-         }
+            if let error = error {
+                print("FirebaseModel: Error updating user data in Firestore: \(error)\n")
+            }
+        }
     }
     
     func setDictionaryDownloadedByUserUser(dicID: String, remove:Bool){
         switch remove{
         case false:
             firebase.collection("Dictionaries").document(dicID).updateData(
-                [
-                    "dicDownloadedUsers": FieldValue.arrayUnion([mainModel.loadUserData().userID])
-                ]
+                ["dicDownloadedUsers": FieldValue.arrayUnion([mainModel.loadUserData().userID])]
             ){ error in
-                    if let error = error {
-                        print("FirebaseModel: Error updating user data in Firestore: \(error)\n")
-                    }
-             }
+                if let error = error {
+                    print("FirebaseModel: Error updating user data in Firestore: \(error)\n")
+                }
+            }
         case true:
             firebase.collection("Dictionaries").document(dicID).updateData(
-                [
-                    "dicDownloadedUsers": FieldValue.arrayRemove([mainModel.loadUserData().userID])
-                ]
+                ["dicDownloadedUsers": FieldValue.arrayRemove([mainModel.loadUserData().userID])]
             ){ error in
-                    if let error = error {
-                        print("FirebaseModel: Error updating user data in Firestore: \(error)\n")
-                    }
-             }
+                if let error = error {
+                    print("FirebaseModel: Error updating user data in Firestore: \(error)\n")
+                }
+            }
         }
-       
     }
-  
     
     func setLikeForDictionaryFirebase(dicID: String, userID:String, like:Bool){
         switch like{
         case true:
             firebase.collection("Dictionaries").document(dicID).updateData(
-                [
-                    "dicLikes": FieldValue.arrayUnion([mainModel.loadUserData().userID])
-                ]
+                ["dicLikes": FieldValue.arrayUnion([mainModel.loadUserData().userID])]
             ){ error in
                 if let error = error {
                     print("FirebaseModel: Error updating user data in Firestore: \(error)\n")
@@ -1100,9 +1062,7 @@ struct Firebase {
             }
         case false:
             firebase.collection("Dictionaries").document(dicID).updateData(
-                [
-                    "dicLikes": FieldValue.arrayRemove([mainModel.loadUserData().userID])
-                ]
+                ["dicLikes": FieldValue.arrayRemove([mainModel.loadUserData().userID])]
             ){ error in
                 if let error = error {
                     print("FirebaseModel: Error updating user data in Firestore: \(error)\n")
@@ -1131,9 +1091,7 @@ struct Firebase {
         switch increment{
         case true:
             firebase.collection("Users").document(userID).updateData(
-                [
-                    "userLikes": FieldValue.increment(Int64(1))
-                ]
+                ["userLikes": FieldValue.increment(Int64(1))]
             ){ error in
                 if let error = error {
                     print("FirebaseModel: Error updating network user likes count: \(error)")
@@ -1141,11 +1099,12 @@ struct Firebase {
             }
         case false:
             firebase.collection("Users").document(userID).updateData(
-                ["userLikes": FieldValue.increment(Int64(-1))]) { error in
-                    if let error = error {
-                        print("FirebaseModel: Error updating network user likes count: \(error)")
-                    }
+                ["userLikes": FieldValue.increment(Int64(-1))]
+            ){ error in
+                if let error = error {
+                    print("FirebaseModel: Error updating network user likes count: \(error)")
                 }
+            }
         }
     }
     
@@ -1161,40 +1120,41 @@ struct Firebase {
             }
         case false:
             firebase.collection("Dictionaries").document(dicID).updateData(
-                ["dicWordsCount": FieldValue.increment(Int64(-1))]) { error in
-                    if let error = error {
-                        print("FirebaseModel: Error updating avatar URL in Firestore: \(error)")
-                    }
+                ["dicWordsCount": FieldValue.increment(Int64(-1))]
+            ){ error in
+                if let error = error {
+                    print("FirebaseModel: Error updating avatar URL in Firestore: \(error)")
                 }
+            }
         }
     }
     
     func setDeletedStatusForDictionary(dicID: String) {
-            firebase.collection("Dictionaries").document(dicID).updateData(
-                ["dicDeleted": true]
-            ){ error in
-                    if let error = error {
-                        print("FirebaseModel: Error updating avatar URL in Firestore: \(error)")
-                    }
-             }
+        firebase.collection("Dictionaries").document(dicID).updateData(
+            ["dicDeleted": true]
+        ){ error in
+            if let error = error {
+                print("FirebaseModel: Error updating avatar URL in Firestore: \(error)")
+            }
+        }
     }
     
     func updateImagesCountFirebase(dicID: String, increment:Bool) {
         switch increment{
-            case true:
+        case true:
             firebase.collection("Dictionaries").document(dicID).updateData(
                 ["dicImagesCount": FieldValue.increment(Int64(1))]) { error in
                     if let error = error {
                         print("FirebaseModel: Error updating avatar URL in Firestore: \(error)")
                     }
-            }
-            case false:
+                }
+        case false:
             firebase.collection("Dictionaries").document(dicID).updateData(
                 ["dicImagesCount": FieldValue.increment(Int64(-1))]) { error in
                     if let error = error {
                         print("FirebaseModel: Error updating avatar URL in Firestore: \(error)")
                     }
-            }
+                }
         }
     }
     
@@ -1238,7 +1198,6 @@ struct Firebase {
             }
         }
     }
-    
   
     func updateWordInFirebase(wrdID: String, newWord: String, newTranslation: String) {
         firebase.collection("Words").document(wrdID).updateData(
@@ -1271,13 +1230,11 @@ struct Firebase {
         }
     }
     
-    
     func updateImageURLaddressFirebase(wrdID: String, word:String, fsURL:String, imageName:String) {
         firebase.collection("Words").document(wrdID).updateData(
             ["wrdImageFirestorePath": fsURL, "wrdImageName": imageName]
         ) { error in
             if let error = error {
-                
                 print("FirebaseModel: Error updating avatar URL in Firestore: \(error)")
             }
         }
@@ -1287,7 +1244,6 @@ struct Firebase {
     func deleteDictionaryFirebase(dicID: String, completion: @escaping (Error?) -> Void) {
         firebase.collection("Dictionaries").document(dicID).delete { error in
             if let error = error {
-                
                 print("FirebaseModel: Error deleting dictionary: \(error)")
             }
             completion(error)
@@ -1383,8 +1339,6 @@ struct Firebase {
         }
     }
     
-  
-    
     func deleteWordFromFirebase(wrdID: String) {
         firebase.collection("Words").document(wrdID).delete { error in
             if let error = error {
@@ -1414,7 +1368,6 @@ struct Firebase {
             }
             updateImagesCountFirebase(dicID: dicID, increment: true)
         }
-        
     }
     
     func uploadWordImage(imageName:String, userID:String, dicID:String, completion: @escaping (String?,Error?) -> Void){
@@ -1436,14 +1389,12 @@ struct Firebase {
     func uploadAvatarToFirestore(userID:String, avatarPath:URL){
         let storage = Storage.storage()
         let imageRef = storage.reference().child(userID).child("userAvatar.jpg")
-       
+        
         imageRef.putFile(from: avatarPath, metadata: nil) { metadata, error in
             guard metadata != nil else {
                 return
             }
-           
         }
-        
     }
     
     func deleteImageFromStorage(imageName: String, userID:String, dicID:String){

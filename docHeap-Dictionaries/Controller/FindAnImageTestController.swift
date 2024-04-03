@@ -19,13 +19,10 @@ class FindAnImageTestController: UIViewController , PerformToSegue, UpdateView {
     }
     
     func didUpdateView(sender: String) {
-        
-       // coreDataManager.loadParentDictionaryData(dicID: selectedDictionary, userID: mainModel.loadUserData().userID, data: context)
-//        coreDataManager.loadWordsForSelectedDictionary(dicID: coreDataManager.parentDictionaryData.first?.dicID ?? "", userID: mainModel.loadUserData().userID, data: context)
         loadData()
         standartState()
-        mainModel.wordsStatusClearing(array: /*coreDataManager.wordsArray*/wordsForTestArray, statusToClear: 1, data: context)
-        mainModel.wordsStatusClearing(array: /*coreDataManager.wordsArray*/wordsForTestArray, statusToClear: 2, data: context)
+        mainModel.wordsStatusClearing(array: wordsForTestArray, statusToClear: 1, data: context)
+        mainModel.wordsStatusClearing(array: wordsForTestArray, statusToClear: 2, data: context)
         reloadTestData()
         coreDataManager.saveData(data: context)
         testStart()
@@ -63,7 +60,7 @@ class FindAnImageTestController: UIViewController , PerformToSegue, UpdateView {
     @IBOutlet weak var progressBarLabel: UILabel!
     @IBOutlet weak var progressBar: UIProgressView!
     
-    func localizeElements(){
+    private func localizeElements(){
         roundsNameLabel.text = "findAnImageVC_round_label".localized
         instructionLabel.text = "findAnImageVC_instruction_label".localized
         scoresNameLabel.text = "findAnImageVC_scores_label".localized
@@ -129,9 +126,7 @@ class FindAnImageTestController: UIViewController , PerformToSegue, UpdateView {
         mainWord = queryResult.0
         mainWordImage = queryResult.1
         fourImagesWordsArray = queryResult.2
-       // print("Images words array: \(fourImagesWordsArray)\n")
         fourImagesPathArray = queryResult.3
-       // print("Images path array: \(fourImagesPathArray)\n")
         roundNumber += 1
         roundNumberLabel.text = String(roundNumber)
         standartState()
@@ -146,8 +141,6 @@ class FindAnImageTestController: UIViewController , PerformToSegue, UpdateView {
    private func standartState(){
        let bgViewWidth = wordsBackgroundView.frame.width
        let buttonHight = (bgViewWidth - 60)/2
-       print("Width = \(bgViewWidth)\n")
-       print("Height = \(buttonHight)\n")
         blockView.isHidden = true
         commentView.isHidden = true
         nextButton.isHidden = true
@@ -178,7 +171,6 @@ class FindAnImageTestController: UIViewController , PerformToSegue, UpdateView {
         learningLanguageImage.image = UIImage(named: "\(learnImage).png")
         translateLanguageImage.image = UIImage(named: "\(translateImage).png")
         translateLanguageLabel.text = parentDictionaryData.dicTranslateLanguage
-        //progressLabel.text = defaults.labelTestProgressText
         scoresNumberLabel.text = String(rightAnswers)
         nextButton.layer.cornerRadius = 10
         checkButton.layer.cornerRadius = 10
@@ -283,7 +275,6 @@ class FindAnImageTestController: UIViewController , PerformToSegue, UpdateView {
         wordsCount = 0
         progressBarProgress = 0
         progressBar.progress = Float(progressBarProgress)
-        
     }
     
     func warningViewAppearAnimate(_ text:String){
@@ -294,8 +285,8 @@ class FindAnImageTestController: UIViewController , PerformToSegue, UpdateView {
             self.warningLabel.alpha = 1
         } completion: { Bool in
             UIView.animate(withDuration: 0.75) {
-                              self.warningLabel.alpha = 0
-                            }
+                self.warningLabel.alpha = 0
+            }
         }
     }
 
@@ -340,7 +331,6 @@ class FindAnImageTestController: UIViewController , PerformToSegue, UpdateView {
             }
         } else {
             warningViewAppearAnimate("sharedElements_noChose_label".localized)
-//            warningLabel.isHidden = false
         }
     }
     

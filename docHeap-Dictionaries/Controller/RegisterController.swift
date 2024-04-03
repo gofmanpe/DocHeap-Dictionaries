@@ -6,7 +6,6 @@
 //
 
 import UIKit
-
 import FirebaseAuth
 import FirebaseFirestore
 import CoreData
@@ -55,8 +54,8 @@ class RegisterController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-            localizeElements()
-            elementsDesign()
+        localizeElements()
+        elementsDesign()
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
         tapGesture.cancelsTouchesInView = false
         background.addGestureRecognizer(tapGesture)
@@ -130,13 +129,12 @@ class RegisterController: UIViewController {
                 }
             }
         }
-        
     }
     
     func showErrorPopUp(text:String){
-                let overLayerView = LoginErrorPopUp()
+        let overLayerView = LoginErrorPopUp()
         overLayerView.appearOverlayer(sender: self, text: text)
-        }
+    }
     
     @IBAction func registerButtonPressed(_ sender: UIButton) {
         if entryesCheck(){
@@ -235,16 +233,13 @@ class RegisterController: UIViewController {
         let fileManager = FileManager.default
 
         do {
-            // Проверяем существует ли файл на исходном пути
             if fileManager.fileExists(atPath: sourceURL.path) {
-                // Копируем файл
                 try fileManager.copyItem(at: sourceURL, to: destinationURL)
-                print("Файл успешно скопирован.")
             } else {
-                print("Файл не найден на исходном пути.")
+                print("File didn't found.")
             }
         } catch let error {
-            print("Ошибка при копировании файла: \(error.localizedDescription)")
+            print("Error copying file: \(error.localizedDescription)")
         }
     }
  
@@ -259,27 +254,23 @@ class RegisterController: UIViewController {
         present(imagePicker, animated: true, completion: nil)
     }
     
-    
 }
 
 extension RegisterController: UIImagePickerControllerDelegate & UINavigationControllerDelegate{
+    
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-            if let imageFromGallery = info[UIImagePickerController.InfoKey(rawValue: "UIImagePickerControllerEditedImage")] as? UIImage {
-                selectedImage = imageFromGallery
-                avatarSelected = true
-                if let imageUrl = info[.imageURL] as? URL {
-                        imageExtention = imageUrl.pathExtension
-                        }
-                saveImageToAppDirectory(image: selectedImage, isImageSelected: true)
-                let tempAvatarPath = "Temp/\(tempAvatarName)"
-                avatarImage.image = UIImage(contentsOfFile:  mainModel.getDocumentsFolderPath().appendingPathComponent(tempAvatarPath).path)
-            } else {
-                print("No IMAGE!")
+        if let imageFromGallery = info[UIImagePickerController.InfoKey(rawValue: "UIImagePickerControllerEditedImage")] as? UIImage {
+            selectedImage = imageFromGallery
+            avatarSelected = true
+            if let imageUrl = info[.imageURL] as? URL {
+                imageExtention = imageUrl.pathExtension
             }
-        
-              picker.dismiss(animated: true, completion: nil)
-        
-        
-        
+            saveImageToAppDirectory(image: selectedImage, isImageSelected: true)
+            let tempAvatarPath = "Temp/\(tempAvatarName)"
+            avatarImage.image = UIImage(contentsOfFile:  mainModel.getDocumentsFolderPath().appendingPathComponent(tempAvatarPath).path)
+        } else {
+            print("No IMAGE!")
         }
+        picker.dismiss(animated: true, completion: nil)
+    }
 }

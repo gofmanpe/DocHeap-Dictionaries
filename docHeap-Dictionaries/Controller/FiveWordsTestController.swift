@@ -84,7 +84,7 @@ class FiveWordsTestController: UIViewController, PerformToSegue, UpdateView {
     @IBOutlet weak var testProgressLabel: UILabel!
     @IBOutlet weak var rulesLabel: UILabel!
     
-    func localizeElements(){
+    private func localizeElements(){
         errorsModeLabel.text = "fiveWordsTestVC_repetitionMode_label".localized
         roundNameLabel.text = "fiveWordsTestVC_roundsName_label".localized
         scoresNameLabel.text = "fiveWordsTestVC_scoresName_label".localized
@@ -142,7 +142,7 @@ class FiveWordsTestController: UIViewController, PerformToSegue, UpdateView {
     
 //MARK: - Test engine functions
 
-    func fiveWordsTestStart(){
+    private func fiveWordsTestStart(){
         fiveWordsTestUIState()
         fiveButtonsTranstlationsArray.removeAll()
         let wordsArray = coreDataManager.wordsArray
@@ -168,7 +168,7 @@ class FiveWordsTestController: UIViewController, PerformToSegue, UpdateView {
         mainWordLabel.text = mainWord
     }
     
-    func errorsRepetition(){
+    private func errorsRepetition(){
         fiveWordsTestUIState()
         let arrayOfWords = coreDataManager.wordsArray
         filteredArray = arrayOfWords.filter({$0.wrdStatus == 0})
@@ -188,18 +188,16 @@ class FiveWordsTestController: UIViewController, PerformToSegue, UpdateView {
         mainWordLabel.text = mainWord
     }
 
-    func buttonsBhvrTheEnd(){
+    private func buttonsBhvrTheEnd(){
         for button in fiveUIButtonsArray{
             button.isEnabled = false
             button.backgroundColor = .clear
         }
-        
         if errorsRepetitionMode{
             commentViewSettings("fixed")
         } else {
             commentViewSettings("finish")
         }
-       // progressLabel.text = defaults.labelTestProgressText
     }
     
     private func commentViewSettings(_ feedback:String){
@@ -249,7 +247,7 @@ class FiveWordsTestController: UIViewController, PerformToSegue, UpdateView {
         }
     }
     
-    func fiveWordsTestUIState() {
+    private func fiveWordsTestUIState() {
         mainWordLabel.clipsToBounds = true
         choiseMaided = false
         answer = false
@@ -268,8 +266,7 @@ class FiveWordsTestController: UIViewController, PerformToSegue, UpdateView {
         errorsModeLabel.layer.cornerRadius = 3
     }
     
-    func standartState(){
-       
+    private func standartState(){
         commentView.layer.cornerRadius = 10
         commentView.layer.borderWidth = 3
         fiveUIButtonsArray = [firstWordButton,secondWordButton,thirdWordButton,fouthWordButton,fifthWordButton]
@@ -304,7 +301,7 @@ class FiveWordsTestController: UIViewController, PerformToSegue, UpdateView {
         warningView.isHidden = true
     }
     
-    func pressedButtonBehavor(buttonId:Int,button:UIButton){
+    private func pressedButtonBehavor(buttonId:Int,button:UIButton){
         for button in fiveUIButtonsArray{
             button.backgroundColor = .clear
             button.layer.borderWidth = 0
@@ -320,18 +317,17 @@ class FiveWordsTestController: UIViewController, PerformToSegue, UpdateView {
         }
     }
     
-    func reloadTestData(){
+    private func reloadTestData(){
         answer = false
         choiseMaided = false
         rightAnswers = 0
         scoresLabel.text = String(rightAnswers)
         wordsCount = 0
-       // progressLabel.text = defaults.labelTestProgressText
         progressBarProgress = 0
         progressBar.progress = Float(progressBarProgress)
     }
     
-    func resultsPopUpApear(){
+    private func resultsPopUpApear(){
         let overLayerView = TestResultsPopUp()
         overLayerView.performToSegueDelegate = self
         overLayerView.didUpdateViewDelegate = self
@@ -343,7 +339,7 @@ class FiveWordsTestController: UIViewController, PerformToSegue, UpdateView {
         overLayerView.appearOverlayer(sender: self)
     }
     
-    func warningViewAppearAnimate(_ text:String){
+    private func warningViewAppearAnimate(_ text:String){
         warningView.isHidden = false
         warningLabel.text = text
         warningView.alpha = 0
@@ -425,7 +421,6 @@ class FiveWordsTestController: UIViewController, PerformToSegue, UpdateView {
                     commentLabel.isHidden = true
                     progressBarProgress += (1.0 / Double(wrongWordsArray.count))
                     progressBar.progress = Float(progressBarProgress)
-                   // progressLabel.text = defaults.labelTestProgressText
                     if selectedWord == mainWordTranslation {
                         answer = true
                         wrongWordsArray[mainWordIndex].wrdRightAnswers += 1

@@ -124,12 +124,9 @@ class DeleteAccountPopUp: UIViewController {
         mainView.layer.cornerRadius = 10
         mainView.clipsToBounds = true
         commentView.isHidden = true
-        
     }
     
-    
-    
-    func deleteAccountWithoutSharedDictionaries(){
+    private func deleteAccountWithoutSharedDictionaries(){
         firebase.deleteAllUserStatisticFirebase(userID: mainModel.loadUserData().userID) { error in
             if let error = error {
                 print(error.localizedDescription)
@@ -148,8 +145,6 @@ class DeleteAccountPopUp: UIViewController {
                     print(error.localizedDescription)
                 }
             }
-//            coreData.deleteWordsByDicID(dicID: dictionary, context: context)
-//            coreData.deleteDictionaryFromCoreData(dicID: dictionary, userID: mainModel.loadUserData().userID, context: context)
         }
         firebase.deleteUserFirebase(userID:mainModel.loadUserData().userID, completion: { error in
             if let error = error {
@@ -207,6 +202,5 @@ class DeleteAccountPopUp: UIViewController {
         delegateDeleteAccount?.performToStart()
         hide()
     }
-    
     
 }

@@ -83,7 +83,7 @@ class ThreeWordsTestController: UIViewController, PerformToSegue, UpdateView{
     @IBOutlet weak var instructionLabel: UILabel!
     
 //MARK: - Localization
-    func localizeElements(){
+    private func localizeElements(){
         roundNameLabel.text = "threeWordsTestVC_roundsName_label".localized
         scoresNameLabel.text = "threeWordsTestVC_scoresName_label".localized
         instructionLabel.text = "threeWordsTestVC_instructionLabel_label".localized
@@ -137,12 +137,12 @@ class ThreeWordsTestController: UIViewController, PerformToSegue, UpdateView{
     }
     
 //MARK: - Test engine functions
-    func loadData(){
+    private func loadData(){
         wordsArray = coreDataManager.getAllWords(data: context)
         parentDictionaryData = coreDataManager.getParentDictionaryData(dicID: selectedDictionary, userID: mainModel.loadUserData().userID, context: context)
     }
     
-    func threeWordsTestStart(){
+    private func threeWordsTestStart(){
         threeWordsTestUIState()
         threeButtonsTranstlationsArray.removeAll()
         let wordsArray = coreDataManager.wordsArray
@@ -167,7 +167,7 @@ class ThreeWordsTestController: UIViewController, PerformToSegue, UpdateView{
         mainWordLabel.text = mainWord
     }
     
-    func errorsRepetition(){
+    private func errorsRepetition(){
         threeWordsTestUIState()
         let arrayOfWords = coreDataManager.wordsArray
         filteredArray = arrayOfWords.filter({$0.wrdStatus == 0})
@@ -187,7 +187,7 @@ class ThreeWordsTestController: UIViewController, PerformToSegue, UpdateView{
         mainWordLabel.text = mainWord
     }
     
-    func buttonsBhvrTheEnd(){
+    private func buttonsBhvrTheEnd(){
         for button in threeUIButtonsArray{
             button.isEnabled = false
             button.backgroundColor = .clear
@@ -249,7 +249,7 @@ class ThreeWordsTestController: UIViewController, PerformToSegue, UpdateView{
         }
     }
     
-    func threeWordsTestUIState() {
+    private func threeWordsTestUIState() {
         warningView.isHidden = true
         choiseMaided = false
         answer = false
@@ -267,7 +267,7 @@ class ThreeWordsTestController: UIViewController, PerformToSegue, UpdateView{
         errorsModeLabel.layer.cornerRadius = 3
     }
     
-    func standartState(){
+    private func standartState(){
         wordsBackgroundView.layer.shadowColor = UIColor.black.cgColor
         wordsBackgroundView.layer.shadowOpacity = 0.2
         wordsBackgroundView.layer.shadowOffset = .zero
@@ -302,7 +302,7 @@ class ThreeWordsTestController: UIViewController, PerformToSegue, UpdateView{
         warningView.isHidden = true
     }
     
-    func pressedButtonBehavor(buttonId:Int,button:UIButton){
+    private func pressedButtonBehavor(buttonId:Int,button:UIButton){
         for button in threeUIButtonsArray{
             button.backgroundColor = .clear
             button.layer.borderWidth = 0
@@ -320,7 +320,7 @@ class ThreeWordsTestController: UIViewController, PerformToSegue, UpdateView{
        
     }
     
-    func reloadTestData(){
+    private func reloadTestData(){
         answer = false
         choiseMaided = false
         rightAnswers = 0
@@ -331,7 +331,7 @@ class ThreeWordsTestController: UIViewController, PerformToSegue, UpdateView{
         progressBar.progress = Float(progressBarProgress)
     }
     
-    func resultsPopUpApear(){
+    private func resultsPopUpApear(){
         let overLayerView = TestResultsPopUp()
         overLayerView.performToSegueDelegate = self
         overLayerView.didUpdateViewDelegate = self
@@ -343,7 +343,7 @@ class ThreeWordsTestController: UIViewController, PerformToSegue, UpdateView{
         overLayerView.appearOverlayer(sender: self)
     }
     
-    func warningViewAppearAnimate(_ text:String){
+    private func warningViewAppearAnimate(_ text:String){
         warningView.isHidden = false
         warningLabel.text = text
         warningView.alpha = 0
@@ -351,8 +351,8 @@ class ThreeWordsTestController: UIViewController, PerformToSegue, UpdateView{
             self.warningView.alpha = 1
         } completion: { Bool in
             UIView.animate(withDuration: 0.75) {
-                              self.warningView.alpha = 0
-                            }
+                self.warningView.alpha = 0
+            }
         }
     }
     
@@ -491,7 +491,6 @@ class ThreeWordsTestController: UIViewController, PerformToSegue, UpdateView{
             }
         }
     }
-    
     
     @IBAction func toResultsButtonPressed(_ sender: UIButton) {
         buttonsBhvrTheEnd()

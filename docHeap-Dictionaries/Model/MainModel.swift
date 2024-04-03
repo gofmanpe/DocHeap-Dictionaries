@@ -52,7 +52,7 @@ struct MainModel{
     }
     
     func convertCurrentDateToInt() ->Int{
-       var currentDate = Date()
+        let currentDate = Date()
         let intDate = Int(currentDate.timeIntervalSince1970)
         return intDate
     }
@@ -219,7 +219,6 @@ struct MainModel{
         let reachabilityManager = NetworkReachabilityManager()
         return reachabilityManager?.isReachable ?? false
     }
-    
    
 }
 

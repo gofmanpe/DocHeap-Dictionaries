@@ -21,12 +21,11 @@ struct SyncModel {
         guard let userData = coreData.loadUserDataByID(userID: userID, context: context) else {
             return
         }
-            if !userData.userSyncronized{
-                firebase.updateUserDataFirebase(userData: userData)
-            } else {
-                return
-            }
-        
+        if !userData.userSyncronized{
+            firebase.updateUserDataFirebase(userData: userData)
+        } else {
+            return
+        }
     }
    
     func syncUserLikesForSharedDictionaries(userID:String, context:NSManagedObjectContext){
@@ -142,18 +141,17 @@ struct SyncModel {
                         context.delete(unsyWord)
                     }
                 }
-                
             }
         }
     }
     
     func loadDictionariesFromFirebase(userID:String, context:NSManagedObjectContext){
-         firebase.getAllDictionaries(forUser: userID) { allDictionaries, error in
-             if let allDictionaries = allDictionaries{
-                 for dictionary in allDictionaries {
-                     if let dictionaryData = dictionary.value as? [String: Any] {
-                         let dicID = dictionaryData["dicID"] as! String
-                         let dicForSave = LocalDictionary(
+        firebase.getAllDictionaries(forUser: userID) { allDictionaries, error in
+            if let allDictionaries = allDictionaries{
+                for dictionary in allDictionaries {
+                    if let dictionaryData = dictionary.value as? [String: Any] {
+                        let dicID = dictionaryData["dicID"] as! String
+                        let dicForSave = LocalDictionary(
                             dicID: dicID,
                             dicCommentsOn: dictionaryData["dicCommentsOn"] as! Bool,
                             dicDeleted: false,
@@ -170,63 +168,61 @@ struct SyncModel {
                             dicSyncronized: true,
                             dicUserID: dictionaryData["dicUserID"] as! String,
                             dicWordsCount: dictionaryData["dicWordsCount"] as? Int ?? 0)
-                         coreData.createDictionary(dictionary: dicForSave, context: context)
-                         self.mainModel.createFolderInDocuments(withName: "\(dicForSave.dicUserID)/\(dicID)")
-                         self.loadWordsFromFirebase(dicID: dicID, context: context)
+                        coreData.createDictionary(dictionary: dicForSave, context: context)
+                        self.mainModel.createFolderInDocuments(withName: "\(dicForSave.dicUserID)/\(dicID)")
+                        self.loadWordsFromFirebase(dicID: dicID, context: context)
                     }
-                     
-                 }
-             }
-         }
-     }
+                }
+            }
+        }
+    }
     
     func loadWordsFromFirebase(dicID: String, context:NSManagedObjectContext) {
         fireDB.collection("Words").whereField("wrdDicID", isEqualTo: dicID).getDocuments { (querySnapshot, error) in
-             if let error = error {
-                 
-                 print("Error getting words: \(error.localizedDescription)")
-                 return
-             }
-             guard let documents = querySnapshot?.documents else {
-                 print("No words found")
-                 return
-             }
-             for document in documents {
-                 let wordData = document.data()
-                 let wrdWord = wordData["wrdWord"] as? String
-                 let wrdTranslation = wordData["wrdTranslation"] as? String
-                 let wrdAddDate = wordData["wrdAddDate"] as? String
-                 let wrdDicID = wordData["wrdDicID"] as? String  ?? "NO_DIC"
-                 let wrdImageName = wordData["wrdImageName"] as? String ?? "NO_IMAGE"
-                 let wrdUserID = wordData["wrdUserID"] as? String ?? "NO_USER_ID"
-                 let wrdID = wordData["wrdID"] as! String
-                 let wrdImageFirestorePath = wordData["wrdImageFirestorePath"] as? String ?? ""
-                 let parentDictionary = self.coreData.loadParentDictionaryForWord(dicID: wrdDicID,  data: context).first
-                 let loadedWord = Word(context: context)
-                 loadedWord.wrdWord = wrdWord
-                 loadedWord.wrdTranslation = wrdTranslation
-                 loadedWord.wrdAddDate = wrdAddDate
-                 loadedWord.imageName = wrdImageName
-                 loadedWord.wrdBobbleColor = ".yellow"
-                 loadedWord.wrdStatus = 0
-                 loadedWord.wrdWrongAnswers = 0
-                 loadedWord.wrdRightAnswers = 0
-                 loadedWord.wrdID = wrdID
-                 loadedWord.wrdDicID = wrdDicID
-                 loadedWord.wrdUserID = wrdUserID
-                 loadedWord.parentDictionary = parentDictionary
-                 if wrdImageFirestorePath != "" {
-                     self.alamo.downloadAndSaveImage(fromURL: wrdImageFirestorePath, userID: wrdUserID, dicID: wrdDicID, imageName: wrdImageName) {}
-                     loadedWord.wrdImageFirestorePath = wrdImageFirestorePath
-                     loadedWord.wrdImageIsSet = true
-                 } else {
-                     loadedWord.wrdImageFirestorePath = ""
-                     loadedWord.wrdImageIsSet = false
-                 }
-                 self.coreData.saveData(data: context)
-                 }
-         }
-     }
+            if let error = error {
+                print("Error getting words: \(error.localizedDescription)")
+                return
+            }
+            guard let documents = querySnapshot?.documents else {
+                print("No words found")
+                return
+            }
+            for document in documents {
+                let wordData = document.data()
+                let wrdWord = wordData["wrdWord"] as? String
+                let wrdTranslation = wordData["wrdTranslation"] as? String
+                let wrdAddDate = wordData["wrdAddDate"] as? String
+                let wrdDicID = wordData["wrdDicID"] as? String  ?? "NO_DIC"
+                let wrdImageName = wordData["wrdImageName"] as? String ?? "NO_IMAGE"
+                let wrdUserID = wordData["wrdUserID"] as? String ?? "NO_USER_ID"
+                let wrdID = wordData["wrdID"] as! String
+                let wrdImageFirestorePath = wordData["wrdImageFirestorePath"] as? String ?? ""
+                let parentDictionary = self.coreData.loadParentDictionaryForWord(dicID: wrdDicID,  data: context).first
+                let loadedWord = Word(context: context)
+                loadedWord.wrdWord = wrdWord
+                loadedWord.wrdTranslation = wrdTranslation
+                loadedWord.wrdAddDate = wrdAddDate
+                loadedWord.imageName = wrdImageName
+                loadedWord.wrdBobbleColor = ".yellow"
+                loadedWord.wrdStatus = 0
+                loadedWord.wrdWrongAnswers = 0
+                loadedWord.wrdRightAnswers = 0
+                loadedWord.wrdID = wrdID
+                loadedWord.wrdDicID = wrdDicID
+                loadedWord.wrdUserID = wrdUserID
+                loadedWord.parentDictionary = parentDictionary
+                if wrdImageFirestorePath != "" {
+                    self.alamo.downloadAndSaveImage(fromURL: wrdImageFirestorePath, userID: wrdUserID, dicID: wrdDicID, imageName: wrdImageName) {}
+                    loadedWord.wrdImageFirestorePath = wrdImageFirestorePath
+                    loadedWord.wrdImageIsSet = true
+                } else {
+                    loadedWord.wrdImageFirestorePath = ""
+                    loadedWord.wrdImageIsSet = false
+                }
+                self.coreData.saveData(data: context)
+            }
+        }
+    }
     
     func loadStatisticFromFirebase(userID:String, context:NSManagedObjectContext){
         firebase.getStatisticByUserID(userID: userID) { loadedUserStatistic, error in
@@ -354,8 +350,8 @@ struct SyncModel {
     }
     
     func syncDictionariesCoreDataAndFirebase(userID: String, context:NSManagedObjectContext){
-//TODO: - check, if local RO dictionary is apsent in Firebase, delete it in CoreData
-       let allDictionaries = coreData.loadAllUserDictionaries(userID: userID, data: context)
+        //TODO: - check, if local RO dictionary is apsent in Firebase, delete it in CoreData
+        let allDictionaries = coreData.loadAllUserDictionaries(userID: userID, data: context)
         let allUserDictionaries = allDictionaries.filter({$0.dicReadOnly == false})
         let unsyncDictionaries = allUserDictionaries.filter({$0.dicSyncronized == false})
         if !unsyncDictionaries.isEmpty{
@@ -376,7 +372,7 @@ struct SyncModel {
                                 }
                                 coreData.deleteDictionaryFromCoreData(dicID: dicID, userID: mainModel.loadUserData().userID, context: context)
                                 context.delete(unsyncDictionary)
-    //TODO: - Delete all images in dictionary Firestore folder
+                                //TODO: - Delete all images in dictionary Firestore folder
                             } else { // dictionary was changed in CoreData
                                 // here update dictionary filds in Firestore and set Sync = true for dictionary in CoreData
                                 let dicName = unsyncDictionary.dicName ?? "NO_DIC_NAME"
@@ -394,7 +390,7 @@ struct SyncModel {
                                         print("FirebaseModel: Error updating word firlds in Firestore: \(error)\n")
                                     }
                                 }
-                                 self.coreData.setSyncronizedStatusForDictionary(data: context, dicID: dicID, sync: true)
+                                self.coreData.setSyncronizedStatusForDictionary(data: context, dicID: dicID, sync: true)
                             }
                         } else { // dictionary was not finded in Firebase
                             // here create dictionary in Firebase, and set Sync = true for word in CoreData

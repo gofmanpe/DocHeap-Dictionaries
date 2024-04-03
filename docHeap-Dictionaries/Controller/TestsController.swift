@@ -11,8 +11,6 @@ import CoreData
 class TestsController: UIViewController, PerformToSegue{
     
 //MARK: - Protocols delegate functions
-   // func getRoundsNumber(number: Int) {}
-    
     func performToSegue(identifier: String, dicID: String, roundsNumber:Int) {
         numberOfRounds = roundsNumber
         segueIdentifier = identifier
@@ -81,11 +79,7 @@ class TestsController: UIViewController, PerformToSegue{
     }
     
 //MARK: - Controller functions
-    func localizeElements(){
-        
-    }
-    
-    func isDictionariesAvalible(){
+    private func isDictionariesAvalible(){
         coreDataManager.loadDictionariesForCurrentUser(userID: mainModel.loadUserData().userID, data: context)
         if coreDataManager.dictionariesArray.isEmpty{
             testsTable.isHidden = true
@@ -98,7 +92,7 @@ class TestsController: UIViewController, PerformToSegue{
         }
     }
     
-    func standartState(){
+    private func standartState(){
         currentUserEmail = mainModel.loadUserData().email
         testsTable.dataSource = self
         testsTable.delegate = self
@@ -107,7 +101,7 @@ class TestsController: UIViewController, PerformToSegue{
         testsTable.register(UINib(nibName: "TestNewCell", bundle: nil), forCellReuseIdentifier: "testNewCell")
     }
 
-    func popUpApear(){
+    private func popUpApear(){
         let overLayerView = SelectDictionaryForTestPopUp()
         overLayerView.performToSegueDelegate = self
         overLayerView.selectedTestIdentifier = selectedTestIdentifier
@@ -122,7 +116,6 @@ extension TestsController: UITableViewDelegate, UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        //let testCell = testsTable.dequeueReusableCell(withIdentifier: "testCell") as! TestCell
         let testCell = testsTable.dequeueReusableCell(withIdentifier: "testNewCell") as! TestNewCell
         testCell.testName.text = testsArray[indexPath.row].name
         testCell.testImage.image = UIImage(named: testsArray[indexPath.row].image)

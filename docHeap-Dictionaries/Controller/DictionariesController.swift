@@ -52,7 +52,7 @@ class DictionariesController: UIViewController, UpdateView, CellButtonPressed{
     @IBOutlet weak var userInitials: UILabel!
     
 //MARK: - Localization
-    func localizeElements(){
+    private func localizeElements(){
         myDictionariesLabel.text = "dictionariesVC_myDictionaries_label".localized
         likesNameLabel.text = "dictionariesVC_likes_label".localized
         scoresNameLabel.text = "dictionariesVC_scores_label".localized
@@ -72,19 +72,15 @@ class DictionariesController: UIViewController, UpdateView, CellButtonPressed{
     private var dicID = String()
     var userID = String()
     private var dictionariesArray = [LocalDictionary]()
-   // private var userData : UserData?
     private var likesCount = Int()
     
 //MARK: - Lifecycle functions
     override func viewDidLoad() {
         super.viewDidLoad()
-       
-            setupData()
-            dictionaryCheck()
-            elementsDesign()
-            localizeElements()
-       
-        
+        setupData()
+        dictionaryCheck()
+        elementsDesign()
+        localizeElements()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -105,11 +101,9 @@ class DictionariesController: UIViewController, UpdateView, CellButtonPressed{
         setupData()
         dictionaryCheck()
     }
-
-    
     
 //MARK: - Controller functions
-    func setupData(){
+    private func setupData(){
         dictionariesArray = coreData.loadUserDictionaries(userID: mainModel.loadUserData().userID, context: context)
         guard let userData = coreData.loadUserDataByID(userID: mainModel.loadUserData().userID, context: context) else {
             return
@@ -117,24 +111,11 @@ class DictionariesController: UIViewController, UpdateView, CellButtonPressed{
         let userTotalStat = coreData.getTotalStatisticForUser(userID: mainModel.loadUserData().userID, context: context).first
         scoresLabel.text = String(userTotalStat?.scores ?? 0)
         testsRunsLabel.text = String(userTotalStat?.testRuns ?? 0)
-       
-//        let userEmail = userData.userEmail
         userInitials.text = getUserInitials(fullName: userData.userName)
         dictionariesTable.delegate = self
         dictionariesTable.dataSource = self
         dictionariesTable.reloadData()
         userNameLabel.text = userData.userName
-//        if dictionariesArray.isEmpty{
-//            noDicltionariesLabel.isHidden = false}
-//        else {
-//            dictionariesTable.reloadData()
-//            noDicltionariesLabel.isHidden = true
-//        }
-//        if !userData.userName.isEmpty {
-//            userNameLabel.text = userData.userName
-//        } else {
-//            userNameLabel.text = userEmail
-//        }
         let avatarExtention = userData.userAvatarExtention
         if !avatarExtention.isEmpty{
             avatarName = "userAvatar.\(avatarExtention)"
@@ -158,7 +139,7 @@ class DictionariesController: UIViewController, UpdateView, CellButtonPressed{
         }
     }
     
-    func getUserInitials(fullName: String) -> String {
+    private func getUserInitials(fullName: String) -> String {
         let words = fullName.components(separatedBy: " ")
         var initials = ""
         for word in words {
@@ -169,11 +150,10 @@ class DictionariesController: UIViewController, UpdateView, CellButtonPressed{
         return initials.uppercased()
     }
     
-    func elementsDesign(){
+    private func elementsDesign(){
         avatarBgView.layer.cornerRadius = avatarBgView.frame.size.width/2
         avatarBgView.layer.masksToBounds = false
         avatarBgView.clipsToBounds = true
-        
         avatarImageView.layer.cornerRadius = avatarImageView.frame.size.width/2
         avatarImageView.layer.masksToBounds = false
         avatarImageView.clipsToBounds = true
@@ -190,27 +170,27 @@ class DictionariesController: UIViewController, UpdateView, CellButtonPressed{
         newDictionaryButton.layer.cornerRadius = 10
     }
     
-    func popUpApear(dictionaryIDFromCell:String, senderAction:String){
-            switch senderAction {
-            case "Create":
-                let overLayerView = CreateDictionaryPopUp()
-                overLayerView.tableReloadDelegate = self
-                overLayerView.appear(sender: self)
-            case "Edit":
-                let overLayerView = EditDictionaryPopUp()
-                overLayerView.dicID = dictionaryIDFromCell
-                overLayerView.tableReloadDelegate = self
-                overLayerView.appear(sender: self)
-            case "Delete":
-                let overLayerView = DeleteDictionaryPopUp()
-                overLayerView.tableReloadDelegate = self
-                overLayerView.dicID = dictionaryIDFromCell
-                overLayerView.appear(sender: self)
-            default: break
-            }
+    private func popUpApear(dictionaryIDFromCell:String, senderAction:String){
+        switch senderAction {
+        case "Create":
+            let overLayerView = CreateDictionaryPopUp()
+            overLayerView.tableReloadDelegate = self
+            overLayerView.appear(sender: self)
+        case "Edit":
+            let overLayerView = EditDictionaryPopUp()
+            overLayerView.dicID = dictionaryIDFromCell
+            overLayerView.tableReloadDelegate = self
+            overLayerView.appear(sender: self)
+        case "Delete":
+            let overLayerView = DeleteDictionaryPopUp()
+            overLayerView.tableReloadDelegate = self
+            overLayerView.dicID = dictionaryIDFromCell
+            overLayerView.appear(sender: self)
+        default: break
+        }
     }
     
-    func buttonScaleAnimation(targetButton:UIButton){
+    private func buttonScaleAnimation(targetButton:UIButton){
         UIView.animate(withDuration: 0.2) {
             targetButton.transform = CGAffineTransform(scaleX: 1.25, y: 1.25)
         } completion: { (bool) in
@@ -218,7 +198,7 @@ class DictionariesController: UIViewController, UpdateView, CellButtonPressed{
         }
     }
     
-    func imageScaleAnimation(target:UIImageView){
+    private func imageScaleAnimation(target:UIImageView){
         UIView.animate(withDuration: 0.2) {
             target.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
         } completion: { (bool) in
@@ -226,7 +206,7 @@ class DictionariesController: UIViewController, UpdateView, CellButtonPressed{
         }
     }
     
-    func dictionaryCheck(){
+    private func dictionaryCheck(){
         dictionariesTable.reloadData()
         if dictionariesArray.isEmpty {
             dictionariesTable.isHidden = true
@@ -289,7 +269,6 @@ extension DictionariesController: UITableViewDelegate, UITableViewDataSource{
             } else {
                 dictionaryCell.messagesStackView.isHidden = true
             }
-            //listenCounts(dicID: dictionariesArray[indexPath.row].dicID ?? "")
             firebase.listenDictionaryCommentsCount(dicID: dictionariesArray[indexPath.row].dicID) { count, error in
                 if let error = error{
                     print("Error get dictionary likes count: \(error)\n")
@@ -297,7 +276,6 @@ extension DictionariesController: UITableViewDelegate, UITableViewDataSource{
                     guard let messagesCount = count else {
                         return
                     }
-                  //  self.imageScaleAnimation(target: dictionaryCell.commentImage)
                     dictionaryCell.dicCommentsLabel.text = String(messagesCount)
                 }
             }
@@ -308,12 +286,9 @@ extension DictionariesController: UITableViewDelegate, UITableViewDataSource{
                     guard let likesCount = count else {
                         return
                     }
-                 //   self.imageScaleAnimation(target: dictionaryCell.likeImage)
                     dictionaryCell.dicLikesLabel.text = String(likesCount)
                 }
             }
-            //dictionaryCell.dicLikesLabel.text = String(likesCount)
-           // dictionaryCell.dicCommentsLabel.text = String(messagesCount)
             dictionaryCell.dicTypeLabel.text = "dictionariesVC_dicCell_shared_label".localized
             dictionaryCell.dicTypeLabel.isHidden = false
         }
@@ -326,12 +301,12 @@ extension DictionariesController: UITableViewDelegate, UITableViewDataSource{
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-            let destinationVC = segue.destination as! BrowseDictionaryController
-            if let indexPath = dictionariesTable.indexPathForSelectedRow{
-                let ownerName = coreData.getNetworkUserNameByID(userID: dictionariesArray[indexPath.row].dicOwnerID, context: context)
-                destinationVC.ownerName = ownerName
-                destinationVC.dicID = dictionariesArray[indexPath.row].dicID
-            }
+        let destinationVC = segue.destination as! BrowseDictionaryController
+        if let indexPath = dictionariesTable.indexPathForSelectedRow{
+            let ownerName = coreData.getNetworkUserNameByID(userID: dictionariesArray[indexPath.row].dicOwnerID, context: context)
+            destinationVC.ownerName = ownerName
+            destinationVC.dicID = dictionariesArray[indexPath.row].dicID
+        }
     }
     
 }
