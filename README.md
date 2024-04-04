@@ -1,1 +1,1 @@
-[header](https://drive.google.com/file/d/17v5nVZGa0DHnPA6VP6Bt9kB1MAn2Gc3i/view?usp=sharing)
+![header_wth_author_1600px](https://github.com/gofmanpe/DocHeap-Dictionaries/assets/116877774/93d3fe41-9251-46b0-9281-25ae933ad62d)
