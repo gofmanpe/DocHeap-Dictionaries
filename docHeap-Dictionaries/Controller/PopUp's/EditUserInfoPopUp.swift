@@ -215,7 +215,7 @@ class EditUserInfoPopUp: UIViewController {
                 userMistakes: userData?.userMistakes ?? 0,
                 userRightAnswers: userData?.userRightAnswers ?? 0,
                 userTestsCompleted: userData?.userTestsCompleted ?? 0, 
-                userIdentityToken: userData?.userIdentityToken ?? ""
+                userAppleIdentifier: userData?.userAppleIdentifier ?? ""
             )
             coreData.updateUserProfileData(userData: uData, context: context)
             userData = coreData.loadUserDataByID(userID: mainModel.loadUserData().userID, context: context)

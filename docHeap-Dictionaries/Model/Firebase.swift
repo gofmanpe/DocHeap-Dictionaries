@@ -20,7 +20,7 @@ struct Firebase {
     private var listners = [String : ListenerRegistration]()
     
 //MARK: - Create functions
-    func createUser(userID:String, userEmail: String, userName: String, userInterfaceLanguage:String, userAvatarFirestorePath:URL?, accType:String) {
+    func createUser(userID:String, userEmail: String, userName: String, userInterfaceLanguage:String, userAvatarFirestorePath:URL?, accType:String, appleIdentifier:String?) {
         let date = mainModel.convertDateToString(currentDate: Date(), time: false)
         var data: [String: Any] = [
             "userID" : userID,
@@ -43,6 +43,11 @@ struct Firebase {
             data["userAvatarFirestorePath"] = userAvatarFirestorePath?.absoluteString
         } else {
             data["userAvatarFirestorePath"] = ""
+        }
+        if appleIdentifier != nil {
+            data["userAppleIdentifier"] = appleIdentifier
+        } else {
+            data["userAppleIdentifier"] = ""
         }
         firebase.collection("Users").document(userID).setData(data) { (error) in
             if let err = error{
@@ -189,7 +194,71 @@ struct Firebase {
         }
     }
     
+    func createAppUserToken1(userID: String, token:String) {
+        firebase.collection("AppUsersTokens").document(userID).setData([
+            "userID": userID,
+            "userToken": token
+        ]) { (error) in
+            if let err = error{
+                print("Firebase: Error to saving data: \(err)")
+            }
+        }
+    }
+    
 //MARK: - Read functions
+    func getUserIDByAppleIdenfitier(identifier:String,  completion: @escaping (String?, Error?) -> Void){
+        firebase.collection("Users").whereField("userAppleIdentifier", isEqualTo: identifier).getDocuments { (querySnapshot, error) in
+            if let error = error {
+                print("Error getting documents: \(error)")
+                completion(nil,error)
+            } else {
+                guard let document = querySnapshot?.documents.first else {
+                    completion(nil,error)
+                    return
+                }
+                let userData = document.data()
+                print("User data is: \(userData)\n")
+                let userID = userData["userID"] as! String
+                completion(userID,nil)
+            }
+        }
+    }
+    
+    func getUserDataByID(userID: String, completion: @escaping (UserData?, Error?) -> Void) {
+        firebase.collection("Users").whereField("userID", isEqualTo: userID).getDocuments { (querySnapshot, error) in
+            if let error = error{
+                completion(nil,error)
+            } else {
+                guard let document = querySnapshot?.documents.first else {
+                    completion(nil,error)
+                    return
+                }
+                let userFBdata = document.data()
+                let result = UserData(
+                    userID: userFBdata["userID"] as! String,
+                    userName: userFBdata["userName"] as? String ?? "",
+                    userBirthDate: userFBdata["userBirthDate"] as? String ?? "",
+                    userCountry: userFBdata["userCountry"] as? String ?? "",
+                    userAvatarFirestorePath: userFBdata["userAvatarFirestorePath"] as? String ?? "",
+                    userAvatarExtention: "jpg",
+                    userNativeLanguage: userFBdata["userNativeLanguage"] as? String ?? "",
+                    userScores: userFBdata["userScores"] as? Int ?? 0,
+                    userShowEmail: userFBdata["userShowEmail"] as? Bool ?? false,
+                    userEmail: userFBdata["userEmail"] as? String ?? "",
+                    userSyncronized: true,
+                    userType: "",
+                    userRegisterDate: userFBdata["userRegisterDate"] as! String,
+                    userInterfaceLanguage: userFBdata["userInterfaceLanguage"] as? String ?? "",
+                    userMistakes: userFBdata["userMistakes"] as? Int ?? 0,
+                    userRightAnswers: userFBdata["userRightAnswers"] as? Int ?? 0,
+                    userTestsCompleted: userFBdata["userTestsCompleted"] as? Int ?? 0,
+                    userAppleIdentifier: ""
+                )
+                completion(result,nil)
+            }
+        }
+    }
+    
     func getUserDataByEmail(userEmail: String, completion: @escaping (UserData?) -> Void) {
         firebase.collection("Users").whereField("userEmail", isEqualTo: userEmail).getDocuments { (querySnapshot, error) in
             if error != nil {
@@ -218,7 +287,7 @@ struct Firebase {
                     userMistakes: userFBdata["userMistakes"] as? Int ?? 0,
                     userRightAnswers: userFBdata["userRightAnswers"] as? Int ?? 0,
                     userTestsCompleted: userFBdata["userTestsCompleted"] as? Int ?? 0, 
-                    userIdentityToken: ""
+                    userAppleIdentifier: ""
                 )
                 completion(result)
             }
@@ -334,7 +403,6 @@ struct Firebase {
                         completion(nil,nil)
                     }
                 }
-                
             }
         }
     }
@@ -1205,6 +1273,18 @@ struct Firebase {
         ) { error in
             if let error = error {
                 print("FirebaseModel: Error updating avatar URL in Firestore: \(error)")
+            }
+        }
+    }
+    
+    func updateUserAppleIdentifier(userID: String, userIdentifier:String) {
+        firebase.collection("Users").document(userID).updateData(
+            ["userAppleIdentifier" : userIdentifier,
+             "accountType" : FieldValue.arrayUnion(["apple"])
+            ]
+        ) { error in
+            if let error = error {
+                print("FirebaseModel: Error updating userAppleIdentifier in Firestore: \(error)")
             }
         }
     }

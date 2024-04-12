@@ -206,7 +206,7 @@ class RegisterController: UIViewController {
                                         userName: self.userName,
                                         userInterfaceLanguage: self.mainModel.currentSystemLanguage(),
                                         userAvatarFirestorePath: downloadURL,
-                                        accType: "auth"
+                                        accType: "auth", appleIdentifier: nil
                                     )
                                 }
                             }
@@ -218,7 +218,8 @@ class RegisterController: UIViewController {
                                 userName: self.userName,
                                 userInterfaceLanguage: self.mainModel.currentSystemLanguage(),
                                 userAvatarFirestorePath: nil,
-                                accType: "auth"
+                                accType: "auth",
+                                appleIdentifier: nil
                             )
                         }
                         self.performSegue(withIdentifier: "goToApp", sender: self)

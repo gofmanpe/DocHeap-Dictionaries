@@ -70,7 +70,7 @@ class StartController: UIViewController{
         super.viewDidLoad()
         tokenCheck()
         userSignedCheck()
-       // print(mainModel.getDocumentsFolderPath())
+       print(mainModel.getDocumentsFolderPath())
         setupView()
         localizeElements()
         loadCurrentUser()
@@ -146,7 +146,7 @@ class StartController: UIViewController{
                   } // User was logined
                     let userEmail = email ?? "No_user_email"
                     let userPhoto = photoURL
-                    userCheckAndCreate(userName: userName, userEmail: userEmail, userPhoto: userPhoto, accType: "google", userToken: nil)
+                    userCheckAndCreate(userName: userName, userEmail: userEmail, userPhoto: userPhoto, accType: "google", userAppleIdentifier: nil)
                 }
             }
         }
@@ -172,7 +172,7 @@ class StartController: UIViewController{
         overLayerView.appearOverlayer(sender: self, text:text)
     }
     
-    func userCheckAndCreate(userName:String, userEmail:String, userPhoto:URL?, accType:String, userToken:String?){
+    func userCheckAndCreate(userName:String, userEmail:String, userPhoto:URL?, accType:String, userAppleIdentifier:String?){
         var userAvatar = String()
         if userPhoto != nil {
             userAvatar = userPhoto!.absoluteString
@@ -182,6 +182,10 @@ class StartController: UIViewController{
         if coreDataManager.isUserExistInCoreData(userEmail: userEmail, context: context){ // User was found in CoreData by email
             guard let userID = coreDataManager.loadUserData(userEmail: userEmail, data: context).first?.userID else {
                 return
+            }
+            if let userApplID = userAppleIdentifier {
+                // here update userAppleIdentifier in firebase
+                self.firebase.updateUserAppleIdentifier(userID: userID, userIdentifier: userApplID)
             }
             //TODO: - For sync from different devices, if dictionary and/or word was created/modified/deleted from different device on same accaunt
             userDefaults.set(userID, forKey: "userID")
@@ -195,7 +199,9 @@ class StartController: UIViewController{
             firebase.checkUserExistsInFirebase(userEmail: userEmail) { userExist in
                 if userExist{ // User exist in Firebase
                     self.firebase.getUserDataByEmail(userEmail: userEmail) { result in
-                        guard let data = result else {return}
+                        guard let data = result else {
+                            return
+                        }
                         let userData = UserData(
                             userID: data.userID,
                             userName: data.userName,
@@ -214,7 +220,7 @@ class StartController: UIViewController{
                             userMistakes: data.userMistakes,
                             userRightAnswers: data.userRightAnswers,
                             userTestsCompleted: data.userTestsCompleted, 
-                            userIdentityToken: userToken ?? ""
+                            userAppleIdentifier: userAppleIdentifier ?? ""
                         )
                         DispatchQueue.main.async {
                             self.sync.loadDictionariesFromFirebase(userID: userData.userID, context: self.context)
@@ -224,6 +230,10 @@ class StartController: UIViewController{
                         if !self.mainModel.isUserFolderExist(folderName: userData.userID) { // User folder dont exist
                             self.mainModel.createFolderInDocuments(withName: userData.userID)
                             self.mainModel.createFolderInDocuments(withName: "\(userData.userID)/Temp")
+                        }
+                        if let userApplID = userAppleIdentifier {
+                            // here update userAppleIdentifier in firebase
+                            self.firebase.updateUserAppleIdentifier(userID: userData.userID, userIdentifier: userApplID)
                         }
                         self.userDefaults.set(userData.userID, forKey: "userID")
                         self.userDefaults.set(userEmail, forKey: "userEmail")
@@ -238,12 +248,13 @@ class StartController: UIViewController{
                     }
                 } else { // User doesnt exist in Firebase
                     let userID = self.mainModel.uniqueIDgenerator(prefix: "usr")
+                  //  self.firebase.createAppUserToken(userID: userID, token: userAppleIdentifier ?? "")
                     self.firebase.createUser(userID: userID,
                                              userEmail: userEmail,
                                              userName: userName,
                                              userInterfaceLanguage: self.mainModel.currentSystemLanguage(),
                                              userAvatarFirestorePath: URL(string:userAvatar),
-                                             accType: accType)
+                                             accType: accType, appleIdentifier: userAppleIdentifier)
                     let newUserData = UserData(
                         userID: userID,
                         userName: userName,
@@ -262,7 +273,7 @@ class StartController: UIViewController{
                         userMistakes: 0,
                         userRightAnswers: 0,
                         userTestsCompleted: 0, 
-                        userIdentityToken: userToken ?? ""
+                        userAppleIdentifier: userAppleIdentifier ?? ""
                     )
                     self.coreDataManager.createLocalUser(userData: newUserData, context: self.context)
                     self.mainModel.createFolderInDocuments(withName: userID)
@@ -336,7 +347,7 @@ class StartController: UIViewController{
                                 userMistakes: data.userMistakes,
                                 userRightAnswers: data.userRightAnswers,
                                 userTestsCompleted: data.userTestsCompleted, 
-                                userIdentityToken: ""
+                                userAppleIdentifier: ""
                             )
                             self.coreDataManager.createLocalUser(userData: userData, context: self.context)
                             if !self.mainModel.isUserFolderExist(folderName: userData.userID) { // User folder dont exist
@@ -441,6 +452,9 @@ extension StartController: ASAuthorizationControllerDelegate {
             return
         }
         
+        let userIdentifier = credential.user
+       
+        
         guard let token = credential.identityToken else {
             return
         }
@@ -448,39 +462,71 @@ extension StartController: ASAuthorizationControllerDelegate {
         guard let tokenString = String(data:token, encoding: .utf8) else {
             return
         }
-        let userToken = UserDefaults.standard.string(forKey: "appleIdentityToken")
         
-        if userToken == nil{
-            UserDefaults.standard.set(tokenString, forKey: "appleIdentityToken")
-            let oAuthCredential = OAuthProvider.credential(withProviderID: "apple.com", idToken: tokenString, rawNonce: nonce)
-            Auth.auth().signIn(with: oAuthCredential) { result, error in
-                if let error = error {
-                    print("Some error without token: \(error)\n")
+        
+        
+        let existingUserToken = UserDefaults.standard.string(forKey: "appleIdentityToken")
+        
+        if existingUserToken == nil{ // first launch or reinstall
+            firebase.getUserIDByAppleIdenfitier(identifier: userIdentifier) { userID, error in
+                if let error = error{
+                    print("Error get userID by token: \(error)\n")
                 } else {
-                    guard let firstName = credential.fullName?.givenName else {
-                        return
+                    if userID != nil{ // get user data in firebase by userIdentifier
+                        UserDefaults.standard.set(tokenString, forKey: "appleIdentityToken")
+                        let oAuthCredential = OAuthProvider.credential(withProviderID: "apple.com", idToken: tokenString, rawNonce: nonce)
+                        Auth.auth().signIn(with: oAuthCredential) { result, error in
+                            if let error = error {
+                                print("Some error without token: \(error)\n")
+                            } else {
+                                self.firebase.getUserDataByID(userID: userID!) { data, error in
+                                    guard let userData = data else {
+                                        return
+                                    }
+                                    self.userCheckAndCreate(userName: userData.userName, userEmail: userData.userEmail, userPhoto: nil, accType: "apple", userAppleIdentifier: userIdentifier)
+                                }
+                            }
+                        }
+                       // self.goToApp()
+                    } else { // creating new user
+                        UserDefaults.standard.set(tokenString, forKey: "appleIdentityToken")
+                        let oAuthCredential = OAuthProvider.credential(withProviderID: "apple.com", idToken: tokenString, rawNonce: nonce)
+                        Auth.auth().signIn(with: oAuthCredential) { result, error in
+                            if let error = error {
+                                print("Some error without token: \(error)\n")
+                            } else {
+                                guard let firstName = credential.fullName?.givenName else {
+                                    return
+                                }
+                                print("First name is: \(firstName)\n")
+                                guard let lastName = credential.fullName?.familyName else {
+                                    return
+                                }
+                                print("First name is: \(lastName)\n")
+                                guard let email = credential.email else {
+                                    return
+                                }
+                                print("First name is: \(email)\n")
+                                let userName = "\(firstName) \(lastName)"
+                                self.userCheckAndCreate(userName: userName, userEmail: email, userPhoto: nil, accType: "apple", userAppleIdentifier: userIdentifier)
+                                self.goToApp()
+                            }
+                        }
+                        
                     }
-                    guard let lastName = credential.fullName?.familyName else {
-                        return
-                    }
-                    guard let email = credential.email else {
-                        return
-                    }
-                    let userName = "\(firstName) \(lastName)"
-                    self.userCheckAndCreate(userName: userName, userEmail: email, userPhoto: nil, accType: "apple", userToken: tokenString)
                 }
             }
+            
         } else {
-            let oAuthCredential = OAuthProvider.credential(withProviderID: "apple.com", idToken: userToken!, rawNonce: "")
+            let oAuthCredential = OAuthProvider.credential(withProviderID: "apple.com", idToken: existingUserToken!, rawNonce: "")
             Auth.auth().signIn(with: oAuthCredential) { result, error in
                 if let error = error {
                     print("Some error with saved token: \(error)\n")
                 }
                 self.accType = "apple"
-                guard let userData = self.coreDataManager.loadUserDataByToken(userToken: userToken!, context: self.context) else {
+                guard let userData = self.coreDataManager.loadUserDataByAppleIdentifier(identifier: userIdentifier, context: self.context) else {
                     return
                 }
-                print(userData)
                 self.userDefaults.set(userData.userID, forKey: "userID")
                 self.userDefaults.set(userData.userEmail, forKey: "userEmail")
                 self.userDefaults.set(true, forKey: "keepSigned")

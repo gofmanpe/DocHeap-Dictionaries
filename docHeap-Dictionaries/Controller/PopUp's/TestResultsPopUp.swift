@@ -94,7 +94,7 @@ class TestResultsPopUp: UIViewController{
             userMistakes: errorsCount,
             userRightAnswers: rightAnswers,
             userTestsCompleted: 1, 
-            userIdentityToken: userData?.userIdentityToken ?? "")
+            userAppleIdentifier: userData?.userAppleIdentifier ?? "")
         if mainModel.isInternetAvailable(){
             firebase.updateUserDataFirebase(userData: userResults)
             coreDataManager.updateUserDataAfterTest(userData: userResults, context: context)

@@ -41,7 +41,6 @@
 		7675F6832BA4AF9900C3AC9A /* AboutAppPopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7675F6812BA4AF9900C3AC9A /* AboutAppPopUp.swift */; };
 		7675F6842BA4AF9900C3AC9A /* AboutAppPopUp.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7675F6822BA4AF9900C3AC9A /* AboutAppPopUp.xib */; };
 		767777C82B767097008C7E75 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 767777CA2B767097008C7E75 /* Localizable.stringsdict */; };
-		7677914E2AE5B1070074EDE9 /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 7677914D2AE5B1070074EDE9 /* IQKeyboardManagerSwift */; };
 		767791502AE5B1B40074EDE9 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 7677914F2AE5B1B40074EDE9 /* Alamofire */; };
 		7678A7372B4DE12D00630946 /* UserInfoPopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7678A7352B4DE12D00630946 /* UserInfoPopUp.swift */; };
 		7678A7382B4DE12D00630946 /* UserInfoPopUp.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7678A7362B4DE12D00630946 /* UserInfoPopUp.xib */; };
@@ -85,7 +84,6 @@
 		76C8ABFE2B0E179C00CE41BE /* Alamo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C8ABFD2B0E179C00CE41BE /* Alamo.swift */; };
 		76DE1D552B612DF500DF4913 /* BrowseSharedWordsPairPopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76DE1D532B612DF500DF4913 /* BrowseSharedWordsPairPopUp.swift */; };
 		76DE1D562B612DF500DF4913 /* BrowseSharedWordsPairPopUp.xib in Resources */ = {isa = PBXBuildFile; fileRef = 76DE1D542B612DF500DF4913 /* BrowseSharedWordsPairPopUp.xib */; };
-		76DFBD572A35F8E7009966AE /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 76DFBD562A35F8E7009966AE /* IQKeyboardManagerSwift */; };
 		76EBE93D2BA46B2700548843 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 76EBE93C2BA46B2700548843 /* GoogleService-Info.plist */; };
 		76EEC2DB2AF51C2F00C2B11B /* StartController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76EEC2DA2AF51C2E00C2B11B /* StartController.swift */; };
 		76EEC2DD2AF5246200C2B11B /* RegisterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76EEC2DC2AF5246200C2B11B /* RegisterController.swift */; };
@@ -96,7 +94,6 @@
 		76EEC2E82AF5405800C2B11B /* FirebaseAppCheck in Frameworks */ = {isa = PBXBuildFile; productRef = 76EEC2E72AF5405800C2B11B /* FirebaseAppCheck */; };
 		76EEC2EB2AF5413E00C2B11B /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 76EEC2EA2AF5413E00C2B11B /* FirebaseFirestore */; };
 		76EEC2ED2AF5416E00C2B11B /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 76EEC2EC2AF5416E00C2B11B /* FirebaseAuth */; };
-		76EEC2F42AFE86B900C2B11B /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 76EEC2F32AFE86B900C2B11B /* OpenAI */; };
 		76EEC2F62B00DECF00C2B11B /* Firebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76EEC2F52B00DECF00C2B11B /* Firebase.swift */; };
 		76EEC2F82B01982C00C2B11B /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 76EEC2F72B01982C00C2B11B /* FirebaseStorage */; };
 		76EEC3032B03D69200C2B11B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 76EEC3052B03D69200C2B11B /* Localizable.strings */; };
@@ -107,6 +104,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		76126C632BC934510006703E /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		7617D8832B547AE900358EBC /* StatisticCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticCell.swift; sourceTree = "<group>"; };
 		7617D8842B547AE900358EBC /* StatisticCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = StatisticCell.xib; sourceTree = "<group>"; };
 		7618E5242B3DA8CC0090F183 /* EditUserInfoPopUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditUserInfoPopUp.swift; sourceTree = "<group>"; };
@@ -208,7 +206,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				7655BD852B2894E600240961 /* GoogleSignInSwift in Frameworks */,
-				76DFBD572A35F8E7009966AE /* IQKeyboardManagerSwift in Frameworks */,
 				76C428C52B348B470005418D /* MBProgressHUD in Frameworks */,
 				76EEC2E22AF5405800C2B11B /* FirebaseAnalyticsOnDeviceConversion in Frameworks */,
 				76884CF62B470DFE0095FEF3 /* AlamofireImage in Frameworks */,
@@ -219,9 +216,7 @@
 				76EEC2E02AF5405800C2B11B /* FirebaseAnalytics in Frameworks */,
 				76EEC2ED2AF5416E00C2B11B /* FirebaseAuth in Frameworks */,
 				76EEC2F82B01982C00C2B11B /* FirebaseStorage in Frameworks */,
-				7677914E2AE5B1070074EDE9 /* IQKeyboardManagerSwift in Frameworks */,
 				76EEC2E82AF5405800C2B11B /* FirebaseAppCheck in Frameworks */,
-				76EEC2F42AFE86B900C2B11B /* OpenAI in Frameworks */,
 				76EEC2E62AF5405800C2B11B /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
 				7655BD832B2894E600240961 /* GoogleSignIn in Frameworks */,
 			);
@@ -284,6 +279,7 @@
 				76733D7329D0849500379116 /* SceneDelegate.swift */,
 				76EBE93C2BA46B2700548843 /* GoogleService-Info.plist */,
 				76733D8229D0849700379116 /* Info.plist */,
+				76126C632BC934510006703E /* PrivacyInfo.xcprivacy */,
 			);
 			path = "docHeap-Dictionaries";
 			sourceTree = "<group>";
@@ -408,9 +404,7 @@
 			);
 			name = "docHeap-Dictionaries";
 			packageProductDependencies = (
-				76DFBD562A35F8E7009966AE /* IQKeyboardManagerSwift */,
 				767CDCF72AADDB3C00AFEB9D /* Alamofire */,
-				7677914D2AE5B1070074EDE9 /* IQKeyboardManagerSwift */,
 				7677914F2AE5B1B40074EDE9 /* Alamofire */,
 				76EEC2DF2AF5405800C2B11B /* FirebaseAnalytics */,
 				76EEC2E12AF5405800C2B11B /* FirebaseAnalyticsOnDeviceConversion */,
@@ -419,7 +413,6 @@
 				76EEC2E72AF5405800C2B11B /* FirebaseAppCheck */,
 				76EEC2EA2AF5413E00C2B11B /* FirebaseFirestore */,
 				76EEC2EC2AF5416E00C2B11B /* FirebaseAuth */,
-				76EEC2F32AFE86B900C2B11B /* OpenAI */,
 				76EEC2F72B01982C00C2B11B /* FirebaseStorage */,
 				7655BD822B2894E600240961 /* GoogleSignIn */,
 				7655BD842B2894E600240961 /* GoogleSignInSwift */,
@@ -457,10 +450,8 @@
 			);
 			mainGroup = 76733D6529D0849400379116;
 			packageReferences = (
-				76DFBD552A35F8E7009966AE /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
 				767CDCF62AADDB3C00AFEB9D /* XCRemoteSwiftPackageReference "Alamofire" */,
 				76EEC2DE2AF5405800C2B11B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
-				76EEC2F22AFE86B900C2B11B /* XCRemoteSwiftPackageReference "OpenAI" */,
 				7655BD812B2894E600240961 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 				76C428C32B348B470005418D /* XCRemoteSwiftPackageReference "MBProgressHUD" */,
 				76884CF42B470DFE0095FEF3 /* XCRemoteSwiftPackageReference "AlamofireImage" */,
@@ -743,7 +734,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "docHeap-Dictionaries/docHeap-Dictionaries.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = R583G7JFCN;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "docHeap-Dictionaries/Info.plist";
@@ -778,7 +769,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "docHeap-Dictionaries/docHeap-Dictionaries.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = R583G7JFCN;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "docHeap-Dictionaries/Info.plist";
@@ -862,28 +853,12 @@
 				minimumVersion = 1.2.0;
 			};
 		};
-		76DFBD552A35F8E7009966AE /* XCRemoteSwiftPackageReference "IQKeyboardManager" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/hackiftekhar/IQKeyboardManager.git";
-			requirement = {
-				kind = exactVersion;
-				version = 6.5.0;
-			};
-		};
 		76EEC2DE2AF5405800C2B11B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 10.17.0;
-			};
-		};
-		76EEC2F22AFE86B900C2B11B /* XCRemoteSwiftPackageReference "OpenAI" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/MacPaw/OpenAI.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.2.4;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -898,11 +873,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 7655BD812B2894E600240961 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
 			productName = GoogleSignInSwift;
-		};
-		7677914D2AE5B1070074EDE9 /* IQKeyboardManagerSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 76DFBD552A35F8E7009966AE /* XCRemoteSwiftPackageReference "IQKeyboardManager" */;
-			productName = IQKeyboardManagerSwift;
 		};
 		7677914F2AE5B1B40074EDE9 /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -923,11 +893,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 76C428C32B348B470005418D /* XCRemoteSwiftPackageReference "MBProgressHUD" */;
 			productName = MBProgressHUD;
-		};
-		76DFBD562A35F8E7009966AE /* IQKeyboardManagerSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 76DFBD552A35F8E7009966AE /* XCRemoteSwiftPackageReference "IQKeyboardManager" */;
-			productName = IQKeyboardManagerSwift;
 		};
 		76EEC2DF2AF5405800C2B11B /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -963,11 +928,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 76EEC2DE2AF5405800C2B11B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAuth;
-		};
-		76EEC2F32AFE86B900C2B11B /* OpenAI */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 76EEC2F22AFE86B900C2B11B /* XCRemoteSwiftPackageReference "OpenAI" */;
-			productName = OpenAI;
 		};
 		76EEC2F72B01982C00C2B11B /* FirebaseStorage */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -158,7 +158,7 @@ struct CoreDataManager{
         localUser.userMistakes = Int64(userData.userMistakes)
         localUser.userRightAnswers = Int64(userData.userRightAnswers)
         localUser.userTestsCompleted = Int64(userData.userTestsCompleted)
-        localUser.userIdentityToken = userData.userIdentityToken
+        localUser.userAppleIdentifier = userData.userAppleIdentifier
         saveData(data: context)
     }
     
@@ -804,7 +804,7 @@ struct CoreDataManager{
                 userMistakes: Int(data?.userMistakes ?? 0),
                 userRightAnswers: Int(data?.userRightAnswers ?? 0),
                 userTestsCompleted: Int(data?.userTestsCompleted ?? 0),
-                userIdentityToken: data?.userIdentityToken ?? ""
+                userAppleIdentifier: data?.userAppleIdentifier ?? ""
             )
         } catch {
             print ("Error fetching data \(error)")
@@ -812,9 +812,9 @@ struct CoreDataManager{
         return queryResult
     }
     
-    func loadUserDataByToken(userToken: String, context: NSManagedObjectContext)->UserData?{
+    func loadUserDataByAppleIdentifier(identifier: String, context: NSManagedObjectContext)->UserData?{
         let request: NSFetchRequest<Users> = Users.fetchRequest()
-        request.predicate = NSPredicate(format: "userIdentityToken MATCHES %@", userToken)
+        request.predicate = NSPredicate(format: "userAppleIdentifier MATCHES %@", identifier)
         var queryResult : UserData?
         do {
             let userArray = try context.fetch(request)
@@ -837,7 +837,7 @@ struct CoreDataManager{
                 userMistakes: Int(data?.userMistakes ?? 0),
                 userRightAnswers: Int(data?.userRightAnswers ?? 0),
                 userTestsCompleted: Int(data?.userTestsCompleted ?? 0),
-                userIdentityToken: data?.userIdentityToken ?? ""
+                userAppleIdentifier: data?.userAppleIdentifier ?? ""
             )
         } catch {
             print ("Error fetching data \(error)")
